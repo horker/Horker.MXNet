@@ -1,0 +1,45 @@
+<#@ template language="C#" hostspecific="true" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.Threading" #>
+<#
+var types = new string[] {
+	"double",
+	"long",
+	"int",
+	"byte",
+	"sbyte"
+};
+
+var templateDirectory = Path.GetDirectoryName(Host.TemplateFile);
+var baseFilePath = Path.Combine(templateDirectory, "FloatNDArray.cs");
+
+var  document = File.ReadAllText(baseFilePath);
+
+var start = document.IndexOf("CUT ABOVE") + "CUT ABOVE".Length;
+var end = document.IndexOf("CUT BELOW") - 11;
+
+var doc = document.Substring(start, end - start);
+
+TextInfo textInfo = Thread.CurrentThread.CurrentCulture.TextInfo;
+#>
+using Horker.MXNet.Core;
+using Horker.MXNet.Operators;
+
+namespace Horker.Numerics
+{
+<#
+foreach (var t in types)
+{
+	string capitalized = textInfo.ToTitleCase(t);
+	if (t == "sbyte")
+		capitalized = "SByte";
+
+	var text = doc.Replace("Float", capitalized);
+	text = text.Replace("float", t);
+#>
+<#= text #>
+<#
+}
+#>
+}

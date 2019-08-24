@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<Configuration>
+    <ViewDefinitions>
+        <View>
+            <Name>Horker.Numerics.NDArrayObject</Name>
+            <ViewSelectedBy>
+                <TypeName>Horker.Numerics.NDArrayObject</TypeName>
+            </ViewSelectedBy>
+            <CustomControl>
+                <CustomEntries>
+                    <CustomEntry>
+                        <CustomItem>
+                            <ExpressionBinding>
+                                <ScriptBlock>
+                                    [Horker.Numerics.NDArrayExtensions]::ToStringInLongFormat($_)
+                                </ScriptBlock>
+                            </ExpressionBinding>
+                        </CustomItem>
+                    </CustomEntry>
+                </CustomEntries>
+            </CustomControl>
+        </View>
+        <!--
+        <View>
+            <Name>Horker.Tensor.TensorMaps.DataFrame</Name>
+            <ViewSelectedBy>
+                <TypeName>Horker.Tensor.TensorMaps.DataFrame</TypeName>
+            </ViewSelectedBy>
+            <CustomControl>
+                <CustomEntries>
+                    <CustomEntry>
+                        <CustomItem>
+                            <ExpressionBinding>
+                                <ScriptBlock>
+                                    $s = ($_.Columns |
+                                    Select-Object `
+                                        @{ n = "Name"; e = { $_.Name } },
+                                        @{ n = "Type"; e = { $_.Value.GetElementType().Name } },
+                                        @{ n = "Count"; e = { $_.Value.Data.Count } },
+                                        @{ n = "Values"; e = { [Horker.Tensor.Tensors.Convert]::ToStringInShortFormat($_.Value, $false) } } |
+                                    Format-Table | Out-String).Trim()
+
+                                    if (-not [string]::IsNullOrEmpty($_.Generator) -or -not [string]::IsNullOrEmpty($_.Note)) { $s += "`r`n" }
+                                    if (-not [string]::IsNullOrEmpty($_.Generator)) { $s += "`r`nGenerator: $($_.Generator)" }
+                                    if (-not [string]::IsNullOrEmpty($_.Note)) { $s += "`r`nNote: $($_.Note)" }
+                                    $s
+                                </ScriptBlock>
+                            </ExpressionBinding>
+                        </CustomItem>
+                    </CustomEntry>
+                </CustomEntries>
+            </CustomControl>
+        </View>
+        <View>
+            <Name>Accord.Statistics.Analysis.MultinomialLogisticRegressionAnalysis</Name>
+            <ViewSelectedBy>
+                <TypeName>Accord.Statistics.Analysis.MultinomialLogisticRegressionAnalysis</TypeName>
+            </ViewSelectedBy>
+            <CustomControl>
+                <CustomEntries>
+                    <CustomEntry>
+                        <CustomItem>
+                            <ExpressionBinding>
+                                <ScriptBlock>
+$tab = New-Object Collections.Generic.List[PSObject]
+$tab.Add([PSCustomObject]@{
+    Index = 0
+    Class = $_.OutputNames[0]
+    Feature = "(baseline)"
+    Coefficient = [double]::NaN
+    Confidence = $null
+    "Std.Error" = [double]::NaN
+    WaldTest = [double]::NaN
+})
+
+for ($i = 0; $i -lt $_.NumberOfOutputs - 1; ++$i) {
+    for ($j = 0; $j -lt $_.NumberOfInputs + 1; ++$j) {
+        $index = $i * ($_.NumberOfInputs + 1) + $j
+        $coef = $_.Coefficients[$index + 1]
+        $r = [PSCustomObject]@{
+            Index = $j
+            Class = $_.OutputNames[$i + 1]
+            Feature = (@("Intercept") + $_.InputNames)[$j]
+            Coefficient = [Math]::Round($_.CoefficientValues[$i][$j], 5)
+            Confidence = "[" + $coef.ConfidenceLower.ToString("g5") + ", " + $coef.ConfidenceUpper.ToString("g5") + "]"
+            "Std.Error" = [Math]::Round($_.StandardErrors[$i][$j], 5)
+            WaldTest = $_.WaldTests[$i][$j].PValue.ToString("g3")
+        }
+        $tab.Add($r)
+    }
+}
+
+$out = @"
+$(($tab | Format-Table | Out-String).Trim())
+
+ChiSquare = $($_.ChiSquare.PValue.ToString("g3"))
+LogLikelihood = $($_.LogLikelihood.ToString("g3")), Deviance = $($_.Deviance.ToString("g3")), AIC = $((-2 * $_.LogLikelihood + 2 * ($_.Coefficients.Count - 1)).ToString("g3"))
+"@
+$out
+                                </ScriptBlock>
+                            </ExpressionBinding>
+                        </CustomItem>
+                    </CustomEntry>
+                </CustomEntries>
+            </CustomControl>
+        </View>
+        -->
+    </ViewDefinitions>
+</Configuration>
