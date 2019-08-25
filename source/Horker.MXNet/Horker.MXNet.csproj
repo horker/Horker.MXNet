@@ -87,7 +87,7 @@
     <Compile Include="Generated\CApi.cs" />
     <Compile Include="Generated\CApiDeclaration.cs" />
     <Compile Include="Generated\Enumerations.cs" />
-    <Compile Include="Operators\Op.cs" />
+    <Compile Include="Generated\Op.cs" />
     <Compile Include="Core\IntPtrConverter.cs" />
     <Compile Include="Core\NativeMethodException.cs" />
     <Compile Include="Core\NDArray.cs" />

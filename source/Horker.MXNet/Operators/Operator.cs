@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Horker.MXNet.Core;
 
 namespace Horker.MXNet.Operators
@@ -21,7 +22,20 @@ namespace Horker.MXNet.Operators
 
             foreach (var c in creators)
             {
-                CApi.MXSymbolGetAtomicSymbolName(c, out var name);
+                // You must call this method for all symbols before use.
+                CApi.MXSymbolGetAtomicSymbolInfo(
+                    c,
+                    out IntPtr namePtr,                 // const char **
+                    out IntPtr description,          // const char **
+                    out int num_args,             // mx_uint *
+                    out IntPtr arg_names,            // const char ***
+                    out IntPtr arg_type_infos,       // const char ***
+                    out IntPtr arg_descriptions,     // const char ***
+                    out IntPtr key_var_num_args,     // const char **
+                    out IntPtr return_type           // const char **
+                );
+                string name = Marshal.PtrToStringAnsi(namePtr);
+//                CApi.MXSymbolGetAtomicSymbolName(c, out var name);
                 _creators.Add(name, c);
             }
         }
@@ -61,14 +75,13 @@ namespace Horker.MXNet.Operators
             // Invoke the operator.
             // (Not sure that inputsPin is necessary, but behave defensive.)
 
-            using (var inputsPin = new ObjectPin(inputHandles))
             using (var outputsPin = new ObjectPin(outputHandles))
             {
                 var outputCount2 = outputCount;
                 var outputAddress = outputsPin.Address;
 
                 CApi.MXImperativeInvoke(
-                    handle, inputHandles.Length, inputsPin.Address, ref outputCount2, ref outputAddress,
+                    handle, inputHandles.Length, inputHandles, ref outputCount2, ref outputAddress,
                     paramKeys.Length, paramKeys, paramValues);
 
 #if DEBUG
