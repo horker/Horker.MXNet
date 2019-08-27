@@ -8,9 +8,9 @@ Describe "NDArray operation tests" {
         [Context]::DefaultContext = [Context]::Cpu()
 
         $a = New-NDArray -DoubleValues 1, 2, 3
-        $a.Sin()
+        $b = $a.Sin()
 
-        $c.Shape | Should -Be 3
-        $c.ToArray() | Should -Be ([Math]::Sin(1)), ([Math]::Sin(2)), ([Math]::Sin(3))
+        $b.Shape | Should -Be 3
+        $b.ToArray() | Should -Be ([Math]::Sin(1)), ([Math]::Sin(2)), ([Math]::Sin(3))
     }
 }
