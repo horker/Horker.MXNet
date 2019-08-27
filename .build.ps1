@@ -9,8 +9,8 @@ Set-StrictMode -Version Latest
 $SOURCE_PATH = "$PSScriptRoot\source"
 $SCRIPT_PATH = "$PSScriptRoot\scripts"
 
-$MODULE_PATH = "$PSScriptRoot\module\psmxnet"
-$MODULE_PATH_DEBUG = "$PSScriptRoot\module\debug\psmxnet"
+$MODULE_PATH = "$PSScriptRoot\module\Horker.Numerics"
+$MODULE_PATH_DEBUG = "$PSScriptRoot\module\debug\Horker.Numerics"
 
 $SOLUTION_FILE = "$PSScriptRoot\source\Horker.MXNet.sln"
 

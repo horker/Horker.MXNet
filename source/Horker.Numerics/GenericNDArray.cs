@@ -23,7 +23,8 @@ namespace Horker.Numerics
             }
         }
 
-        public GenericNDArray(T[] data, int[] shape)
+        // This method does not copy data and shape.
+        private GenericNDArray(T[] data, int[] shape)
         {
             _data = data;
             _shape = shape;
@@ -36,7 +37,10 @@ namespace Horker.Numerics
 
         public static GenericNDArray<T> Create(T[] data, int[] shape)
         {
-            return new GenericNDArray<T>(data, shape);
+            if (shape == null)
+                shape = new int[1] { data.Length };
+
+            return new GenericNDArray<T>(data.ToArray(), shape.ToArray());
         }
 
     }
