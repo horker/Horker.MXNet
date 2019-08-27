@@ -33,5 +33,11 @@ namespace Horker.Numerics
         {
             return _data;
         }
+
+        public static GenericNDArray<T> Create(T[] data, int[] shape)
+        {
+            return new GenericNDArray<T>(data, shape);
+        }
+
     }
 }

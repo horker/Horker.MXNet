@@ -40,13 +40,13 @@ namespace Horker.Numerics.PowerShell
             }
 
             if (setName == "double")
-                result = NDArray<double>.Create(DoubleValues, Shape);
+                result = NumericNDArray<double>.Create(DoubleValues, Shape);
             else if (setName == "float")
-                result = NDArray<float>.Create(FloatValues, Shape);
+                result = NumericNDArray<float>.Create(FloatValues, Shape);
             else if (setName == "int")
-                result = NDArray<int>.Create(IntValues, Shape);
+                result = NumericNDArray<int>.Create(IntValues, Shape);
             else if (setName == "object")
-                result = NDArray<object>.Create(ObjectValues, Shape);
+                result = GenericNDArray<object>.Create(ObjectValues, Shape);
 
             WriteObject(result);
         }

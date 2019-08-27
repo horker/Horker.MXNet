@@ -23,11 +23,12 @@ namespace Horker.MXNet.Operators
             foreach (var c in creators)
             {
                 // You must call this method for all symbols before use.
+                // If not, the process will crash in an unexpected manner.
                 CApi.MXSymbolGetAtomicSymbolInfo(
                     c,
-                    out IntPtr namePtr,                 // const char **
+                    out IntPtr namePtr,              // const char **
                     out IntPtr description,          // const char **
-                    out int num_args,             // mx_uint *
+                    out int num_args,                // mx_uint *
                     out IntPtr arg_names,            // const char ***
                     out IntPtr arg_type_infos,       // const char ***
                     out IntPtr arg_descriptions,     // const char ***
@@ -35,7 +36,6 @@ namespace Horker.MXNet.Operators
                     out IntPtr return_type           // const char **
                 );
                 string name = Marshal.PtrToStringAnsi(namePtr);
-//                CApi.MXSymbolGetAtomicSymbolName(c, out var name);
                 _creators.Add(name, c);
             }
         }

@@ -111,7 +111,7 @@ namespace Horker.Numerics.Tests
         [TestMethod]
         public void TestNullData()
         {
-            var a = NDArray<string>.Create(new string[] { null, "foo" }, new int[] { 2 });
+            var a = GenericNDArray<string>.Create(new string[] { null, "foo" }, new int[] { 2 });
 
             var s = a.ToStringInLongFormat();
 

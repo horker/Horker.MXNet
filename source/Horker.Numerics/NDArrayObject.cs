@@ -9,7 +9,7 @@ namespace Horker.Numerics
     /// <summary>
     /// This class is an empty common base class of NDArray<T>.
     /// The reason why this is not an interface but a class is that PowerShell
-    /// cannot define methods and output formatters to interfaces.
+    /// cannot define methods and output formatters to the interface.
     /// </summary>
     public class NDArrayObject
     {

@@ -1,38 +1,43 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Horker.MXNet.Core;
 using Horker.MXNet.Operators;
 
 namespace Horker.Numerics
 {
-
-    /// <summary>
-    /// This class is a type-specific version of NDArray for the double type.
-    /// </summary>
-    public class DoubleNDArray : NDArray<double>
+    public partial class NumericNDArray<T> : NDArray<T>
+        where T : struct
     {
-        private static DType _dtype;
-
-        static DoubleNDArray() {
-            _dtype = DType.FromType(typeof(double));
+        static NumericNDArray()
+        {
+            _dtype = DType.FromType(typeof(T));
         }
 
-        private NDArray _impl;
+        private static DType _dtype;
+
+        public static DType DType => _dtype;
+
+        protected NDArray _impl;
 
         public override int[] Shape => _impl.Shape.Dimensions;
         public override long Size => _impl.Size;
 
-        public DoubleNDArray(NDArray impl)
+        public NumericNDArray(NDArray impl)
         {
             _impl = impl;
         }
 
-        public DoubleNDArray(double[] data, int[] shape)
+        public NumericNDArray(T[] data, int[] shape)
         {
-            _impl = NDArray.FromArray<double>(data, shape);
+            _impl = NDArray.FromArray(data, shape);
         }
 
-        public override double[] ToArray()
+        public override T[] ToArray()
         {
-            return _impl.ToArray<double>();
+            return _impl.ToArray<T>();
         }
 
         public override string ToString()
@@ -40,182 +45,58 @@ namespace Horker.Numerics
             return this.ToStringInShortFormat(true);
         }
 
-        public DoubleNDArray Add(DoubleNDArray rhs)
+        // Factory methods
+
+        public static NumericNDArray<T> Create(T[] data, int[] shape = null)
         {
-            var impl = Op.BroadcastAdd(_impl, rhs._impl);
-            return new DoubleNDArray(impl);
+            if (shape == null)
+                shape = new[] { data.Length };
+
+            if (data is double[] d)
+                return new DoubleNDArray(d, shape) as NumericNDArray<T>;
+            if (data is float[] f)
+                return new FloatNDArray(f, shape) as NumericNDArray<T>;
+            if (data is long[] l)
+                return new LongNDArray(l, shape) as NumericNDArray<T>;
+            if (data is int[] i)
+                return new IntNDArray(i, shape) as NumericNDArray<T>;
+            if (data is sbyte[] sb)
+                return new SByteNDArray(sb, shape) as NumericNDArray<T>;
+            if (data is byte[] b)
+                return new ByteNDArray(b, shape) as NumericNDArray<T>;
+
+            throw new InvalidOperationException($"NumericNDArray does not support type {typeof(T).Name}");
         }
-    }
 
-    /// <summary>
-    /// This class is a type-specific version of NDArray for the long type.
-    /// </summary>
-    public class LongNDArray : NDArray<long>
-    {
-        private static DType _dtype;
-
-        static LongNDArray() {
-            _dtype = DType.FromType(typeof(long));
-        }
-
-        private NDArray _impl;
-
-        public override int[] Shape => _impl.Shape.Dimensions;
-        public override long Size => _impl.Size;
-
-        public LongNDArray(NDArray impl)
+        private static NDArray<T> Create(NDArray impl)
         {
-            _impl = impl;
+            if (typeof(T) == typeof(double))
+                return new DoubleNDArray(impl) as NDArray<T>;
+            if (typeof(T) == typeof(float))
+                return new FloatNDArray(impl) as NDArray<T>;
+            if (typeof(T) == typeof(long))
+                return new LongNDArray(impl) as NDArray<T>;
+            if (typeof(T) == typeof(int))
+                return new IntNDArray(impl) as NDArray<T>;
+            if (typeof(T) == typeof(sbyte))
+                return new SByteNDArray(impl) as NDArray<T>;
+            if (typeof(T) == typeof(byte))
+                return new ByteNDArray(impl) as NDArray<T>;
+
+            throw new InvalidOperationException($"NumericNDArray does not support type {typeof(T).Name}");
         }
 
-        public LongNDArray(long[] data, int[] shape)
+        public static NumericNDArray<T> Zeros(int[] shape)
         {
-            _impl = NDArray.FromArray<long>(data, shape);
+            var impl = Op.Zeros(shape, null, DType.FromType(typeof(T)));
+            return new NumericNDArray<T>(impl);
         }
 
-        public override long[] ToArray()
+        public static NumericNDArray<T> Ones(int[] shape)
         {
-            return _impl.ToArray<long>();
+            var impl = Op.Ones(shape, null, DType.FromType(typeof(T)));
+            return new NumericNDArray<T>(impl);
         }
 
-        public override string ToString()
-        {
-            return this.ToStringInShortFormat(true);
-        }
-
-        public LongNDArray Add(LongNDArray rhs)
-        {
-            var impl = Op.BroadcastAdd(_impl, rhs._impl);
-            return new LongNDArray(impl);
-        }
-    }
-
-    /// <summary>
-    /// This class is a type-specific version of NDArray for the int type.
-    /// </summary>
-    public class IntNDArray : NDArray<int>
-    {
-        private static DType _dtype;
-
-        static IntNDArray() {
-            _dtype = DType.FromType(typeof(int));
-        }
-
-        private NDArray _impl;
-
-        public override int[] Shape => _impl.Shape.Dimensions;
-        public override long Size => _impl.Size;
-
-        public IntNDArray(NDArray impl)
-        {
-            _impl = impl;
-        }
-
-        public IntNDArray(int[] data, int[] shape)
-        {
-            _impl = NDArray.FromArray<int>(data, shape);
-        }
-
-        public override int[] ToArray()
-        {
-            return _impl.ToArray<int>();
-        }
-
-        public override string ToString()
-        {
-            return this.ToStringInShortFormat(true);
-        }
-
-        public IntNDArray Add(IntNDArray rhs)
-        {
-            var impl = Op.BroadcastAdd(_impl, rhs._impl);
-            return new IntNDArray(impl);
-        }
-    }
-
-    /// <summary>
-    /// This class is a type-specific version of NDArray for the byte type.
-    /// </summary>
-    public class ByteNDArray : NDArray<byte>
-    {
-        private static DType _dtype;
-
-        static ByteNDArray() {
-            _dtype = DType.FromType(typeof(byte));
-        }
-
-        private NDArray _impl;
-
-        public override int[] Shape => _impl.Shape.Dimensions;
-        public override long Size => _impl.Size;
-
-        public ByteNDArray(NDArray impl)
-        {
-            _impl = impl;
-        }
-
-        public ByteNDArray(byte[] data, int[] shape)
-        {
-            _impl = NDArray.FromArray<byte>(data, shape);
-        }
-
-        public override byte[] ToArray()
-        {
-            return _impl.ToArray<byte>();
-        }
-
-        public override string ToString()
-        {
-            return this.ToStringInShortFormat(true);
-        }
-
-        public ByteNDArray Add(ByteNDArray rhs)
-        {
-            var impl = Op.BroadcastAdd(_impl, rhs._impl);
-            return new ByteNDArray(impl);
-        }
-    }
-
-    /// <summary>
-    /// This class is a type-specific version of NDArray for the sbyte type.
-    /// </summary>
-    public class SByteNDArray : NDArray<sbyte>
-    {
-        private static DType _dtype;
-
-        static SByteNDArray() {
-            _dtype = DType.FromType(typeof(sbyte));
-        }
-
-        private NDArray _impl;
-
-        public override int[] Shape => _impl.Shape.Dimensions;
-        public override long Size => _impl.Size;
-
-        public SByteNDArray(NDArray impl)
-        {
-            _impl = impl;
-        }
-
-        public SByteNDArray(sbyte[] data, int[] shape)
-        {
-            _impl = NDArray.FromArray<sbyte>(data, shape);
-        }
-
-        public override sbyte[] ToArray()
-        {
-            return _impl.ToArray<sbyte>();
-        }
-
-        public override string ToString()
-        {
-            return this.ToStringInShortFormat(true);
-        }
-
-        public SByteNDArray Add(SByteNDArray rhs)
-        {
-            var impl = Op.BroadcastAdd(_impl, rhs._impl);
-            return new SByteNDArray(impl);
-        }
     }
 }

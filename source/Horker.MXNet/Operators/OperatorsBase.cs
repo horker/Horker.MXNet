@@ -72,5 +72,13 @@ namespace Horker.MXNet.Operators
 
             return value.ToString();
         }
+
+        public static string Convert(NDShape value)
+        {
+            if (value == null)
+                return "()";
+
+            return value.ToString();
+        }
     }
 }
