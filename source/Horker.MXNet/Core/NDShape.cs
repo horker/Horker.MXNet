@@ -9,7 +9,7 @@ namespace Horker.MXNet.Core
 {
     public class NDShape
     {
-        private readonly int[] _dimensions;
+        private int[] _dimensions;
         private string _stringRepr;
 
         // You must not modify the elements of this value.
@@ -21,16 +21,26 @@ namespace Horker.MXNet.Core
 
         public int Size => _dimensions.Aggregate((d, sum) => sum * d);
 
-        public NDShape(int [] shape)
+        private NDShape()
+        {
+        }
+
+        public NDShape(int[] shape)
         {
             _dimensions = shape.ToArray();
-            _stringRepr = null;
         }
 
         public NDShape(IntPtr dimensions, int count)
         {
             _dimensions = new int[count];
             Marshal.Copy(dimensions, _dimensions, 0, count);
+        }
+
+        public static NDShape CreateUncopied(int[] shape)
+        {
+            var s = new NDShape();
+            s._dimensions = shape;
+            return s;
         }
 
         public override string ToString()
@@ -44,6 +54,11 @@ namespace Horker.MXNet.Core
         public static implicit operator NDShape(int[] dimensions)
         {
             return new NDShape(dimensions);
+        }
+
+        public static implicit operator NDShape(object[] shape)
+        {
+            return new NDShape(shape.Cast<int>().ToArray());
         }
 
         public static implicit operator string(NDShape shape)

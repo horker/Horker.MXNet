@@ -25,5 +25,14 @@ namespace Horker.MXNet.Core
                 }
             }
         }
+
+        public static NDShape GetAdjacent(NDShape shape)
+        {
+            var dims = shape.Dimensions.ToArray();
+            for (var i = 0; i < dims.Length; ++i)
+                dims[i] += 1;
+
+            return NDShape.CreateUncopied(dims);
+        }
     }
 }

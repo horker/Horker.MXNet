@@ -18,6 +18,8 @@ namespace Horker.MXNet.Core
         private DType _dtype = null;
         private Context _context = null;
 
+        // Constructors and factory methods
+
         public NDArray(IntPtr handle)
         {
             Handle = handle;
@@ -64,6 +66,29 @@ namespace Horker.MXNet.Core
             return new NDArray(handle, shape);
         }
 
+        public static NDArray Zeros(NDShape shape, Context ctx = null, DType type = null)
+        {
+            ctx = ctx ?? Context.DefaultContext;
+            type = type ?? DType.DefaultDType;
+
+            var results = Operator.Invoke("_zeros",
+                new string[] { "shape", "ctx", "dtype" },
+                new string[] { shape, ctx, type });
+
+            return results[0];
+        }
+
+        public static NDArray ZerosLike(NDArray array, Context ctx = null)
+        {
+            ctx = ctx ?? Context.DefaultContext;
+
+            var results = Operator.Invoke("_zeros",
+                new string[] { "shape", "ctx", "dtype" },
+                new string[] { array.Shape, ctx, array.DType });
+
+            return results[0];
+        }
+
         public static NDArray Ones(NDShape shape, Context ctx = null, DType type = null)
         {
             ctx = ctx ?? Context.DefaultContext;
@@ -86,6 +111,8 @@ namespace Horker.MXNet.Core
 
             return results[0];
         }
+
+        // Properties
 
         public NDShape Shape
         {
@@ -145,6 +172,41 @@ namespace Horker.MXNet.Core
             }
         }
 
+        public double this[params int[] shape]
+        {
+            get
+            {
+                return Op.Slice(this, shape, ShapeHelpers.GetAdjacent(shape)).Cast(DType.Float64).ToArray<double>()[0];
+            }
+        }
+
+        public NDArray this[int[] begin, int[] end, int[] step = null]
+        {
+            get
+            {
+                return Op.Slice(this, begin, end);
+            }
+        }
+
+        // Override methods
+
+        public override string ToString()
+        {
+            return NDArrayExtensions.ToStringInShortFormat(this, true);
+        }
+
+        public override int GetHashCode()
+        {
+            return (int)Handle;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return ReferenceEquals(this, obj);
+        }
+
+        // Other methods
+
         public T[] ToArray<T>()
             where T: new()
         {
@@ -164,21 +226,5 @@ namespace Horker.MXNet.Core
             return result;
         }
 
-        public override string ToString()
-        {
-            return NDArrayExtensions.ToStringInShortFormat(this, true);
-        }
-
-        // Equality functions
-
-        public override int GetHashCode()
-        {
-            return (int)Handle;
-        }
-
-        public override bool Equals(object obj)
-        {
-            return ReferenceEquals(this, obj);
-        }
     }
 }

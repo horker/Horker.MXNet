@@ -85,5 +85,26 @@ namespace Horker.MXNet.Tests
             Assert.AreEqual(3.0 / 2, result[1], 1e-5);
             Assert.AreEqual(3.0 / 3, result[2], 1e-5);
         }
+
+        [TestMethod]
+        public void TestIntexGetter()
+        {
+            var a = NDArray.FromArray(new float[] { 1, 2, 3, 4 }, new int[] { 2, 2 });
+
+            Assert.AreEqual(3, a[1, 0]);
+        }
+
+        [TestMethod]
+        public void TestIntexGetter2()
+        {
+            var a = NDArray.FromArray(new float[] { 1, 2, 3, 4 }, new int[] { 2, 2 });
+
+            var b = a[new[] { 0, 0 }, new[] { 2, 1 }];
+
+            CollectionAssert.AreEqual(new int[] { 2, 1 }, b.Shape.Dimensions);
+
+            var result = b.ToArray<float>();
+            CollectionAssert.AreEqual(new float[] { 1, 3 }, result);
+        }
     }
 }
