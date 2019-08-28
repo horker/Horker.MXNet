@@ -71,7 +71,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NDArrayTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ToStringTest.cs" />
   </ItemGroup>
@@ -83,9 +82,9 @@
       <Project>{5de0998e-7315-4a67-a390-16de6d8435f1}</Project>
       <Name>Horker.MXNet</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Horker.Numerics\Horker.Numerics.csproj">
-      <Project>{526b980c-7693-4609-aa5e-28d7a11d08c0}</Project>
-      <Name>Horker.Numerics</Name>
+    <ProjectReference Include="..\Horker.Numerics.PowerShell\Horker.Numerics.PowerShell.csproj">
+      <Project>{884deb8f-a5c6-47b4-a1c3-7d20cc36ff8c}</Project>
+      <Name>Horker.Numerics.PowerShell</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

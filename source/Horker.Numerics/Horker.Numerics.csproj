@@ -69,33 +69,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GenericNDArray.cs" />
-    <Compile Include="gen_NumericNDArrayMethods.cs" />
-    <Compile Include="Helpers\ShapeHelpers.cs" />
-    <Compile Include="Helpers\TypeTest.cs" />
-    <Compile Include="NDArray.cs" />
-    <Compile Include="NDArrayExtensions.cs" />
-    <Compile Include="FloatNDArray.cs" />
-    <Compile Include="NDArrayObject.cs" />
-    <Compile Include="NumericNDArray.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TypedNDArrays.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TypedNDArrays.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Horker.MXNet\Horker.MXNet.csproj">
       <Project>{5DE0998E-7315-4A67-A390-16DE6D8435F1}</Project>
       <Name>Horker.MXNet</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="TypedNDArrays.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>TypedNDArrays.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

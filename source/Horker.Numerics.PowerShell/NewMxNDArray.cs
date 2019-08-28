@@ -4,24 +4,22 @@ using System.Linq;
 using System.Management.Automation;
 using System.Text;
 using System.Threading.Tasks;
+using Horker.MXNet.Core;
 
-namespace Horker.Numerics.PowerShell
+namespace Horker.MXNet.PowerShell
 {
-    [Cmdlet("New", "NDArray")]
-    [OutputType(typeof(NDArrayObject))]
-    public class NewNDArray : PSCmdlet
+    [Cmdlet("New", "MxNDArray")]
+    [OutputType(typeof(NDArray))]
+    public class NewMxNDArray : PSCmdlet
     {
         [Parameter(Position = 0, Mandatory = true, ParameterSetName = "double")]
-        public double[] DoubleValues;
+        public double[] Double;
 
         [Parameter(Position = 0, Mandatory = true, ParameterSetName = "float")]
-        public float[] FloatValues;
+        public float[] Float;
 
         [Parameter(Position = 0, Mandatory = true, ParameterSetName = "int")]
-        public int[] IntValues;
-
-        [Parameter(Position = 0, Mandatory = true, ParameterSetName = "object")]
-        public object[] ObjectValues;
+        public int[] Int;
 
         [Parameter(Position = 1, Mandatory = false)]
         public int[] Shape = null;
@@ -32,7 +30,7 @@ namespace Horker.Numerics.PowerShell
         protected override void BeginProcessing()
         {
             var setName = ParameterSetName;
-            NDArrayObject result = null;
+            NDArray result = null;
 
             if (Type != null)
             {
@@ -40,13 +38,16 @@ namespace Horker.Numerics.PowerShell
             }
 
             if (setName == "double")
-                result = NumericNDArray<double>.Create(DoubleValues, Shape);
+                result = NDArray.FromArray<double>(Double, Shape);
             else if (setName == "float")
-                result = NumericNDArray<float>.Create(FloatValues, Shape);
+                result = NDArray.FromArray<float>(Float, Shape);
             else if (setName == "int")
-                result = NumericNDArray<int>.Create(IntValues, Shape);
-            else if (setName == "object")
-                result = GenericNDArray<object>.Create(ObjectValues, Shape);
+                result = NDArray.FromArray<int>(Int, Shape);
+            else
+            {
+                WriteError(new ErrorRecord(new ArgumentException("Unsupported type"), "", ErrorCategory.InvalidType, null));
+                return;
+            }
 
             WriteObject(result);
         }

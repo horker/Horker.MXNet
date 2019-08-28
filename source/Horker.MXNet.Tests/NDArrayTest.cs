@@ -41,5 +41,27 @@ namespace Horker.MXNet.Tests
 
             CollectionAssert.AreEqual(new float[] { 1, 1, 1, 1, 1, 1 }, arrayData);
         }
+
+        [TestMethod]
+        public void TestReduceSum()
+        {
+            var a = NDArray.FromArray(new double[] { 1, 2, 3, 4, 5, 6 }, new int[] { 3, 2 });
+            var b = a.Sum();
+
+            var result = b.ToArray<double>();
+            CollectionAssert.AreEqual(new int[] { 1 }, b.Shape.Dimensions);
+            CollectionAssert.AreEqual(new double[] { 6 * 7 / 2 }, result);
+        }
+
+        [TestMethod]
+        public void TestAdd()
+        {
+            var a = NDArray.FromArray(new int[] { 1, 2, 3, 4, 5, 6 }, new int[] { 3, 2 });
+            var b = NDArray.FromArray(new int[] { 1, 2, 3 }, new int[] { 3, 1 });
+            var c = a + b;
+
+            var result = c.ToArray<int>();
+            CollectionAssert.AreEqual(new int[] { 2, 3, 5, 6, 8, 9 }, result);
+        }
     }
 }

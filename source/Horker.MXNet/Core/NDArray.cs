@@ -11,7 +11,7 @@ namespace Horker.MXNet.Core
     /// <summary>
     /// This class is equivalent to the python API's NDArray.
     /// </summary>
-    public class NDArray : NDArrayOrSymbol
+    public partial class NDArray : NDArrayOrSymbol
     {
         private NDShape _shape = null;
         private long _size = -1;
@@ -162,6 +162,16 @@ namespace Horker.MXNet.Core
             }
 
             return result;
+        }
+
+        public override string ToString()
+        {
+            return NDArrayExtensions.ToStringInShortFormat(this, true);
+        }
+
+        public static NDArray operator+(NDArray lhs, NDArray rhs)
+        {
+            return Op.BroadcastAdd(lhs, rhs);
         }
     }
 }

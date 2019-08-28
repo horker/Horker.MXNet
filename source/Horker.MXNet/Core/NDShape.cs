@@ -15,6 +15,12 @@ namespace Horker.MXNet.Core
         // You must not modify the elements of this value.
         public int[] Dimensions => _dimensions;
 
+        public int this[int i] => _dimensions[i];
+
+        public int NDimensions => _dimensions.Length;
+
+        public int Size => _dimensions.Aggregate((d, sum) => sum * d);
+
         public NDShape(int [] shape)
         {
             _dimensions = shape.ToArray();

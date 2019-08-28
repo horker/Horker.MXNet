@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Horker.Numerics
+namespace Horker.MXNet.Core
 {
     public static class ShapeHelpers
     {

@@ -1,7 +1,7 @@
 Set-StrictMode -Version Latest
 
 $source = "$PSScriptRoot\source\op.json"
-$outOpFile = "$PSScriptRoot\..\source\Horker.Numerics\gen_NumericNDArrayMethods.cs"
+$outOpFile = "$PSScriptRoot\..\source\Horker.MXNet\gen_NDArrayMethods.cs"
 
 . "$PSScriptRoot\common.ps1"
 
@@ -14,7 +14,7 @@ function Replace-TypeName {
 
     switch ($TypeName) {
         "NdArrayOrSymbol" {
-            "NumericNDArray<T>"
+            "NDArrayOrSymbol"
         }
         default {
             $TypeName
@@ -44,14 +44,9 @@ function Get-Arguments {
         [object[]]$Arguments
     )
 
-    $result = @("_impl")
+    $result = @("this")
     foreach ($a in $Arguments) {
-        if (Test-Input $a.TypeName) {
-            $result += (Convert-SnailCaseToCamelCase $a.Name) + "._impl"
-        }
-        else {
-            $result += Convert-SnailCaseToCamelCase $a.Name
-        }
+        $result += Convert-SnailCaseToCamelCase $a.Name
     }
 
     $result -join ", "
@@ -64,14 +59,11 @@ function Get-Arguments {
 $methodsHeader = @"
 using System;
 using System.Collections.Generic;
-using Horker.MXNet.Core;
 using Horker.MXNet.Operators;
-using Horker.Numerics;
 
-namespace Horker.Numerics
+namespace Horker.MXNet.Core
 {
-    public partial class NumericNDArray<T> : NDArray<T>
-        where T: struct
+    public partial class NDArray : NDArrayOrSymbol
     {
 "@
 
@@ -85,8 +77,7 @@ $methodsTemplate = @"
         /// {0}
         public {1} {2}({3})
         {{
-            var impl = Op.{4}({5});
-            return new NumericNDArray<T>(impl);
+            return Op.{4}({5});
         }}
 "@
 
@@ -125,21 +116,21 @@ function Get-NDArrayMethods {
 
         $pascalName = Convert-SnailCaseToCamelCase $op.Name -Pascal
 
-        $returnType = "NumericNDArray<T>"
+        $returnType = "NDArray"
 
         # Skip the first parameter
         if ($a.Length -eq 1) {
             $signature = ""
-            $arguments = "_impl"
+            $arguments = "this"
         }
         else {
             $a = $a[1..($a.Length - 1)]
 
             $signature = Get-Signature $a
-            $arguments = Get-Arguments $a -Impl
+            $arguments = Get-Arguments $a
         }
 
-        $methodsTemplate -f "func", $returnType, $pascalName, $signature, $pascalName, $arguments
+        $methodsTemplate -f "doc", $returnType, $pascalName, $signature, $pascalName, $arguments
     }
 
     $methodsFooter
