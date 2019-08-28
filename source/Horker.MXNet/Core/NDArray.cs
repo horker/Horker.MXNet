@@ -208,7 +208,6 @@ namespace Horker.MXNet.Core
         // Other methods
 
         public T[] ToArray<T>()
-            where T: new()
         {
             if (typeof(T) != DType.RuntimeType)
                 throw new ArgumentException($"T must be {DType.RuntimeType.FullName} for this NDArray");
@@ -226,5 +225,154 @@ namespace Horker.MXNet.Core
             return result;
         }
 
+        public T[,] To2DArray<T>()
+        {
+            if (typeof(T) != DType.RuntimeType)
+                throw new ArgumentException($"T must be {DType.RuntimeType.FullName} for this NDArray");
+
+            if (Shape.NDimensions != 2)
+                throw new InvalidOperationException("NDArray is not 2-dimensional");
+
+            var size = Size;
+            var result = new T[Shape[0], Shape[1]];
+            using (var pin = new ObjectPin(result))
+            {
+                CApi.MXNDArraySyncCopyToCPU(Handle, pin.Address, size);
+            }
+
+            return result;
+        }
+
+        public T[,,] To3DArray<T>()
+        {
+            if (typeof(T) != DType.RuntimeType)
+                throw new ArgumentException($"T must be {DType.RuntimeType.FullName} for this NDArray");
+
+            if (Shape.NDimensions != 3)
+                throw new InvalidOperationException("NDArray is not 2-dimensional");
+
+            var size = Size;
+            var result = new T[Shape[0], Shape[1], Shape[2]];
+            using (var pin = new ObjectPin(result))
+            {
+                CApi.MXNDArraySyncCopyToCPU(Handle, pin.Address, size);
+            }
+
+            return result;
+        }
+
+        public T[,,,] To4DArray<T>()
+        {
+            if (typeof(T) != DType.RuntimeType)
+                throw new ArgumentException($"T must be {DType.RuntimeType.FullName} for this NDArray");
+
+            if (Shape.NDimensions != 4)
+                throw new InvalidOperationException("NDArray is not 2-dimensional");
+
+            var size = Size;
+            var result = new T[Shape[0], Shape[1], Shape[2], Shape[4]];
+            using (var pin = new ObjectPin(result))
+            {
+                CApi.MXNDArraySyncCopyToCPU(Handle, pin.Address, size);
+            }
+
+            return result;
+        }
+
+        public T[][] To2DJagged<T>()
+        {
+            if (typeof(T) != DType.RuntimeType)
+                throw new ArgumentException($"T must be {DType.RuntimeType.FullName} for this NDArray");
+
+            if (Shape.NDimensions != 2)
+                throw new InvalidOperationException("NDArray is not 2-dimensional");
+
+            var size = Size;
+            var s0 = Shape[0];
+            var s1 = Shape[1];
+
+            var data = To2DArray<T>();
+            var result = new T[s0][];
+
+            for (var i0 = 0; i0 < result.Length; ++i0)
+            {
+                result[i0] = new T[s1];
+                for (var i1 = 0; i1 < result[i0].Length; ++i1)
+                {
+                    result[i0][i1] = data[i0, i1];
+                }
+            }
+
+            return result;
+        }
+
+        public T[][][] To3DJagged<T>()
+        {
+            if (typeof(T) != DType.RuntimeType)
+                throw new ArgumentException($"T must be {DType.RuntimeType.FullName} for this NDArray");
+
+            if (Shape.NDimensions != 3)
+                throw new InvalidOperationException("NDArray is not 3-dimensional");
+
+            var size = Size;
+            var s0 = Shape[0];
+            var s1 = Shape[1];
+            var s2 = Shape[2];
+
+            var data = To3DArray<T>();
+            var result = new T[s0][][];
+
+            for (var i0 = 0; i0 < result.Length; ++i0)
+            {
+                result[i0] = new T[s1][];
+                for (var i1 = 0; i1 < result[i0].Length; ++i1)
+                {
+                    result[i0][i1] = new T[s2];
+                    for (var i2 = 0; i2 < result[i0][i1].Length; ++i1)
+                    {
+                        result[i0][i1][i2] = data[i0, i1, i2];
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public T[][][][] To4DJagged<T>()
+        {
+            if (typeof(T) != DType.RuntimeType)
+                throw new ArgumentException($"T must be {DType.RuntimeType.FullName} for this NDArray");
+
+            if (Shape.NDimensions != 4)
+                throw new InvalidOperationException("NDArray is not 4-dimensional");
+
+            var size = Size;
+            var s0 = Shape[0];
+            var s1 = Shape[1];
+            var s2 = Shape[2];
+            var s3 = Shape[3];
+
+            var data = To4DArray<T>();
+            var result = new T[s0][][][];
+
+            for (var i0 = 0; i0 < result.Length; ++i0)
+            {
+                result[i0] = new T[s1][][];
+                for (var i1 = 0; i1 < result[i0].Length; ++i1)
+                {
+                    result[i0][i1] = new T[s2][];
+                    for (var i2 = 0; i2 < result[i0][i1].Length; ++i1)
+                    {
+                        result[i0][i1][i2] = new T[s3];
+                        for (var i3 = 0; i3 < result[i0][i1][i2].Length; ++i1)
+                        {
+                            result[i0][i1][i2][i3] = data[i0, i1, i2, i3];
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }

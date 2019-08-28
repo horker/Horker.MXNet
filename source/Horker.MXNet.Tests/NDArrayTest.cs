@@ -106,5 +106,42 @@ namespace Horker.MXNet.Tests
             var result = b.ToArray<float>();
             CollectionAssert.AreEqual(new float[] { 1, 3 }, result);
         }
+
+        [TestMethod]
+        public void TestTo2DArray()
+        {
+            var a = NDArray.FromArray(new float[] { 1, 2, 3, 4, 5, 6 }, new int[] { 3, 2 });
+
+            var b = a.To2DArray<float>();
+
+            Assert.AreEqual(2, b.Rank);
+            Assert.AreEqual(3, b.GetLength(0));
+            Assert.AreEqual(2, b.GetLength(1));
+
+            Assert.AreEqual(1, b[0, 0]);
+            Assert.AreEqual(2, b[0, 1]);
+            Assert.AreEqual(3, b[1, 0]);
+            Assert.AreEqual(4, b[1, 1]);
+            Assert.AreEqual(5, b[2, 0]);
+            Assert.AreEqual(6, b[2, 1]);
+        }
+
+        [TestMethod]
+        public void TestTo2DJagged()
+        {
+            var a = NDArray.FromArray(new float[] { 1, 2, 3, 4, 5, 6 }, new int[] { 3, 2 });
+
+            var b = a.To2DJagged<float>();
+
+            Assert.AreEqual(1, b.Rank);
+            Assert.AreEqual(3, b.Length);
+
+            Assert.AreEqual(1, b[0][0]);
+            Assert.AreEqual(2, b[0][1]);
+            Assert.AreEqual(3, b[1][0]);
+            Assert.AreEqual(4, b[1][1]);
+            Assert.AreEqual(5, b[2][0]);
+            Assert.AreEqual(6, b[2][1]);
+        }
     }
 }
