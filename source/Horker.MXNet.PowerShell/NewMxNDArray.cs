@@ -9,6 +9,7 @@ using Horker.MXNet.Core;
 namespace Horker.MXNet.PowerShell
 {
     [Cmdlet("New", "MxNDArray")]
+    [Alias("mx.ndarray")]
     [OutputType(typeof(NDArray))]
     public class NewMxNDArray : PSCmdlet
     {
@@ -38,11 +39,11 @@ namespace Horker.MXNet.PowerShell
             }
 
             if (setName == "double")
-                result = NDArray.FromArray<double>(Double, Shape);
+                result = NDArray.FromArray(Double, Shape);
             else if (setName == "float")
-                result = NDArray.FromArray<float>(Float, Shape);
+                result = NDArray.FromArray(Float, Shape);
             else if (setName == "int")
-                result = NDArray.FromArray<int>(Int, Shape);
+                result = NDArray.FromArray(Int, Shape);
             else
             {
                 WriteError(new ErrorRecord(new ArgumentException("Unsupported type"), "", ErrorCategory.InvalidType, null));
