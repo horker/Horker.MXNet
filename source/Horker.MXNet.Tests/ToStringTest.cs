@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Horker.MXNet.Core;
-using Horker.MXNet.PowerShell;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Horker.MXNet.Tests

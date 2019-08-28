@@ -9,21 +9,19 @@ Set-StrictMode -Version Latest
 $SOURCE_PATH = "$PSScriptRoot\source"
 $SCRIPT_PATH = "$PSScriptRoot\scripts"
 
-$MODULE_PATH = "$PSScriptRoot\module\Horker.Numerics"
-$MODULE_PATH_DEBUG = "$PSScriptRoot\module\debug\Horker.Numerics"
+$MODULE_PATH = "$PSScriptRoot\module\Horker.MXNet"
+$MODULE_PATH_DEBUG = "$PSScriptRoot\module\debug\Horker.MXNet"
 
 $SOLUTION_FILE = "$PSScriptRoot\source\Horker.MXNet.sln"
 
 $OBJECT_FILES = @(
     "Horker.MXNet.dll"
     "Horker.MXNet.pdb"
-    "Horker.Numerics.dll"
-    "Horker.Numerics.pdb"
-    "Horker.Numerics.PowerShell.dll"
-    "Horker.Numerics.PowerShell.pdb"
-    "System.Buffers.dll"
-    "System.Numerics.Vectors.dll"
-    "System.Runtime.CompilerServices.Unsafe.dll"
+    "Horker.MXNet.PowerShell.dll"
+    "Horker.MXNet.PowerShell.pdb"
+#    "System.Buffers.dll"
+#    "System.Numerics.Vectors.dll"
+#    "System.Runtime.CompilerServices.Unsafe.dll"
 )
 
 #TODO

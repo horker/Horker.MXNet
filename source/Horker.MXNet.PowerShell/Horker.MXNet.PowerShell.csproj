@@ -7,8 +7,8 @@
     <ProjectGuid>{884DEB8F-A5C6-47B4-A1C3-7D20CC36FF8C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Horker.Numerics.PowerShell</RootNamespace>
-    <AssemblyName>Horker.Numerics.PowerShell</AssemblyName>
+    <RootNamespace>Horker.MXNet.PowerShell</RootNamespace>
+    <AssemblyName>Horker.MXNet.PowerShell</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

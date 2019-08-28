@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horker.Numerics", "Horker.N
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horker.Numerics.Tests", "Horker.Numerics.Tests\Horker.Numerics.Tests.csproj", "{44F71CFB-C083-4DB4-A9F8-6CC9AC68BDD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horker.Numerics.PowerShell", "Horker.Numerics.PowerShell\Horker.Numerics.PowerShell.csproj", "{884DEB8F-A5C6-47B4-A1C3-7D20CC36FF8C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horker.MXNet.PowerShell", "Horker.MXNet.PowerShell\Horker.MXNet.PowerShell.csproj", "{884DEB8F-A5C6-47B4-A1C3-7D20CC36FF8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,8 +75,8 @@ Global
 		{44F71CFB-C083-4DB4-A9F8-6CC9AC68BDD3}.Release|x64.Build.0 = Release|x64
 		{884DEB8F-A5C6-47B4-A1C3-7D20CC36FF8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{884DEB8F-A5C6-47B4-A1C3-7D20CC36FF8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{884DEB8F-A5C6-47B4-A1C3-7D20CC36FF8C}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{884DEB8F-A5C6-47B4-A1C3-7D20CC36FF8C}.Debug|x64.Build.0 = Debug|Any CPU
+		{884DEB8F-A5C6-47B4-A1C3-7D20CC36FF8C}.Debug|x64.ActiveCfg = Debug|x64
+		{884DEB8F-A5C6-47B4-A1C3-7D20CC36FF8C}.Debug|x64.Build.0 = Debug|x64
 		{884DEB8F-A5C6-47B4-A1C3-7D20CC36FF8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{884DEB8F-A5C6-47B4-A1C3-7D20CC36FF8C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{884DEB8F-A5C6-47B4-A1C3-7D20CC36FF8C}.Release|x64.ActiveCfg = Release|x64
