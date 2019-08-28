@@ -82,6 +82,21 @@ namespace Horker.MXNet.Core
             _dtype = dtype;
         }
 
+        public DType(string name)
+        {
+            var n = name.ToLower();
+            for (var i = 0; i < _names.Length; ++i)
+            {
+                if (_names[i] == name)
+                {
+                    _dtype = (DTypeEnum)i;
+                    return;
+                }
+            }
+
+            throw new ArgumentException("Invalid type name");
+        }
+
         public static DType FromType(Type type)
         {
             if (type == typeof(double))
