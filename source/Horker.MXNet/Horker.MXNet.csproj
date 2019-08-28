@@ -85,6 +85,11 @@
     <Compile Include="Core\DType.cs" />
     <Compile Include="Core\gen_NDArrayMethods.cs" />
     <Compile Include="Core\NDArrayExtensions.cs" />
+    <Compile Include="Core\NDArrayOperators.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NDArrayOperators.tt</DependentUpon>
+    </Compile>
     <Compile Include="Core\ObjectPin.cs" />
     <Compile Include="Generated\CApi.cs" />
     <Compile Include="Generated\CApiDeclaration.cs" />
@@ -107,6 +112,14 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Core\NDArrayOperators.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>NDArrayOperators.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -169,9 +169,16 @@ namespace Horker.MXNet.Core
             return NDArrayExtensions.ToStringInShortFormat(this, true);
         }
 
-        public static NDArray operator+(NDArray lhs, NDArray rhs)
+        // Equality functions
+
+        public override int GetHashCode()
         {
-            return Op.BroadcastAdd(lhs, rhs);
+            return (int)Handle;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return ReferenceEquals(this, obj);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Horker.MXNet.Tests
         }
 
         [TestMethod]
-        public void TestSin()
+        public void TestOperatorSin()
         {
             NDArray a = NDArray.FromArray(new double[] { 3, 0, Math.PI });
             var a2 = a.ToArray<double>();
@@ -28,7 +28,7 @@ namespace Horker.MXNet.Tests
         }
 
         [TestMethod]
-        public void TestAdd()
+        public void TestOperatorAdd()
         {
             NDArray a = NDArray.FromArray(new int[] { 1, 2, 3 });
             NDArray b = NDArray.FromArray(new int[] { 4, 5, 6 });

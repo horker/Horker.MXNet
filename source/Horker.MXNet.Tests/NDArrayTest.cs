@@ -58,10 +58,32 @@ namespace Horker.MXNet.Tests
         {
             var a = NDArray.FromArray(new int[] { 1, 2, 3, 4, 5, 6 }, new int[] { 3, 2 });
             var b = NDArray.FromArray(new int[] { 1, 2, 3 }, new int[] { 3, 1 });
+
             var c = a + b;
 
             var result = c.ToArray<int>();
             CollectionAssert.AreEqual(new int[] { 2, 3, 5, 6, 8, 9 }, result);
+        }
+
+        [TestMethod]
+        public void TestRDiv()
+        {
+            var a = NDArray.FromArray(new float[] { 1, 2, 3 }, new int[] { 3 });
+            var b = NDArray.FromArray(new float[] { 4, 5, 6 }, new int[] { 3 });
+
+            var c = a / 3;
+
+            var result = c.ToArray<float>();
+            Assert.AreEqual(1.0 / 3, result[0], 1e-5);
+            Assert.AreEqual(2.0 / 3, result[1], 1e-5);
+            Assert.AreEqual(3.0 / 3, result[2], 1e-5);
+
+            c = 3 / a;
+
+            result = c.ToArray<float>();
+            Assert.AreEqual(3.0 / 1, result[0], 1e-5);
+            Assert.AreEqual(3.0 / 2, result[1], 1e-5);
+            Assert.AreEqual(3.0 / 3, result[2], 1e-5);
         }
     }
 }

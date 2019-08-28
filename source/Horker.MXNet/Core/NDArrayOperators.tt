@@ -1,0 +1,49 @@
+﻿<#@ template language="C#" hostspecific="true" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.Threading" #>
+<#
+var binaryOperators = new string[][]
+{
+    new string[] { "+", "BroadcastAdd", "PlusScalar", "PlusScalar" },
+    new string[] { "-", "BroadcastSub", "MinusScalar", "RminusScalar" },
+    new string[] { "*", "BroadcastMul", "DivScalar", "DivScalar" },
+    new string[] { "/", "BroadcastDiv", "DivScalar", "RdivScalar" },
+    new string[] { "%", "BroadcastMod", "ModScalar", "RmodScalar" },
+    new string[] { "&", "BroadcastLogicalAnd", "LogicalAndScalar", "LogicalAndScalar" },
+    new string[] { "|", "BroadcastLogicalOr", "LogicalOrScalar", "LogicalOrScalar" },
+    new string[] { "^", "BroadcastLogicalXor", "LogicalXorScalar", "LogicalXorScalar" }
+};
+#>
+using Horker.MXNet.Operators;
+
+namespace Horker.MXNet.Core
+{
+    public partial class NDArray : NDArrayOrSymbol
+    {
+<#
+foreach (var binary in binaryOperators)
+{
+#>
+<#
+#>
+        public static NDArray operator<#= binary[0] #>(NDArray lhs, NDArray rhs)
+        {
+            return Op.<#= binary[1] #>(lhs, rhs);
+        }
+
+        public static NDArray operator<#= binary[0] #>(NDArray lhs, float rhs)
+        {
+            return Op.<#= binary[2] #>(lhs, rhs);
+        }
+
+        public static NDArray operator<#= binary[0] #>(float lhs, NDArray rhs)
+        {
+            return Op.<#= binary[3] #>(rhs, lhs);
+        }
+
+<#
+}
+#>
+    }
+}
