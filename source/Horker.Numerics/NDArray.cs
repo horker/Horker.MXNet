@@ -104,7 +104,7 @@ namespace Horker.Numerics
             if (typeof(T) == typeof(byte))
                 return (lhs as ByteNDArray).BroadcastMod(rhs as ByteNDArray) as NDArray<T>;
 
-            throw new InvalidOperationException($"Operation * is not supported for type {typeof(T).Name}");
+            throw new InvalidOperationException($"Operation % is not supported for type {typeof(T).Name}");
         }
     }
 }
