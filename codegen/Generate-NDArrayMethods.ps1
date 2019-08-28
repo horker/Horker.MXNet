@@ -1,7 +1,7 @@
 Set-StrictMode -Version Latest
 
 $source = "$PSScriptRoot\source\op.json"
-$outOpFile = "$PSScriptRoot\..\source\Horker.MXNet\gen_NDArrayMethods.cs"
+$outOpFile = "$PSScriptRoot\..\source\Horker.MXNet\Core\gen_NDArrayMethods.cs"
 
 . "$PSScriptRoot\common.ps1"
 
@@ -36,6 +36,9 @@ function Get-Signature {
         }
         $result += $param
     }
+
+    $result += "NDArray output = null"
+
     $result -join ", "
 }
 
@@ -77,9 +80,11 @@ $methodsTemplate = @"
         /// {0}
         public {1} {2}({3})
         {{
-            return Op.{4}({5});
+            return Op.{4}({5}, output);
         }}
 "@
+
+$Excludes = @("MakeLoss")
 
 function Get-NDArrayMethods {
     param(
@@ -96,8 +101,12 @@ function Get-NDArrayMethods {
         }
 
         $name = $op.Name
+#        Write-Host $name
 
-        Write-Host $name
+        if ($Excludes -eq $op.Name) {
+            Write-Host "$name is included in exclude list"
+            continue
+        }
 
         if ($op.Args.TypeName -contains "NdArrayOrSymbol[]" -or
             $op.Args.TypeName -contains "List<Symbol>") {
@@ -120,7 +129,7 @@ function Get-NDArrayMethods {
 
         # Skip the first parameter
         if ($a.Length -eq 1) {
-            $signature = ""
+            $signature = "NDArray output = null"
             $arguments = "this"
         }
         else {

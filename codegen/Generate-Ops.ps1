@@ -1,7 +1,7 @@
 Set-StrictMode -Version Latest
 
 $source = "$PSScriptRoot\source\op.json"
-$outFile = "$PSScriptRoot\..\source\Horker.MXNet.Core\Generated\Op.cs"
+$outFile = "$PSScriptRoot\..\source\Horker.MXNet\Generated\Op.cs"
 
 ############################################################
 
@@ -99,6 +99,9 @@ function Get-Signature {
         }
         $result += $param
     }
+
+    $result += "NDArray output = null";
+
     $result -join ", "
 }
 
@@ -215,14 +218,17 @@ $template = @"
 
         public static {2} {3}({4})
         {{
-            var results = Operator.Invoke(
+            var result = Operator.Invoke(
                 "{5}",
                 _{6}ParamNames,
                 {7},
-                {8});
+                {8},
+                output);
             return {9};
         }}
 "@
+
+$Excludes = @("MakeLoss")
 
 function Get-ClassDefinition {
     param(
@@ -239,6 +245,12 @@ function Get-ClassDefinition {
         }
 
         $name = $op.Name
+
+        if ($Excludes -eq $op.Name) {
+            Write-Host "$name is included in exclude list"
+            continue
+        }
+
         $pascalName = Convert-SnailCaseToCamelCase $op.Name -Pascal
         $camelName = Convert-SnailCaseToCamelCase $op.Name
 
@@ -258,9 +270,9 @@ function Get-ClassDefinition {
         $arguments = Get-Arguments $a
         $inputs = Get-Inputs $a
 
-        $results = "results[0]"
+        $result= "result"
 
-        $template -f $camelName, $paramNames, $returnType, $pascalName, $signature, $name, $camelName, $arguments, $inputs, $results
+        $template -f $camelName, $paramNames, $returnType, $pascalName, $signature, $name, $camelName, $arguments, $inputs, $result
     }
 
     $footer

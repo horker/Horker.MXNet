@@ -42,11 +42,11 @@ namespace Horker.MXNet.Operators
 
         private static IntPtr[] _zeroInputHandles = new IntPtr[0];
 
-        public static NDArray[] Invoke(string name, string[] paramKeys, string[] paramValues, NDArrayOrSymbol[] inputs = null, int outputCount = 1)
+        public static NDArray Invoke(string name, string[] paramKeys, string[] paramValues, NDArrayOrSymbol[] inputs = null, NDArray output = null)
         {
             Debug.Assert(paramKeys.Length == paramValues.Length);
 
-            var handle = _creators[name];
+            var creatorHandle = _creators[name];
 
             // Prepare input handles.
 
@@ -64,35 +64,36 @@ namespace Horker.MXNet.Operators
             // To avoid memeory allocation in MXNet's unmanaged code, prepare the buffer of the output values in our code.
             // MXNet thoughtfully uses this buffer.
 
-            var outputs = new NDArray[outputCount];
-            for (var i = 0; i < outputCount; ++i)
-                outputs[i] = NDArray.CreateNone();
-
-            var outputHandles = new IntPtr[outputCount];
-            for (var i = 0; i < outputCount; ++i)
-                outputHandles[i] = outputs[i].Handle;
+            var outputHandles = new IntPtr[1];
+            if (output == null)
+            {
+                CApi.MXNDArrayCreateNone(out var handle);
+                outputHandles[0] = handle;
+            }
+            else
+            {
+                outputHandles[0] = output.Handle;
+            }
 
             // Invoke the operator.
-            // (Not sure that inputsPin is necessary, but behave defensive.)
 
             using (var outputsPin = new ObjectPin(outputHandles))
             {
-                var outputCount2 = outputCount;
+                var outputCount = outputHandles.Length;
                 var outputAddress = outputsPin.Address;
 
                 CApi.MXImperativeInvoke(
-                    handle, inputHandles.Length, inputHandles, ref outputCount2, ref outputAddress,
+                    creatorHandle, inputHandles.Length, inputHandles, ref outputCount, ref outputAddress,
                     paramKeys.Length, paramKeys, paramValues);
 
 #if DEBUG
                 GC.Collect();
 #endif
 
-                Debug.Assert(outputCount2 == outputCount);
                 Debug.Assert(outputAddress == outputsPin.Address);
             }
 
-            return outputs;
+            return new NDArray(outputHandles[0]);
         }
     }
 }

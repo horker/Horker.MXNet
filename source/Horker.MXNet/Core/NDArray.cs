@@ -13,7 +13,6 @@ namespace Horker.MXNet.Core
     /// </summary>
     public partial class NDArray : NDArrayOrSymbol
     {
-        private NDShape _shape = null;
         private long _size = -1;
         private DType _dtype = null;
         private Context _context = null;
@@ -23,12 +22,6 @@ namespace Horker.MXNet.Core
         public NDArray(IntPtr handle)
         {
             Handle = handle;
-        }
-
-        public NDArray(IntPtr handle, int[] shape)
-        {
-            Handle = handle;
-            _shape = shape;
         }
 
         public static NDArray CreateNone()
@@ -44,7 +37,7 @@ namespace Horker.MXNet.Core
 
             CApi.MXNDArrayCreateEx(shape, shape.Length, (int)ctx.DeviceType, ctx.DeviceId, delayAlloc ? 1 : 0, type, out var handle);
 
-            return new NDArray(handle, shape);
+            return new NDArray(handle);
         }
 
         public static NDArray FromArray<T>(T[] data, int[] shape = null, Context ctx = null)
@@ -63,7 +56,7 @@ namespace Horker.MXNet.Core
 #endif
             }
 
-            return new NDArray(handle, shape);
+            return new NDArray(handle);
         }
 
         public static NDArray Zeros(NDShape shape, Context ctx = null, DType type = null)
@@ -71,22 +64,22 @@ namespace Horker.MXNet.Core
             ctx = ctx ?? Context.DefaultContext;
             type = type ?? DType.DefaultDType;
 
-            var results = Operator.Invoke("_zeros",
+            var result = Operator.Invoke("_zeros",
                 new string[] { "shape", "ctx", "dtype" },
                 new string[] { shape, ctx, type });
 
-            return results[0];
+            return result;
         }
 
         public static NDArray ZerosLike(NDArray array, Context ctx = null)
         {
             ctx = ctx ?? Context.DefaultContext;
 
-            var results = Operator.Invoke("_zeros",
+            var result = Operator.Invoke("_zeros",
                 new string[] { "shape", "ctx", "dtype" },
                 new string[] { array.Shape, ctx, array.DType });
 
-            return results[0];
+            return result;
         }
 
         public static NDArray Ones(NDShape shape, Context ctx = null, DType type = null)
@@ -94,22 +87,22 @@ namespace Horker.MXNet.Core
             ctx = ctx ?? Context.DefaultContext;
             type = type ?? DType.DefaultDType;
 
-            var results = Operator.Invoke("_ones",
+            var result = Operator.Invoke("_ones",
                 new string[] { "shape", "ctx", "dtype" },
                 new string[] { shape, ctx, type });
 
-            return results[0];
+            return result;
         }
 
         public static NDArray OnesLike(NDArray array, Context ctx = null)
         {
             ctx = ctx ?? Context.DefaultContext;
 
-            var results = Operator.Invoke("_ones",
+            var result = Operator.Invoke("_ones",
                 new string[] { "shape", "ctx", "dtype" },
                 new string[] { array.Shape, ctx, array.DType });
 
-            return results[0];
+            return result;
         }
 
         // Properties
@@ -118,13 +111,8 @@ namespace Horker.MXNet.Core
         {
             get
             {
-                if (_shape == null)
-                {
-                    CApi.MXNDArrayGetShapeEx(Handle, out var dim, out var data);
-                    _shape = new NDShape(data, dim);
-                }
-
-                return _shape;
+                CApi.MXNDArrayGetShapeEx(Handle, out var dim, out var data);
+                return new NDShape(data, dim);
             }
         }
 
