@@ -149,7 +149,7 @@ namespace Horker.MXNet.Core
             where T: new()
         {
             if (typeof(T) != DType.RuntimeType)
-                throw new ArgumentException("T must be {_dtyhpe.Runtime.FullName} for this NDArray");
+                throw new ArgumentException($"T must be {DType.RuntimeType.FullName} for this NDArray");
 
             var size = Size;
             var result = new T[size];
