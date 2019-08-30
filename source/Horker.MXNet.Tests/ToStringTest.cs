@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using Horker.MXNet.Core;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Horker.MXNet.Operators;
+using Xunit;
 
 namespace Horker.MXNet.Tests
 {
-    [TestClass]
     public class ToStringTest
     {
-        [TestMethod]
+        public ToStringTest()
+        {
+            Operator.LoadSymbolCreators();
+        }
+
+        [Fact]
         public void TestToStringInLongFormat()
         {
             var a = NDArray.FromArray(new float[] { 1, 2, 3, 4, 5, 6 }, new int[] { 2, 3 });
@@ -23,10 +28,10 @@ namespace Horker.MXNet.Tests
                 " 1  2  3\r\n" +
                 " 4  5  6";
 
-            Assert.AreEqual(expected, s);
+            Assert.Equal(expected, s);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestToStringInShortFormat()
         {
             var a = NDArray.FromArray(new float[] { 1, 2, 3, 4, 5, 6 }, new int[] { 2, 3 });
@@ -35,10 +40,10 @@ namespace Horker.MXNet.Tests
 
             var expected = "[2 x 3, Single] 1 2 3 4 5...";
 
-            Assert.AreEqual(expected, s);
+            Assert.Equal(expected, s);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestToStringInLongFormat2()
         {
             var a = NDArray.FromArray(new float[] { 1, 2, 3, 4, 5, 6, 7, 888, 9, 10, -111, 12 }, new int[] { 3, 2, 2 });
@@ -57,10 +62,10 @@ namespace Horker.MXNet.Tests
                 "   9   10\r\n" +
                 "-111   12";
 
-            Assert.AreEqual(expected, s);
+            Assert.Equal(expected, s);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestToStringInShortFormat2()
         {
             var a = NDArray.FromArray(new float[] { 1, 2, 3, 4, 5, 6, 7, 888, 9, 10, -111, 12 }, new int[] { 2, 2, 3 });
@@ -69,10 +74,10 @@ namespace Horker.MXNet.Tests
 
             var expected = "[2 x 2 x 3, Single] 1 2 3 4 5...";
 
-            Assert.AreEqual(expected, s);
+            Assert.Equal(expected, s);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestToStringInLongFormat3()
         {
             var a = NDArray.FromArray(new float[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 }, new int[] { 3, 2, 2, 1, 1 });
@@ -106,7 +111,7 @@ namespace Horker.MXNet.Tests
                 "(2, 1, 1, _, _) =\r\n" +
                 " 12";
 
-            Assert.AreEqual(expected, s);
+            Assert.Equal(expected, s);
         }
     }
 }

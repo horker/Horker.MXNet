@@ -12,31 +12,34 @@ namespace Horker.MXNet.Operators
 
         public static void LoadSymbolCreators()
         {
-            if (_creators != null)
-                return;
-
-            CApi.MXSymbolListAtomicSymbolCreators(out var size, out var array);
-            var creators = IntPtrConverter.ToArray<IntPtr>(array, size);
-
-            _creators = new Dictionary<string, IntPtr>();
-
-            foreach (var c in creators)
+            lock (typeof(Operator))
             {
-                // You must call this method for all symbols before use.
-                // If not, the process will crash in an unexpected manner.
-                CApi.MXSymbolGetAtomicSymbolInfo(
-                    c,
-                    out IntPtr namePtr,              // const char **
-                    out IntPtr description,          // const char **
-                    out int num_args,                // mx_uint *
-                    out IntPtr arg_names,            // const char ***
-                    out IntPtr arg_type_infos,       // const char ***
-                    out IntPtr arg_descriptions,     // const char ***
-                    out IntPtr key_var_num_args,     // const char **
-                    out IntPtr return_type           // const char **
-                );
-                string name = Marshal.PtrToStringAnsi(namePtr);
-                _creators.Add(name, c);
+                if (_creators != null)
+                    return;
+
+                CApi.MXSymbolListAtomicSymbolCreators(out var size, out var array);
+                var creators = IntPtrConverter.ToArray<IntPtr>(array, size);
+
+                _creators = new Dictionary<string, IntPtr>();
+
+                foreach (var c in creators)
+                {
+                    // You must call this method for all symbols before use.
+                    // If not, the process will crash in an unexpected manner.
+                    CApi.MXSymbolGetAtomicSymbolInfo(
+                        c,
+                        out IntPtr namePtr,              // const char **
+                        out IntPtr description,          // const char **
+                        out int num_args,                // mx_uint *
+                        out IntPtr arg_names,            // const char ***
+                        out IntPtr arg_type_infos,       // const char ***
+                        out IntPtr arg_descriptions,     // const char ***
+                        out IntPtr key_var_num_args,     // const char **
+                        out IntPtr return_type           // const char **
+                    );
+                    string name = Marshal.PtrToStringAnsi(namePtr);
+                    _creators.Add(name, c);
+                }
             }
         }
 

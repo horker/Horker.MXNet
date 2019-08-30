@@ -20,7 +20,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _cvimdecodeParamNames = new[] { "flag", "toRgb" };
+        private static string[] _cvimdecodeParamNames = new[] { "flag", "to_rgb" };
 
         public static NDArray Cvimdecode(Symbol buf, int flag = 1, bool toRgb = true, NDArray output = null)
         {
@@ -33,7 +33,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _cvimreadParamNames = new[] { "filename", "flag", "toRgb" };
+        private static string[] _cvimreadParamNames = new[] { "filename", "flag", "to_rgb" };
 
         public static NDArray Cvimread(string filename, int flag = 1, bool toRgb = true, NDArray output = null)
         {
@@ -98,7 +98,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _BatchNormV1ParamNames = new[] { "eps", "momentum", "fixGamma", "useGlobalStats", "outputMeanVar" };
+        private static string[] _BatchNormV1ParamNames = new[] { "eps", "momentum", "fix_gamma", "use_global_stats", "output_mean_var" };
 
         public static NDArray BatchNormV1(NDArrayOrSymbol data, NDArrayOrSymbol gamma, NDArrayOrSymbol beta, float eps = 0.00100000005f, float momentum = 0.899999976f, bool fixGamma = true, bool useGlobalStats = false, bool outputMeanVar = false, NDArray output = null)
         {
@@ -111,7 +111,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _mpAdamwUpdateParamNames = new[] { "lr", "eta", "beta1", "beta2", "epsilon", "wd", "clipGradient" };
+        private static string[] _mpAdamwUpdateParamNames = new[] { "lr", "eta", "beta1", "beta2", "epsilon", "wd", "clip_gradient" };
 
         public static NDArray MpAdamwUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mean, NDArrayOrSymbol var, NDArrayOrSymbol weight32, NDArrayOrSymbol rescaleGrad, float lr, float eta, float beta1 = 0.899999976f, float beta2 = 0.999000013f, float epsilon = 9.99999994e-09f, float wd = 0f, float clipGradient = -1f, NDArray output = null)
         {
@@ -124,7 +124,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _adamwUpdateParamNames = new[] { "lr", "eta", "beta1", "beta2", "epsilon", "wd", "clipGradient" };
+        private static string[] _adamwUpdateParamNames = new[] { "lr", "eta", "beta1", "beta2", "epsilon", "wd", "clip_gradient" };
 
         public static NDArray AdamwUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mean, NDArrayOrSymbol var, NDArrayOrSymbol rescaleGrad, float lr, float eta, float beta1 = 0.899999976f, float beta2 = 0.999000013f, float epsilon = 9.99999994e-09f, float wd = 0f, float clipGradient = -1f, NDArray output = null)
         {
@@ -137,7 +137,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _allFiniteParamNames = new[] { "initOutput" };
+        private static string[] _allFiniteParamNames = new[] { "init_output" };
 
         public static NDArray AllFinite(Symbol data, bool initOutput = true, NDArray output = null)
         {
@@ -150,7 +150,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _IdentityAttachKLSparseRegParamNames = new[] { "sparsenessTarget", "penalty", "momentum" };
+        private static string[] _IdentityAttachKLSparseRegParamNames = new[] { "sparseness_target", "penalty", "momentum" };
 
         public static NDArray IdentityAttachKLSparseReg(NDArrayOrSymbol data, float sparsenessTarget = 0.100000001f, float penalty = 0.00100000005f, float momentum = 0.899999976f, NDArray output = null)
         {
@@ -163,7 +163,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _LeakyReLUParamNames = new[] { "actType", "slope", "lowerBound", "upperBound" };
+        private static string[] _LeakyReLUParamNames = new[] { "act_type", "slope", "lower_bound", "upper_bound" };
 
         public static NDArray LeakyReLU(NDArrayOrSymbol data, NDArrayOrSymbol gamma, LeakyreluActType actType = LeakyreluActType.Leaky, float slope = 0.25f, float lowerBound = 0.125f, float upperBound = 0.333999991f, NDArray output = null)
         {
@@ -189,7 +189,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _ActivationParamNames = new[] { "actType" };
+        private static string[] _ActivationParamNames = new[] { "act_type" };
 
         public static NDArray Activation(NDArrayOrSymbol data, ActivationActType actType, NDArray output = null)
         {
@@ -202,7 +202,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _BatchNormParamNames = new[] { "eps", "momentum", "fixGamma", "useGlobalStats", "outputMeanVar", "axis", "cudnnOff" };
+        private static string[] _BatchNormParamNames = new[] { "eps", "momentum", "fix_gamma", "use_global_stats", "output_mean_var", "axis", "cudnn_off" };
 
         public static NDArray BatchNorm(NDArrayOrSymbol data, NDArrayOrSymbol gamma, NDArrayOrSymbol beta, NDArrayOrSymbol movingMean, NDArrayOrSymbol movingVar, double eps = 0.0010000000474974513, float momentum = 0.899999976f, bool fixGamma = true, bool useGlobalStats = false, bool outputMeanVar = false, int axis = 1, bool cudnnOff = false, NDArray output = null)
         {
@@ -215,7 +215,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _ConvolutionParamNames = new[] { "kernel", "numFilter", "stride", "dilate", "pad", "numGroup", "workspace", "noBias", "cudnnTune", "cudnnOff", "layout" };
+        private static string[] _ConvolutionParamNames = new[] { "kernel", "num_filter", "stride", "dilate", "pad", "num_group", "workspace", "no_bias", "cudnn_tune", "cudnn_off", "layout" };
 
         public static NDArray Convolution(NDArrayOrSymbol data, NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, uint numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, uint numGroup = 1, ulong workspace = 1024, bool noBias = false, ConvolutionCudnnTune? cudnnTune = null, bool cudnnOff = false, ConvolutionLayout? layout = null, NDArray output = null)
         {
@@ -228,7 +228,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _CTCLossParamNames = new[] { "useDataLengths", "useLabelLengths", "blankLabel" };
+        private static string[] _CTCLossParamNames = new[] { "use_data_lengths", "use_label_lengths", "blank_label" };
 
         public static NDArray CTCLoss(NDArrayOrSymbol data, NDArrayOrSymbol label, NDArrayOrSymbol dataLengths, NDArrayOrSymbol labelLengths, bool useDataLengths = false, bool useLabelLengths = false, CtclossBlankLabel blankLabel = CtclossBlankLabel.First, NDArray output = null)
         {
@@ -241,7 +241,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _CuDNNBatchNormParamNames = new[] { "eps", "momentum", "fixGamma", "useGlobalStats", "outputMeanVar", "axis", "cudnnOff" };
+        private static string[] _CuDNNBatchNormParamNames = new[] { "eps", "momentum", "fix_gamma", "use_global_stats", "output_mean_var", "axis", "cudnn_off" };
 
         public static NDArray CuDNNBatchNorm(NDArrayOrSymbol data, NDArrayOrSymbol gamma, NDArrayOrSymbol beta, NDArrayOrSymbol movingMean, NDArrayOrSymbol movingVar, double eps = 0.0010000000474974513, float momentum = 0.899999976f, bool fixGamma = true, bool useGlobalStats = false, bool outputMeanVar = false, int axis = 1, bool cudnnOff = false, NDArray output = null)
         {
@@ -254,7 +254,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _DeconvolutionParamNames = new[] { "kernel", "numFilter", "stride", "dilate", "pad", "adj", "targetShape", "numGroup", "workspace", "noBias", "cudnnTune", "cudnnOff", "layout" };
+        private static string[] _DeconvolutionParamNames = new[] { "kernel", "num_filter", "stride", "dilate", "pad", "adj", "target_shape", "num_group", "workspace", "no_bias", "cudnn_tune", "cudnn_off", "layout" };
 
         public static NDArray Deconvolution(NDArrayOrSymbol data, NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, uint numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, NDShape adj = null, NDShape targetShape = null, uint numGroup = 1, ulong workspace = 512, bool noBias = true, DeconvolutionCudnnTune? cudnnTune = null, bool cudnnOff = false, DeconvolutionLayout? layout = null, NDArray output = null)
         {
@@ -267,7 +267,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _DropoutParamNames = new[] { "p", "mode", "axes", "cudnnOff" };
+        private static string[] _DropoutParamNames = new[] { "p", "mode", "axes", "cudnn_off" };
 
         public static NDArray Dropout(NDArrayOrSymbol data, float p = 0.5f, DropoutMode mode = DropoutMode.Training, NDShape axes = null, bool? cudnnOff = false, NDArray output = null)
         {
@@ -280,7 +280,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _FullyConnectedParamNames = new[] { "numHidden", "noBias", "flatten" };
+        private static string[] _FullyConnectedParamNames = new[] { "num_hidden", "no_bias", "flatten" };
 
         public static NDArray FullyConnected(NDArrayOrSymbol data, NDArrayOrSymbol weight, NDArrayOrSymbol bias, int numHidden, bool noBias = false, bool flatten = true, NDArray output = null)
         {
@@ -293,7 +293,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _LayerNormParamNames = new[] { "axis", "eps", "outputMeanVar" };
+        private static string[] _LayerNormParamNames = new[] { "axis", "eps", "output_mean_var" };
 
         public static NDArray LayerNorm(NDArrayOrSymbol data, NDArrayOrSymbol gamma, NDArrayOrSymbol beta, int axis = -1, float eps = 9.99999975e-06f, bool outputMeanVar = false, NDArray output = null)
         {
@@ -332,7 +332,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _PoolingParamNames = new[] { "kernel", "poolType", "globalPool", "cudnnOff", "poolingConvention", "stride", "pad", "pValue", "countIncludePad", "layout" };
+        private static string[] _PoolingParamNames = new[] { "kernel", "pool_type", "global_pool", "cudnn_off", "pooling_convention", "stride", "pad", "p_value", "count_include_pad", "layout" };
 
         public static NDArray Pooling(NDArrayOrSymbol data, NDShape kernel = null, PoolingPoolType poolType = PoolingPoolType.Max, bool globalPool = false, bool cudnnOff = false, PoolingPoolingConvention poolingConvention = PoolingPoolingConvention.Valid, NDShape stride = null, NDShape pad = null, int? pValue = null, bool? countIncludePad = null, PoolingLayout? layout = null, NDArray output = null)
         {
@@ -397,7 +397,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _signsgdUpdateParamNames = new[] { "lr", "wd", "rescaleGrad", "clipGradient" };
+        private static string[] _signsgdUpdateParamNames = new[] { "lr", "wd", "rescale_grad", "clip_gradient" };
 
         public static NDArray SignsgdUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, float lr, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, NDArray output = null)
         {
@@ -410,7 +410,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _signumUpdateParamNames = new[] { "lr", "momentum", "wd", "rescaleGrad", "clipGradient", "wdLh" };
+        private static string[] _signumUpdateParamNames = new[] { "lr", "momentum", "wd", "rescale_grad", "clip_gradient", "wd_lh" };
 
         public static NDArray SignumUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mom, float lr, float momentum = 0f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, float wdLh = 0f, NDArray output = null)
         {
@@ -423,7 +423,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _sgdUpdateParamNames = new[] { "lr", "wd", "rescaleGrad", "clipGradient", "lazyUpdate" };
+        private static string[] _sgdUpdateParamNames = new[] { "lr", "wd", "rescale_grad", "clip_gradient", "lazy_update" };
 
         public static NDArray SgdUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, float lr, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, bool lazyUpdate = true, NDArray output = null)
         {
@@ -436,7 +436,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _sgdMomUpdateParamNames = new[] { "lr", "momentum", "wd", "rescaleGrad", "clipGradient", "lazyUpdate" };
+        private static string[] _sgdMomUpdateParamNames = new[] { "lr", "momentum", "wd", "rescale_grad", "clip_gradient", "lazy_update" };
 
         public static NDArray SgdMomUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mom, float lr, float momentum = 0f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, bool lazyUpdate = true, NDArray output = null)
         {
@@ -449,7 +449,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _mpSgdUpdateParamNames = new[] { "lr", "wd", "rescaleGrad", "clipGradient", "lazyUpdate" };
+        private static string[] _mpSgdUpdateParamNames = new[] { "lr", "wd", "rescale_grad", "clip_gradient", "lazy_update" };
 
         public static NDArray MpSgdUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol weight32, float lr, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, bool lazyUpdate = true, NDArray output = null)
         {
@@ -462,7 +462,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _mpSgdMomUpdateParamNames = new[] { "lr", "momentum", "wd", "rescaleGrad", "clipGradient", "lazyUpdate" };
+        private static string[] _mpSgdMomUpdateParamNames = new[] { "lr", "momentum", "wd", "rescale_grad", "clip_gradient", "lazy_update" };
 
         public static NDArray MpSgdMomUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mom, NDArrayOrSymbol weight32, float lr, float momentum = 0f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, bool lazyUpdate = true, NDArray output = null)
         {
@@ -475,7 +475,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _ftmlUpdateParamNames = new[] { "lr", "t", "beta1", "beta2", "epsilon", "wd", "rescaleGrad", "clipGrad" };
+        private static string[] _ftmlUpdateParamNames = new[] { "lr", "t", "beta1", "beta2", "epsilon", "wd", "rescale_grad", "clip_grad" };
 
         public static NDArray FtmlUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol d, NDArrayOrSymbol v, NDArrayOrSymbol z, float lr, int t, float beta1 = 0.600000024f, float beta2 = 0.999000013f, double epsilon = 9.9999999392252903e-09, float wd = 0f, float rescaleGrad = 1f, float clipGrad = -1f, NDArray output = null)
         {
@@ -488,7 +488,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _adamUpdateParamNames = new[] { "lr", "beta1", "beta2", "epsilon", "wd", "rescaleGrad", "clipGradient", "lazyUpdate" };
+        private static string[] _adamUpdateParamNames = new[] { "lr", "beta1", "beta2", "epsilon", "wd", "rescale_grad", "clip_gradient", "lazy_update" };
 
         public static NDArray AdamUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mean, NDArrayOrSymbol var, float lr, float beta1 = 0.899999976f, float beta2 = 0.999000013f, float epsilon = 9.99999994e-09f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, bool lazyUpdate = true, NDArray output = null)
         {
@@ -501,7 +501,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _nagMomUpdateParamNames = new[] { "lr", "momentum", "wd", "rescaleGrad", "clipGradient" };
+        private static string[] _nagMomUpdateParamNames = new[] { "lr", "momentum", "wd", "rescale_grad", "clip_gradient" };
 
         public static NDArray NagMomUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mom, float lr, float momentum = 0f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, NDArray output = null)
         {
@@ -514,7 +514,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _mpNagMomUpdateParamNames = new[] { "lr", "momentum", "wd", "rescaleGrad", "clipGradient" };
+        private static string[] _mpNagMomUpdateParamNames = new[] { "lr", "momentum", "wd", "rescale_grad", "clip_gradient" };
 
         public static NDArray MpNagMomUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mom, NDArrayOrSymbol weight32, float lr, float momentum = 0f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, NDArray output = null)
         {
@@ -527,7 +527,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _rmspropUpdateParamNames = new[] { "lr", "gamma1", "epsilon", "wd", "rescaleGrad", "clipGradient", "clipWeights" };
+        private static string[] _rmspropUpdateParamNames = new[] { "lr", "gamma1", "epsilon", "wd", "rescale_grad", "clip_gradient", "clip_weights" };
 
         public static NDArray RmspropUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol n, float lr, float gamma1 = 0.949999988f, float epsilon = 9.99999994e-09f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, float clipWeights = -1f, NDArray output = null)
         {
@@ -540,7 +540,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _rmspropalexUpdateParamNames = new[] { "lr", "gamma1", "gamma2", "epsilon", "wd", "rescaleGrad", "clipGradient", "clipWeights" };
+        private static string[] _rmspropalexUpdateParamNames = new[] { "lr", "gamma1", "gamma2", "epsilon", "wd", "rescale_grad", "clip_gradient", "clip_weights" };
 
         public static NDArray RmspropalexUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol n, NDArrayOrSymbol g, NDArrayOrSymbol delta, float lr, float gamma1 = 0.949999988f, float gamma2 = 0.899999976f, float epsilon = 9.99999994e-09f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, float clipWeights = -1f, NDArray output = null)
         {
@@ -553,7 +553,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _ftrlUpdateParamNames = new[] { "lr", "lamda1", "beta", "wd", "rescaleGrad", "clipGradient" };
+        private static string[] _ftrlUpdateParamNames = new[] { "lr", "lamda1", "beta", "wd", "rescale_grad", "clip_gradient" };
 
         public static NDArray FtrlUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol z, NDArrayOrSymbol n, float lr, float lamda1 = 0.00999999978f, float beta = 1f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, NDArray output = null)
         {
@@ -566,7 +566,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _sparseAdagradUpdateParamNames = new[] { "lr", "epsilon", "wd", "rescaleGrad", "clipGradient" };
+        private static string[] _sparseAdagradUpdateParamNames = new[] { "lr", "epsilon", "wd", "rescale_grad", "clip_gradient" };
 
         public static NDArray SparseAdagradUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol history, float lr, float epsilon = 1.00000001e-07f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, NDArray output = null)
         {
@@ -579,7 +579,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _PadParamNames = new[] { "mode", "padWidth", "constantValue" };
+        private static string[] _PadParamNames = new[] { "mode", "pad_width", "constant_value" };
 
         public static NDArray Pad(NDArrayOrSymbol data, PadMode mode, NDShape padWidth, double constantValue = 0, NDArray output = null)
         {
@@ -696,7 +696,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _sampleMultinomialParamNames = new[] { "shape", "getProb", "dtype" };
+        private static string[] _sampleMultinomialParamNames = new[] { "shape", "get_prob", "dtype" };
 
         public static NDArray SampleMultinomial(NDArrayOrSymbol data, NDShape shape = null, bool getProb = false, DType dtype = null, NDArray output = null)
         {
@@ -917,7 +917,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _sampleUniqueZipfianParamNames = new[] { "rangeMax", "shape" };
+        private static string[] _sampleUniqueZipfianParamNames = new[] { "range_max", "shape" };
 
         public static NDArray SampleUniqueZipfian(int rangeMax, NDShape shape = null, NDArray output = null)
         {
@@ -930,7 +930,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _LinearRegressionOutputParamNames = new[] { "gradScale" };
+        private static string[] _LinearRegressionOutputParamNames = new[] { "grad_scale" };
 
         public static NDArray LinearRegressionOutput(NDArrayOrSymbol data, NDArrayOrSymbol label, float gradScale = 1f, NDArray output = null)
         {
@@ -943,7 +943,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _MAERegressionOutputParamNames = new[] { "gradScale" };
+        private static string[] _MAERegressionOutputParamNames = new[] { "grad_scale" };
 
         public static NDArray MAERegressionOutput(NDArrayOrSymbol data, NDArrayOrSymbol label, float gradScale = 1f, NDArray output = null)
         {
@@ -956,7 +956,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _LogisticRegressionOutputParamNames = new[] { "gradScale" };
+        private static string[] _LogisticRegressionOutputParamNames = new[] { "grad_scale" };
 
         public static NDArray LogisticRegressionOutput(NDArrayOrSymbol data, NDArrayOrSymbol label, float gradScale = 1f, NDArray output = null)
         {
@@ -969,7 +969,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _RNNParamNames = new[] { "stateSize", "numLayers", "mode", "bidirectional", "p", "stateOutputs", "projectionSize", "lstmStateClipMin", "lstmStateClipMax", "lstmStateClipNan", "useSequenceLength" };
+        private static string[] _RNNParamNames = new[] { "state_size", "num_layers", "mode", "bidirectional", "p", "state_outputs", "projection_size", "lstm_state_clip_min", "lstm_state_clip_max", "lstm_state_clip_nan", "use_sequence_length" };
 
         public static NDArray RNN(NDArrayOrSymbol data, NDArrayOrSymbol parameters, NDArrayOrSymbol state, NDArrayOrSymbol stateCell, NDArrayOrSymbol sequenceLength, uint stateSize, uint numLayers, RNNMode mode, bool bidirectional = false, float p = 0f, bool stateOutputs = false, int? projectionSize = null, double? lstmStateClipMin = null, double? lstmStateClipMax = null, bool lstmStateClipNan = false, bool useSequenceLength = false, NDArray output = null)
         {
@@ -982,7 +982,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _SliceChannelParamNames = new[] { "numOutputs", "axis", "squeezeAxis" };
+        private static string[] _SliceChannelParamNames = new[] { "num_outputs", "axis", "squeeze_axis" };
 
         public static NDArray SliceChannel(NDArrayOrSymbol data, int numOutputs, int axis = 1, bool squeezeAxis = false, NDArray output = null)
         {
@@ -995,7 +995,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _SoftmaxOutputParamNames = new[] { "gradScale", "ignoreLabel", "multiOutput", "useIgnore", "preserveShape", "normalization", "outGrad", "smoothAlpha" };
+        private static string[] _SoftmaxOutputParamNames = new[] { "grad_scale", "ignore_label", "multi_output", "use_ignore", "preserve_shape", "normalization", "out_grad", "smooth_alpha" };
 
         public static NDArray SoftmaxOutput(NDArrayOrSymbol data, NDArrayOrSymbol label, float gradScale = 1f, float ignoreLabel = -1f, bool multiOutput = false, bool useIgnore = false, bool preserveShape = false, SoftmaxoutputNormalization normalization = SoftmaxoutputNormalization.Null, bool outGrad = false, float smoothAlpha = 0f, NDArray output = null)
         {
@@ -1229,7 +1229,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _broadcastLikeParamNames = new[] { "lhsAxes", "rhsAxes" };
+        private static string[] _broadcastLikeParamNames = new[] { "lhs_axes", "rhs_axes" };
 
         public static NDArray BroadcastLike(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDShape lhsAxes = null, NDShape rhsAxes = null, NDArray output = null)
         {
@@ -1242,7 +1242,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _normParamNames = new[] { "ord", "axis", "outDtype", "keepdims" };
+        private static string[] _normParamNames = new[] { "ord", "axis", "out_dtype", "keepdims" };
 
         public static NDArray Norm(NDArrayOrSymbol data, int ord = 2, NDShape axis = null, NormOutDtype? outDtype = null, bool keepdims = false, NDArray output = null)
         {
@@ -1294,20 +1294,20 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _dotParamNames = new[] { "transposeA", "transposeB", "forwardStype" };
+        private static string[] _dotParamNames = new[] { "transpose_a", "transpose_b", "forward_stype" };
 
         public static NDArray Dot(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, bool transposeA = false, bool transposeB = false, DotForwardStype? forwardStype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "dot",
                 _dotParamNames,
-                new[] { Convert(transposeA), Convert(transposeB), Convert((int)forwardStype) },
+                new[] { Convert(transposeA), Convert(transposeB), forwardStype.HasValue ? Convert((int)forwardStype) : null },
                 new[] { lhs, rhs },
                 output);
             return result;
         }
 
-        private static string[] _batchDotParamNames = new[] { "transposeA", "transposeB", "forwardStype" };
+        private static string[] _batchDotParamNames = new[] { "transpose_a", "transpose_b", "forward_stype" };
 
         public static NDArray BatchDot(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, bool transposeA = false, bool transposeB = false, BatchDotForwardStype? forwardStype = null, NDArray output = null)
         {
@@ -2256,7 +2256,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _shapeArrayParamNames = new[] { "lhsBegin", "lhsEnd", "rhsBegin", "rhsEnd" };
+        private static string[] _shapeArrayParamNames = new[] { "lhs_begin", "lhs_end", "rhs_begin", "rhs_end" };
 
         public static NDArray ShapeArray(NDArrayOrSymbol data, int? lhsBegin = null, int? lhsEnd = null, int? rhsBegin = null, int? rhsEnd = null, NDArray output = null)
         {
@@ -2815,7 +2815,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _histogramParamNames = new[] { "binCnt", "range" };
+        private static string[] _histogramParamNames = new[] { "bin_cnt", "range" };
 
         public static NDArray Histogram(NDArrayOrSymbol data, NDArrayOrSymbol bins, int? binCnt = null, Tuple<double> range = null, NDArray output = null)
         {
@@ -2828,7 +2828,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _EmbeddingParamNames = new[] { "inputDim", "outputDim", "dtype", "sparseGrad" };
+        private static string[] _EmbeddingParamNames = new[] { "input_dim", "output_dim", "dtype", "sparse_grad" };
 
         public static NDArray Embedding(NDArrayOrSymbol data, NDArrayOrSymbol weight, int inputDim, int outputDim, DType dtype = null, bool sparseGrad = false, NDArray output = null)
         {
@@ -2867,7 +2867,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _oneHotParamNames = new[] { "depth", "onValue", "offValue", "dtype" };
+        private static string[] _oneHotParamNames = new[] { "depth", "on_value", "off_value", "dtype" };
 
         public static NDArray OneHot(NDArrayOrSymbol indices, int depth, double onValue = 1, double offValue = 0, DType dtype = null, NDArray output = null)
         {
@@ -2984,7 +2984,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _arangeParamNames = new[] { "start", "stop", "step", "repeat", "inferRange", "ctx", "dtype" };
+        private static string[] _arangeParamNames = new[] { "start", "stop", "step", "repeat", "infer_range", "ctx", "dtype" };
 
         public static NDArray Arange(double start, double? stop = null, double step = 1, int repeat = 1, bool inferRange = false, Context ctx = null, DType dtype = null, NDArray output = null)
         {
@@ -2997,7 +2997,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _linspaceParamNames = new[] { "start", "stop", "step", "repeat", "inferRange", "ctx", "dtype" };
+        private static string[] _linspaceParamNames = new[] { "start", "stop", "step", "repeat", "infer_range", "ctx", "dtype" };
 
         public static NDArray Linspace(double start, double? stop = null, double step = 1, int repeat = 1, bool inferRange = false, Context ctx = null, DType dtype = null, NDArray output = null)
         {
@@ -3036,7 +3036,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _linalgGemmParamNames = new[] { "transposeA", "transposeB", "alpha", "beta", "axis" };
+        private static string[] _linalgGemmParamNames = new[] { "transpose_a", "transpose_b", "alpha", "beta", "axis" };
 
         public static NDArray LinalgGemm(NDArrayOrSymbol A, NDArrayOrSymbol B, NDArrayOrSymbol C, bool transposeA = false, bool transposeB = false, double alpha = 1, double beta = 1, int axis = -2, NDArray output = null)
         {
@@ -3049,7 +3049,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _linalgGemm2ParamNames = new[] { "transposeA", "transposeB", "alpha", "axis" };
+        private static string[] _linalgGemm2ParamNames = new[] { "transpose_a", "transpose_b", "alpha", "axis" };
 
         public static NDArray LinalgGemm2(NDArrayOrSymbol A, NDArrayOrSymbol B, bool transposeA = false, bool transposeB = false, double alpha = 1, int axis = -2, NDArray output = null)
         {
@@ -3335,7 +3335,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _clipParamNames = new[] { "aMin", "aMax" };
+        private static string[] _clipParamNames = new[] { "a_min", "a_max" };
 
         public static NDArray Clip(NDArrayOrSymbol data, float aMin, float aMax, NDArray output = null)
         {
@@ -3387,7 +3387,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _depthToSpaceParamNames = new[] { "blockSize" };
+        private static string[] _depthToSpaceParamNames = new[] { "block_size" };
 
         public static NDArray DepthToSpace(NDArrayOrSymbol data, int blockSize, NDArray output = null)
         {
@@ -3400,7 +3400,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _spaceToDepthParamNames = new[] { "blockSize" };
+        private static string[] _spaceToDepthParamNames = new[] { "block_size" };
 
         public static NDArray SpaceToDepth(NDArrayOrSymbol data, int blockSize, NDArray output = null)
         {
@@ -3413,7 +3413,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _splitV2ParamNames = new[] { "indices", "axis", "squeezeAxis", "sections" };
+        private static string[] _splitV2ParamNames = new[] { "indices", "axis", "squeeze_axis", "sections" };
 
         public static NDArray SplitV2(NDArrayOrSymbol data, NDShape indices, int axis = 1, bool squeezeAxis = false, int sections = 0, NDArray output = null)
         {
@@ -3426,7 +3426,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _topkParamNames = new[] { "axis", "k", "retTyp", "isAscend", "dtype" };
+        private static string[] _topkParamNames = new[] { "axis", "k", "ret_typ", "is_ascend", "dtype" };
 
         public static NDArray Topk(NDArrayOrSymbol data, int? axis = -1, int k = 1, TopkRetTyp retTyp = TopkRetTyp.Indices, bool isAscend = false, DType dtype = null, NDArray output = null)
         {
@@ -3439,7 +3439,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _sortParamNames = new[] { "axis", "isAscend" };
+        private static string[] _sortParamNames = new[] { "axis", "is_ascend" };
 
         public static NDArray Sort(NDArrayOrSymbol data, int? axis = -1, bool isAscend = true, NDArray output = null)
         {
@@ -3452,7 +3452,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _argsortParamNames = new[] { "axis", "isAscend", "dtype" };
+        private static string[] _argsortParamNames = new[] { "axis", "is_ascend", "dtype" };
 
         public static NDArray Argsort(NDArrayOrSymbol data, int? axis = -1, bool isAscend = true, DType dtype = null, NDArray output = null)
         {
@@ -3517,7 +3517,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _BilinearSamplerParamNames = new[] { "cudnnOff" };
+        private static string[] _BilinearSamplerParamNames = new[] { "cudnn_off" };
 
         public static NDArray BilinearSampler(NDArrayOrSymbol data, NDArrayOrSymbol grid, bool? cudnnOff = null, NDArray output = null)
         {
@@ -3530,7 +3530,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _ConvolutionV1ParamNames = new[] { "kernel", "numFilter", "stride", "dilate", "pad", "numGroup", "workspace", "noBias", "cudnnTune", "cudnnOff", "layout" };
+        private static string[] _ConvolutionV1ParamNames = new[] { "kernel", "num_filter", "stride", "dilate", "pad", "num_group", "workspace", "no_bias", "cudnn_tune", "cudnn_off", "layout" };
 
         public static NDArray ConvolutionV1(NDArrayOrSymbol data, NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, uint numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, uint numGroup = 1, ulong workspace = 1024, bool noBias = false, ConvolutionV1CudnnTune? cudnnTune = null, bool cudnnOff = false, ConvolutionV1Layout? layout = null, NDArray output = null)
         {
@@ -3543,7 +3543,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _CorrelationParamNames = new[] { "kernelSize", "maxDisplacement", "stride1", "stride2", "padSize", "isMultiply" };
+        private static string[] _CorrelationParamNames = new[] { "kernel_size", "max_displacement", "stride1", "stride2", "pad_size", "is_multiply" };
 
         public static NDArray Correlation(NDArrayOrSymbol data1, NDArrayOrSymbol data2, uint kernelSize = 1, uint maxDisplacement = 1, uint stride1 = 1, uint stride2 = 1, uint padSize = 0, bool isMultiply = true, NDArray output = null)
         {
@@ -3569,7 +3569,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _GridGeneratorParamNames = new[] { "transformType", "targetShape" };
+        private static string[] _GridGeneratorParamNames = new[] { "transform_type", "target_shape" };
 
         public static NDArray GridGenerator(NDArrayOrSymbol data, GridgeneratorTransformType transformType, NDShape targetShape = null, NDArray output = null)
         {
@@ -3608,7 +3608,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _PoolingV1ParamNames = new[] { "kernel", "poolType", "globalPool", "poolingConvention", "stride", "pad" };
+        private static string[] _PoolingV1ParamNames = new[] { "kernel", "pool_type", "global_pool", "pooling_convention", "stride", "pad" };
 
         public static NDArray PoolingV1(NDArrayOrSymbol data, NDShape kernel = null, PoolingV1PoolType poolType = PoolingV1PoolType.Max, bool globalPool = false, PoolingV1PoolingConvention poolingConvention = PoolingV1PoolingConvention.Valid, NDShape stride = null, NDShape pad = null, NDArray output = null)
         {
@@ -3621,7 +3621,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _ROIPoolingParamNames = new[] { "pooledSize", "spatialScale" };
+        private static string[] _ROIPoolingParamNames = new[] { "pooled_size", "spatial_scale" };
 
         public static NDArray ROIPooling(NDArrayOrSymbol data, NDArrayOrSymbol rois, NDShape pooledSize, float spatialScale, NDArray output = null)
         {
@@ -3634,7 +3634,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _SequenceLastParamNames = new[] { "useSequenceLength", "axis" };
+        private static string[] _SequenceLastParamNames = new[] { "use_sequence_length", "axis" };
 
         public static NDArray SequenceLast(NDArrayOrSymbol data, NDArrayOrSymbol sequenceLength, bool useSequenceLength = false, int axis = 0, NDArray output = null)
         {
@@ -3647,7 +3647,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _SequenceMaskParamNames = new[] { "useSequenceLength", "value", "axis" };
+        private static string[] _SequenceMaskParamNames = new[] { "use_sequence_length", "value", "axis" };
 
         public static NDArray SequenceMask(NDArrayOrSymbol data, NDArrayOrSymbol sequenceLength, bool useSequenceLength = false, float value = 0f, int axis = 0, NDArray output = null)
         {
@@ -3660,7 +3660,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _SequenceReverseParamNames = new[] { "useSequenceLength", "axis" };
+        private static string[] _SequenceReverseParamNames = new[] { "use_sequence_length", "axis" };
 
         public static NDArray SequenceReverse(NDArrayOrSymbol data, NDArrayOrSymbol sequenceLength, bool useSequenceLength = false, int axis = 0, NDArray output = null)
         {
@@ -3673,7 +3673,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _SpatialTransformerParamNames = new[] { "transformType", "samplerType", "targetShape", "cudnnOff" };
+        private static string[] _SpatialTransformerParamNames = new[] { "transform_type", "sampler_type", "target_shape", "cudnn_off" };
 
         public static NDArray SpatialTransformer(NDArrayOrSymbol data, NDArrayOrSymbol loc, SpatialtransformerTransformType transformType, SpatialtransformerSamplerType samplerType, NDShape targetShape = null, bool? cudnnOff = null, NDArray output = null)
         {
@@ -3686,7 +3686,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _SVMOutputParamNames = new[] { "margin", "regularizationCoefficient", "useLinear" };
+        private static string[] _SVMOutputParamNames = new[] { "margin", "regularization_coefficient", "use_linear" };
 
         public static NDArray SVMOutput(NDArrayOrSymbol data, NDArrayOrSymbol label, float margin = 1f, float regularizationCoefficient = 1f, bool useLinear = false, NDArray output = null)
         {

@@ -119,7 +119,7 @@ function Get-ParamNames {
         if (Test-Input $a.TypeName) {
             continue
         }
-        $result += Convert-SnailCaseToCamelCase $a.Name
+        $result += $a.Name
     }
 
     if ($result.Length -eq 0) {

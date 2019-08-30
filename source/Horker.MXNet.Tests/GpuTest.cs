@@ -1,34 +1,32 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Horker.MXNet.Core;
 using Horker.MXNet.Operators;
+using Xunit;
 
 namespace Horker.MXNet.Tests
 {
-    [TestClass]
     public class GpuTest
     {
-        [TestInitialize]
-        public void TestInitialize()
+        public GpuTest()
         {
             Operator.LoadSymbolCreators();
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGpuValues()
         {
             var a = NDArray.FromArray(new float[] { 1, 2, 3, 4 }, new int[] { 2, 2 }, Context.Gpu(0));
 
-            Assert.AreEqual(a.DType, DType.Float32);
-            Assert.AreEqual(a.Context, Context.Gpu(0));
-            CollectionAssert.AreEqual(new int[] { 2, 2 }, a.Shape.Dimensions);
+            Assert.Equal(a.DType, DType.Float32);
+            Assert.Equal(a.Context, Context.Gpu(0));
+            Assert.Equal(new int[] { 2, 2 }, a.Shape.Dimensions);
 
             var values = a.ToArray<float>();
 
-            CollectionAssert.AreEqual(new float[] { 1, 2, 3, 4 }, values);
+            Assert.Equal(new float[] { 1, 2, 3, 4 }, values);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGpuAdd()
         {
             var a = NDArray.FromArray(new int[] { 1, 2, 3 }, null, Context.Gpu(0));
@@ -36,7 +34,7 @@ namespace Horker.MXNet.Tests
             var result = Op.BroadcastAdd(a, b);
 
             var values = result.ToArray<int>();
-            CollectionAssert.AreEqual(new int[] { 5, 7, 9 }, values);
+            Assert.Equal(new int[] { 5, 7, 9 }, values);
         }
     }
 }
