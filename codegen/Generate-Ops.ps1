@@ -4,6 +4,8 @@ $source = "$PSScriptRoot\source\op.json"
 $outFile = "$PSScriptRoot\..\source\Horker.MXNet\Generated\Op.cs"
 
 ############################################################
+# Convert-SnailCaseToCamelCase function
+############################################################
 
 $cultureInfo = [Threading.Thread]::CurrentThread.CurrentCulture
 $textInfo = $cultureInfo.TextInfo
@@ -42,6 +44,33 @@ function Convert-SnailCaseToCamelCase {
     $builder.ToString()
 }
 
+############################################################
+# Get-Description function
+############################################################
+
+function Get-Description {
+    param(
+        [object]$Op
+    )
+
+    $desc = $op.Description
+    $desc = ([regex]"\n").Replace($desc, "`r`n        /// ")
+    $desc = "/// <summary>`r`n        /// " + $desc + "`r`n        /// </summary>`r`n"
+
+    $args = @()
+    foreach ($a in $Op.args) {
+        $d = $a.Description
+        $d = ([regex]"\n").Replace($d, "`r`n        /// ")
+        $args += "        /// <param name=`"$($a.Name)`">$($d)</param>"
+    }
+
+    $desc + ($args -join "`r`n")
+}
+
+############################################################
+# Test-Input function
+############################################################
+
 function Test-Input {
     param(
         [string]$TypeName
@@ -49,6 +78,10 @@ function Test-Input {
 
     $TypeName -eq "NdArrayOrSymbol" -or $TypeName -eq "NdArray" -or $TypeName -eq "Symbol"
 }
+
+############################################################
+# Reorder-Params function
+############################################################
 
 function Reorder-Params {
     param(
@@ -70,6 +103,10 @@ function Reorder-Params {
     $result
 }
 
+############################################################
+# Replace-TypeName function
+############################################################
+
 function Replace-TypeName {
     param(
         [string]$TypeName
@@ -84,6 +121,10 @@ function Replace-TypeName {
         }
     }
 }
+
+############################################################
+# Get-Signature function
+############################################################
 
 function Get-Signature {
     param(
@@ -104,6 +145,10 @@ function Get-Signature {
 
     $result -join ", "
 }
+
+############################################################
+# Get-ParamNames function
+############################################################
 
 function Get-ParamNames {
     param(
@@ -129,6 +174,10 @@ function Get-ParamNames {
         "new[] { `"" + ($result -join "`", `"") + "`" }"
     }
 }
+
+############################################################
+# Get-Arguments function
+############################################################
 
 function Get-Arguments {
     param(
@@ -160,6 +209,10 @@ function Get-Arguments {
     }
 }
 
+############################################################
+# Get-Inputs function
+############################################################
+
 function Get-Inputs {
     param(
         [object[]]$Arguments
@@ -185,6 +238,8 @@ function Get-Inputs {
     }
 }
 
+############################################################
+# Template
 ############################################################
 
 $header = @"
@@ -216,19 +271,24 @@ $template = @"
 
         private static string[] _{0}ParamNames = {1};
 
-        public static {2} {3}({4})
+        {2}
+        public static {3} {4}({5})
         {{
             var result = Operator.Invoke(
-                "{5}",
-                _{6}ParamNames,
-                {7},
+                "{6}",
+                _{7}ParamNames,
                 {8},
+                {9},
                 output);
-            return {9};
+            return {10};
         }}
 "@
 
 $Excludes = @("MakeLoss")
+
+############################################################
+# Main function
+############################################################
 
 function Get-ClassDefinition {
     param(
@@ -263,6 +323,9 @@ function Get-ClassDefinition {
         }
 
         $a = $op.Args | where Name -ne "symbol_name"
+
+        $desc = Get-Description $op
+
         $a = Reorder-Params $a
 
         $signature = Get-Signature $a
@@ -272,12 +335,20 @@ function Get-ClassDefinition {
 
         $result= "result"
 
-        $template -f $camelName, $paramNames, $returnType, $pascalName, $signature, $name, $camelName, $arguments, $inputs, $result
+        $template -f $camelName, $paramNames,
+            $desc,
+            $returnType,
+            $pascalName, $signature,
+            $name, $camelName, $arguments, $inputs, $result
     }
 
     $footer
 }
+
 ############################################################
+# Run
+############################################################
+
 
 $ops = Get-Content -Encoding utf8 $source | ConvertFrom-Json
 
