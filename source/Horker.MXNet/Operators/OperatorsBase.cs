@@ -10,7 +10,7 @@ namespace Horker.MXNet.Operators
     public class OperatorsBase
     {
         protected static string[] _empty = new string[0];
-        protected static NDArrayOrSymbol[] _emptyInput = new NDArrayOrSymbol[0];
+        protected static IntPtr[] _emptyInput = new IntPtr[0];
 
         public static string Convert(double value)
         {

@@ -45,7 +45,7 @@ namespace Horker.MXNet.Operators
 
         private static IntPtr[] _zeroInputHandles = new IntPtr[0];
 
-        public static NDArray Invoke(string name, string[] paramKeys, string[] paramValues, NDArrayOrSymbol[] inputs = null, NDArray output = null)
+        public static NDArray Invoke(string name, string[] paramKeys, string[] paramValues, IntPtr[] inputHandles, NDArray output = null)
         {
             Debug.Assert(paramKeys.Length == paramValues.Length);
 
@@ -53,15 +53,8 @@ namespace Horker.MXNet.Operators
 
             // Prepare input handles.
 
-            IntPtr[] inputHandles;
-            if (inputs == null)
+            if (inputHandles == null)
                 inputHandles = _zeroInputHandles;
-            else
-            {
-                inputHandles = new IntPtr[inputs.Length];
-                for (var i = 0; i < inputs.Length; ++i)
-                    inputHandles[i] = inputs[i].Handle;
-            }
 
             // Prepare output handles.
             // To avoid memeory allocation in MXNet's unmanaged code, prepare the buffer of the output values in our code.

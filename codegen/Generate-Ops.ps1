@@ -227,7 +227,7 @@ function Get-Inputs {
         if (-not (Test-Input $a.TypeName)) {
             continue
         }
-        $result += Convert-SnailCaseToCamelCase $a.Name
+        $result += (Convert-SnailCaseToCamelCase $a.Name) + ".Handle"
     }
 
     if ($result.Length -eq 0) {

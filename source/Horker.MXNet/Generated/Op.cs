@@ -40,7 +40,7 @@ namespace Horker.MXNet.Operators
                 "_cvimdecode",
                 _cvimdecodeParamNames,
                 new[] { Convert(flag), Convert(toRgb) },
-                new[] { buf },
+                new[] { buf.Handle },
                 output);
             return result;
         }
@@ -83,7 +83,7 @@ namespace Horker.MXNet.Operators
                 "_cvimresize",
                 _cvimresizeParamNames,
                 new[] { Convert(w), Convert(h), Convert(interp) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -108,7 +108,7 @@ namespace Horker.MXNet.Operators
                 "_cvcopyMakeBorder",
                 _cvcopyMakeBorderParamNames,
                 new[] { Convert(top), Convert(bot), Convert(left), Convert(right), Convert(type), Convert(values) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -126,7 +126,7 @@ namespace Horker.MXNet.Operators
                 "_copyto",
                 _copytoParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -215,7 +215,7 @@ namespace Horker.MXNet.Operators
                 "BatchNorm_v1",
                 _BatchNormV1ParamNames,
                 new[] { Convert(eps), Convert(momentum), Convert(fixGamma), Convert(useGlobalStats), Convert(outputMeanVar) },
-                new[] { data, gamma, beta },
+                new[] { data.Handle, gamma.Handle, beta.Handle },
                 output);
             return result;
         }
@@ -270,7 +270,7 @@ namespace Horker.MXNet.Operators
                 "_mp_adamw_update",
                 _mpAdamwUpdateParamNames,
                 new[] { Convert(lr), Convert(eta), Convert(beta1), Convert(beta2), Convert(epsilon), Convert(wd), Convert(clipGradient) },
-                new[] { weight, grad, mean, var, weight32, rescaleGrad },
+                new[] { weight.Handle, grad.Handle, mean.Handle, var.Handle, weight32.Handle, rescaleGrad.Handle },
                 output);
             return result;
         }
@@ -322,7 +322,7 @@ namespace Horker.MXNet.Operators
                 "_adamw_update",
                 _adamwUpdateParamNames,
                 new[] { Convert(lr), Convert(eta), Convert(beta1), Convert(beta2), Convert(epsilon), Convert(wd), Convert(clipGradient) },
-                new[] { weight, grad, mean, var, rescaleGrad },
+                new[] { weight.Handle, grad.Handle, mean.Handle, var.Handle, rescaleGrad.Handle },
                 output);
             return result;
         }
@@ -344,7 +344,7 @@ namespace Horker.MXNet.Operators
                 "all_finite",
                 _allFiniteParamNames,
                 new[] { Convert(initOutput) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -365,7 +365,7 @@ namespace Horker.MXNet.Operators
                 "IdentityAttachKLSparseReg",
                 _IdentityAttachKLSparseRegParamNames,
                 new[] { Convert(sparsenessTarget), Convert(penalty), Convert(momentum) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -406,7 +406,7 @@ namespace Horker.MXNet.Operators
                 "LeakyReLU",
                 _LeakyReLUParamNames,
                 new[] { Convert((int)actType), Convert(slope), Convert(lowerBound), Convert(upperBound) },
-                new[] { data, gamma },
+                new[] { data.Handle, gamma.Handle },
                 output);
             return result;
         }
@@ -455,7 +455,7 @@ namespace Horker.MXNet.Operators
                 "softmax_cross_entropy",
                 _softmaxCrossEntropyParamNames,
                 _empty,
-                new[] { data, label },
+                new[] { data.Handle, label.Handle },
                 output);
             return result;
         }
@@ -486,7 +486,7 @@ namespace Horker.MXNet.Operators
                 "Activation",
                 _ActivationParamNames,
                 new[] { Convert((int)actType) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -566,7 +566,7 @@ namespace Horker.MXNet.Operators
                 "BatchNorm",
                 _BatchNormParamNames,
                 new[] { Convert(eps), Convert(momentum), Convert(fixGamma), Convert(useGlobalStats), Convert(outputMeanVar), Convert(axis), Convert(cudnnOff) },
-                new[] { data, gamma, beta, movingMean, movingVar },
+                new[] { data.Handle, gamma.Handle, beta.Handle, movingMean.Handle, movingVar.Handle },
                 output);
             return result;
         }
@@ -672,7 +672,7 @@ namespace Horker.MXNet.Operators
                 "Convolution",
                 _ConvolutionParamNames,
                 new[] { Convert(kernel), Convert(numFilter), Convert(stride), Convert(dilate), Convert(pad), Convert(numGroup), Convert(workspace), Convert(noBias), Convert((int)cudnnTune), Convert(cudnnOff), Convert((int)layout) },
-                new[] { data, weight, bias },
+                new[] { data.Handle, weight.Handle, bias.Handle },
                 output);
             return result;
         }
@@ -743,7 +743,7 @@ namespace Horker.MXNet.Operators
                 "CTCLoss",
                 _CTCLossParamNames,
                 new[] { Convert(useDataLengths), Convert(useLabelLengths), Convert((int)blankLabel) },
-                new[] { data, label, dataLengths, labelLengths },
+                new[] { data.Handle, label.Handle, dataLengths.Handle, labelLengths.Handle },
                 output);
             return result;
         }
@@ -772,7 +772,7 @@ namespace Horker.MXNet.Operators
                 "CuDNNBatchNorm",
                 _CuDNNBatchNormParamNames,
                 new[] { Convert(eps), Convert(momentum), Convert(fixGamma), Convert(useGlobalStats), Convert(outputMeanVar), Convert(axis), Convert(cudnnOff) },
-                new[] { data, gamma, beta, movingMean, movingVar },
+                new[] { data.Handle, gamma.Handle, beta.Handle, movingMean.Handle, movingVar.Handle },
                 output);
             return result;
         }
@@ -805,7 +805,7 @@ namespace Horker.MXNet.Operators
                 "Deconvolution",
                 _DeconvolutionParamNames,
                 new[] { Convert(kernel), Convert(numFilter), Convert(stride), Convert(dilate), Convert(pad), Convert(adj), Convert(targetShape), Convert(numGroup), Convert(workspace), Convert(noBias), Convert((int)cudnnTune), Convert(cudnnOff), Convert((int)layout) },
-                new[] { data, weight, bias },
+                new[] { data.Handle, weight.Handle, bias.Handle },
                 output);
             return result;
         }
@@ -858,7 +858,7 @@ namespace Horker.MXNet.Operators
                 "Dropout",
                 _DropoutParamNames,
                 new[] { Convert(p), Convert((int)mode), Convert(axes), Convert(cudnnOff) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -913,7 +913,7 @@ namespace Horker.MXNet.Operators
                 "FullyConnected",
                 _FullyConnectedParamNames,
                 new[] { Convert(numHidden), Convert(noBias), Convert(flatten) },
-                new[] { data, weight, bias },
+                new[] { data.Handle, weight.Handle, bias.Handle },
                 output);
             return result;
         }
@@ -963,7 +963,7 @@ namespace Horker.MXNet.Operators
                 "LayerNorm",
                 _LayerNormParamNames,
                 new[] { Convert(axis), Convert(eps), Convert(outputMeanVar) },
-                new[] { data, gamma, beta },
+                new[] { data.Handle, gamma.Handle, beta.Handle },
                 output);
             return result;
         }
@@ -1002,7 +1002,7 @@ namespace Horker.MXNet.Operators
                 "LRN",
                 _LRNParamNames,
                 new[] { Convert(nsize), Convert(alpha), Convert(beta), Convert(knorm) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -1043,7 +1043,7 @@ namespace Horker.MXNet.Operators
                 "moments",
                 _momentsParamNames,
                 new[] { Convert(axes), Convert(keepdims) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -1123,7 +1123,7 @@ namespace Horker.MXNet.Operators
                 "Pooling",
                 _PoolingParamNames,
                 new[] { Convert(kernel), Convert((int)poolType), Convert(globalPool), Convert(cudnnOff), Convert((int)poolingConvention), Convert(stride), Convert(pad), Convert(pValue), Convert(countIncludePad), Convert((int)layout) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -1168,7 +1168,7 @@ namespace Horker.MXNet.Operators
                 "softmax",
                 _softmaxParamNames,
                 new[] { Convert(axis), Convert(temperature), Convert(dtype) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -1214,7 +1214,7 @@ namespace Horker.MXNet.Operators
                 "softmin",
                 _softminParamNames,
                 new[] { Convert(axis), Convert(temperature), Convert(dtype) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -1250,7 +1250,7 @@ namespace Horker.MXNet.Operators
                 "log_softmax",
                 _logSoftmaxParamNames,
                 new[] { Convert(axis), Convert(temperature), Convert(dtype) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -1294,7 +1294,7 @@ namespace Horker.MXNet.Operators
                 "SoftmaxActivation",
                 _SoftmaxActivationParamNames,
                 new[] { Convert((int)mode) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -1332,7 +1332,7 @@ namespace Horker.MXNet.Operators
                 "signsgd_update",
                 _signsgdUpdateParamNames,
                 new[] { Convert(lr), Convert(wd), Convert(rescaleGrad), Convert(clipGradient) },
-                new[] { weight, grad },
+                new[] { weight.Handle, grad.Handle },
                 output);
             return result;
         }
@@ -1376,7 +1376,7 @@ namespace Horker.MXNet.Operators
                 "signum_update",
                 _signumUpdateParamNames,
                 new[] { Convert(lr), Convert(momentum), Convert(wd), Convert(rescaleGrad), Convert(clipGradient), Convert(wdLh) },
-                new[] { weight, grad, mom },
+                new[] { weight.Handle, grad.Handle, mom.Handle },
                 output);
             return result;
         }
@@ -1414,7 +1414,7 @@ namespace Horker.MXNet.Operators
                 "sgd_update",
                 _sgdUpdateParamNames,
                 new[] { Convert(lr), Convert(wd), Convert(rescaleGrad), Convert(clipGradient), Convert(lazyUpdate) },
-                new[] { weight, grad },
+                new[] { weight.Handle, grad.Handle },
                 output);
             return result;
         }
@@ -1468,7 +1468,7 @@ namespace Horker.MXNet.Operators
                 "sgd_mom_update",
                 _sgdMomUpdateParamNames,
                 new[] { Convert(lr), Convert(momentum), Convert(wd), Convert(rescaleGrad), Convert(clipGradient), Convert(lazyUpdate) },
-                new[] { weight, grad, mom },
+                new[] { weight.Handle, grad.Handle, mom.Handle },
                 output);
             return result;
         }
@@ -1493,7 +1493,7 @@ namespace Horker.MXNet.Operators
                 "mp_sgd_update",
                 _mpSgdUpdateParamNames,
                 new[] { Convert(lr), Convert(wd), Convert(rescaleGrad), Convert(clipGradient), Convert(lazyUpdate) },
-                new[] { weight, grad, weight32 },
+                new[] { weight.Handle, grad.Handle, weight32.Handle },
                 output);
             return result;
         }
@@ -1520,7 +1520,7 @@ namespace Horker.MXNet.Operators
                 "mp_sgd_mom_update",
                 _mpSgdMomUpdateParamNames,
                 new[] { Convert(lr), Convert(momentum), Convert(wd), Convert(rescaleGrad), Convert(clipGradient), Convert(lazyUpdate) },
-                new[] { weight, grad, mom, weight32 },
+                new[] { weight.Handle, grad.Handle, mom.Handle, weight32.Handle },
                 output);
             return result;
         }
@@ -1565,7 +1565,7 @@ namespace Horker.MXNet.Operators
                 "ftml_update",
                 _ftmlUpdateParamNames,
                 new[] { Convert(lr), Convert(t), Convert(beta1), Convert(beta2), Convert(epsilon), Convert(wd), Convert(rescaleGrad), Convert(clipGrad) },
-                new[] { weight, grad, d, v, z },
+                new[] { weight.Handle, grad.Handle, d.Handle, v.Handle, z.Handle },
                 output);
             return result;
         }
@@ -1624,7 +1624,7 @@ namespace Horker.MXNet.Operators
                 "adam_update",
                 _adamUpdateParamNames,
                 new[] { Convert(lr), Convert(beta1), Convert(beta2), Convert(epsilon), Convert(wd), Convert(rescaleGrad), Convert(clipGradient), Convert(lazyUpdate) },
-                new[] { weight, grad, mean, var },
+                new[] { weight.Handle, grad.Handle, mean.Handle, var.Handle },
                 output);
             return result;
         }
@@ -1664,7 +1664,7 @@ namespace Horker.MXNet.Operators
                 "nag_mom_update",
                 _nagMomUpdateParamNames,
                 new[] { Convert(lr), Convert(momentum), Convert(wd), Convert(rescaleGrad), Convert(clipGradient) },
-                new[] { weight, grad, mom },
+                new[] { weight.Handle, grad.Handle, mom.Handle },
                 output);
             return result;
         }
@@ -1693,7 +1693,7 @@ namespace Horker.MXNet.Operators
                 "mp_nag_mom_update",
                 _mpNagMomUpdateParamNames,
                 new[] { Convert(lr), Convert(momentum), Convert(wd), Convert(rescaleGrad), Convert(clipGradient) },
-                new[] { weight, grad, mom, weight32 },
+                new[] { weight.Handle, grad.Handle, mom.Handle, weight32.Handle },
                 output);
             return result;
         }
@@ -1755,7 +1755,7 @@ namespace Horker.MXNet.Operators
                 "rmsprop_update",
                 _rmspropUpdateParamNames,
                 new[] { Convert(lr), Convert(gamma1), Convert(epsilon), Convert(wd), Convert(rescaleGrad), Convert(clipGradient), Convert(clipWeights) },
-                new[] { weight, grad, n },
+                new[] { weight.Handle, grad.Handle, n.Handle },
                 output);
             return result;
         }
@@ -1809,7 +1809,7 @@ namespace Horker.MXNet.Operators
                 "rmspropalex_update",
                 _rmspropalexUpdateParamNames,
                 new[] { Convert(lr), Convert(gamma1), Convert(gamma2), Convert(epsilon), Convert(wd), Convert(rescaleGrad), Convert(clipGradient), Convert(clipWeights) },
-                new[] { weight, grad, n, g, delta },
+                new[] { weight.Handle, grad.Handle, n.Handle, g.Handle, delta.Handle },
                 output);
             return result;
         }
@@ -1858,7 +1858,7 @@ namespace Horker.MXNet.Operators
                 "ftrl_update",
                 _ftrlUpdateParamNames,
                 new[] { Convert(lr), Convert(lamda1), Convert(beta), Convert(wd), Convert(rescaleGrad), Convert(clipGradient) },
-                new[] { weight, grad, z, n },
+                new[] { weight.Handle, grad.Handle, z.Handle, n.Handle },
                 output);
             return result;
         }
@@ -1898,7 +1898,7 @@ namespace Horker.MXNet.Operators
                 "_sparse_adagrad_update",
                 _sparseAdagradUpdateParamNames,
                 new[] { Convert(lr), Convert(epsilon), Convert(wd), Convert(rescaleGrad), Convert(clipGradient) },
-                new[] { weight, grad, history },
+                new[] { weight.Handle, grad.Handle, history.Handle },
                 output);
             return result;
         }
@@ -2002,7 +2002,7 @@ namespace Horker.MXNet.Operators
                 "Pad",
                 _PadParamNames,
                 new[] { Convert((int)mode), Convert(padWidth), Convert(constantValue) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -2047,7 +2047,7 @@ namespace Horker.MXNet.Operators
                 "Flatten",
                 _FlattenParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -2095,7 +2095,7 @@ namespace Horker.MXNet.Operators
                 "_sample_uniform",
                 _sampleUniformParamNames,
                 new[] { Convert(shape), Convert(dtype) },
-                new[] { low, high },
+                new[] { low.Handle, high.Handle },
                 output);
             return result;
         }
@@ -2143,7 +2143,7 @@ namespace Horker.MXNet.Operators
                 "_sample_normal",
                 _sampleNormalParamNames,
                 new[] { Convert(shape), Convert(dtype) },
-                new[] { mu, sigma },
+                new[] { mu.Handle, sigma.Handle },
                 output);
             return result;
         }
@@ -2191,7 +2191,7 @@ namespace Horker.MXNet.Operators
                 "_sample_gamma",
                 _sampleGammaParamNames,
                 new[] { Convert(shape), Convert(dtype) },
-                new[] { alpha, beta },
+                new[] { alpha.Handle, beta.Handle },
                 output);
             return result;
         }
@@ -2237,7 +2237,7 @@ namespace Horker.MXNet.Operators
                 "_sample_exponential",
                 _sampleExponentialParamNames,
                 new[] { Convert(shape), Convert(dtype) },
-                new[] { lam },
+                new[] { lam.Handle },
                 output);
             return result;
         }
@@ -2285,7 +2285,7 @@ namespace Horker.MXNet.Operators
                 "_sample_poisson",
                 _samplePoissonParamNames,
                 new[] { Convert(shape), Convert(dtype) },
-                new[] { lam },
+                new[] { lam.Handle },
                 output);
             return result;
         }
@@ -2335,7 +2335,7 @@ namespace Horker.MXNet.Operators
                 "_sample_negative_binomial",
                 _sampleNegativeBinomialParamNames,
                 new[] { Convert(shape), Convert(dtype) },
-                new[] { k, p },
+                new[] { k.Handle, p.Handle },
                 output);
             return result;
         }
@@ -2385,7 +2385,7 @@ namespace Horker.MXNet.Operators
                 "_sample_generalized_negative_binomial",
                 _sampleGeneralizedNegativeBinomialParamNames,
                 new[] { Convert(shape), Convert(dtype) },
-                new[] { mu, alpha },
+                new[] { mu.Handle, alpha.Handle },
                 output);
             return result;
         }
@@ -2434,7 +2434,7 @@ namespace Horker.MXNet.Operators
                 "_sample_multinomial",
                 _sampleMultinomialParamNames,
                 new[] { Convert(shape), Convert(getProb), Convert(dtype) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -2735,7 +2735,7 @@ namespace Horker.MXNet.Operators
                 "_random_uniform_like",
                 _randomUniformLikeParamNames,
                 new[] { Convert(low), Convert(high) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -2766,7 +2766,7 @@ namespace Horker.MXNet.Operators
                 "_random_normal_like",
                 _randomNormalLikeParamNames,
                 new[] { Convert(loc), Convert(scale) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -2796,7 +2796,7 @@ namespace Horker.MXNet.Operators
                 "_random_gamma_like",
                 _randomGammaLikeParamNames,
                 new[] { Convert(alpha), Convert(beta) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -2825,7 +2825,7 @@ namespace Horker.MXNet.Operators
                 "_random_exponential_like",
                 _randomExponentialLikeParamNames,
                 new[] { Convert(lam) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -2855,7 +2855,7 @@ namespace Horker.MXNet.Operators
                 "_random_poisson_like",
                 _randomPoissonLikeParamNames,
                 new[] { Convert(lam) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -2887,7 +2887,7 @@ namespace Horker.MXNet.Operators
                 "_random_negative_binomial_like",
                 _randomNegativeBinomialLikeParamNames,
                 new[] { Convert(k), Convert(p) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -2921,7 +2921,7 @@ namespace Horker.MXNet.Operators
                 "_random_generalized_negative_binomial_like",
                 _randomGeneralizedNegativeBinomialLikeParamNames,
                 new[] { Convert(mu), Convert(alpha) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -2945,7 +2945,7 @@ namespace Horker.MXNet.Operators
                 "_shuffle",
                 _shuffleParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -3029,7 +3029,7 @@ namespace Horker.MXNet.Operators
                 "LinearRegressionOutput",
                 _LinearRegressionOutputParamNames,
                 new[] { Convert(gradScale) },
-                new[] { data, label },
+                new[] { data.Handle, label.Handle },
                 output);
             return result;
         }
@@ -3071,7 +3071,7 @@ namespace Horker.MXNet.Operators
                 "MAERegressionOutput",
                 _MAERegressionOutputParamNames,
                 new[] { Convert(gradScale) },
-                new[] { data, label },
+                new[] { data.Handle, label.Handle },
                 output);
             return result;
         }
@@ -3117,7 +3117,7 @@ namespace Horker.MXNet.Operators
                 "LogisticRegressionOutput",
                 _LogisticRegressionOutputParamNames,
                 new[] { Convert(gradScale) },
-                new[] { data, label },
+                new[] { data.Handle, label.Handle },
                 output);
             return result;
         }
@@ -3205,7 +3205,7 @@ namespace Horker.MXNet.Operators
                 "RNN",
                 _RNNParamNames,
                 new[] { Convert(stateSize), Convert(numLayers), Convert((int)mode), Convert(bidirectional), Convert(p), Convert(stateOutputs), Convert(projectionSize), Convert(lstmStateClipMin), Convert(lstmStateClipMax), Convert(lstmStateClipNan), Convert(useSequenceLength) },
-                new[] { data, parameters, state, stateCell, sequenceLength },
+                new[] { data.Handle, parameters.Handle, state.Handle, stateCell.Handle, sequenceLength.Handle },
                 output);
             return result;
         }
@@ -3286,7 +3286,7 @@ namespace Horker.MXNet.Operators
                 "SliceChannel",
                 _SliceChannelParamNames,
                 new[] { Convert(numOutputs), Convert(axis), Convert(squeezeAxis) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -3390,7 +3390,7 @@ namespace Horker.MXNet.Operators
                 "SoftmaxOutput",
                 _SoftmaxOutputParamNames,
                 new[] { Convert(gradScale), Convert(ignoreLabel), Convert(multiOutput), Convert(useIgnore), Convert(preserveShape), Convert((int)normalization), Convert(outGrad), Convert(smoothAlpha) },
-                new[] { data, label },
+                new[] { data.Handle, label.Handle },
                 output);
             return result;
         }
@@ -3468,7 +3468,7 @@ namespace Horker.MXNet.Operators
                 "SwapAxis",
                 _SwapAxisParamNames,
                 new[] { Convert(dim1), Convert(dim2) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -3492,7 +3492,7 @@ namespace Horker.MXNet.Operators
                 "amp_cast",
                 _ampCastParamNames,
                 new[] { Convert(dtype) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -3534,7 +3534,7 @@ namespace Horker.MXNet.Operators
                 "argmax",
                 _argmaxParamNames,
                 new[] { Convert(axis), Convert(keepdims) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -3576,7 +3576,7 @@ namespace Horker.MXNet.Operators
                 "argmin",
                 _argminParamNames,
                 new[] { Convert(axis), Convert(keepdims) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -3610,7 +3610,7 @@ namespace Horker.MXNet.Operators
                 "argmax_channel",
                 _argmaxChannelParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -3675,7 +3675,7 @@ namespace Horker.MXNet.Operators
                 "pick",
                 _pickParamNames,
                 new[] { Convert(axis), Convert(keepdims), Convert((int)mode) },
-                new[] { data, index },
+                new[] { data.Handle, index.Handle },
                 output);
             return result;
         }
@@ -3745,7 +3745,7 @@ namespace Horker.MXNet.Operators
                 "sum",
                 _sumParamNames,
                 new[] { Convert(axis), Convert(keepdims), Convert(exclude) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -3781,7 +3781,7 @@ namespace Horker.MXNet.Operators
                 "mean",
                 _meanParamNames,
                 new[] { Convert(axis), Convert(keepdims), Convert(exclude) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -3817,7 +3817,7 @@ namespace Horker.MXNet.Operators
                 "prod",
                 _prodParamNames,
                 new[] { Convert(axis), Convert(keepdims), Convert(exclude) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -3855,7 +3855,7 @@ namespace Horker.MXNet.Operators
                 "nansum",
                 _nansumParamNames,
                 new[] { Convert(axis), Convert(keepdims), Convert(exclude) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -3893,7 +3893,7 @@ namespace Horker.MXNet.Operators
                 "nanprod",
                 _nanprodParamNames,
                 new[] { Convert(axis), Convert(keepdims), Convert(exclude) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -3929,7 +3929,7 @@ namespace Horker.MXNet.Operators
                 "max",
                 _maxParamNames,
                 new[] { Convert(axis), Convert(keepdims), Convert(exclude) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -3965,7 +3965,7 @@ namespace Horker.MXNet.Operators
                 "min",
                 _minParamNames,
                 new[] { Convert(axis), Convert(keepdims), Convert(exclude) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -4006,7 +4006,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_axis",
                 _broadcastAxisParamNames,
                 new[] { Convert(axis), Convert(size) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -4044,7 +4044,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_to",
                 _broadcastToParamNames,
                 new[] { Convert(shape) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -4083,7 +4083,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_like",
                 _broadcastLikeParamNames,
                 new[] { Convert(lhsAxes), Convert(rhsAxes) },
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -4139,7 +4139,7 @@ namespace Horker.MXNet.Operators
                 "norm",
                 _normParamNames,
                 new[] { Convert(ord), Convert(axis), Convert((int)outDtype), Convert(keepdims) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -4196,7 +4196,7 @@ namespace Horker.MXNet.Operators
                 "cast_storage",
                 _castStorageParamNames,
                 new[] { Convert((int)stype) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -4243,7 +4243,7 @@ namespace Horker.MXNet.Operators
                 "where",
                 _whereParamNames,
                 _empty,
-                new[] { condition, x, y },
+                new[] { condition.Handle, x.Handle, y.Handle },
                 output);
             return result;
         }
@@ -4318,7 +4318,7 @@ namespace Horker.MXNet.Operators
                 "diag",
                 _diagParamNames,
                 new[] { Convert(k), Convert(axis1), Convert(axis2) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -4386,7 +4386,7 @@ namespace Horker.MXNet.Operators
                 "dot",
                 _dotParamNames,
                 new[] { Convert(transposeA), Convert(transposeB), Convert((int)forwardStype) },
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -4421,7 +4421,7 @@ namespace Horker.MXNet.Operators
                 "batch_dot",
                 _batchDotParamNames,
                 new[] { Convert(transposeA), Convert(transposeB), Convert((int)forwardStype) },
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -4465,7 +4465,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_add",
                 _broadcastAddParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -4509,7 +4509,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_sub",
                 _broadcastSubParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -4547,7 +4547,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_mul",
                 _broadcastMulParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -4585,7 +4585,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_div",
                 _broadcastDivParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -4619,7 +4619,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_mod",
                 _broadcastModParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -4653,7 +4653,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_power",
                 _broadcastPowerParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -4689,7 +4689,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_maximum",
                 _broadcastMaximumParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -4725,7 +4725,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_minimum",
                 _broadcastMinimumParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -4767,7 +4767,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_hypot",
                 _broadcastHypotParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -4801,7 +4801,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_equal",
                 _broadcastEqualParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -4835,7 +4835,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_not_equal",
                 _broadcastNotEqualParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -4869,7 +4869,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_greater",
                 _broadcastGreaterParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -4903,7 +4903,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_greater_equal",
                 _broadcastGreaterEqualParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -4937,7 +4937,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_lesser",
                 _broadcastLesserParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -4971,7 +4971,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_lesser_equal",
                 _broadcastLesserEqualParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5005,7 +5005,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_logical_and",
                 _broadcastLogicalAndParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5039,7 +5039,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_logical_or",
                 _broadcastLogicalOrParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5073,7 +5073,7 @@ namespace Horker.MXNet.Operators
                 "broadcast_logical_xor",
                 _broadcastLogicalXorParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5104,7 +5104,7 @@ namespace Horker.MXNet.Operators
                 "elemwise_add",
                 _elemwiseAddParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5123,7 +5123,7 @@ namespace Horker.MXNet.Operators
                 "_grad_add",
                 _gradAddParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5154,7 +5154,7 @@ namespace Horker.MXNet.Operators
                 "elemwise_sub",
                 _elemwiseSubParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5184,7 +5184,7 @@ namespace Horker.MXNet.Operators
                 "elemwise_mul",
                 _elemwiseMulParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5207,7 +5207,7 @@ namespace Horker.MXNet.Operators
                 "elemwise_div",
                 _elemwiseDivParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5226,7 +5226,7 @@ namespace Horker.MXNet.Operators
                 "_mod",
                 _modParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5245,7 +5245,7 @@ namespace Horker.MXNet.Operators
                 "_power",
                 _powerParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5264,7 +5264,7 @@ namespace Horker.MXNet.Operators
                 "_maximum",
                 _maximumParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5283,7 +5283,7 @@ namespace Horker.MXNet.Operators
                 "_minimum",
                 _minimumParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5306,7 +5306,7 @@ namespace Horker.MXNet.Operators
                 "_hypot",
                 _hypotParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5325,7 +5325,7 @@ namespace Horker.MXNet.Operators
                 "_equal",
                 _equalParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5344,7 +5344,7 @@ namespace Horker.MXNet.Operators
                 "_not_equal",
                 _notEqualParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5363,7 +5363,7 @@ namespace Horker.MXNet.Operators
                 "_greater",
                 _greaterParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5382,7 +5382,7 @@ namespace Horker.MXNet.Operators
                 "_greater_equal",
                 _greaterEqualParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5401,7 +5401,7 @@ namespace Horker.MXNet.Operators
                 "_lesser",
                 _lesserParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5420,7 +5420,7 @@ namespace Horker.MXNet.Operators
                 "_lesser_equal",
                 _lesserEqualParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5439,7 +5439,7 @@ namespace Horker.MXNet.Operators
                 "_logical_and",
                 _logicalAndParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5458,7 +5458,7 @@ namespace Horker.MXNet.Operators
                 "_logical_or",
                 _logicalOrParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5477,7 +5477,7 @@ namespace Horker.MXNet.Operators
                 "_logical_xor",
                 _logicalXorParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -5496,7 +5496,7 @@ namespace Horker.MXNet.Operators
                 "_plus_scalar",
                 _plusScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5515,7 +5515,7 @@ namespace Horker.MXNet.Operators
                 "_minus_scalar",
                 _minusScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5534,7 +5534,7 @@ namespace Horker.MXNet.Operators
                 "_rminus_scalar",
                 _rminusScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5563,7 +5563,7 @@ namespace Horker.MXNet.Operators
                 "_mul_scalar",
                 _mulScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5592,7 +5592,7 @@ namespace Horker.MXNet.Operators
                 "_div_scalar",
                 _divScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5611,7 +5611,7 @@ namespace Horker.MXNet.Operators
                 "_rdiv_scalar",
                 _rdivScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5630,7 +5630,7 @@ namespace Horker.MXNet.Operators
                 "_mod_scalar",
                 _modScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5649,7 +5649,7 @@ namespace Horker.MXNet.Operators
                 "_rmod_scalar",
                 _rmodScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5668,7 +5668,7 @@ namespace Horker.MXNet.Operators
                 "_maximum_scalar",
                 _maximumScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5687,7 +5687,7 @@ namespace Horker.MXNet.Operators
                 "_minimum_scalar",
                 _minimumScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5706,7 +5706,7 @@ namespace Horker.MXNet.Operators
                 "_power_scalar",
                 _powerScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5725,7 +5725,7 @@ namespace Horker.MXNet.Operators
                 "_rpower_scalar",
                 _rpowerScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5744,7 +5744,7 @@ namespace Horker.MXNet.Operators
                 "_hypot_scalar",
                 _hypotScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5782,7 +5782,7 @@ namespace Horker.MXNet.Operators
                 "smooth_l1",
                 _smoothL1ParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5801,7 +5801,7 @@ namespace Horker.MXNet.Operators
                 "_equal_scalar",
                 _equalScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5820,7 +5820,7 @@ namespace Horker.MXNet.Operators
                 "_not_equal_scalar",
                 _notEqualScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5839,7 +5839,7 @@ namespace Horker.MXNet.Operators
                 "_greater_scalar",
                 _greaterScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5858,7 +5858,7 @@ namespace Horker.MXNet.Operators
                 "_greater_equal_scalar",
                 _greaterEqualScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5877,7 +5877,7 @@ namespace Horker.MXNet.Operators
                 "_lesser_scalar",
                 _lesserScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5896,7 +5896,7 @@ namespace Horker.MXNet.Operators
                 "_lesser_equal_scalar",
                 _lesserEqualScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5915,7 +5915,7 @@ namespace Horker.MXNet.Operators
                 "_logical_and_scalar",
                 _logicalAndScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5934,7 +5934,7 @@ namespace Horker.MXNet.Operators
                 "_logical_or_scalar",
                 _logicalOrScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5953,7 +5953,7 @@ namespace Horker.MXNet.Operators
                 "_logical_xor_scalar",
                 _logicalXorScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -5984,7 +5984,7 @@ namespace Horker.MXNet.Operators
                 "_scatter_elemwise_div",
                 _scatterElemwiseDivParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -6014,7 +6014,7 @@ namespace Horker.MXNet.Operators
                 "_scatter_plus_scalar",
                 _scatterPlusScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6044,7 +6044,7 @@ namespace Horker.MXNet.Operators
                 "_scatter_minus_scalar",
                 _scatterMinusScalarParamNames,
                 new[] { Convert(scalar) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6075,7 +6075,7 @@ namespace Horker.MXNet.Operators
                 "relu",
                 _reluParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6102,7 +6102,7 @@ namespace Horker.MXNet.Operators
                 "sigmoid",
                 _sigmoidParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6129,7 +6129,7 @@ namespace Horker.MXNet.Operators
                 "hard_sigmoid",
                 _hardSigmoidParamNames,
                 new[] { Convert(alpha), Convert(beta) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6156,7 +6156,7 @@ namespace Horker.MXNet.Operators
                 "softsign",
                 _softsignParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6176,7 +6176,7 @@ namespace Horker.MXNet.Operators
                 "_copy",
                 _copyParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6221,7 +6221,7 @@ namespace Horker.MXNet.Operators
                 "BlockGrad",
                 _BlockGradParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6262,7 +6262,7 @@ namespace Horker.MXNet.Operators
                 "make_loss",
                 _makeLossParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6281,7 +6281,7 @@ namespace Horker.MXNet.Operators
                 "_identity_with_attr_like_rhs",
                 _identityWithAttrLikeRhsParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -6327,7 +6327,7 @@ namespace Horker.MXNet.Operators
                 "reshape_like",
                 _reshapeLikeParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -6357,7 +6357,7 @@ namespace Horker.MXNet.Operators
                 "shape_array",
                 _shapeArrayParamNames,
                 new[] { Convert(lhsBegin), Convert(lhsEnd), Convert(rhsBegin), Convert(rhsEnd) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6383,7 +6383,7 @@ namespace Horker.MXNet.Operators
                 "size_array",
                 _sizeArrayParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6414,7 +6414,7 @@ namespace Horker.MXNet.Operators
                 "Cast",
                 _CastParamNames,
                 new[] { Convert(dtype) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6440,7 +6440,7 @@ namespace Horker.MXNet.Operators
                 "negative",
                 _negativeParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6468,7 +6468,7 @@ namespace Horker.MXNet.Operators
                 "reciprocal",
                 _reciprocalParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6500,7 +6500,7 @@ namespace Horker.MXNet.Operators
                 "abs",
                 _absParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6532,7 +6532,7 @@ namespace Horker.MXNet.Operators
                 "sign",
                 _signParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6564,7 +6564,7 @@ namespace Horker.MXNet.Operators
                 "round",
                 _roundParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6600,7 +6600,7 @@ namespace Horker.MXNet.Operators
                 "rint",
                 _rintParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6634,7 +6634,7 @@ namespace Horker.MXNet.Operators
                 "ceil",
                 _ceilParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6668,7 +6668,7 @@ namespace Horker.MXNet.Operators
                 "floor",
                 _floorParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6703,7 +6703,7 @@ namespace Horker.MXNet.Operators
                 "trunc",
                 _truncParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6736,7 +6736,7 @@ namespace Horker.MXNet.Operators
                 "fix",
                 _fixParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6771,7 +6771,7 @@ namespace Horker.MXNet.Operators
                 "square",
                 _squareParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6806,7 +6806,7 @@ namespace Horker.MXNet.Operators
                 "sqrt",
                 _sqrtParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6837,7 +6837,7 @@ namespace Horker.MXNet.Operators
                 "rsqrt",
                 _rsqrtParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6872,7 +6872,7 @@ namespace Horker.MXNet.Operators
                 "cbrt",
                 _cbrtParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6898,7 +6898,7 @@ namespace Horker.MXNet.Operators
                 "erf",
                 _erfParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6924,7 +6924,7 @@ namespace Horker.MXNet.Operators
                 "erfinv",
                 _erfinvParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6953,7 +6953,7 @@ namespace Horker.MXNet.Operators
                 "rcbrt",
                 _rcbrtParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -6984,7 +6984,7 @@ namespace Horker.MXNet.Operators
                 "exp",
                 _expParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7010,7 +7010,7 @@ namespace Horker.MXNet.Operators
                 "log",
                 _logParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7036,7 +7036,7 @@ namespace Horker.MXNet.Operators
                 "log10",
                 _log10ParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7062,7 +7062,7 @@ namespace Horker.MXNet.Operators
                 "log2",
                 _log2ParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7093,7 +7093,7 @@ namespace Horker.MXNet.Operators
                 "log1p",
                 _log1pParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7123,7 +7123,7 @@ namespace Horker.MXNet.Operators
                 "expm1",
                 _expm1ParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7146,7 +7146,7 @@ namespace Horker.MXNet.Operators
                 "gamma",
                 _gammaParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7169,7 +7169,7 @@ namespace Horker.MXNet.Operators
                 "gammaln",
                 _gammalnParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7192,7 +7192,7 @@ namespace Horker.MXNet.Operators
                 "logical_not",
                 _logicalNotParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7225,7 +7225,7 @@ namespace Horker.MXNet.Operators
                 "sin",
                 _sinParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7254,7 +7254,7 @@ namespace Horker.MXNet.Operators
                 "cos",
                 _cosParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7287,7 +7287,7 @@ namespace Horker.MXNet.Operators
                 "tan",
                 _tanParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7321,7 +7321,7 @@ namespace Horker.MXNet.Operators
                 "arcsin",
                 _arcsinParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7351,7 +7351,7 @@ namespace Horker.MXNet.Operators
                 "arccos",
                 _arccosParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7384,7 +7384,7 @@ namespace Horker.MXNet.Operators
                 "arctan",
                 _arctanParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7415,7 +7415,7 @@ namespace Horker.MXNet.Operators
                 "degrees",
                 _degreesParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7446,7 +7446,7 @@ namespace Horker.MXNet.Operators
                 "radians",
                 _radiansParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7477,7 +7477,7 @@ namespace Horker.MXNet.Operators
                 "sinh",
                 _sinhParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7504,7 +7504,7 @@ namespace Horker.MXNet.Operators
                 "cosh",
                 _coshParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7535,7 +7535,7 @@ namespace Horker.MXNet.Operators
                 "tanh",
                 _tanhParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7564,7 +7564,7 @@ namespace Horker.MXNet.Operators
                 "arcsinh",
                 _arcsinhParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7589,7 +7589,7 @@ namespace Horker.MXNet.Operators
                 "arccosh",
                 _arccoshParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7618,7 +7618,7 @@ namespace Horker.MXNet.Operators
                 "arctanh",
                 _arctanhParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -7651,7 +7651,7 @@ namespace Horker.MXNet.Operators
                 "_histogram",
                 _histogramParamNames,
                 new[] { Convert(binCnt), Convert(range) },
-                new[] { data, bins },
+                new[] { data.Handle, bins.Handle },
                 output);
             return result;
         }
@@ -7726,7 +7726,7 @@ namespace Horker.MXNet.Operators
                 "Embedding",
                 _EmbeddingParamNames,
                 new[] { Convert(inputDim), Convert(outputDim), Convert(dtype), Convert(sparseGrad) },
-                new[] { data, weight },
+                new[] { data.Handle, weight.Handle },
                 output);
             return result;
         }
@@ -7798,7 +7798,7 @@ namespace Horker.MXNet.Operators
                 "take",
                 _takeParamNames,
                 new[] { Convert(axis), Convert((int)mode) },
-                new[] { a, indices },
+                new[] { a.Handle, indices.Handle },
                 output);
             return result;
         }
@@ -7838,7 +7838,7 @@ namespace Horker.MXNet.Operators
                 "batch_take",
                 _batchTakeParamNames,
                 _empty,
-                new[] { a, indices },
+                new[] { a.Handle, indices.Handle },
                 output);
             return result;
         }
@@ -7894,7 +7894,7 @@ namespace Horker.MXNet.Operators
                 "one_hot",
                 _oneHotParamNames,
                 new[] { Convert(depth), Convert(onValue), Convert(offValue), Convert(dtype) },
-                new[] { indices },
+                new[] { indices.Handle },
                 output);
             return result;
         }
@@ -7937,7 +7937,7 @@ namespace Horker.MXNet.Operators
                 "gather_nd",
                 _gatherNdParamNames,
                 _empty,
-                new[] { data, indices },
+                new[] { data.Handle, indices.Handle },
                 output);
             return result;
         }
@@ -8000,7 +8000,7 @@ namespace Horker.MXNet.Operators
                 "scatter_nd",
                 _scatterNdParamNames,
                 new[] { Convert(shape) },
-                new[] { data, indices },
+                new[] { data.Handle, indices.Handle },
                 output);
             return result;
         }
@@ -8036,7 +8036,7 @@ namespace Horker.MXNet.Operators
                 "_scatter_set_nd",
                 _scatterSetNdParamNames,
                 new[] { Convert(shape) },
-                new[] { lhs, rhs, indices },
+                new[] { lhs.Handle, rhs.Handle, indices.Handle },
                 output);
             return result;
         }
@@ -8222,7 +8222,7 @@ namespace Horker.MXNet.Operators
                 "zeros_like",
                 _zerosLikeParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -8251,7 +8251,7 @@ namespace Horker.MXNet.Operators
                 "ones_like",
                 _onesLikeParamNames,
                 _empty,
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -8325,7 +8325,7 @@ namespace Horker.MXNet.Operators
                 "_linalg_gemm",
                 _linalgGemmParamNames,
                 new[] { Convert(transposeA), Convert(transposeB), Convert(alpha), Convert(beta), Convert(axis) },
-                new[] { A, B, C },
+                new[] { A.Handle, B.Handle, C.Handle },
                 output);
             return result;
         }
@@ -8394,7 +8394,7 @@ namespace Horker.MXNet.Operators
                 "_linalg_gemm2",
                 _linalgGemm2ParamNames,
                 new[] { Convert(transposeA), Convert(transposeB), Convert(alpha), Convert(axis) },
-                new[] { A, B },
+                new[] { A.Handle, B.Handle },
                 output);
             return result;
         }
@@ -8438,7 +8438,7 @@ namespace Horker.MXNet.Operators
                 "_linalg_potrf",
                 _linalgPotrfParamNames,
                 _empty,
-                new[] { A },
+                new[] { A.Handle },
                 output);
             return result;
         }
@@ -8491,7 +8491,7 @@ namespace Horker.MXNet.Operators
                 "_linalg_potri",
                 _linalgPotriParamNames,
                 _empty,
-                new[] { A },
+                new[] { A.Handle },
                 output);
             return result;
         }
@@ -8549,7 +8549,7 @@ namespace Horker.MXNet.Operators
                 "_linalg_trmm",
                 _linalgTrmmParamNames,
                 new[] { Convert(transpose), Convert(rightside), Convert(lower), Convert(alpha) },
-                new[] { A, B },
+                new[] { A.Handle, B.Handle },
                 output);
             return result;
         }
@@ -8608,7 +8608,7 @@ namespace Horker.MXNet.Operators
                 "_linalg_trsm",
                 _linalgTrsmParamNames,
                 new[] { Convert(transpose), Convert(rightside), Convert(lower), Convert(alpha) },
-                new[] { A, B },
+                new[] { A.Handle, B.Handle },
                 output);
             return result;
         }
@@ -8648,7 +8648,7 @@ namespace Horker.MXNet.Operators
                 "_linalg_sumlogdiag",
                 _linalgSumlogdiagParamNames,
                 _empty,
-                new[] { A },
+                new[] { A.Handle },
                 output);
             return result;
         }
@@ -8696,7 +8696,7 @@ namespace Horker.MXNet.Operators
                 "_linalg_extractdiag",
                 _linalgExtractdiagParamNames,
                 new[] { Convert(offset) },
-                new[] { A },
+                new[] { A.Handle },
                 output);
             return result;
         }
@@ -8745,7 +8745,7 @@ namespace Horker.MXNet.Operators
                 "_linalg_makediag",
                 _linalgMakediagParamNames,
                 new[] { Convert(offset) },
-                new[] { A },
+                new[] { A.Handle },
                 output);
             return result;
         }
@@ -8801,7 +8801,7 @@ namespace Horker.MXNet.Operators
                 "_linalg_extracttrian",
                 _linalgExtracttrianParamNames,
                 new[] { Convert(offset), Convert(lower) },
-                new[] { A },
+                new[] { A.Handle },
                 output);
             return result;
         }
@@ -8867,7 +8867,7 @@ namespace Horker.MXNet.Operators
                 "_linalg_maketrian",
                 _linalgMaketrianParamNames,
                 new[] { Convert(offset), Convert(lower) },
-                new[] { A },
+                new[] { A.Handle },
                 output);
             return result;
         }
@@ -8922,7 +8922,7 @@ namespace Horker.MXNet.Operators
                 "_linalg_syrk",
                 _linalgSyrkParamNames,
                 new[] { Convert(transpose), Convert(alpha) },
-                new[] { A },
+                new[] { A.Handle },
                 output);
             return result;
         }
@@ -8986,7 +8986,7 @@ namespace Horker.MXNet.Operators
                 "_linalg_gelqf",
                 _linalgGelqfParamNames,
                 _empty,
-                new[] { A },
+                new[] { A.Handle },
                 output);
             return result;
         }
@@ -9049,7 +9049,7 @@ namespace Horker.MXNet.Operators
                 "_linalg_syevd",
                 _linalgSyevdParamNames,
                 _empty,
-                new[] { A },
+                new[] { A.Handle },
                 output);
             return result;
         }
@@ -9092,7 +9092,7 @@ namespace Horker.MXNet.Operators
                 "_linalg_inverse",
                 _linalgInverseParamNames,
                 _empty,
-                new[] { A },
+                new[] { A.Handle },
                 output);
             return result;
         }
@@ -9175,7 +9175,7 @@ namespace Horker.MXNet.Operators
                 "Reshape",
                 _ReshapeParamNames,
                 new[] { Convert(shape), Convert(reverse) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -9223,7 +9223,7 @@ namespace Horker.MXNet.Operators
                 "transpose",
                 _transposeParamNames,
                 new[] { Convert(axes) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -9249,7 +9249,7 @@ namespace Horker.MXNet.Operators
                 "expand_dims",
                 _expandDimsParamNames,
                 new[] { Convert(axis) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -9316,7 +9316,7 @@ namespace Horker.MXNet.Operators
                 "slice",
                 _sliceParamNames,
                 new[] { Convert(begin), Convert(end), Convert(step) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -9346,7 +9346,7 @@ namespace Horker.MXNet.Operators
                 "_slice_assign",
                 _sliceAssignParamNames,
                 new[] { Convert(begin), Convert(end), Convert(step) },
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -9375,7 +9375,7 @@ namespace Horker.MXNet.Operators
                 "_slice_assign_scalar",
                 _sliceAssignScalarParamNames,
                 new[] { Convert(begin), Convert(end), Convert(scalar), Convert(step) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -9419,7 +9419,7 @@ namespace Horker.MXNet.Operators
                 "slice_axis",
                 _sliceAxisParamNames,
                 new[] { Convert(axis), Convert(begin), Convert(end) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -9491,7 +9491,7 @@ namespace Horker.MXNet.Operators
                 "slice_like",
                 _sliceLikeParamNames,
                 new[] { Convert(axes) },
-                new[] { data, shapeLike },
+                new[] { data.Handle, shapeLike.Handle },
                 output);
             return result;
         }
@@ -9537,7 +9537,7 @@ namespace Horker.MXNet.Operators
                 "clip",
                 _clipParamNames,
                 new[] { Convert(aMin), Convert(aMax) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -9582,7 +9582,7 @@ namespace Horker.MXNet.Operators
                 "repeat",
                 _repeatParamNames,
                 new[] { Convert(repeats), Convert(axis) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -9637,7 +9637,7 @@ namespace Horker.MXNet.Operators
                 "tile",
                 _tileParamNames,
                 new[] { Convert(reps) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -9672,7 +9672,7 @@ namespace Horker.MXNet.Operators
                 "reverse",
                 _reverseParamNames,
                 new[] { Convert(axis) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -9725,7 +9725,7 @@ namespace Horker.MXNet.Operators
                 "depth_to_space",
                 _depthToSpaceParamNames,
                 new[] { Convert(blockSize) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -9780,7 +9780,7 @@ namespace Horker.MXNet.Operators
                 "space_to_depth",
                 _spaceToDepthParamNames,
                 new[] { Convert(blockSize) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -9870,7 +9870,7 @@ namespace Horker.MXNet.Operators
                 "_split_v2",
                 _splitV2ParamNames,
                 new[] { Convert(indices), Convert(axis), Convert(squeezeAxis), Convert(sections) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -9923,7 +9923,7 @@ namespace Horker.MXNet.Operators
                 "topk",
                 _topkParamNames,
                 new[] { Convert(axis), Convert(k), Convert((int)retTyp), Convert(isAscend), Convert(dtype) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -9967,7 +9967,7 @@ namespace Horker.MXNet.Operators
                 "sort",
                 _sortParamNames,
                 new[] { Convert(axis), Convert(isAscend) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -10010,7 +10010,7 @@ namespace Horker.MXNet.Operators
                 "argsort",
                 _argsortParamNames,
                 new[] { Convert(axis), Convert(isAscend), Convert(dtype) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -10039,7 +10039,7 @@ namespace Horker.MXNet.Operators
                 "_ravel_multi_index",
                 _ravelMultiIndexParamNames,
                 new[] { Convert(shape) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -10068,7 +10068,7 @@ namespace Horker.MXNet.Operators
                 "_unravel_index",
                 _unravelIndexParamNames,
                 new[] { Convert(shape) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -10108,7 +10108,7 @@ namespace Horker.MXNet.Operators
                 "_sparse_retain",
                 _sparseRetainParamNames,
                 _empty,
-                new[] { data, indices },
+                new[] { data.Handle, indices.Handle },
                 output);
             return result;
         }
@@ -10156,7 +10156,7 @@ namespace Horker.MXNet.Operators
                 "_square_sum",
                 _squareSumParamNames,
                 new[] { Convert(axis), Convert(keepdims), Convert(exclude) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -10249,7 +10249,7 @@ namespace Horker.MXNet.Operators
                 "BilinearSampler",
                 _BilinearSamplerParamNames,
                 new[] { Convert(cudnnOff) },
-                new[] { data, grid },
+                new[] { data.Handle, grid.Handle },
                 output);
             return result;
         }
@@ -10289,7 +10289,7 @@ namespace Horker.MXNet.Operators
                 "Convolution_v1",
                 _ConvolutionV1ParamNames,
                 new[] { Convert(kernel), Convert(numFilter), Convert(stride), Convert(dilate), Convert(pad), Convert(numGroup), Convert(workspace), Convert(noBias), Convert((int)cudnnTune), Convert(cudnnOff), Convert((int)layout) },
-                new[] { data, weight, bias },
+                new[] { data.Handle, weight.Handle, bias.Handle },
                 output);
             return result;
         }
@@ -10347,7 +10347,7 @@ namespace Horker.MXNet.Operators
                 "Correlation",
                 _CorrelationParamNames,
                 new[] { Convert(kernelSize), Convert(maxDisplacement), Convert(stride1), Convert(stride2), Convert(padSize), Convert(isMultiply) },
-                new[] { data1, data2 },
+                new[] { data1.Handle, data2.Handle },
                 output);
             return result;
         }
@@ -10384,7 +10384,7 @@ namespace Horker.MXNet.Operators
                 "GridGenerator",
                 _GridGeneratorParamNames,
                 new[] { Convert((int)transformType), Convert(targetShape) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -10446,7 +10446,7 @@ namespace Horker.MXNet.Operators
                 "InstanceNorm",
                 _InstanceNormParamNames,
                 new[] { Convert(eps) },
-                new[] { data, gamma, beta },
+                new[] { data.Handle, gamma.Handle, beta.Handle },
                 output);
             return result;
         }
@@ -10520,7 +10520,7 @@ namespace Horker.MXNet.Operators
                 "L2Normalization",
                 _L2NormalizationParamNames,
                 new[] { Convert(eps), Convert((int)mode) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -10583,7 +10583,7 @@ namespace Horker.MXNet.Operators
                 "Pooling_v1",
                 _PoolingV1ParamNames,
                 new[] { Convert(kernel), Convert((int)poolType), Convert(globalPool), Convert((int)poolingConvention), Convert(stride), Convert(pad) },
-                new[] { data },
+                new[] { data.Handle },
                 output);
             return result;
         }
@@ -10649,7 +10649,7 @@ namespace Horker.MXNet.Operators
                 "ROIPooling",
                 _ROIPoolingParamNames,
                 new[] { Convert(pooledSize), Convert(spatialScale) },
-                new[] { data, rois },
+                new[] { data.Handle, rois.Handle },
                 output);
             return result;
         }
@@ -10716,7 +10716,7 @@ namespace Horker.MXNet.Operators
                 "SequenceLast",
                 _SequenceLastParamNames,
                 new[] { Convert(useSequenceLength), Convert(axis) },
-                new[] { data, sequenceLength },
+                new[] { data.Handle, sequenceLength.Handle },
                 output);
             return result;
         }
@@ -10806,7 +10806,7 @@ namespace Horker.MXNet.Operators
                 "SequenceMask",
                 _SequenceMaskParamNames,
                 new[] { Convert(useSequenceLength), Convert(value), Convert(axis) },
-                new[] { data, sequenceLength },
+                new[] { data.Handle, sequenceLength.Handle },
                 output);
             return result;
         }
@@ -10894,7 +10894,7 @@ namespace Horker.MXNet.Operators
                 "SequenceReverse",
                 _SequenceReverseParamNames,
                 new[] { Convert(useSequenceLength), Convert(axis) },
-                new[] { data, sequenceLength },
+                new[] { data.Handle, sequenceLength.Handle },
                 output);
             return result;
         }
@@ -10917,7 +10917,7 @@ namespace Horker.MXNet.Operators
                 "SpatialTransformer",
                 _SpatialTransformerParamNames,
                 new[] { Convert((int)transformType), Convert((int)samplerType), Convert(targetShape), Convert(cudnnOff) },
-                new[] { data, loc },
+                new[] { data.Handle, loc.Handle },
                 output);
             return result;
         }
@@ -10944,7 +10944,7 @@ namespace Horker.MXNet.Operators
                 "SVMOutput",
                 _SVMOutputParamNames,
                 new[] { Convert(margin), Convert(regularizationCoefficient), Convert(useLinear) },
-                new[] { data, label },
+                new[] { data.Handle, label.Handle },
                 output);
             return result;
         }
@@ -10963,7 +10963,7 @@ namespace Horker.MXNet.Operators
                 "_onehot_encode",
                 _onehotEncodeParamNames,
                 _empty,
-                new[] { lhs, rhs },
+                new[] { lhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -10983,7 +10983,7 @@ namespace Horker.MXNet.Operators
                 "fill_element_0index",
                 _fillElement0indexParamNames,
                 _empty,
-                new[] { lhs, mhs, rhs },
+                new[] { lhs.Handle, mhs.Handle, rhs.Handle },
                 output);
             return result;
         }
@@ -11008,7 +11008,7 @@ namespace Horker.MXNet.Operators
                 "_imdecode",
                 _imdecodeParamNames,
                 new[] { Convert(index), Convert(x0), Convert(y0), Convert(x1), Convert(y1), Convert(c), Convert(size) },
-                new[] { mean },
+                new[] { mean.Handle },
                 output);
             return result;
         }
