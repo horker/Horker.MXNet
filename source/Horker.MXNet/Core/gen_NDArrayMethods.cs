@@ -357,6 +357,103 @@ namespace Horker.MXNet.Core
         }
 
         /// <summary>
+        /// Compute *N*-D convolution on *(N+2)*-D input.
+        /// 
+        /// In the 2-D convolution, given input data with shape *(batch_size,
+        /// channel, height, width)*, the output is computed by
+        /// 
+        /// .. math::
+        /// 
+        ///    out[n,i,:,:] = bias[i] + \sum_{j=0}^{channel} data[n,j,:,:] \star
+        ///    weight[i,j,:,:]
+        /// 
+        /// where :math:`\star` is the 2-D cross-correlation operator.
+        /// 
+        /// For general 2-D convolution, the shapes are
+        /// 
+        /// - **data**: *(batch_size, channel, height, width)*
+        /// - **weight**: *(num_filter, channel, kernel[0], kernel[1])*
+        /// - **bias**: *(num_filter,)*
+        /// - **out**: *(batch_size, num_filter, out_height, out_width)*.
+        /// 
+        /// Define::
+        /// 
+        ///   f(x,k,p,s,d) = floor((x+2*p-d*(k-1)-1)/s)+1
+        /// 
+        /// then we have::
+        /// 
+        ///   out_height=f(height, kernel[0], pad[0], stride[0], dilate[0])
+        ///   out_width=f(width, kernel[1], pad[1], stride[1], dilate[1])
+        /// 
+        /// If ``no_bias`` is set to be true, then the ``bias`` term is ignored.
+        /// 
+        /// The default data ``layout`` is *NCHW*, namely *(batch_size, channel, height,
+        /// width)*. We can choose other layouts such as *NWC*.
+        /// 
+        /// If ``num_group`` is larger than 1, denoted by *g*, then split the input ``data``
+        /// evenly into *g* parts along the channel axis, and also evenly split ``weight``
+        /// along the first dimension. Next compute the convolution on the *i*-th part of
+        /// the data with the *i*-th weight part. The output is obtained by concatenating all
+        /// the *g* results.
+        /// 
+        /// 1-D convolution does not have *height* dimension but only *width* in space.
+        /// 
+        /// - **data**: *(batch_size, channel, width)*
+        /// - **weight**: *(num_filter, channel, kernel[0])*
+        /// - **bias**: *(num_filter,)*
+        /// - **out**: *(batch_size, num_filter, out_width)*.
+        /// 
+        /// 3-D convolution adds an additional *depth* dimension besides *height* and
+        /// *width*. The shapes are
+        /// 
+        /// - **data**: *(batch_size, channel, depth, height, width)*
+        /// - **weight**: *(num_filter, channel, kernel[0], kernel[1], kernel[2])*
+        /// - **bias**: *(num_filter,)*
+        /// - **out**: *(batch_size, num_filter, out_depth, out_height, out_width)*.
+        /// 
+        /// Both ``weight`` and ``bias`` are learnable parameters.
+        /// 
+        /// There are other options to tune the performance.
+        /// 
+        /// - **cudnn_tune**: enable this option leads to higher startup time but may give
+        ///   faster speed. Options are
+        /// 
+        ///   - **off**: no tuning
+        ///   - **limited_workspace**:run test and pick the fastest algorithm that doesn't
+        ///     exceed workspace limit.
+        ///   - **fastest**: pick the fastest algorithm and ignore workspace limit.
+        ///   - **None** (default): the behavior is determined by environment variable
+        ///     ``MXNET_CUDNN_AUTOTUNE_DEFAULT``. 0 for off, 1 for limited workspace
+        ///     (default), 2 for fastest.
+        /// 
+        /// - **workspace**: A large number leads to more (GPU) memory usage but may improve
+        ///   the performance.
+        /// 
+        /// 
+        /// 
+        /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\nn\convolution.cc:L472
+        /// </summary>
+        /// <param name="data">Input data to the ConvolutionOp.</param>
+        /// <param name="weight">Weight matrix.</param>
+        /// <param name="bias">Bias parameter.</param>
+        /// <param name="kernel">Convolution kernel size: (w,), (h, w) or (d, h, w)</param>
+        /// <param name="stride">Convolution stride: (w,), (h, w) or (d, h, w). Defaults to 1 for each dimension.</param>
+        /// <param name="dilate">Convolution dilate: (w,), (h, w) or (d, h, w). Defaults to 1 for each dimension.</param>
+        /// <param name="pad">Zero pad for convolution: (w,), (h, w) or (d, h, w). Defaults to no padding.</param>
+        /// <param name="num_filter">Convolution filter(channel) number</param>
+        /// <param name="num_group">Number of group partitions.</param>
+        /// <param name="workspace">Maximum temporary workspace allowed (MB) in convolution.This parameter has two usages. When CUDNN is not used, it determines the effective batch size of the convolution kernel. When CUDNN is used, it controls the maximum temporary storage used for tuning the best CUDNN kernel when `limited_workspace` strategy is used.</param>
+        /// <param name="no_bias">Whether to disable bias parameter.</param>
+        /// <param name="cudnn_tune">Whether to pick convolution algo by running performance test.</param>
+        /// <param name="cudnn_off">Turn off cudnn for this layer.</param>
+        /// <param name="layout">Set layout for input, output and weight. Empty for
+        ///     default layout: NCW for 1d, NCHW for 2d and NCDHW for 3d.NHWC and NDHWC are only supported on GPU.</param>
+        public NDArray Convolution(NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, int numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, int numGroup = 1, long workspace = 1024, bool noBias = false, string cudnnTune = null, bool cudnnOff = false, string layout = null, NDArray output = null)
+        {
+            return Op.Convolution(this, weight, bias, kernel, numFilter, stride, dilate, pad, numGroup, workspace, noBias, cudnnTune, cudnnOff, layout, output);
+        }
+
+        /// <summary>
         /// Connectionist Temporal Classification Loss.
         /// 
         /// .. note:: The existing alias ``contrib_CTCLoss`` is deprecated.
@@ -436,6 +533,74 @@ namespace Horker.MXNet.Core
         public NDArray CuDNNBatchNorm(NDArrayOrSymbol gamma, NDArrayOrSymbol beta, NDArrayOrSymbol movingMean, NDArrayOrSymbol movingVar, double eps = 0.0010000000474974513, double momentum = 0.899999976, bool fixGamma = true, bool useGlobalStats = false, bool outputMeanVar = false, int axis = 1, bool cudnnOff = false, NDArray output = null)
         {
             return Op.CuDNNBatchNorm(this, gamma, beta, movingMean, movingVar, eps, momentum, fixGamma, useGlobalStats, outputMeanVar, axis, cudnnOff, output);
+        }
+
+        /// <summary>
+        /// Computes 1D or 2D transposed convolution (aka fractionally strided convolution) of the input tensor. This operation can be seen as the gradient of Convolution operation with respect to its input. Convolution usually reduces the size of the input. Transposed convolution works the other way, going from a smaller input to a larger output while preserving the connectivity pattern.
+        /// </summary>
+        /// <param name="data">Input tensor to the deconvolution operation.</param>
+        /// <param name="weight">Weights representing the kernel.</param>
+        /// <param name="bias">Bias added to the result after the deconvolution operation.</param>
+        /// <param name="kernel">Deconvolution kernel size: (w,), (h, w) or (d, h, w). This is same as the kernel size used for the corresponding convolution</param>
+        /// <param name="stride">The stride used for the corresponding convolution: (w,), (h, w) or (d, h, w). Defaults to 1 for each dimension.</param>
+        /// <param name="dilate">Dilation factor for each dimension of the input: (w,), (h, w) or (d, h, w). Defaults to 1 for each dimension.</param>
+        /// <param name="pad">The amount of implicit zero padding added during convolution for each dimension of the input: (w,), (h, w) or (d, h, w). ``(kernel-1)/2`` is usually a good choice. If `target_shape` is set, `pad` will be ignored and a padding that will generate the target shape will be used. Defaults to no padding.</param>
+        /// <param name="adj">Adjustment for output shape: (w,), (h, w) or (d, h, w). If `target_shape` is set, `adj` will be ignored and computed accordingly.</param>
+        /// <param name="target_shape">Shape of the output tensor: (w,), (h, w) or (d, h, w).</param>
+        /// <param name="num_filter">Number of output filters.</param>
+        /// <param name="num_group">Number of groups partition.</param>
+        /// <param name="workspace">Maximum temporary workspace allowed (MB) in deconvolution.This parameter has two usages. When CUDNN is not used, it determines the effective batch size of the deconvolution kernel. When CUDNN is used, it controls the maximum temporary storage used for tuning the best CUDNN kernel when `limited_workspace` strategy is used.</param>
+        /// <param name="no_bias">Whether to disable bias parameter.</param>
+        /// <param name="cudnn_tune">Whether to pick convolution algorithm by running performance test.</param>
+        /// <param name="cudnn_off">Turn off cudnn for this layer.</param>
+        /// <param name="layout">Set layout for input, output and weight. Empty for default layout, NCW for 1d, NCHW for 2d and NCDHW for 3d.NHWC and NDHWC are only supported on GPU.</param>
+        public NDArray Deconvolution(NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, int numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, NDShape adj = null, NDShape targetShape = null, int numGroup = 1, long workspace = 512, bool noBias = true, string cudnnTune = null, bool cudnnOff = false, string layout = null, NDArray output = null)
+        {
+            return Op.Deconvolution(this, weight, bias, kernel, numFilter, stride, dilate, pad, adj, targetShape, numGroup, workspace, noBias, cudnnTune, cudnnOff, layout, output);
+        }
+
+        /// <summary>
+        /// Applies dropout operation to input array.
+        /// 
+        /// - During training, each element of the input is set to zero with probability p.
+        ///   The whole array is rescaled by :math:`1/(1-p)` to keep the expected
+        ///   sum of the input unchanged.
+        /// 
+        /// - During testing, this operator does not change the input if mode is 'training'.
+        ///   If mode is 'always', the same computaion as during training will be applied.
+        /// 
+        /// Example::
+        /// 
+        ///   random.seed(998)
+        ///   input_array = array([[3., 0.5,  -0.5,  2., 7.],
+        ///                       [2., -0.4,   7.,  3., 0.2]])
+        ///   a = symbol.Variable('a')
+        ///   dropout = symbol.Dropout(a, p = 0.2)
+        ///   executor = dropout.simple_bind(a = input_array.shape)
+        /// 
+        ///   ## If training
+        ///   executor.forward(is_train = True, a = input_array)
+        ///   executor.outputs
+        ///   [[ 3.75   0.625 -0.     2.5    8.75 ]
+        ///    [ 2.5   -0.5    8.75   3.75   0.   ]]
+        /// 
+        ///   ## If testing
+        ///   executor.forward(is_train = False, a = input_array)
+        ///   executor.outputs
+        ///   [[ 3.     0.5   -0.5    2.     7.   ]
+        ///    [ 2.    -0.4    7.     3.     0.2  ]]
+        /// 
+        /// 
+        /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\nn\dropout.cc:L97
+        /// </summary>
+        /// <param name="data">Input array to which dropout will be applied.</param>
+        /// <param name="p">Fraction of the input that gets dropped out during training time.</param>
+        /// <param name="mode">Whether to only turn on dropout during training or to also turn on for inference.</param>
+        /// <param name="axes">Axes for variational dropout kernel.</param>
+        /// <param name="cudnn_off">Whether to turn off cudnn in dropout operator. This option is ignored if axes is specified.</param>
+        public NDArray Dropout(double p = 0.5, string mode = "training", NDShape axes = null, bool? cudnnOff = false, NDArray output = null)
+        {
+            return Op.Dropout(this, p, mode, axes, cudnnOff, output);
         }
 
         /// <summary>
@@ -585,6 +750,77 @@ namespace Horker.MXNet.Core
         public NDArray Moments(NDShape axes = null, bool keepdims = false, NDArray output = null)
         {
             return Op.Moments(this, axes, keepdims, output);
+        }
+
+        /// <summary>
+        /// Performs pooling on the input.
+        /// 
+        /// The shapes for 1-D pooling are
+        /// 
+        /// - **data** and **out**: *(batch_size, channel, width)* (NCW layout) or
+        ///   *(batch_size, width, channel)* (NWC layout),
+        /// 
+        /// The shapes for 2-D pooling are
+        /// 
+        /// - **data** and **out**: *(batch_size, channel, height, width)* (NCHW layout) or
+        ///   *(batch_size, height, width, channel)* (NHWC layout),
+        /// 
+        ///     out_height = f(height, kernel[0], pad[0], stride[0])
+        ///     out_width = f(width, kernel[1], pad[1], stride[1])
+        /// 
+        /// The definition of *f* depends on ``pooling_convention``, which has two options:
+        /// 
+        /// - **valid** (default)::
+        /// 
+        ///     f(x, k, p, s) = floor((x+2*p-k)/s)+1
+        /// 
+        /// - **full**, which is compatible with Caffe::
+        /// 
+        ///     f(x, k, p, s) = ceil((x+2*p-k)/s)+1
+        /// 
+        /// But ``global_pool`` is set to be true, then do a global pooling, namely reset
+        /// ``kernel=(height, width)``.
+        /// 
+        /// Three pooling options are supported by ``pool_type``:
+        /// 
+        /// - **avg**: average pooling
+        /// - **max**: max pooling
+        /// - **sum**: sum pooling
+        /// - **lp**: Lp pooling
+        /// 
+        /// For 3-D pooling, an additional *depth* dimension is added before
+        /// *height*. Namely the input data and output will have shape *(batch_size, channel, depth,
+        /// height, width)* (NCDHW layout) or *(batch_size, depth, height, width, channel)* (NDHWC layout).
+        /// 
+        /// Notes on Lp pooling:
+        /// 
+        /// Lp pooling was first introduced by this paper: https://arxiv.org/pdf/1204.3968.pdf.
+        /// L-1 pooling is simply sum pooling, while L-inf pooling is simply max pooling.
+        /// We can see that Lp pooling stands between those two, in practice the most common value for p is 2.
+        /// 
+        /// For each window ``X``, the mathematical expression for Lp pooling is:
+        /// 
+        /// :math:`f(X) = \sqrt[p]{\sum_{x}^{X} x^p}`
+        /// 
+        /// 
+        /// 
+        /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\nn\pooling.cc:L416
+        /// </summary>
+        /// <param name="data">Input data to the pooling operator.</param>
+        /// <param name="kernel">Pooling kernel size: (y, x) or (d, y, x)</param>
+        /// <param name="pool_type">Pooling type to be applied.</param>
+        /// <param name="global_pool">Ignore kernel size, do global pooling based on current input feature map. </param>
+        /// <param name="cudnn_off">Turn off cudnn pooling and use MXNet pooling operator. </param>
+        /// <param name="pooling_convention">Pooling convention to be applied.</param>
+        /// <param name="stride">Stride: for pooling (y, x) or (d, y, x). Defaults to 1 for each dimension.</param>
+        /// <param name="pad">Pad for pooling: (y, x) or (d, y, x). Defaults to no padding.</param>
+        /// <param name="p_value">Value of p for Lp pooling, can be 1 or 2, required for Lp Pooling.</param>
+        /// <param name="count_include_pad">Only used for AvgPool, specify whether to count padding elements for averagecalculation. For example, with a 5*5 kernel on a 3*3 corner of a image,the sum of the 9 valid elements will be divided by 25 if this is set to true,or it will be divided by 9 if this is set to false. Defaults to true.</param>
+        /// <param name="layout">Set layout for input and output. Empty for
+        ///     default layout: NCW for 1d, NCHW for 2d and NCDHW for 3d.</param>
+        public NDArray Pooling(NDShape kernel = null, string poolType = "max", bool globalPool = false, bool cudnnOff = false, string poolingConvention = "valid", NDShape stride = null, NDShape pad = null, int? pValue = null, bool? countIncludePad = null, string layout = null, NDArray output = null)
+        {
+            return Op.Pooling(this, kernel, poolType, globalPool, cudnnOff, poolingConvention, stride, pad, pValue, countIncludePad, layout, output);
         }
 
         /// <summary>
@@ -1607,6 +1843,46 @@ namespace Horker.MXNet.Core
         }
 
         /// <summary>
+        /// Concurrent sampling from multiple multinomial distributions.
+        /// 
+        /// *data* is an *n* dimensional array whose last dimension has length *k*, where
+        /// *k* is the number of possible outcomes of each multinomial distribution. This
+        /// operator will draw *shape* samples from each distribution. If shape is empty
+        /// one sample will be drawn from each distribution.
+        /// 
+        /// If *get_prob* is true, a second array containing log likelihood of the drawn
+        /// samples will also be returned. This is usually used for reinforcement learning
+        /// where you can provide reward as head gradient for this array to estimate
+        /// gradient.
+        /// 
+        /// Note that the input distribution must be normalized, i.e. *data* must sum to
+        /// 1 along its last axis.
+        /// 
+        /// Examples::
+        /// 
+        ///    probs = [[0, 0.1, 0.2, 0.3, 0.4], [0.4, 0.3, 0.2, 0.1, 0]]
+        /// 
+        ///    // Draw a single sample for each distribution
+        ///    sample_multinomial(probs) = [3, 0]
+        /// 
+        ///    // Draw a vector containing two samples for each distribution
+        ///    sample_multinomial(probs, shape=(2)) = [[4, 2],
+        ///                                            [0, 0]]
+        /// 
+        ///    // requests log likelihood
+        ///    sample_multinomial(probs, get_prob=True) = [2, 1], [0.2, 0.3]
+        /// 
+        /// </summary>
+        /// <param name="data">Distribution probabilities. Must sum to one on the last axis.</param>
+        /// <param name="shape">Shape to be sampled from each random distribution.</param>
+        /// <param name="get_prob">Whether to also return the log probability of sampled result. This is usually used for differentiating through stochastic variables, e.g. in reinforcement learning.</param>
+        /// <param name="dtype">DType of the output in case this can't be inferred.</param>
+        public NDArray SampleMultinomial(NDShape shape = null, bool getProb = false, string dtype = "int32", NDArray output = null)
+        {
+            return Op.SampleMultinomial(this, shape, getProb, dtype, output);
+        }
+
+        /// <summary>
         /// Randomly shuffle the elements.
         /// 
         /// This shuffles the array along the first axis.
@@ -2387,6 +2663,67 @@ namespace Horker.MXNet.Core
         public NDArray Min(NDShape axis = null, bool keepdims = false, bool exclude = false, NDArray output = null)
         {
             return Op.Min(this, axis, keepdims, exclude, output);
+        }
+
+        /// <summary>
+        /// Broadcasts the input array over particular axes.
+        /// 
+        /// Broadcasting is allowed on axes with size 1, such as from `(2,1,3,1)` to
+        /// `(2,8,3,9)`. Elements will be duplicated on the broadcasted axes.
+        /// 
+        /// Example::
+        /// 
+        ///    // given x of shape (1,2,1)
+        ///    x = [[[ 1.],
+        ///          [ 2.]]]
+        /// 
+        ///    // broadcast x on on axis 2
+        ///    broadcast_axis(x, axis=2, size=3) = [[[ 1.,  1.,  1.],
+        ///                                          [ 2.,  2.,  2.]]]
+        ///    // broadcast x on on axes 0 and 2
+        ///    broadcast_axis(x, axis=(0,2), size=(2,3)) = [[[ 1.,  1.,  1.],
+        ///                                                  [ 2.,  2.,  2.]],
+        ///                                                 [[ 1.,  1.,  1.],
+        ///                                                  [ 2.,  2.,  2.]]]
+        /// 
+        /// 
+        /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\broadcast_reduce_op_value.cc:L238
+        /// </summary>
+        /// <param name="data">The input</param>
+        /// <param name="axis">The axes to perform the broadcasting.</param>
+        /// <param name="size">Target sizes of the broadcasting axes.</param>
+        public NDArray BroadcastAxis(NDShape axis = null, NDShape size = null, NDArray output = null)
+        {
+            return Op.BroadcastAxis(this, axis, size, output);
+        }
+
+        /// <summary>
+        /// Broadcasts the input array to a new shape.
+        /// 
+        /// Broadcasting is a mechanism that allows NDArrays to perform arithmetic operations
+        /// with arrays of different shapes efficiently without creating multiple copies of arrays.
+        /// Also see, `Broadcasting <https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html>`_ for more explanation.
+        /// 
+        /// Broadcasting is allowed on axes with size 1, such as from `(2,1,3,1)` to
+        /// `(2,8,3,9)`. Elements will be duplicated on the broadcasted axes.
+        /// 
+        /// For example::
+        /// 
+        ///    broadcast_to([[1,2,3]], shape=(2,3)) = [[ 1.,  2.,  3.],
+        ///                                            [ 1.,  2.,  3.]])
+        /// 
+        /// The dimension which you do not want to change can also be kept as `0` which means copy the original value.
+        /// So with `shape=(2,0)`, we will obtain the same result as in the above example.
+        /// 
+        /// 
+        /// 
+        /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\broadcast_reduce_op_value.cc:L262
+        /// </summary>
+        /// <param name="data">The input</param>
+        /// <param name="shape">The shape of the desired array. We can set the dim to zero if it's same as the original. E.g `A = broadcast_to(B, shape=(10, 0, 0))` has the same meaning as `A = broadcast_axis(B, axis=0, size=10)`.</param>
+        public NDArray BroadcastTo(NDShape shape = null, NDArray output = null)
+        {
+            return Op.BroadcastTo(this, shape, output);
         }
 
         /// <summary>
@@ -6464,6 +6801,121 @@ namespace Horker.MXNet.Core
         }
 
         /// <summary>
+        /// Reshapes the input array.
+        /// 
+        /// .. note:: ``Reshape`` is deprecated, use ``reshape``
+        /// 
+        /// Given an array and a shape, this function returns a copy of the array in the new shape.
+        /// The shape is a tuple of integers such as (2,3,4). The size of the new shape should be same as the size of the input array.
+        /// 
+        /// Example::
+        /// 
+        ///   reshape([1,2,3,4], shape=(2,2)) = [[1,2], [3,4]]
+        /// 
+        /// Some dimensions of the shape can take special values from the set {0, -1, -2, -3, -4}. The significance of each is explained below:
+        /// 
+        /// - ``0``  copy this dimension from the input to the output shape.
+        /// 
+        ///   Example::
+        /// 
+        ///   - input shape = (2,3,4), shape = (4,0,2), output shape = (4,3,2)
+        ///   - input shape = (2,3,4), shape = (2,0,0), output shape = (2,3,4)
+        /// 
+        /// - ``-1`` infers the dimension of the output shape by using the remainder of the input dimensions
+        ///   keeping the size of the new array same as that of the input array.
+        ///   At most one dimension of shape can be -1.
+        /// 
+        ///   Example::
+        /// 
+        ///   - input shape = (2,3,4), shape = (6,1,-1), output shape = (6,1,4)
+        ///   - input shape = (2,3,4), shape = (3,-1,8), output shape = (3,1,8)
+        ///   - input shape = (2,3,4), shape=(-1,), output shape = (24,)
+        /// 
+        /// - ``-2`` copy all/remainder of the input dimensions to the output shape.
+        /// 
+        ///   Example::
+        /// 
+        ///   - input shape = (2,3,4), shape = (-2,), output shape = (2,3,4)
+        ///   - input shape = (2,3,4), shape = (2,-2), output shape = (2,3,4)
+        ///   - input shape = (2,3,4), shape = (-2,1,1), output shape = (2,3,4,1,1)
+        /// 
+        /// - ``-3`` use the product of two consecutive dimensions of the input shape as the output dimension.
+        /// 
+        ///   Example::
+        /// 
+        ///   - input shape = (2,3,4), shape = (-3,4), output shape = (6,4)
+        ///   - input shape = (2,3,4,5), shape = (-3,-3), output shape = (6,20)
+        ///   - input shape = (2,3,4), shape = (0,-3), output shape = (2,12)
+        ///   - input shape = (2,3,4), shape = (-3,-2), output shape = (6,4)
+        /// 
+        /// - ``-4`` split one dimension of the input into two dimensions passed subsequent to -4 in shape (can contain -1).
+        /// 
+        ///   Example::
+        /// 
+        ///   - input shape = (2,3,4), shape = (-4,1,2,-2), output shape =(1,2,3,4)
+        ///   - input shape = (2,3,4), shape = (2,-4,-1,3,-2), output shape = (2,1,3,4)
+        /// 
+        /// If the argument `reverse` is set to 1, then the special values are inferred from right to left.
+        /// 
+        ///   Example::
+        /// 
+        ///   - without reverse=1, for input shape = (10,5,4), shape = (-1,0), output shape would be (40,5)
+        ///   - with reverse=1, output shape will be (50,4).
+        /// 
+        /// 
+        /// 
+        /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\matrix_op.cc:L201
+        /// </summary>
+        /// <param name="data">Input data to reshape.</param>
+        /// <param name="shape">The target shape</param>
+        /// <param name="reverse">If true then the special values are inferred from right to left</param>
+        /// <param name="target_shape">(Deprecated! Use ``shape`` instead.) Target new shape. One and only one dim can be 0, in which case it will be inferred from the rest of dims</param>
+        /// <param name="keep_highest">(Deprecated! Use ``shape`` instead.) Whether keep the highest dim unchanged.If set to true, then the first dim in target_shape is ignored,and always fixed as input</param>
+        public NDArray Reshape(NDShape shape = null, bool reverse = false, NDShape targetShape = null, bool keepHighest = false, NDArray output = null)
+        {
+            return Op.Reshape(this, shape, reverse, targetShape, keepHighest, output);
+        }
+
+        /// <summary>
+        /// Permutes the dimensions of an array.
+        /// 
+        /// Examples::
+        /// 
+        ///   x = [[ 1, 2],
+        ///        [ 3, 4]]
+        /// 
+        ///   transpose(x) = [[ 1.,  3.],
+        ///                   [ 2.,  4.]]
+        /// 
+        ///   x = [[[ 1.,  2.],
+        ///         [ 3.,  4.]],
+        /// 
+        ///        [[ 5.,  6.],
+        ///         [ 7.,  8.]]]
+        /// 
+        ///   transpose(x) = [[[ 1.,  5.],
+        ///                    [ 3.,  7.]],
+        /// 
+        ///                   [[ 2.,  6.],
+        ///                    [ 4.,  8.]]]
+        /// 
+        ///   transpose(x, axes=(1,0,2)) = [[[ 1.,  2.],
+        ///                                  [ 5.,  6.]],
+        /// 
+        ///                                 [[ 3.,  4.],
+        ///                                  [ 7.,  8.]]]
+        /// 
+        /// 
+        /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\matrix_op.cc:L377
+        /// </summary>
+        /// <param name="data">Source input</param>
+        /// <param name="axes">Target axis order. By default the axes will be inverted.</param>
+        public NDArray Transpose(NDShape axes = null, NDArray output = null)
+        {
+            return Op.Transpose(this, axes, output);
+        }
+
+        /// <summary>
         /// Inserts a new axis of size 1 into the array shape
         /// 
         /// For example, given ``x`` with shape ``(2,3,4)``, then ``expand_dims(x, axis=1)``
@@ -6478,6 +6930,105 @@ namespace Horker.MXNet.Core
         public NDArray ExpandDims(int axis, NDArray output = null)
         {
             return Op.ExpandDims(this, axis, output);
+        }
+
+        /// <summary>
+        /// Slices a region of the array.
+        /// 
+        /// .. note:: ``crop`` is deprecated. Use ``slice`` instead.
+        /// 
+        /// This function returns a sliced array between the indices given
+        /// by `begin` and `end` with the corresponding `step`.
+        /// 
+        /// For an input array of ``shape=(d_0, d_1, ..., d_n-1)``,
+        /// slice operation with ``begin=(b_0, b_1...b_m-1)``,
+        /// ``end=(e_0, e_1, ..., e_m-1)``, and ``step=(s_0, s_1, ..., s_m-1)``,
+        /// where m <= n, results in an array with the shape
+        /// ``(|e_0-b_0|/|s_0|, ..., |e_m-1-b_m-1|/|s_m-1|, d_m, ..., d_n-1)``.
+        /// 
+        /// The resulting array's *k*-th dimension contains elements
+        /// from the *k*-th dimension of the input array starting
+        /// from index ``b_k`` (inclusive) with step ``s_k``
+        /// until reaching ``e_k`` (exclusive).
+        /// 
+        /// If the *k*-th elements are `None` in the sequence of `begin`, `end`,
+        /// and `step`, the following rule will be used to set default values.
+        /// If `s_k` is `None`, set `s_k=1`. If `s_k > 0`, set `b_k=0`, `e_k=d_k`;
+        /// else, set `b_k=d_k-1`, `e_k=-1`.
+        /// 
+        /// The storage type of ``slice`` output depends on storage types of inputs
+        /// 
+        /// - slice(csr) = csr
+        /// - otherwise, ``slice`` generates output with default storage
+        /// 
+        /// .. note:: When input data storage type is csr, it only supports
+        ///    step=(), or step=(None,), or step=(1,) to generate a csr output.
+        ///    For other step parameter values, it falls back to slicing
+        ///    a dense tensor.
+        /// 
+        /// Example::
+        /// 
+        ///   x = [[  1.,   2.,   3.,   4.],
+        ///        [  5.,   6.,   7.,   8.],
+        ///        [  9.,  10.,  11.,  12.]]
+        /// 
+        ///   slice(x, begin=(0,1), end=(2,4)) = [[ 2.,  3.,  4.],
+        ///                                      [ 6.,  7.,  8.]]
+        ///   slice(x, begin=(None, 0), end=(None, 3), step=(-1, 2)) = [[9., 11.],
+        ///                                                             [5.,  7.],
+        ///                                                             [1.,  3.]]
+        /// 
+        /// 
+        /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\matrix_op.cc:L508
+        /// </summary>
+        /// <param name="data">Source input</param>
+        /// <param name="begin">starting indices for the slice operation, supports negative indices.</param>
+        /// <param name="end">ending indices for the slice operation, supports negative indices.</param>
+        /// <param name="step">step for the slice operation, supports negative values.</param>
+        public NDArray Slice(NDShape begin, NDShape end, NDShape step = null, NDArray output = null)
+        {
+            return Op.Slice(this, begin, end, step, output);
+        }
+
+        /// <summary>
+        /// Assign the rhs to a cropped subset of lhs.
+        /// 
+        /// Requirements
+        /// ------------
+        /// - output should be explicitly given and be the same as lhs.
+        /// - lhs and rhs are of the same data type, and on the same device.
+        /// 
+        /// 
+        /// From:C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\matrix_op.cc:537
+        /// </summary>
+        /// <param name="lhs">Source input</param>
+        /// <param name="rhs">value to assign</param>
+        /// <param name="begin">starting indices for the slice operation, supports negative indices.</param>
+        /// <param name="end">ending indices for the slice operation, supports negative indices.</param>
+        /// <param name="step">step for the slice operation, supports negative values.</param>
+        public NDArray SliceAssign(NDArrayOrSymbol rhs, NDShape begin, NDShape end, NDShape step = null, NDArray output = null)
+        {
+            return Op.SliceAssign(this, rhs, begin, end, step, output);
+        }
+
+        /// <summary>
+        /// (Assign the scalar to a cropped subset of the input.
+        /// 
+        /// Requirements
+        /// ------------
+        /// - output should be explicitly given and be the same as input
+        /// )
+        /// 
+        /// From:C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\matrix_op.cc:562
+        /// </summary>
+        /// <param name="data">Source input</param>
+        /// <param name="scalar">The scalar value for assignment.</param>
+        /// <param name="begin">starting indices for the slice operation, supports negative indices.</param>
+        /// <param name="end">ending indices for the slice operation, supports negative indices.</param>
+        /// <param name="step">step for the slice operation, supports negative values.</param>
+        public NDArray SliceAssignScalar(NDShape begin, NDShape end, double scalar = 0, NDShape step = null, NDArray output = null)
+        {
+            return Op.SliceAssignScalar(this, begin, end, scalar, step, output);
         }
 
         /// <summary>
@@ -6513,6 +7064,69 @@ namespace Horker.MXNet.Core
         public NDArray SliceAxis(int axis, int begin, int? end, NDArray output = null)
         {
             return Op.SliceAxis(this, axis, begin, end, output);
+        }
+
+        /// <summary>
+        /// Slices a region of the array like the shape of another array.
+        /// 
+        /// This function is similar to ``slice``, however, the `begin` are always `0`s
+        /// and `end` of specific axes are inferred from the second input `shape_like`.
+        /// 
+        /// Given the second `shape_like` input of ``shape=(d_0, d_1, ..., d_n-1)``,
+        /// a ``slice_like`` operator with default empty `axes`, it performs the
+        /// following operation:
+        /// 
+        /// `` out = slice(input, begin=(0, 0, ..., 0), end=(d_0, d_1, ..., d_n-1))``.
+        /// 
+        /// When `axes` is not empty, it is used to speficy which axes are being sliced.
+        /// 
+        /// Given a 4-d input data, ``slice_like`` operator with ``axes=(0, 2, -1)``
+        /// will perform the following operation:
+        /// 
+        /// `` out = slice(input, begin=(0, 0, 0, 0), end=(d_0, None, d_2, d_3))``.
+        /// 
+        /// Note that it is allowed to have first and second input with different dimensions,
+        /// however, you have to make sure the `axes` are specified and not exceeding the
+        /// dimension limits.
+        /// 
+        /// For example, given `input_1` with ``shape=(2,3,4,5)`` and `input_2` with
+        /// ``shape=(1,2,3)``, it is not allowed to use:
+        /// 
+        /// `` out = slice_like(a, b)`` because ndim of `input_1` is 4, and ndim of `input_2`
+        /// is 3.
+        /// 
+        /// The following is allowed in this situation:
+        /// 
+        /// `` out = slice_like(a, b, axes=(0, 2))``
+        /// 
+        /// Example::
+        /// 
+        ///   x = [[  1.,   2.,   3.,   4.],
+        ///        [  5.,   6.,   7.,   8.],
+        ///        [  9.,  10.,  11.,  12.]]
+        /// 
+        ///   y = [[  0.,   0.,   0.],
+        ///        [  0.,   0.,   0.]]
+        /// 
+        ///   slice_like(x, y) = [[ 1.,  2.,  3.]
+        ///                       [ 5.,  6.,  7.]]
+        ///   slice_like(x, y, axes=(0, 1)) = [[ 1.,  2.,  3.]
+        ///                                    [ 5.,  6.,  7.]]
+        ///   slice_like(x, y, axes=(0)) = [[ 1.,  2.,  3.,  4.]
+        ///                                 [ 5.,  6.,  7.,  8.]]
+        ///   slice_like(x, y, axes=(-1)) = [[  1.,   2.,   3.]
+        ///                                  [  5.,   6.,   7.]
+        ///                                  [  9.,  10.,  11.]]
+        /// 
+        /// 
+        /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\matrix_op.cc:L667
+        /// </summary>
+        /// <param name="data">Source input</param>
+        /// <param name="shape_like">Shape like input</param>
+        /// <param name="axes">List of axes on which input data will be sliced according to the corresponding size of the second input. By default will slice on all axes. Negative axes are supported.</param>
+        public NDArray SliceLike(NDArrayOrSymbol shapeLike, NDShape axes = null, NDArray output = null)
+        {
+            return Op.SliceLike(this, shapeLike, axes, output);
         }
 
         /// <summary>
@@ -7139,6 +7753,37 @@ namespace Horker.MXNet.Core
         }
 
         /// <summary>
+        /// This operator is DEPRECATED. Apply convolution to input then add a bias.
+        /// </summary>
+        /// <param name="data">Input data to the ConvolutionV1Op.</param>
+        /// <param name="weight">Weight matrix.</param>
+        /// <param name="bias">Bias parameter.</param>
+        /// <param name="kernel">convolution kernel size: (h, w) or (d, h, w)</param>
+        /// <param name="stride">convolution stride: (h, w) or (d, h, w)</param>
+        /// <param name="dilate">convolution dilate: (h, w) or (d, h, w)</param>
+        /// <param name="pad">pad for convolution: (h, w) or (d, h, w)</param>
+        /// <param name="num_filter">convolution filter(channel) number</param>
+        /// <param name="num_group">Number of group partitions. Equivalent to slicing input into num_group
+        ///     partitions, apply convolution on each, then concatenate the results</param>
+        /// <param name="workspace">Maximum temporary workspace allowed for convolution (MB).This parameter determines the effective batch size of the convolution kernel, which may be smaller than the given batch size. Also, the workspace will be automatically enlarged to make sure that we can run the kernel with batch_size=1</param>
+        /// <param name="no_bias">Whether to disable bias parameter.</param>
+        /// <param name="cudnn_tune">Whether to pick convolution algo by running performance test.
+        ///     Leads to higher startup time but may give faster speed. Options are:
+        ///     'off': no tuning
+        ///     'limited_workspace': run test and pick the fastest algorithm that doesn't exceed workspace limit.
+        ///     'fastest': pick the fastest algorithm and ignore workspace limit.
+        ///     If set to None (default), behavior is determined by environment
+        ///     variable MXNET_CUDNN_AUTOTUNE_DEFAULT: 0 for off,
+        ///     1 for limited workspace (default), 2 for fastest.</param>
+        /// <param name="cudnn_off">Turn off cudnn for this layer.</param>
+        /// <param name="layout">Set layout for input, output and weight. Empty for
+        ///     default layout: NCHW for 2d and NCDHW for 3d.</param>
+        public NDArray ConvolutionV1(NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, int numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, int numGroup = 1, long workspace = 1024, bool noBias = false, string cudnnTune = null, bool cudnnOff = false, string layout = null, NDArray output = null)
+        {
+            return Op.ConvolutionV1(this, weight, bias, kernel, numFilter, stride, dilate, pad, numGroup, workspace, noBias, cudnnTune, cudnnOff, layout, output);
+        }
+
+        /// <summary>
         /// Applies correlation to inputs.
         /// 
         /// The correlation layer performs multiplicative patch comparisons between two feature maps.
@@ -7314,6 +7959,60 @@ namespace Horker.MXNet.Core
         public NDArray L2Normalization(double eps = 1.00000001e-10, string mode = "instance", NDArray output = null)
         {
             return Op.L2Normalization(this, eps, mode, output);
+        }
+
+        /// <summary>
+        /// This operator is DEPRECATED.
+        /// Perform pooling on the input.
+        /// 
+        /// The shapes for 2-D pooling is
+        /// 
+        /// - **data**: *(batch_size, channel, height, width)*
+        /// - **out**: *(batch_size, num_filter, out_height, out_width)*, with::
+        /// 
+        ///     out_height = f(height, kernel[0], pad[0], stride[0])
+        ///     out_width = f(width, kernel[1], pad[1], stride[1])
+        /// 
+        /// The definition of *f* depends on ``pooling_convention``, which has two options:
+        /// 
+        /// - **valid** (default)::
+        /// 
+        ///     f(x, k, p, s) = floor((x+2*p-k)/s)+1
+        /// 
+        /// - **full**, which is compatible with Caffe::
+        /// 
+        ///     f(x, k, p, s) = ceil((x+2*p-k)/s)+1
+        /// 
+        /// But ``global_pool`` is set to be true, then do a global pooling, namely reset
+        /// ``kernel=(height, width)``.
+        /// 
+        /// Three pooling options are supported by ``pool_type``:
+        /// 
+        /// - **avg**: average pooling
+        /// - **max**: max pooling
+        /// - **sum**: sum pooling
+        /// 
+        /// 1-D pooling is special case of 2-D pooling with *weight=1* and
+        /// *kernel[1]=1*.
+        /// 
+        /// For 3-D pooling, an additional *depth* dimension is added before
+        /// *height*. Namely the input data will have shape *(batch_size, channel, depth,
+        /// height, width)*.
+        /// 
+        /// 
+        /// 
+        /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\pooling_v1.cc:L104
+        /// </summary>
+        /// <param name="data">Input data to the pooling operator.</param>
+        /// <param name="kernel">pooling kernel size: (y, x) or (d, y, x)</param>
+        /// <param name="pool_type">Pooling type to be applied.</param>
+        /// <param name="global_pool">Ignore kernel size, do global pooling based on current input feature map. </param>
+        /// <param name="pooling_convention">Pooling convention to be applied.</param>
+        /// <param name="stride">stride: for pooling (y, x) or (d, y, x)</param>
+        /// <param name="pad">pad for pooling: (y, x) or (d, y, x)</param>
+        public NDArray PoolingV1(NDShape kernel = null, string poolType = "max", bool globalPool = false, string poolingConvention = "valid", NDShape stride = null, NDShape pad = null, NDArray output = null)
+        {
+            return Op.PoolingV1(this, kernel, poolType, globalPool, poolingConvention, stride, pad, output);
         }
 
         /// <summary>

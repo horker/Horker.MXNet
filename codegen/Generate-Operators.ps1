@@ -1,7 +1,7 @@
 Set-StrictMode -Version Latest
 
 $source = "$PSScriptRoot\source\ops.json"
-$opOutFile = "$PSScriptRoot\..\source\Horker.MXNet\Core\gen_Op.cs"
+$opOutFile = "$PSScriptRoot\..\source\Horker.MXNet\Operators\gen_Op.cs"
 $ndArrayMethodsOutFile = "$PSScriptRoot\..\source\Horker.MXNet\Core\gen_NDArrayMethods.cs"
 
 ############################################################
@@ -119,7 +119,7 @@ function Get-DescriptionString {
 
     $desc = $Op.Description
     $desc = ([regex]"\n").Replace($desc, "`r`n        /// ")
-    $desc = "/// <summary>`r`n        /// " + $desc + "`r`n        /// </summary>`r`n"
+    $desc = "/// <summary>`r`n        /// " + $desc + "`r`n        /// </summary>"
 
     $args = @()
     for ($i = 0; $i -lt $Op.NumArgs; ++$i) {
@@ -128,7 +128,12 @@ function Get-DescriptionString {
         $args += "        /// <param name=`"$($Op.ArgNames[$i])`">$($d)</param>"
     }
 
-    $desc + ($args -join "`r`n")
+    if ($Op.NumArgs -gt 0) {
+        $desc + "`r`n" + ($args -join "`r`n")
+    }
+    else {
+        $desc
+    }
 }
 
 ############################################################
@@ -146,9 +151,9 @@ function Get-ParamNames {
     $optional = @()
 
     $first = 0
-    if ($SkipFirst) {
+    if ($Method) {
         $first = 1
-        $required = "this"
+        $required += "this"
     }
 
     for ($i = $first; $i -lt $Op.NumArgs; ++$i) {
@@ -398,8 +403,8 @@ function Get-OperatorDefinitions {
             continue
         }
 
-        if ($op.argTypeInfos -match "\[\]") {
-            Write-Host "$($op.Name) contains array arguments"
+        if ($op.argTypeInfos -match "(NDArray(OrSymbol)?|Symbol)\[\]") {
+            Write-Host "$opName contains array arguments"
             continue
         }
 
@@ -426,7 +431,6 @@ namespace Horker.MXNet.Operators
 
     foreach ($op in $ops) {
         $opName = $op.Name
-        Write-Host $opName
 
         $camelName = Convert-SnailCaseToCamelCase $op.Name
         $pascalName = Convert-SnailCaseToCamelCase $op.Name -Pascal
@@ -491,7 +495,7 @@ namespace Horker.MXNet.Core
         $(Get-DescriptionString $op)
         public NDArray $pascalName($(Get-SignatureString -SkipFirst $op))
         {
-            return Op.$pascalName($((Get-ParamNames $op -SkipFirst -AddOutput) -join ", "));
+            return Op.$pascalName($((Get-ParamNames $op -Method -AddOutput) -join ", "));
         }
 
 "@
@@ -507,5 +511,5 @@ namespace Horker.MXNet.Core
 # Run
 ############################################################
 
-#Generate-Op | Set-Content $opOutFile
+Generate-Op | Set-Content $opOutFile
 Generate-NDArrayMethods | Set-Content $ndArrayMethodsOutFile

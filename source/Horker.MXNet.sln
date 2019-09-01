@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.705
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OperatorLoader", "OperatorLoader\OperatorLoader.csproj", "{A74BA01B-989C-49CF-8849-A718EEBC06E9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProgram", "TestProgram\TestProgram.csproj", "{FAE11C0D-4929-4C56-B371-711E28796DA2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horker.MXNet", "Horker.MXNet\Horker.MXNet.csproj", "{5DE0998E-7315-4A67-A390-16DE6D8435F1}"
@@ -15,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horker.MXNet.PowerShell", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horker.MXNet.Tests", "Horker.MXNet.Tests\Horker.MXNet.Tests.csproj", "{B8668A4B-C76D-4E46-BAD5-67962D045596}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGenerator", "CodeGenerator\CodeGenerator.csproj", "{4C95860F-776F-479F-8596-5E9A8C4B267B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OperatorCollector", "OperatorCollector\OperatorCollector.csproj", "{4C95860F-776F-479F-8596-5E9A8C4B267B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +23,6 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A74BA01B-989C-49CF-8849-A718EEBC06E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A74BA01B-989C-49CF-8849-A718EEBC06E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A74BA01B-989C-49CF-8849-A718EEBC06E9}.Debug|x64.ActiveCfg = Debug|x64
-		{A74BA01B-989C-49CF-8849-A718EEBC06E9}.Debug|x64.Build.0 = Debug|x64
-		{A74BA01B-989C-49CF-8849-A718EEBC06E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A74BA01B-989C-49CF-8849-A718EEBC06E9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A74BA01B-989C-49CF-8849-A718EEBC06E9}.Release|x64.ActiveCfg = Release|x64
-		{A74BA01B-989C-49CF-8849-A718EEBC06E9}.Release|x64.Build.0 = Release|x64
 		{FAE11C0D-4929-4C56-B371-711E28796DA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FAE11C0D-4929-4C56-B371-711E28796DA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAE11C0D-4929-4C56-B371-711E28796DA2}.Debug|x64.ActiveCfg = Debug|x64
@@ -79,8 +69,8 @@ Global
 		{4C95860F-776F-479F-8596-5E9A8C4B267B}.Debug|x64.Build.0 = Debug|x64
 		{4C95860F-776F-479F-8596-5E9A8C4B267B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C95860F-776F-479F-8596-5E9A8C4B267B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4C95860F-776F-479F-8596-5E9A8C4B267B}.Release|x64.ActiveCfg = Release|Any CPU
-		{4C95860F-776F-479F-8596-5E9A8C4B267B}.Release|x64.Build.0 = Release|Any CPU
+		{4C95860F-776F-479F-8596-5E9A8C4B267B}.Release|x64.ActiveCfg = Release|x64
+		{4C95860F-776F-479F-8596-5E9A8C4B267B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

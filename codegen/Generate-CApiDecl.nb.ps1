@@ -280,7 +280,7 @@ function Get-WrapperFile {
 # Run
 ###################################################################
 
-Get-DeclarationFile | Set-Content -enc utf8 ..\source\Horker.MXNet\Generated\CApiDeclaration.cs
+Get-DeclarationFile | Set-Content -enc utf8 ..\source\Horker.MXNet\Core\gen_CApiDeclaration.cs
 #!Output
 # 
 #!CommandLine
@@ -288,7 +288,7 @@ Get-DeclarationFile | Set-Content -enc utf8 ..\source\Horker.MXNet\Generated\CAp
 # Run
 ###################################################################
 
-Get-WrapperFile | Set-Content -enc utf8 ..\source\Horker.MXNet\Generated\CApi.cs
+Get-WrapperFile | Set-Content -enc utf8 ..\source\Horker.MXNet\Core\gen_CApi.cs
 #!Output
 # 
 #!CommandLine
