@@ -84,6 +84,7 @@
     <Compile Include="Core\DisposableObject.cs" />
     <Compile Include="Core\DType.cs" />
     <Compile Include="Core\gen_NDArrayMethods.cs" />
+    <Compile Include="Core\gen_Op.cs" />
     <Compile Include="Core\NDArrayExtensions.cs" />
     <Compile Include="Core\NDArrayOperators.cs">
       <AutoGen>True</AutoGen>
@@ -94,7 +95,6 @@
     <Compile Include="Generated\CApi.cs" />
     <Compile Include="Generated\CApiDeclaration.cs" />
     <Compile Include="Generated\Enumerations.cs" />
-    <Compile Include="Generated\Op.cs" />
     <Compile Include="Core\IntPtrConverter.cs" />
     <Compile Include="Core\NativeMethodException.cs" />
     <Compile Include="Core\NDArray.cs" />

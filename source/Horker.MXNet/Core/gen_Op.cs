@@ -1,150 +1,97 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using Horker.MXNet.Core;
 
 namespace Horker.MXNet.Operators
 {
-    public partial class Op : OperatorsBase
+    public class Op : OperatorsBase
     {
-
-        private static string[] _CustomFunctionParamNames = _empty;
+        private static string[] _CustomFunctionParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="symbol_name">name of the resulting symbol</param>
+
         public static NDArray CustomFunction(NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_CustomFunction",
                 _CustomFunctionParamNames,
-                _empty,
-                _emptyInput,
-                output);
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
-        private static string[] _cvimdecodeParamNames = new[] { "flag", "to_rgb" };
+        private static string[] _backwardCustomFunctionParamNames = Empty;
 
         /// <summary>
-        /// Decode image with OpenCV. 
-        /// Note: return image in RGB by default, instead of OpenCV's default BGR.
-        /// </summary>
-        /// <param name="buf">Buffer containing binary encoded image</param>
-        /// <param name="flag">Convert decoded image to grayscale (0) or color (1).</param>
-        /// <param name="to_rgb">Whether to convert decoded image to mxnet's default RGB format (instead of opencv's default BGR).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Cvimdecode(Symbol buf, int flag = 1, bool toRgb = true, NDArray output = null)
-        {
-            var result = Operator.Invoke(
-                "_cvimdecode",
-                _cvimdecodeParamNames,
-                new[] { Convert(flag), Convert(toRgb) },
-                new[] { buf.Handle },
-                output);
-            return result;
-        }
-
-        private static string[] _cvimreadParamNames = new[] { "filename", "flag", "to_rgb" };
-
-        /// <summary>
-        /// Read and decode image with OpenCV. 
-        /// Note: return image in RGB by default, instead of OpenCV's default BGR.
-        /// </summary>
-        /// <param name="filename">Name of the image file to be loaded.</param>
-        /// <param name="flag">Convert decoded image to grayscale (0) or color (1).</param>
-        /// <param name="to_rgb">Whether to convert decoded image to mxnet's default RGB format (instead of opencv's default BGR).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Cvimread(string filename, int flag = 1, bool toRgb = true, NDArray output = null)
-        {
-            var result = Operator.Invoke(
-                "_cvimread",
-                _cvimreadParamNames,
-                new[] { Convert(filename), Convert(flag), Convert(toRgb) },
-                _emptyInput,
-                output);
-            return result;
-        }
-
-        private static string[] _cvimresizeParamNames = new[] { "w", "h", "interp" };
-
-        /// <summary>
-        /// Resize image with OpenCV. 
         /// 
         /// </summary>
-        /// <param name="data">source image</param>
-        /// <param name="w">Width of resized image.</param>
-        /// <param name="h">Height of resized image.</param>
-        /// <param name="interp">Interpolation method (default=cv2.INTER_LINEAR).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Cvimresize(Symbol data, int w, int h, int interp = 1, NDArray output = null)
+
+        public static NDArray BackwardCustomFunction(NDArray output = null)
         {
             var result = Operator.Invoke(
-                "_cvimresize",
-                _cvimresizeParamNames,
-                new[] { Convert(w), Convert(h), Convert(interp) },
-                new[] { data.Handle },
-                output);
+                "_backward_CustomFunction",
+                _backwardCustomFunctionParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
-        private static string[] _cvcopyMakeBorderParamNames = new[] { "top", "bot", "left", "right", "type", "values" };
+        private static string[] _backwardCachedOpParamNames = Empty;
 
         /// <summary>
-        /// Pad image border with OpenCV. 
         /// 
         /// </summary>
-        /// <param name="data">source image</param>
-        /// <param name="top">Top margin.</param>
-        /// <param name="bot">Bottom margin.</param>
-        /// <param name="left">Left margin.</param>
-        /// <param name="right">Right margin.</param>
-        /// <param name="type">Filling type (default=cv2.BORDER_CONSTANT).</param>
-        /// <param name="values">Fill with value(RGB[A] or gray), up to 4 channels.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray CvcopyMakeBorder(Symbol data, int top, int bot, int left, int right, int type = 0, Tuple<double> values = null, NDArray output = null)
+
+        public static NDArray BackwardCachedOp(NDArray output = null)
         {
             var result = Operator.Invoke(
-                "_cvcopyMakeBorder",
-                _cvcopyMakeBorderParamNames,
-                new[] { Convert(top), Convert(bot), Convert(left), Convert(right), Convert(type), Convert(values) },
-                new[] { data.Handle },
-                output);
+                "_backward_CachedOp",
+                _backwardCachedOpParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
-        private static string[] _copytoParamNames = _empty;
+        private static string[] _copytoParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="data">input data</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Copyto(Symbol data, NDArray output = null)
+        public static NDArray Copyto(NDArray data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_copyto",
                 _copytoParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _NoGradientParamNames = _empty;
+        private static string[] _NoGradientParamNames = Empty;
 
         /// <summary>
         /// Place holder for variable who cannot perform gradient
         /// </summary>
-        /// <param name="symbol_name">name of the resulting symbol</param>
+
         public static NDArray NoGradient(NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_NoGradient",
                 _NoGradientParamNames,
-                _empty,
-                _emptyInput,
-                output);
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -208,19 +155,19 @@ namespace Horker.MXNet.Operators
         /// <param name="fix_gamma">Fix gamma while training</param>
         /// <param name="use_global_stats">Whether use global moving statistics instead of local batch-norm. This will force change batch-norm into a scale shift operator.</param>
         /// <param name="output_mean_var">Output All,normal mean and var</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray BatchNormV1(NDArrayOrSymbol data, NDArrayOrSymbol gamma, NDArrayOrSymbol beta, float eps = 0.00100000005f, float momentum = 0.899999976f, bool fixGamma = true, bool useGlobalStats = false, bool outputMeanVar = false, NDArray output = null)
+        public static NDArray BatchNormV1(NDArrayOrSymbol data, NDArrayOrSymbol gamma, NDArrayOrSymbol beta, double eps = 0.00100000005, double momentum = 0.899999976, bool fixGamma = true, bool useGlobalStats = false, bool outputMeanVar = false, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "BatchNorm_v1",
                 _BatchNormV1ParamNames,
                 new[] { Convert(eps), Convert(momentum), Convert(fixGamma), Convert(useGlobalStats), Convert(outputMeanVar) },
                 new[] { data.Handle, gamma.Handle, beta.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _mpAdamwUpdateParamNames = new[] { "lr", "eta", "beta1", "beta2", "epsilon", "wd", "clip_gradient" };
+        private static string[] _mpAdamwUpdateParamNames = new[] { "lr", "beta1", "beta2", "epsilon", "wd", "eta", "clip_gradient" };
 
         /// <summary>
         /// Update function for multi-precision AdamW optimizer.
@@ -263,19 +210,19 @@ namespace Horker.MXNet.Operators
         /// <param name="wd">Weight decay augments the objective function with a regularization term that penalizes large weights. The penalty scales with the square of the magnitude of each weight.</param>
         /// <param name="eta">Learning rate schedule multiplier</param>
         /// <param name="clip_gradient">Clip gradient to the range of [-clip_gradient, clip_gradient] If clip_gradient <= 0, gradient clipping is turned off. grad = max(min(grad, clip_gradient), -clip_gradient).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray MpAdamwUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mean, NDArrayOrSymbol var, NDArrayOrSymbol weight32, NDArrayOrSymbol rescaleGrad, float lr, float eta, float beta1 = 0.899999976f, float beta2 = 0.999000013f, float epsilon = 9.99999994e-09f, float wd = 0f, float clipGradient = -1f, NDArray output = null)
+        public static NDArray MpAdamwUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mean, NDArrayOrSymbol var, NDArrayOrSymbol weight32, NDArrayOrSymbol rescaleGrad, double lr, double eta, double beta1 = 0.899999976, double beta2 = 0.999000013, double epsilon = 9.99999994e-09, double wd = 0, double clipGradient = -1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_mp_adamw_update",
                 _mpAdamwUpdateParamNames,
-                new[] { Convert(lr), Convert(eta), Convert(beta1), Convert(beta2), Convert(epsilon), Convert(wd), Convert(clipGradient) },
+                new[] { Convert(lr), Convert(beta1), Convert(beta2), Convert(epsilon), Convert(wd), Convert(eta), Convert(clipGradient) },
                 new[] { weight.Handle, grad.Handle, mean.Handle, var.Handle, weight32.Handle, rescaleGrad.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _adamwUpdateParamNames = new[] { "lr", "eta", "beta1", "beta2", "epsilon", "wd", "clip_gradient" };
+        private static string[] _adamwUpdateParamNames = new[] { "lr", "beta1", "beta2", "epsilon", "wd", "eta", "clip_gradient" };
 
         /// <summary>
         /// Update function for AdamW optimizer. AdamW is seen as a modification of
@@ -315,15 +262,15 @@ namespace Horker.MXNet.Operators
         /// <param name="wd">Weight decay augments the objective function with a regularization term that penalizes large weights. The penalty scales with the square of the magnitude of each weight.</param>
         /// <param name="eta">Learning rate schedule multiplier</param>
         /// <param name="clip_gradient">Clip gradient to the range of [-clip_gradient, clip_gradient] If clip_gradient <= 0, gradient clipping is turned off. grad = max(min(grad, clip_gradient), -clip_gradient).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray AdamwUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mean, NDArrayOrSymbol var, NDArrayOrSymbol rescaleGrad, float lr, float eta, float beta1 = 0.899999976f, float beta2 = 0.999000013f, float epsilon = 9.99999994e-09f, float wd = 0f, float clipGradient = -1f, NDArray output = null)
+        public static NDArray AdamwUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mean, NDArrayOrSymbol var, NDArrayOrSymbol rescaleGrad, double lr, double eta, double beta1 = 0.899999976, double beta2 = 0.999000013, double epsilon = 9.99999994e-09, double wd = 0, double clipGradient = -1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_adamw_update",
                 _adamwUpdateParamNames,
-                new[] { Convert(lr), Convert(eta), Convert(beta1), Convert(beta2), Convert(epsilon), Convert(wd), Convert(clipGradient) },
+                new[] { Convert(lr), Convert(beta1), Convert(beta2), Convert(epsilon), Convert(wd), Convert(eta), Convert(clipGradient) },
                 new[] { weight.Handle, grad.Handle, mean.Handle, var.Handle, rescaleGrad.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -337,15 +284,105 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">Array</param>
         /// <param name="init_output">Initialize output to 1.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray AllFinite(Symbol data, bool initOutput = true, NDArray output = null)
+        public static NDArray AllFinite(NDArray data, bool initOutput = true, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "all_finite",
                 _allFiniteParamNames,
                 new[] { Convert(initOutput) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardROIAlignParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardROIAlign(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_ROIAlign",
+                _backwardROIAlignParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardForeachParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardForeach(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_foreach",
+                _backwardForeachParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardWhileLoopParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardWhileLoop(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_while_loop",
+                _backwardWhileLoopParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardCondParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardCond(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_cond",
+                _backwardCondParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardCustomParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardCustom(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_Custom",
+                _backwardCustomParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -358,15 +395,51 @@ namespace Horker.MXNet.Operators
         /// <param name="sparseness_target">The sparseness target</param>
         /// <param name="penalty">The tradeoff parameter for the sparseness penalty</param>
         /// <param name="momentum">The momentum for running average</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray IdentityAttachKLSparseReg(NDArrayOrSymbol data, float sparsenessTarget = 0.100000001f, float penalty = 0.00100000005f, float momentum = 0.899999976f, NDArray output = null)
+        public static NDArray IdentityAttachKLSparseReg(NDArrayOrSymbol data, double sparsenessTarget = 0.100000001, double penalty = 0.00100000005, double momentum = 0.899999976, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "IdentityAttachKLSparseReg",
                 _IdentityAttachKLSparseRegParamNames,
                 new[] { Convert(sparsenessTarget), Convert(penalty), Convert(momentum) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardImageCropParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardImageCrop(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_image_crop",
+                _backwardImageCropParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardImageNormalizeParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardImageNormalize(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_image_normalize",
+                _backwardImageNormalizeParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -399,19 +472,19 @@ namespace Horker.MXNet.Operators
         /// <param name="slope">Init slope for the activation. (For leaky and elu only)</param>
         /// <param name="lower_bound">Lower bound of random slope. (For rrelu only)</param>
         /// <param name="upper_bound">Upper bound of random slope. (For rrelu only)</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray LeakyReLU(NDArrayOrSymbol data, NDArrayOrSymbol gamma, LeakyreluActType actType = LeakyreluActType.Leaky, float slope = 0.25f, float lowerBound = 0.125f, float upperBound = 0.333999991f, NDArray output = null)
+        public static NDArray LeakyReLU(NDArrayOrSymbol data, NDArrayOrSymbol gamma, string actType = "leaky", double slope = 0.25, double lowerBound = 0.125, double upperBound = 0.333999991, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "LeakyReLU",
                 _LeakyReLUParamNames,
-                new[] { Convert((int)actType), Convert(slope), Convert(lowerBound), Convert(upperBound) },
+                new[] { Convert(actType), Convert(slope), Convert(lowerBound), Convert(upperBound) },
                 new[] { data.Handle, gamma.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _softmaxCrossEntropyParamNames = _empty;
+        private static string[] _softmaxCrossEntropyParamNames = Empty;
 
         /// <summary>
         /// Calculate cross entropy of softmax output and one-hot label.
@@ -448,15 +521,33 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">Input data</param>
         /// <param name="label">Input label</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray SoftmaxCrossEntropy(NDArrayOrSymbol data, NDArrayOrSymbol label, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "softmax_cross_entropy",
                 _softmaxCrossEntropyParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle, label.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSoftmaxCrossEntropyParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSoftmaxCrossEntropy(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_softmax_cross_entropy",
+                _backwardSoftmaxCrossEntropyParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -479,15 +570,33 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">The input array.</param>
         /// <param name="act_type">Activation function to be applied.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Activation(NDArrayOrSymbol data, ActivationActType actType, NDArray output = null)
+        public static NDArray Activation(NDArrayOrSymbol data, string actType, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "Activation",
                 _ActivationParamNames,
-                new[] { Convert((int)actType) },
+                new[] { Convert(actType) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardActivationParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardActivation(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_Activation",
+                _backwardActivationParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -559,19 +668,55 @@ namespace Horker.MXNet.Operators
         /// <param name="output_mean_var">Output the mean and inverse std </param>
         /// <param name="axis">Specify which shape axis the channel is specified</param>
         /// <param name="cudnn_off">Do not select CUDNN operator, if available</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray BatchNorm(NDArrayOrSymbol data, NDArrayOrSymbol gamma, NDArrayOrSymbol beta, NDArrayOrSymbol movingMean, NDArrayOrSymbol movingVar, double eps = 0.0010000000474974513, float momentum = 0.899999976f, bool fixGamma = true, bool useGlobalStats = false, bool outputMeanVar = false, int axis = 1, bool cudnnOff = false, NDArray output = null)
+        public static NDArray BatchNorm(NDArrayOrSymbol data, NDArrayOrSymbol gamma, NDArrayOrSymbol beta, NDArrayOrSymbol movingMean, NDArrayOrSymbol movingVar, double eps = 0.0010000000474974513, double momentum = 0.899999976, bool fixGamma = true, bool useGlobalStats = false, bool outputMeanVar = false, int axis = 1, bool cudnnOff = false, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "BatchNorm",
                 _BatchNormParamNames,
                 new[] { Convert(eps), Convert(momentum), Convert(fixGamma), Convert(useGlobalStats), Convert(outputMeanVar), Convert(axis), Convert(cudnnOff) },
                 new[] { data.Handle, gamma.Handle, beta.Handle, movingMean.Handle, movingVar.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _ConvolutionParamNames = new[] { "kernel", "num_filter", "stride", "dilate", "pad", "num_group", "workspace", "no_bias", "cudnn_tune", "cudnn_off", "layout" };
+        private static string[] _backwardBatchNormParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardBatchNorm(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_BatchNorm",
+                _backwardBatchNormParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardConcatParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardConcat(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_Concat",
+                _backwardConcatParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _ConvolutionParamNames = new[] { "kernel", "stride", "dilate", "pad", "num_filter", "num_group", "workspace", "no_bias", "cudnn_tune", "cudnn_off", "layout" };
 
         /// <summary>
         /// Compute *N*-D convolution on *(N+2)*-D input.
@@ -665,15 +810,33 @@ namespace Horker.MXNet.Operators
         /// <param name="cudnn_off">Turn off cudnn for this layer.</param>
         /// <param name="layout">Set layout for input, output and weight. Empty for
         ///     default layout: NCW for 1d, NCHW for 2d and NCDHW for 3d.NHWC and NDHWC are only supported on GPU.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Convolution(NDArrayOrSymbol data, NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, uint numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, uint numGroup = 1, ulong workspace = 1024, bool noBias = false, ConvolutionCudnnTune? cudnnTune = null, bool cudnnOff = false, ConvolutionLayout? layout = null, NDArray output = null)
+        public static NDArray Convolution(NDArrayOrSymbol data, NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, int numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, int numGroup = 1, long workspace = 1024, bool noBias = false, string cudnnTune = null, bool cudnnOff = false, string layout = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "Convolution",
                 _ConvolutionParamNames,
-                new[] { Convert(kernel), Convert(numFilter), Convert(stride), Convert(dilate), Convert(pad), Convert(numGroup), Convert(workspace), Convert(noBias), Convert((int)cudnnTune), Convert(cudnnOff), Convert((int)layout) },
+                new[] { Convert(kernel), Convert(stride), Convert(dilate), Convert(pad), Convert(numFilter), Convert(numGroup), Convert(workspace), Convert(noBias), Convert(cudnnTune), Convert(cudnnOff), Convert(layout) },
                 new[] { data.Handle, weight.Handle, bias.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardConvolutionParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardConvolution(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_Convolution",
+                _backwardConvolutionParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -736,15 +899,33 @@ namespace Horker.MXNet.Operators
         /// <param name="use_data_lengths">Whether the data lenghts are decided by `data_lengths`. If false, the lengths are equal to the max sequence length.</param>
         /// <param name="use_label_lengths">Whether the label lenghts are decided by `label_lengths`, or derived from `padding_mask`. If false, the lengths are derived from the first occurrence of the value of `padding_mask`. The value of `padding_mask` is ``0`` when first CTC label is reserved for blank, and ``-1`` when last label is reserved for blank. See `blank_label`.</param>
         /// <param name="blank_label">Set the label that is reserved for blank label.If "first", 0-th label is reserved, and label values for tokens in the vocabulary are between ``1`` and ``alphabet_size-1``, and the padding mask is ``-1``. If "last", last label value ``alphabet_size-1`` is reserved for blank label instead, and label values for tokens in the vocabulary are between ``0`` and ``alphabet_size-2``, and the padding mask is ``0``.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray CTCLoss(NDArrayOrSymbol data, NDArrayOrSymbol label, NDArrayOrSymbol dataLengths, NDArrayOrSymbol labelLengths, bool useDataLengths = false, bool useLabelLengths = false, CtclossBlankLabel blankLabel = CtclossBlankLabel.First, NDArray output = null)
+        public static NDArray CTCLoss(NDArrayOrSymbol data, NDArrayOrSymbol label, NDArrayOrSymbol dataLengths, NDArrayOrSymbol labelLengths, bool useDataLengths = false, bool useLabelLengths = false, string blankLabel = "first", NDArray output = null)
         {
             var result = Operator.Invoke(
                 "CTCLoss",
                 _CTCLossParamNames,
-                new[] { Convert(useDataLengths), Convert(useLabelLengths), Convert((int)blankLabel) },
+                new[] { Convert(useDataLengths), Convert(useLabelLengths), Convert(blankLabel) },
                 new[] { data.Handle, label.Handle, dataLengths.Handle, labelLengths.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardCtcLossParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardCtcLoss(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_ctc_loss",
+                _backwardCtcLossParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -765,19 +946,37 @@ namespace Horker.MXNet.Operators
         /// <param name="output_mean_var">Output the mean and inverse std </param>
         /// <param name="axis">Specify which shape axis the channel is specified</param>
         /// <param name="cudnn_off">Do not select CUDNN operator, if available</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray CuDNNBatchNorm(NDArrayOrSymbol data, NDArrayOrSymbol gamma, NDArrayOrSymbol beta, NDArrayOrSymbol movingMean, NDArrayOrSymbol movingVar, double eps = 0.0010000000474974513, float momentum = 0.899999976f, bool fixGamma = true, bool useGlobalStats = false, bool outputMeanVar = false, int axis = 1, bool cudnnOff = false, NDArray output = null)
+        public static NDArray CuDNNBatchNorm(NDArrayOrSymbol data, NDArrayOrSymbol gamma, NDArrayOrSymbol beta, NDArrayOrSymbol movingMean, NDArrayOrSymbol movingVar, double eps = 0.0010000000474974513, double momentum = 0.899999976, bool fixGamma = true, bool useGlobalStats = false, bool outputMeanVar = false, int axis = 1, bool cudnnOff = false, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "CuDNNBatchNorm",
                 _CuDNNBatchNormParamNames,
                 new[] { Convert(eps), Convert(momentum), Convert(fixGamma), Convert(useGlobalStats), Convert(outputMeanVar), Convert(axis), Convert(cudnnOff) },
                 new[] { data.Handle, gamma.Handle, beta.Handle, movingMean.Handle, movingVar.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _DeconvolutionParamNames = new[] { "kernel", "num_filter", "stride", "dilate", "pad", "adj", "target_shape", "num_group", "workspace", "no_bias", "cudnn_tune", "cudnn_off", "layout" };
+        private static string[] _backwardCuDNNBatchNormParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardCuDNNBatchNorm(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_CuDNNBatchNorm",
+                _backwardCuDNNBatchNormParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _DeconvolutionParamNames = new[] { "kernel", "stride", "dilate", "pad", "adj", "target_shape", "num_filter", "num_group", "workspace", "no_bias", "cudnn_tune", "cudnn_off", "layout" };
 
         /// <summary>
         /// Computes 1D or 2D transposed convolution (aka fractionally strided convolution) of the input tensor. This operation can be seen as the gradient of Convolution operation with respect to its input. Convolution usually reduces the size of the input. Transposed convolution works the other way, going from a smaller input to a larger output while preserving the connectivity pattern.
@@ -798,15 +997,33 @@ namespace Horker.MXNet.Operators
         /// <param name="cudnn_tune">Whether to pick convolution algorithm by running performance test.</param>
         /// <param name="cudnn_off">Turn off cudnn for this layer.</param>
         /// <param name="layout">Set layout for input, output and weight. Empty for default layout, NCW for 1d, NCHW for 2d and NCDHW for 3d.NHWC and NDHWC are only supported on GPU.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Deconvolution(NDArrayOrSymbol data, NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, uint numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, NDShape adj = null, NDShape targetShape = null, uint numGroup = 1, ulong workspace = 512, bool noBias = true, DeconvolutionCudnnTune? cudnnTune = null, bool cudnnOff = false, DeconvolutionLayout? layout = null, NDArray output = null)
+        public static NDArray Deconvolution(NDArrayOrSymbol data, NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, int numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, NDShape adj = null, NDShape targetShape = null, int numGroup = 1, long workspace = 512, bool noBias = true, string cudnnTune = null, bool cudnnOff = false, string layout = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "Deconvolution",
                 _DeconvolutionParamNames,
-                new[] { Convert(kernel), Convert(numFilter), Convert(stride), Convert(dilate), Convert(pad), Convert(adj), Convert(targetShape), Convert(numGroup), Convert(workspace), Convert(noBias), Convert((int)cudnnTune), Convert(cudnnOff), Convert((int)layout) },
+                new[] { Convert(kernel), Convert(stride), Convert(dilate), Convert(pad), Convert(adj), Convert(targetShape), Convert(numFilter), Convert(numGroup), Convert(workspace), Convert(noBias), Convert(cudnnTune), Convert(cudnnOff), Convert(layout) },
                 new[] { data.Handle, weight.Handle, bias.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardDeconvolutionParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardDeconvolution(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_Deconvolution",
+                _backwardDeconvolutionParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -851,15 +1068,33 @@ namespace Horker.MXNet.Operators
         /// <param name="mode">Whether to only turn on dropout during training or to also turn on for inference.</param>
         /// <param name="axes">Axes for variational dropout kernel.</param>
         /// <param name="cudnn_off">Whether to turn off cudnn in dropout operator. This option is ignored if axes is specified.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Dropout(NDArrayOrSymbol data, float p = 0.5f, DropoutMode mode = DropoutMode.Training, NDShape axes = null, bool? cudnnOff = false, NDArray output = null)
+        public static NDArray Dropout(NDArrayOrSymbol data, double p = 0.5, string mode = "training", NDShape axes = null, bool? cudnnOff = false, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "Dropout",
                 _DropoutParamNames,
-                new[] { Convert(p), Convert((int)mode), Convert(axes), Convert(cudnnOff) },
+                new[] { Convert(p), Convert(mode), Convert(axes), Convert(cudnnOff) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardDropoutParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardDropout(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_Dropout",
+                _backwardDropoutParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -906,7 +1141,6 @@ namespace Horker.MXNet.Operators
         /// <param name="num_hidden">Number of hidden nodes of the output.</param>
         /// <param name="no_bias">Whether to disable bias parameter.</param>
         /// <param name="flatten">Whether to collapse all but the first axis of the input data tensor.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray FullyConnected(NDArrayOrSymbol data, NDArrayOrSymbol weight, NDArrayOrSymbol bias, int numHidden, bool noBias = false, bool flatten = true, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -914,7 +1148,26 @@ namespace Horker.MXNet.Operators
                 _FullyConnectedParamNames,
                 new[] { Convert(numHidden), Convert(noBias), Convert(flatten) },
                 new[] { data.Handle, weight.Handle, bias.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardFullyConnectedParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardFullyConnected(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_FullyConnected",
+                _backwardFullyConnectedParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -956,19 +1209,37 @@ namespace Horker.MXNet.Operators
         /// <param name="axis">The axis to perform layer normalization. Usually, this should be be axis of the channel dimension. Negative values means indexing from right to left.</param>
         /// <param name="eps">An `epsilon` parameter to prevent division by 0.</param>
         /// <param name="output_mean_var">Output the mean and std calculated along the given axis.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray LayerNorm(NDArrayOrSymbol data, NDArrayOrSymbol gamma, NDArrayOrSymbol beta, int axis = -1, float eps = 9.99999975e-06f, bool outputMeanVar = false, NDArray output = null)
+        public static NDArray LayerNorm(NDArrayOrSymbol data, NDArrayOrSymbol gamma, NDArrayOrSymbol beta, int axis = -1, double eps = 9.99999975e-06, bool outputMeanVar = false, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "LayerNorm",
                 _LayerNormParamNames,
                 new[] { Convert(axis), Convert(eps), Convert(outputMeanVar) },
                 new[] { data.Handle, gamma.Handle, beta.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _LRNParamNames = new[] { "nsize", "alpha", "beta", "knorm" };
+        private static string[] _backwardLayerNormParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLayerNorm(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_LayerNorm",
+                _backwardLayerNormParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _LRNParamNames = new[] { "alpha", "beta", "knorm", "nsize" };
 
         /// <summary>
         /// Applies local response normalization to the input.
@@ -995,15 +1266,33 @@ namespace Horker.MXNet.Operators
         /// <param name="beta">The power parameter :math:`eta` in the LRN expression.</param>
         /// <param name="knorm">The parameter :math:`k` in the LRN expression.</param>
         /// <param name="nsize">normalization window width in elements.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray LRN(NDArrayOrSymbol data, uint nsize, float alpha = 9.99999975e-05f, float beta = 0.75f, float knorm = 2f, NDArray output = null)
+        public static NDArray LRN(NDArrayOrSymbol data, int nsize, double alpha = 9.99999975e-05, double beta = 0.75, double knorm = 2, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "LRN",
                 _LRNParamNames,
-                new[] { Convert(nsize), Convert(alpha), Convert(beta), Convert(knorm) },
+                new[] { Convert(alpha), Convert(beta), Convert(knorm), Convert(nsize) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardLRNParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLRN(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_LRN",
+                _backwardLRNParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -1036,7 +1325,6 @@ namespace Horker.MXNet.Operators
         /// <param name="data">Input ndarray</param>
         /// <param name="axes">Array of ints. Axes along which to compute mean and variance.</param>
         /// <param name="keepdims">produce moments with the same dimensionality as the input.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Moments(NDArrayOrSymbol data, NDShape axes = null, bool keepdims = false, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -1044,7 +1332,26 @@ namespace Horker.MXNet.Operators
                 _momentsParamNames,
                 new[] { Convert(axes), Convert(keepdims) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardMomentsParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardMoments(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_moments",
+                _backwardMomentsParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -1116,15 +1423,33 @@ namespace Horker.MXNet.Operators
         /// <param name="count_include_pad">Only used for AvgPool, specify whether to count padding elements for averagecalculation. For example, with a 5*5 kernel on a 3*3 corner of a image,the sum of the 9 valid elements will be divided by 25 if this is set to true,or it will be divided by 9 if this is set to false. Defaults to true.</param>
         /// <param name="layout">Set layout for input and output. Empty for
         ///     default layout: NCW for 1d, NCHW for 2d and NCDHW for 3d.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Pooling(NDArrayOrSymbol data, NDShape kernel = null, PoolingPoolType poolType = PoolingPoolType.Max, bool globalPool = false, bool cudnnOff = false, PoolingPoolingConvention poolingConvention = PoolingPoolingConvention.Valid, NDShape stride = null, NDShape pad = null, int? pValue = null, bool? countIncludePad = null, PoolingLayout? layout = null, NDArray output = null)
+        public static NDArray Pooling(NDArrayOrSymbol data, NDShape kernel = null, string poolType = "max", bool globalPool = false, bool cudnnOff = false, string poolingConvention = "valid", NDShape stride = null, NDShape pad = null, int? pValue = null, bool? countIncludePad = null, string layout = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "Pooling",
                 _PoolingParamNames,
-                new[] { Convert(kernel), Convert((int)poolType), Convert(globalPool), Convert(cudnnOff), Convert((int)poolingConvention), Convert(stride), Convert(pad), Convert(pValue), Convert(countIncludePad), Convert((int)layout) },
+                new[] { Convert(kernel), Convert(poolType), Convert(globalPool), Convert(cudnnOff), Convert(poolingConvention), Convert(stride), Convert(pad), Convert(pValue), Convert(countIncludePad), Convert(layout) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardPoolingParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardPooling(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_Pooling",
+                _backwardPoolingParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -1161,15 +1486,15 @@ namespace Horker.MXNet.Operators
         /// <param name="axis">The axis along which to compute softmax.</param>
         /// <param name="temperature">Temperature parameter in softmax</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to the same as input's dtype if not defined (dtype=None).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Softmax(NDArrayOrSymbol data, int axis = -1, double? temperature = null, DType dtype = null, NDArray output = null)
+        public static NDArray Softmax(NDArrayOrSymbol data, int axis = -1, double? temperature = null, string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "softmax",
                 _softmaxParamNames,
                 new[] { Convert(axis), Convert(temperature), Convert(dtype) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -1207,15 +1532,15 @@ namespace Horker.MXNet.Operators
         /// <param name="axis">The axis along which to compute softmax.</param>
         /// <param name="temperature">Temperature parameter in softmax</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to the same as input's dtype if not defined (dtype=None).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Softmin(NDArrayOrSymbol data, int axis = -1, double? temperature = null, DType dtype = null, NDArray output = null)
+        public static NDArray Softmin(NDArrayOrSymbol data, int axis = -1, double? temperature = null, string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "softmin",
                 _softminParamNames,
                 new[] { Convert(axis), Convert(temperature), Convert(dtype) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -1243,15 +1568,15 @@ namespace Horker.MXNet.Operators
         /// <param name="axis">The axis along which to compute softmax.</param>
         /// <param name="temperature">Temperature parameter in softmax</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to the same as input's dtype if not defined (dtype=None).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray LogSoftmax(NDArrayOrSymbol data, int axis = -1, double? temperature = null, DType dtype = null, NDArray output = null)
+        public static NDArray LogSoftmax(NDArrayOrSymbol data, int axis = -1, double? temperature = null, string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "log_softmax",
                 _logSoftmaxParamNames,
                 new[] { Convert(axis), Convert(temperature), Convert(dtype) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -1287,15 +1612,51 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">The input array.</param>
         /// <param name="mode">Specifies how to compute the softmax. If set to ``instance``, it computes softmax for each instance. If set to ``channel``, It computes cross channel softmax for each position of each instance.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SoftmaxActivation(NDArrayOrSymbol data, SoftmaxactivationMode mode = SoftmaxactivationMode.Instance, NDArray output = null)
+        public static NDArray SoftmaxActivation(NDArrayOrSymbol data, string mode = "instance", NDArray output = null)
         {
             var result = Operator.Invoke(
                 "SoftmaxActivation",
                 _SoftmaxActivationParamNames,
-                new[] { Convert((int)mode) },
+                new[] { Convert(mode) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSoftmaxActivationParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSoftmaxActivation(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_SoftmaxActivation",
+                _backwardSoftmaxActivationParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardUpSamplingParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardUpSampling(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_UpSampling",
+                _backwardUpSamplingParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -1325,15 +1686,15 @@ namespace Horker.MXNet.Operators
         /// <param name="wd">Weight decay augments the objective function with a regularization term that penalizes large weights. The penalty scales with the square of the magnitude of each weight.</param>
         /// <param name="rescale_grad">Rescale gradient to grad = rescale_grad*grad.</param>
         /// <param name="clip_gradient">Clip gradient to the range of [-clip_gradient, clip_gradient] If clip_gradient <= 0, gradient clipping is turned off. grad = max(min(grad, clip_gradient), -clip_gradient).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SignsgdUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, float lr, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, NDArray output = null)
+        public static NDArray SignsgdUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, double lr, double wd = 0, double rescaleGrad = 1, double clipGradient = -1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "signsgd_update",
                 _signsgdUpdateParamNames,
                 new[] { Convert(lr), Convert(wd), Convert(rescaleGrad), Convert(clipGradient) },
                 new[] { weight.Handle, grad.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -1369,15 +1730,15 @@ namespace Horker.MXNet.Operators
         /// <param name="rescale_grad">Rescale gradient to grad = rescale_grad*grad.</param>
         /// <param name="clip_gradient">Clip gradient to the range of [-clip_gradient, clip_gradient] If clip_gradient <= 0, gradient clipping is turned off. grad = max(min(grad, clip_gradient), -clip_gradient).</param>
         /// <param name="wd_lh">The amount of weight decay that does not go into gradient/momentum calculationsotherwise do weight decay algorithmically only.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SignumUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mom, float lr, float momentum = 0f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, float wdLh = 0f, NDArray output = null)
+        public static NDArray SignumUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mom, double lr, double momentum = 0, double wd = 0, double rescaleGrad = 1, double clipGradient = -1, double wdLh = 0, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "signum_update",
                 _signumUpdateParamNames,
                 new[] { Convert(lr), Convert(momentum), Convert(wd), Convert(rescaleGrad), Convert(clipGradient), Convert(wdLh) },
                 new[] { weight.Handle, grad.Handle, mom.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -1407,15 +1768,15 @@ namespace Horker.MXNet.Operators
         /// <param name="rescale_grad">Rescale gradient to grad = rescale_grad*grad.</param>
         /// <param name="clip_gradient">Clip gradient to the range of [-clip_gradient, clip_gradient] If clip_gradient <= 0, gradient clipping is turned off. grad = max(min(grad, clip_gradient), -clip_gradient).</param>
         /// <param name="lazy_update">If true, lazy updates are applied if gradient's stype is row_sparse.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SgdUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, float lr, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, bool lazyUpdate = true, NDArray output = null)
+        public static NDArray SgdUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, double lr, double wd = 0, double rescaleGrad = 1, double clipGradient = -1, bool lazyUpdate = true, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "sgd_update",
                 _sgdUpdateParamNames,
                 new[] { Convert(lr), Convert(wd), Convert(rescaleGrad), Convert(clipGradient), Convert(lazyUpdate) },
                 new[] { weight.Handle, grad.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -1461,15 +1822,15 @@ namespace Horker.MXNet.Operators
         /// <param name="rescale_grad">Rescale gradient to grad = rescale_grad*grad.</param>
         /// <param name="clip_gradient">Clip gradient to the range of [-clip_gradient, clip_gradient] If clip_gradient <= 0, gradient clipping is turned off. grad = max(min(grad, clip_gradient), -clip_gradient).</param>
         /// <param name="lazy_update">If true, lazy updates are applied if gradient's stype is row_sparse and both weight and momentum have the same stype</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SgdMomUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mom, float lr, float momentum = 0f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, bool lazyUpdate = true, NDArray output = null)
+        public static NDArray SgdMomUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mom, double lr, double momentum = 0, double wd = 0, double rescaleGrad = 1, double clipGradient = -1, bool lazyUpdate = true, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "sgd_mom_update",
                 _sgdMomUpdateParamNames,
                 new[] { Convert(lr), Convert(momentum), Convert(wd), Convert(rescaleGrad), Convert(clipGradient), Convert(lazyUpdate) },
                 new[] { weight.Handle, grad.Handle, mom.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -1486,15 +1847,15 @@ namespace Horker.MXNet.Operators
         /// <param name="rescale_grad">Rescale gradient to grad = rescale_grad*grad.</param>
         /// <param name="clip_gradient">Clip gradient to the range of [-clip_gradient, clip_gradient] If clip_gradient <= 0, gradient clipping is turned off. grad = max(min(grad, clip_gradient), -clip_gradient).</param>
         /// <param name="lazy_update">If true, lazy updates are applied if gradient's stype is row_sparse.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray MpSgdUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol weight32, float lr, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, bool lazyUpdate = true, NDArray output = null)
+        public static NDArray MpSgdUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol weight32, double lr, double wd = 0, double rescaleGrad = 1, double clipGradient = -1, bool lazyUpdate = true, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "mp_sgd_update",
                 _mpSgdUpdateParamNames,
                 new[] { Convert(lr), Convert(wd), Convert(rescaleGrad), Convert(clipGradient), Convert(lazyUpdate) },
                 new[] { weight.Handle, grad.Handle, weight32.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -1513,19 +1874,19 @@ namespace Horker.MXNet.Operators
         /// <param name="rescale_grad">Rescale gradient to grad = rescale_grad*grad.</param>
         /// <param name="clip_gradient">Clip gradient to the range of [-clip_gradient, clip_gradient] If clip_gradient <= 0, gradient clipping is turned off. grad = max(min(grad, clip_gradient), -clip_gradient).</param>
         /// <param name="lazy_update">If true, lazy updates are applied if gradient's stype is row_sparse and both weight and momentum have the same stype</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray MpSgdMomUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mom, NDArrayOrSymbol weight32, float lr, float momentum = 0f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, bool lazyUpdate = true, NDArray output = null)
+        public static NDArray MpSgdMomUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mom, NDArrayOrSymbol weight32, double lr, double momentum = 0, double wd = 0, double rescaleGrad = 1, double clipGradient = -1, bool lazyUpdate = true, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "mp_sgd_mom_update",
                 _mpSgdMomUpdateParamNames,
                 new[] { Convert(lr), Convert(momentum), Convert(wd), Convert(rescaleGrad), Convert(clipGradient), Convert(lazyUpdate) },
                 new[] { weight.Handle, grad.Handle, mom.Handle, weight32.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _ftmlUpdateParamNames = new[] { "lr", "t", "beta1", "beta2", "epsilon", "wd", "rescale_grad", "clip_grad" };
+        private static string[] _ftmlUpdateParamNames = new[] { "lr", "beta1", "beta2", "epsilon", "t", "wd", "rescale_grad", "clip_grad" };
 
         /// <summary>
         /// The FTML optimizer described in
@@ -1558,15 +1919,15 @@ namespace Horker.MXNet.Operators
         /// <param name="wd">Weight decay augments the objective function with a regularization term that penalizes large weights. The penalty scales with the square of the magnitude of each weight.</param>
         /// <param name="rescale_grad">Rescale gradient to grad = rescale_grad*grad.</param>
         /// <param name="clip_grad">Clip gradient to the range of [-clip_gradient, clip_gradient] If clip_gradient <= 0, gradient clipping is turned off. grad = max(min(grad, clip_gradient), -clip_gradient).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray FtmlUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol d, NDArrayOrSymbol v, NDArrayOrSymbol z, float lr, int t, float beta1 = 0.600000024f, float beta2 = 0.999000013f, double epsilon = 9.9999999392252903e-09, float wd = 0f, float rescaleGrad = 1f, float clipGrad = -1f, NDArray output = null)
+        public static NDArray FtmlUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol d, NDArrayOrSymbol v, NDArrayOrSymbol z, double lr, int t, double beta1 = 0.600000024, double beta2 = 0.999000013, double epsilon = 9.9999999392252903e-09, double wd = 0, double rescaleGrad = 1, double clipGrad = -1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "ftml_update",
                 _ftmlUpdateParamNames,
-                new[] { Convert(lr), Convert(t), Convert(beta1), Convert(beta2), Convert(epsilon), Convert(wd), Convert(rescaleGrad), Convert(clipGrad) },
+                new[] { Convert(lr), Convert(beta1), Convert(beta2), Convert(epsilon), Convert(t), Convert(wd), Convert(rescaleGrad), Convert(clipGrad) },
                 new[] { weight.Handle, grad.Handle, d.Handle, v.Handle, z.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -1617,15 +1978,15 @@ namespace Horker.MXNet.Operators
         /// <param name="rescale_grad">Rescale gradient to grad = rescale_grad*grad.</param>
         /// <param name="clip_gradient">Clip gradient to the range of [-clip_gradient, clip_gradient] If clip_gradient <= 0, gradient clipping is turned off. grad = max(min(grad, clip_gradient), -clip_gradient).</param>
         /// <param name="lazy_update">If true, lazy updates are applied if gradient's stype is row_sparse and all of w, m and v have the same stype</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray AdamUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mean, NDArrayOrSymbol var, float lr, float beta1 = 0.899999976f, float beta2 = 0.999000013f, float epsilon = 9.99999994e-09f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, bool lazyUpdate = true, NDArray output = null)
+        public static NDArray AdamUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mean, NDArrayOrSymbol var, double lr, double beta1 = 0.899999976, double beta2 = 0.999000013, double epsilon = 9.99999994e-09, double wd = 0, double rescaleGrad = 1, double clipGradient = -1, bool lazyUpdate = true, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "adam_update",
                 _adamUpdateParamNames,
                 new[] { Convert(lr), Convert(beta1), Convert(beta2), Convert(epsilon), Convert(wd), Convert(rescaleGrad), Convert(clipGradient), Convert(lazyUpdate) },
                 new[] { weight.Handle, grad.Handle, mean.Handle, var.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -1657,15 +2018,15 @@ namespace Horker.MXNet.Operators
         /// <param name="wd">Weight decay augments the objective function with a regularization term that penalizes large weights. The penalty scales with the square of the magnitude of each weight.</param>
         /// <param name="rescale_grad">Rescale gradient to grad = rescale_grad*grad.</param>
         /// <param name="clip_gradient">Clip gradient to the range of [-clip_gradient, clip_gradient] If clip_gradient <= 0, gradient clipping is turned off. grad = max(min(grad, clip_gradient), -clip_gradient).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray NagMomUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mom, float lr, float momentum = 0f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, NDArray output = null)
+        public static NDArray NagMomUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mom, double lr, double momentum = 0, double wd = 0, double rescaleGrad = 1, double clipGradient = -1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "nag_mom_update",
                 _nagMomUpdateParamNames,
                 new[] { Convert(lr), Convert(momentum), Convert(wd), Convert(rescaleGrad), Convert(clipGradient) },
                 new[] { weight.Handle, grad.Handle, mom.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -1686,15 +2047,15 @@ namespace Horker.MXNet.Operators
         /// <param name="wd">Weight decay augments the objective function with a regularization term that penalizes large weights. The penalty scales with the square of the magnitude of each weight.</param>
         /// <param name="rescale_grad">Rescale gradient to grad = rescale_grad*grad.</param>
         /// <param name="clip_gradient">Clip gradient to the range of [-clip_gradient, clip_gradient] If clip_gradient <= 0, gradient clipping is turned off. grad = max(min(grad, clip_gradient), -clip_gradient).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray MpNagMomUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mom, NDArrayOrSymbol weight32, float lr, float momentum = 0f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, NDArray output = null)
+        public static NDArray MpNagMomUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol mom, NDArrayOrSymbol weight32, double lr, double momentum = 0, double wd = 0, double rescaleGrad = 1, double clipGradient = -1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "mp_nag_mom_update",
                 _mpNagMomUpdateParamNames,
                 new[] { Convert(lr), Convert(momentum), Convert(wd), Convert(rescaleGrad), Convert(clipGradient) },
                 new[] { weight.Handle, grad.Handle, mom.Handle, weight32.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -1748,15 +2109,15 @@ namespace Horker.MXNet.Operators
         /// <param name="rescale_grad">Rescale gradient to grad = rescale_grad*grad.</param>
         /// <param name="clip_gradient">Clip gradient to the range of [-clip_gradient, clip_gradient] If clip_gradient <= 0, gradient clipping is turned off. grad = max(min(grad, clip_gradient), -clip_gradient).</param>
         /// <param name="clip_weights">Clip weights to the range of [-clip_weights, clip_weights] If clip_weights <= 0, weight clipping is turned off. weights = max(min(weights, clip_weights), -clip_weights).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RmspropUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol n, float lr, float gamma1 = 0.949999988f, float epsilon = 9.99999994e-09f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, float clipWeights = -1f, NDArray output = null)
+        public static NDArray RmspropUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol n, double lr, double gamma1 = 0.949999988, double epsilon = 9.99999994e-09, double wd = 0, double rescaleGrad = 1, double clipGradient = -1, double clipWeights = -1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "rmsprop_update",
                 _rmspropUpdateParamNames,
                 new[] { Convert(lr), Convert(gamma1), Convert(epsilon), Convert(wd), Convert(rescaleGrad), Convert(clipGradient), Convert(clipWeights) },
                 new[] { weight.Handle, grad.Handle, n.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -1802,15 +2163,15 @@ namespace Horker.MXNet.Operators
         /// <param name="rescale_grad">Rescale gradient to grad = rescale_grad*grad.</param>
         /// <param name="clip_gradient">Clip gradient to the range of [-clip_gradient, clip_gradient] If clip_gradient <= 0, gradient clipping is turned off. grad = max(min(grad, clip_gradient), -clip_gradient).</param>
         /// <param name="clip_weights">Clip weights to the range of [-clip_weights, clip_weights] If clip_weights <= 0, weight clipping is turned off. weights = max(min(weights, clip_weights), -clip_weights).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RmspropalexUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol n, NDArrayOrSymbol g, NDArrayOrSymbol delta, float lr, float gamma1 = 0.949999988f, float gamma2 = 0.899999976f, float epsilon = 9.99999994e-09f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, float clipWeights = -1f, NDArray output = null)
+        public static NDArray RmspropalexUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol n, NDArrayOrSymbol g, NDArrayOrSymbol delta, double lr, double gamma1 = 0.949999988, double gamma2 = 0.899999976, double epsilon = 9.99999994e-09, double wd = 0, double rescaleGrad = 1, double clipGradient = -1, double clipWeights = -1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "rmspropalex_update",
                 _rmspropalexUpdateParamNames,
                 new[] { Convert(lr), Convert(gamma1), Convert(gamma2), Convert(epsilon), Convert(wd), Convert(rescaleGrad), Convert(clipGradient), Convert(clipWeights) },
                 new[] { weight.Handle, grad.Handle, n.Handle, g.Handle, delta.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -1851,15 +2212,15 @@ namespace Horker.MXNet.Operators
         /// <param name="wd">Weight decay augments the objective function with a regularization term that penalizes large weights. The penalty scales with the square of the magnitude of each weight.</param>
         /// <param name="rescale_grad">Rescale gradient to grad = rescale_grad*grad.</param>
         /// <param name="clip_gradient">Clip gradient to the range of [-clip_gradient, clip_gradient] If clip_gradient <= 0, gradient clipping is turned off. grad = max(min(grad, clip_gradient), -clip_gradient).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray FtrlUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol z, NDArrayOrSymbol n, float lr, float lamda1 = 0.00999999978f, float beta = 1f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, NDArray output = null)
+        public static NDArray FtrlUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol z, NDArrayOrSymbol n, double lr, double lamda1 = 0.00999999978, double beta = 1, double wd = 0, double rescaleGrad = 1, double clipGradient = -1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "ftrl_update",
                 _ftrlUpdateParamNames,
                 new[] { Convert(lr), Convert(lamda1), Convert(beta), Convert(wd), Convert(rescaleGrad), Convert(clipGradient) },
                 new[] { weight.Handle, grad.Handle, z.Handle, n.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -1891,15 +2252,15 @@ namespace Horker.MXNet.Operators
         /// <param name="wd">weight decay</param>
         /// <param name="rescale_grad">Rescale gradient to grad = rescale_grad*grad.</param>
         /// <param name="clip_gradient">Clip gradient to the range of [-clip_gradient, clip_gradient] If clip_gradient <= 0, gradient clipping is turned off. grad = max(min(grad, clip_gradient), -clip_gradient).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SparseAdagradUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol history, float lr, float epsilon = 1.00000001e-07f, float wd = 0f, float rescaleGrad = 1f, float clipGradient = -1f, NDArray output = null)
+        public static NDArray SparseAdagradUpdate(NDArrayOrSymbol weight, NDArrayOrSymbol grad, NDArrayOrSymbol history, double lr, double epsilon = 1.00000001e-07, double wd = 0, double rescaleGrad = 1, double clipGradient = -1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_sparse_adagrad_update",
                 _sparseAdagradUpdateParamNames,
                 new[] { Convert(lr), Convert(epsilon), Convert(wd), Convert(rescaleGrad), Convert(clipGradient) },
                 new[] { weight.Handle, grad.Handle, history.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -1995,19 +2356,19 @@ namespace Horker.MXNet.Operators
         /// <param name="mode">Padding type to use. "constant" pads with `constant_value` "edge" pads using the edge values of the input array "reflect" pads by reflecting values with respect to the edges.</param>
         /// <param name="pad_width">Widths of the padding regions applied to the edges of each axis. It is a tuple of integer padding widths for each axis of the format ``(before_1, after_1, ... , before_N, after_N)``. It should be of length ``2*N`` where ``N`` is the number of dimensions of the array.This is equivalent to pad_width in numpy.pad, but flattened.</param>
         /// <param name="constant_value">The value used for padding when `mode` is "constant".</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Pad(NDArrayOrSymbol data, PadMode mode, NDShape padWidth, double constantValue = 0, NDArray output = null)
+        public static NDArray Pad(NDArrayOrSymbol data, string mode, NDShape padWidth, double constantValue = 0, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "Pad",
                 _PadParamNames,
-                new[] { Convert((int)mode), Convert(padWidth), Convert(constantValue) },
+                new[] { Convert(mode), Convert(padWidth), Convert(constantValue) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _FlattenParamNames = _empty;
+        private static string[] _FlattenParamNames = Empty;
 
         /// <summary>
         /// Flattens the input array into a 2-D array by collapsing the higher dimensions.
@@ -2040,15 +2401,15 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\matrix_op.cc:L293
         /// </summary>
         /// <param name="data">Input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Flatten(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "Flatten",
                 _FlattenParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -2088,15 +2449,15 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">Shape to be sampled from each random distribution.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         /// <param name="high">Upper bounds of the distributions.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SampleUniform(NDArrayOrSymbol low, NDArrayOrSymbol high, NDShape shape = null, DType dtype = null, NDArray output = null)
+        public static NDArray SampleUniform(NDArrayOrSymbol low, NDArrayOrSymbol high, NDShape shape = null, string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_sample_uniform",
                 _sampleUniformParamNames,
                 new[] { Convert(shape), Convert(dtype) },
                 new[] { low.Handle, high.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -2136,15 +2497,15 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">Shape to be sampled from each random distribution.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         /// <param name="sigma">Standard deviations of the distributions.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SampleNormal(NDArrayOrSymbol mu, NDArrayOrSymbol sigma, NDShape shape = null, DType dtype = null, NDArray output = null)
+        public static NDArray SampleNormal(NDArrayOrSymbol mu, NDArrayOrSymbol sigma, NDShape shape = null, string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_sample_normal",
                 _sampleNormalParamNames,
                 new[] { Convert(shape), Convert(dtype) },
                 new[] { mu.Handle, sigma.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -2184,15 +2545,15 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">Shape to be sampled from each random distribution.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         /// <param name="beta">Beta (scale) parameters of the distributions.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SampleGamma(NDArrayOrSymbol alpha, NDArrayOrSymbol beta, NDShape shape = null, DType dtype = null, NDArray output = null)
+        public static NDArray SampleGamma(NDArrayOrSymbol alpha, NDArrayOrSymbol beta, NDShape shape = null, string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_sample_gamma",
                 _sampleGammaParamNames,
                 new[] { Convert(shape), Convert(dtype) },
                 new[] { alpha.Handle, beta.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -2230,15 +2591,15 @@ namespace Horker.MXNet.Operators
         /// <param name="lam">Lambda (rate) parameters of the distributions.</param>
         /// <param name="shape">Shape to be sampled from each random distribution.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SampleExponential(NDArrayOrSymbol lam, NDShape shape = null, DType dtype = null, NDArray output = null)
+        public static NDArray SampleExponential(NDArrayOrSymbol lam, NDShape shape = null, string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_sample_exponential",
                 _sampleExponentialParamNames,
                 new[] { Convert(shape), Convert(dtype) },
                 new[] { lam.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -2278,15 +2639,15 @@ namespace Horker.MXNet.Operators
         /// <param name="lam">Lambda (rate) parameters of the distributions.</param>
         /// <param name="shape">Shape to be sampled from each random distribution.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SamplePoisson(NDArrayOrSymbol lam, NDShape shape = null, DType dtype = null, NDArray output = null)
+        public static NDArray SamplePoisson(NDArrayOrSymbol lam, NDShape shape = null, string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_sample_poisson",
                 _samplePoissonParamNames,
                 new[] { Convert(shape), Convert(dtype) },
                 new[] { lam.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -2328,15 +2689,15 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">Shape to be sampled from each random distribution.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         /// <param name="p">Failure probabilities in each experiment.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SampleNegativeBinomial(NDArrayOrSymbol k, NDArrayOrSymbol p, NDShape shape = null, DType dtype = null, NDArray output = null)
+        public static NDArray SampleNegativeBinomial(NDArrayOrSymbol k, NDArrayOrSymbol p, NDShape shape = null, string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_sample_negative_binomial",
                 _sampleNegativeBinomialParamNames,
                 new[] { Convert(shape), Convert(dtype) },
                 new[] { k.Handle, p.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -2378,15 +2739,15 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">Shape to be sampled from each random distribution.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         /// <param name="alpha">Alpha (dispersion) parameters of the distributions.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SampleGeneralizedNegativeBinomial(NDArrayOrSymbol mu, NDArrayOrSymbol alpha, NDShape shape = null, DType dtype = null, NDArray output = null)
+        public static NDArray SampleGeneralizedNegativeBinomial(NDArrayOrSymbol mu, NDArrayOrSymbol alpha, NDShape shape = null, string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_sample_generalized_negative_binomial",
                 _sampleGeneralizedNegativeBinomialParamNames,
                 new[] { Convert(shape), Convert(dtype) },
                 new[] { mu.Handle, alpha.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -2427,15 +2788,33 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">Shape to be sampled from each random distribution.</param>
         /// <param name="get_prob">Whether to also return the log probability of sampled result. This is usually used for differentiating through stochastic variables, e.g. in reinforcement learning.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SampleMultinomial(NDArrayOrSymbol data, NDShape shape = null, bool getProb = false, DType dtype = null, NDArray output = null)
+        public static NDArray SampleMultinomial(NDArrayOrSymbol data, NDShape shape = null, bool getProb = false, string dtype = "int32", NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_sample_multinomial",
                 _sampleMultinomialParamNames,
                 new[] { Convert(shape), Convert(getProb), Convert(dtype) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSampleMultinomialParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSampleMultinomial(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_sample_multinomial",
+                _backwardSampleMultinomialParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -2463,15 +2842,15 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">Shape of the output.</param>
         /// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RandomUniform(float low = 0f, float high = 1f, NDShape shape = null, Context ctx = null, DType dtype = null, NDArray output = null)
+        public static NDArray RandomUniform(double low = 0, double high = 1, NDShape shape = null, string ctx = "", string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_random_uniform",
                 _randomUniformParamNames,
                 new[] { Convert(low), Convert(high), Convert(shape), Convert(ctx), Convert(dtype) },
-                _emptyInput,
-                output);
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -2498,15 +2877,15 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">Shape of the output.</param>
         /// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RandomNormal(float loc = 0f, float scale = 1f, NDShape shape = null, Context ctx = null, DType dtype = null, NDArray output = null)
+        public static NDArray RandomNormal(double loc = 0, double scale = 1, NDShape shape = null, string ctx = "", string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_random_normal",
                 _randomNormalParamNames,
                 new[] { Convert(loc), Convert(scale), Convert(shape), Convert(ctx), Convert(dtype) },
-                _emptyInput,
-                output);
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -2530,15 +2909,15 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">Shape of the output.</param>
         /// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RandomGamma(float alpha = 1f, float beta = 1f, NDShape shape = null, Context ctx = null, DType dtype = null, NDArray output = null)
+        public static NDArray RandomGamma(double alpha = 1, double beta = 1, NDShape shape = null, string ctx = "", string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_random_gamma",
                 _randomGammaParamNames,
                 new[] { Convert(alpha), Convert(beta), Convert(shape), Convert(ctx), Convert(dtype) },
-                _emptyInput,
-                output);
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -2561,15 +2940,15 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">Shape of the output.</param>
         /// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RandomExponential(float lam = 1f, NDShape shape = null, Context ctx = null, DType dtype = null, NDArray output = null)
+        public static NDArray RandomExponential(double lam = 1, NDShape shape = null, string ctx = "", string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_random_exponential",
                 _randomExponentialParamNames,
                 new[] { Convert(lam), Convert(shape), Convert(ctx), Convert(dtype) },
-                _emptyInput,
-                output);
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -2593,15 +2972,15 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">Shape of the output.</param>
         /// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RandomPoisson(float lam = 1f, NDShape shape = null, Context ctx = null, DType dtype = null, NDArray output = null)
+        public static NDArray RandomPoisson(double lam = 1, NDShape shape = null, string ctx = "", string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_random_poisson",
                 _randomPoissonParamNames,
                 new[] { Convert(lam), Convert(shape), Convert(ctx), Convert(dtype) },
-                _emptyInput,
-                output);
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -2627,15 +3006,15 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">Shape of the output.</param>
         /// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RandomNegativeBinomial(int k = 1, float p = 1f, NDShape shape = null, Context ctx = null, DType dtype = null, NDArray output = null)
+        public static NDArray RandomNegativeBinomial(int k = 1, double p = 1, NDShape shape = null, string ctx = "", string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_random_negative_binomial",
                 _randomNegativeBinomialParamNames,
                 new[] { Convert(k), Convert(p), Convert(shape), Convert(ctx), Convert(dtype) },
-                _emptyInput,
-                output);
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -2662,15 +3041,15 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">Shape of the output.</param>
         /// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RandomGeneralizedNegativeBinomial(float mu = 1f, float alpha = 1f, NDShape shape = null, Context ctx = null, DType dtype = null, NDArray output = null)
+        public static NDArray RandomGeneralizedNegativeBinomial(double mu = 1, double alpha = 1, NDShape shape = null, string ctx = "", string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_random_generalized_negative_binomial",
                 _randomGeneralizedNegativeBinomialParamNames,
                 new[] { Convert(mu), Convert(alpha), Convert(shape), Convert(ctx), Convert(dtype) },
-                _emptyInput,
-                output);
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -2696,15 +3075,15 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">Shape of the output.</param>
         /// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to int32 if not defined (dtype=None).</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RandomRandint(Tuple<double> low, Tuple<double> high, NDShape shape = null, Context ctx = null, DType dtype = null, NDArray output = null)
+        public static NDArray RandomRandint(double? low, double? high, NDShape shape = null, string ctx = "", string dtype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_random_randint",
                 _randomRandintParamNames,
                 new[] { Convert(low), Convert(high), Convert(shape), Convert(ctx), Convert(dtype) },
-                _emptyInput,
-                output);
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -2728,15 +3107,15 @@ namespace Horker.MXNet.Operators
         /// <param name="low">Lower bound of the distribution.</param>
         /// <param name="high">Upper bound of the distribution.</param>
         /// <param name="data">The input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RandomUniformLike(NDArrayOrSymbol data, float low = 0f, float high = 1f, NDArray output = null)
+        public static NDArray RandomUniformLike(NDArrayOrSymbol data, double low = 0, double high = 1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_random_uniform_like",
                 _randomUniformLikeParamNames,
                 new[] { Convert(low), Convert(high) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -2759,15 +3138,15 @@ namespace Horker.MXNet.Operators
         /// <param name="loc">Mean of the distribution.</param>
         /// <param name="scale">Standard deviation of the distribution.</param>
         /// <param name="data">The input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RandomNormalLike(NDArrayOrSymbol data, float loc = 0f, float scale = 1f, NDArray output = null)
+        public static NDArray RandomNormalLike(NDArrayOrSymbol data, double loc = 0, double scale = 1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_random_normal_like",
                 _randomNormalLikeParamNames,
                 new[] { Convert(loc), Convert(scale) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -2789,15 +3168,15 @@ namespace Horker.MXNet.Operators
         /// <param name="alpha">Alpha parameter (shape) of the gamma distribution.</param>
         /// <param name="beta">Beta parameter (scale) of the gamma distribution.</param>
         /// <param name="data">The input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RandomGammaLike(NDArrayOrSymbol data, float alpha = 1f, float beta = 1f, NDArray output = null)
+        public static NDArray RandomGammaLike(NDArrayOrSymbol data, double alpha = 1, double beta = 1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_random_gamma_like",
                 _randomGammaLikeParamNames,
                 new[] { Convert(alpha), Convert(beta) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -2818,15 +3197,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lam">Lambda parameter (rate) of the exponential distribution.</param>
         /// <param name="data">The input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RandomExponentialLike(NDArrayOrSymbol data, float lam = 1f, NDArray output = null)
+        public static NDArray RandomExponentialLike(NDArrayOrSymbol data, double lam = 1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_random_exponential_like",
                 _randomExponentialLikeParamNames,
                 new[] { Convert(lam) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -2848,15 +3227,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lam">Lambda parameter (rate) of the Poisson distribution.</param>
         /// <param name="data">The input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RandomPoissonLike(NDArrayOrSymbol data, float lam = 1f, NDArray output = null)
+        public static NDArray RandomPoissonLike(NDArrayOrSymbol data, double lam = 1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_random_poisson_like",
                 _randomPoissonLikeParamNames,
                 new[] { Convert(lam) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -2880,15 +3259,15 @@ namespace Horker.MXNet.Operators
         /// <param name="k">Limit of unsuccessful experiments.</param>
         /// <param name="p">Failure probability in each experiment.</param>
         /// <param name="data">The input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RandomNegativeBinomialLike(NDArrayOrSymbol data, int k = 1, float p = 1f, NDArray output = null)
+        public static NDArray RandomNegativeBinomialLike(NDArrayOrSymbol data, int k = 1, double p = 1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_random_negative_binomial_like",
                 _randomNegativeBinomialLikeParamNames,
                 new[] { Convert(k), Convert(p) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -2914,19 +3293,19 @@ namespace Horker.MXNet.Operators
         /// <param name="mu">Mean of the negative binomial distribution.</param>
         /// <param name="alpha">Alpha (dispersion) parameter of the negative binomial distribution.</param>
         /// <param name="data">The input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RandomGeneralizedNegativeBinomialLike(NDArrayOrSymbol data, float mu = 1f, float alpha = 1f, NDArray output = null)
+        public static NDArray RandomGeneralizedNegativeBinomialLike(NDArrayOrSymbol data, double mu = 1, double alpha = 1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_random_generalized_negative_binomial_like",
                 _randomGeneralizedNegativeBinomialLikeParamNames,
                 new[] { Convert(mu), Convert(alpha) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _shuffleParamNames = _empty;
+        private static string[] _shuffleParamNames = Empty;
 
         /// <summary>
         /// Randomly shuffle the elements.
@@ -2938,15 +3317,15 @@ namespace Horker.MXNet.Operators
         /// 
         /// </summary>
         /// <param name="data">Data to be shuffled.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Shuffle(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_shuffle",
                 _shuffleParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -2981,15 +3360,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="range_max">The number of possible classes.</param>
         /// <param name="shape">2-D shape of the output, where shape[0] is the batch size, and shape[1] is the number of candidates to sample for each batch.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray SampleUniqueZipfian(int rangeMax, NDShape shape = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_sample_unique_zipfian",
                 _sampleUniqueZipfianParamNames,
                 new[] { Convert(rangeMax), Convert(shape) },
-                _emptyInput,
-                output);
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -3022,15 +3401,33 @@ namespace Horker.MXNet.Operators
         /// <param name="data">Input data to the function.</param>
         /// <param name="label">Input label to the function.</param>
         /// <param name="grad_scale">Scale the gradient by a float factor</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray LinearRegressionOutput(NDArrayOrSymbol data, NDArrayOrSymbol label, float gradScale = 1f, NDArray output = null)
+        public static NDArray LinearRegressionOutput(NDArrayOrSymbol data, NDArrayOrSymbol label, double gradScale = 1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "LinearRegressionOutput",
                 _LinearRegressionOutputParamNames,
                 new[] { Convert(gradScale) },
                 new[] { data.Handle, label.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardLinearRegOutParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLinearRegOut(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_linear_reg_out",
+                _backwardLinearRegOutParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -3064,15 +3461,33 @@ namespace Horker.MXNet.Operators
         /// <param name="data">Input data to the function.</param>
         /// <param name="label">Input label to the function.</param>
         /// <param name="grad_scale">Scale the gradient by a float factor</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray MAERegressionOutput(NDArrayOrSymbol data, NDArrayOrSymbol label, float gradScale = 1f, NDArray output = null)
+        public static NDArray MAERegressionOutput(NDArrayOrSymbol data, NDArrayOrSymbol label, double gradScale = 1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "MAERegressionOutput",
                 _MAERegressionOutputParamNames,
                 new[] { Convert(gradScale) },
                 new[] { data.Handle, label.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardMaeRegOutParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardMaeRegOut(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_mae_reg_out",
+                _backwardMaeRegOutParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -3110,19 +3525,37 @@ namespace Horker.MXNet.Operators
         /// <param name="data">Input data to the function.</param>
         /// <param name="label">Input label to the function.</param>
         /// <param name="grad_scale">Scale the gradient by a float factor</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray LogisticRegressionOutput(NDArrayOrSymbol data, NDArrayOrSymbol label, float gradScale = 1f, NDArray output = null)
+        public static NDArray LogisticRegressionOutput(NDArrayOrSymbol data, NDArrayOrSymbol label, double gradScale = 1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "LogisticRegressionOutput",
                 _LogisticRegressionOutputParamNames,
                 new[] { Convert(gradScale) },
                 new[] { data.Handle, label.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _RNNParamNames = new[] { "state_size", "num_layers", "mode", "bidirectional", "p", "state_outputs", "projection_size", "lstm_state_clip_min", "lstm_state_clip_max", "lstm_state_clip_nan", "use_sequence_length" };
+        private static string[] _backwardLogisticRegOutParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLogisticRegOut(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_logistic_reg_out",
+                _backwardLogisticRegOutParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _RNNParamNames = new[] { "state_size", "num_layers", "bidirectional", "mode", "p", "state_outputs", "projection_size", "lstm_state_clip_min", "lstm_state_clip_max", "lstm_state_clip_nan", "use_sequence_length" };
 
         /// <summary>
         /// Applies recurrent layers to input data. Currently, vanilla RNN, LSTM and GRU are
@@ -3198,15 +3631,33 @@ namespace Horker.MXNet.Operators
         /// <param name="lstm_state_clip_max">Maximum clip value of LSTM states. This option must be used together with lstm_state_clip_min.</param>
         /// <param name="lstm_state_clip_nan">Whether to stop NaN from propagating in state by clipping it to min/max. If clipping range is not specified, this option is ignored.</param>
         /// <param name="use_sequence_length">If set to true, this layer takes in an extra input parameter `sequence_length` to specify variable length sequence</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RNN(NDArrayOrSymbol data, NDArrayOrSymbol parameters, NDArrayOrSymbol state, NDArrayOrSymbol stateCell, NDArrayOrSymbol sequenceLength, uint stateSize, uint numLayers, RNNMode mode, bool bidirectional = false, float p = 0f, bool stateOutputs = false, int? projectionSize = null, double? lstmStateClipMin = null, double? lstmStateClipMax = null, bool lstmStateClipNan = false, bool useSequenceLength = false, NDArray output = null)
+        public static NDArray RNN(NDArrayOrSymbol data, NDArrayOrSymbol parameters, NDArrayOrSymbol state, NDArrayOrSymbol stateCell, NDArrayOrSymbol sequenceLength, int stateSize, int numLayers, string mode, bool bidirectional = false, double p = 0, bool stateOutputs = false, int? projectionSize = null, double? lstmStateClipMin = null, double? lstmStateClipMax = null, bool lstmStateClipNan = false, bool useSequenceLength = false, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "RNN",
                 _RNNParamNames,
-                new[] { Convert(stateSize), Convert(numLayers), Convert((int)mode), Convert(bidirectional), Convert(p), Convert(stateOutputs), Convert(projectionSize), Convert(lstmStateClipMin), Convert(lstmStateClipMax), Convert(lstmStateClipNan), Convert(useSequenceLength) },
+                new[] { Convert(stateSize), Convert(numLayers), Convert(bidirectional), Convert(mode), Convert(p), Convert(stateOutputs), Convert(projectionSize), Convert(lstmStateClipMin), Convert(lstmStateClipMax), Convert(lstmStateClipNan), Convert(useSequenceLength) },
                 new[] { data.Handle, parameters.Handle, state.Handle, stateCell.Handle, sequenceLength.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardRNNParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardRNN(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_RNN",
+                _backwardRNNParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -3279,7 +3730,6 @@ namespace Horker.MXNet.Operators
         /// <param name="num_outputs">Number of splits. Note that this should evenly divide the length of the `axis`.</param>
         /// <param name="axis">Axis along which to split.</param>
         /// <param name="squeeze_axis">If true, Removes the axis with length 1 from the shapes of the output arrays. **Note** that setting `squeeze_axis` to ``true`` removes axis with length 1 only along the `axis` which it is split. Also `squeeze_axis` can be set to ``true`` only if ``input.shape[axis] == num_outputs``.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray SliceChannel(NDArrayOrSymbol data, int numOutputs, int axis = 1, bool squeezeAxis = false, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -3287,7 +3737,8 @@ namespace Horker.MXNet.Operators
                 _SliceChannelParamNames,
                 new[] { Convert(numOutputs), Convert(axis), Convert(squeezeAxis) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -3383,53 +3834,73 @@ namespace Horker.MXNet.Operators
         /// <param name="normalization">Normalizes the gradient.</param>
         /// <param name="out_grad">Multiplies gradient with output gradient element-wise.</param>
         /// <param name="smooth_alpha">Constant for computing a label smoothed version of cross-entropyfor the backwards pass.  This constant gets subtracted from theone-hot encoding of the gold label and distributed uniformly toall other labels.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SoftmaxOutput(NDArrayOrSymbol data, NDArrayOrSymbol label, float gradScale = 1f, float ignoreLabel = -1f, bool multiOutput = false, bool useIgnore = false, bool preserveShape = false, SoftmaxoutputNormalization normalization = SoftmaxoutputNormalization.Null, bool outGrad = false, float smoothAlpha = 0f, NDArray output = null)
+        public static NDArray SoftmaxOutput(NDArrayOrSymbol data, NDArrayOrSymbol label, double gradScale = 1, double ignoreLabel = -1, bool multiOutput = false, bool useIgnore = false, bool preserveShape = false, string normalization = "null", bool outGrad = false, double smoothAlpha = 0, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "SoftmaxOutput",
                 _SoftmaxOutputParamNames,
-                new[] { Convert(gradScale), Convert(ignoreLabel), Convert(multiOutput), Convert(useIgnore), Convert(preserveShape), Convert((int)normalization), Convert(outGrad), Convert(smoothAlpha) },
+                new[] { Convert(gradScale), Convert(ignoreLabel), Convert(multiOutput), Convert(useIgnore), Convert(preserveShape), Convert(normalization), Convert(outGrad), Convert(smoothAlpha) },
                 new[] { data.Handle, label.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _sgMkldnnConvParamNames = _empty;
+        private static string[] _backwardSoftmaxOutputParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSoftmaxOutput(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_SoftmaxOutput",
+                _backwardSoftmaxOutputParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _sgMkldnnConvParamNames = Empty;
 
         /// <summary>
         /// _sg_mkldnn_conv
         /// 
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\subgraph\mkldnn\mkldnn_conv.cc:L770
         /// </summary>
-        /// <param name="symbol_name">name of the resulting symbol</param>
+
         public static NDArray SgMkldnnConv(NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_sg_mkldnn_conv",
                 _sgMkldnnConvParamNames,
-                _empty,
-                _emptyInput,
-                output);
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
-        private static string[] _sgMkldnnFullyConnectedParamNames = _empty;
+        private static string[] _sgMkldnnFullyConnectedParamNames = Empty;
 
         /// <summary>
         /// _sg_mkldnn_fully_connected
         /// 
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\subgraph\mkldnn\mkldnn_fc.cc:L410
         /// </summary>
-        /// <param name="symbol_name">name of the resulting symbol</param>
+
         public static NDArray SgMkldnnFullyConnected(NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_sg_mkldnn_fully_connected",
                 _sgMkldnnFullyConnectedParamNames,
-                _empty,
-                _emptyInput,
-                output);
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -3461,15 +3932,15 @@ namespace Horker.MXNet.Operators
         /// <param name="data">Input array.</param>
         /// <param name="dim1">the first axis to be swapped.</param>
         /// <param name="dim2">the second axis to be swapped.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SwapAxis(NDArrayOrSymbol data, uint dim1 = 0, uint dim2 = 0, NDArray output = null)
+        public static NDArray SwapAxis(NDArrayOrSymbol data, int dim1 = 0, int dim2 = 0, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "SwapAxis",
                 _SwapAxisParamNames,
                 new[] { Convert(dim1), Convert(dim2) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -3485,15 +3956,33 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">The input.</param>
         /// <param name="dtype">Output data type.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray AmpCast(NDArrayOrSymbol data, DType dtype, NDArray output = null)
+        public static NDArray AmpCast(NDArrayOrSymbol data, string dtype, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "amp_cast",
                 _ampCastParamNames,
                 new[] { Convert(dtype) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardAmpCastParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardAmpCast(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_amp_cast",
+                _backwardAmpCastParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -3527,7 +4016,6 @@ namespace Horker.MXNet.Operators
         /// <param name="data">The input</param>
         /// <param name="axis">The axis along which to perform the reduction. Negative values means indexing from right to left. ``Requires axis to be set as int, because global reduction is not supported yet.``</param>
         /// <param name="keepdims">If this is set to `True`, the reduced axis is left in the result as dimension with size one.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Argmax(NDArrayOrSymbol data, int? axis = null, bool keepdims = false, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -3535,7 +4023,8 @@ namespace Horker.MXNet.Operators
                 _argmaxParamNames,
                 new[] { Convert(axis), Convert(keepdims) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -3569,7 +4058,6 @@ namespace Horker.MXNet.Operators
         /// <param name="data">The input</param>
         /// <param name="axis">The axis along which to perform the reduction. Negative values means indexing from right to left. ``Requires axis to be set as int, because global reduction is not supported yet.``</param>
         /// <param name="keepdims">If this is set to `True`, the reduced axis is left in the result as dimension with size one.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Argmin(NDArrayOrSymbol data, int? axis = null, bool keepdims = false, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -3577,11 +4065,12 @@ namespace Horker.MXNet.Operators
                 _argminParamNames,
                 new[] { Convert(axis), Convert(keepdims) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _argmaxChannelParamNames = _empty;
+        private static string[] _argmaxChannelParamNames = Empty;
 
         /// <summary>
         /// Returns argmax indices of each channel from the input array.
@@ -3603,15 +4092,15 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\broadcast_reduce_op_index.cc:L97
         /// </summary>
         /// <param name="data">The input array</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray ArgmaxChannel(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "argmax_channel",
                 _argmaxChannelParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -3668,15 +4157,33 @@ namespace Horker.MXNet.Operators
         /// <param name="axis">int or None. The axis to picking the elements. Negative values means indexing from right to left. If is `None`, the elements in the index w.r.t the flattened input will be picked.</param>
         /// <param name="keepdims">If true, the axis where we pick the elements is left in the result as dimension with size one.</param>
         /// <param name="mode">Specify how out-of-bound indices behave. Default is "clip". "clip" means clip to the range. So, if all indices mentioned are too large, they are replaced by the index that addresses the last element along an axis.  "wrap" means to wrap around.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Pick(NDArrayOrSymbol data, NDArrayOrSymbol index, int? axis = -1, bool keepdims = false, PickMode mode = PickMode.Clip, NDArray output = null)
+        public static NDArray Pick(NDArrayOrSymbol data, NDArrayOrSymbol index, int? axis = -1, bool keepdims = false, string mode = "clip", NDArray output = null)
         {
             var result = Operator.Invoke(
                 "pick",
                 _pickParamNames,
-                new[] { Convert(axis), Convert(keepdims), Convert((int)mode) },
+                new[] { Convert(axis), Convert(keepdims), Convert(mode) },
                 new[] { data.Handle, index.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardPickParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardPick(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_pick",
+                _backwardPickParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -3738,7 +4245,6 @@ namespace Horker.MXNet.Operators
         ///       Negative values means indexing from right to left.</param>
         /// <param name="keepdims">If this is set to `True`, the reduced axes are left in the result as dimension with size one.</param>
         /// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Sum(NDArrayOrSymbol data, NDShape axis = null, bool keepdims = false, bool exclude = false, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -3746,7 +4252,26 @@ namespace Horker.MXNet.Operators
                 _sumParamNames,
                 new[] { Convert(axis), Convert(keepdims), Convert(exclude) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSumParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSum(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_sum",
+                _backwardSumParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -3774,7 +4299,6 @@ namespace Horker.MXNet.Operators
         ///       Negative values means indexing from right to left.</param>
         /// <param name="keepdims">If this is set to `True`, the reduced axes are left in the result as dimension with size one.</param>
         /// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Mean(NDArrayOrSymbol data, NDShape axis = null, bool keepdims = false, bool exclude = false, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -3782,7 +4306,26 @@ namespace Horker.MXNet.Operators
                 _meanParamNames,
                 new[] { Convert(axis), Convert(keepdims), Convert(exclude) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardMeanParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardMean(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_mean",
+                _backwardMeanParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -3810,7 +4353,6 @@ namespace Horker.MXNet.Operators
         ///       Negative values means indexing from right to left.</param>
         /// <param name="keepdims">If this is set to `True`, the reduced axes are left in the result as dimension with size one.</param>
         /// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Prod(NDArrayOrSymbol data, NDShape axis = null, bool keepdims = false, bool exclude = false, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -3818,7 +4360,26 @@ namespace Horker.MXNet.Operators
                 _prodParamNames,
                 new[] { Convert(axis), Convert(keepdims), Convert(exclude) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardProdParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardProd(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_prod",
+                _backwardProdParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -3848,7 +4409,6 @@ namespace Horker.MXNet.Operators
         ///       Negative values means indexing from right to left.</param>
         /// <param name="keepdims">If this is set to `True`, the reduced axes are left in the result as dimension with size one.</param>
         /// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Nansum(NDArrayOrSymbol data, NDShape axis = null, bool keepdims = false, bool exclude = false, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -3856,7 +4416,26 @@ namespace Horker.MXNet.Operators
                 _nansumParamNames,
                 new[] { Convert(axis), Convert(keepdims), Convert(exclude) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardNansumParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardNansum(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_nansum",
+                _backwardNansumParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -3886,7 +4465,6 @@ namespace Horker.MXNet.Operators
         ///       Negative values means indexing from right to left.</param>
         /// <param name="keepdims">If this is set to `True`, the reduced axes are left in the result as dimension with size one.</param>
         /// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Nanprod(NDArrayOrSymbol data, NDShape axis = null, bool keepdims = false, bool exclude = false, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -3894,7 +4472,26 @@ namespace Horker.MXNet.Operators
                 _nanprodParamNames,
                 new[] { Convert(axis), Convert(keepdims), Convert(exclude) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardNanprodParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardNanprod(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_nanprod",
+                _backwardNanprodParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -3922,7 +4519,6 @@ namespace Horker.MXNet.Operators
         ///       Negative values means indexing from right to left.</param>
         /// <param name="keepdims">If this is set to `True`, the reduced axes are left in the result as dimension with size one.</param>
         /// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Max(NDArrayOrSymbol data, NDShape axis = null, bool keepdims = false, bool exclude = false, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -3930,7 +4526,26 @@ namespace Horker.MXNet.Operators
                 _maxParamNames,
                 new[] { Convert(axis), Convert(keepdims), Convert(exclude) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardMaxParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardMax(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_max",
+                _backwardMaxParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -3958,7 +4573,6 @@ namespace Horker.MXNet.Operators
         ///       Negative values means indexing from right to left.</param>
         /// <param name="keepdims">If this is set to `True`, the reduced axes are left in the result as dimension with size one.</param>
         /// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Min(NDArrayOrSymbol data, NDShape axis = null, bool keepdims = false, bool exclude = false, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -3966,7 +4580,26 @@ namespace Horker.MXNet.Operators
                 _minParamNames,
                 new[] { Convert(axis), Convert(keepdims), Convert(exclude) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardMinParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardMin(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_min",
+                _backwardMinParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -3999,7 +4632,6 @@ namespace Horker.MXNet.Operators
         /// <param name="data">The input</param>
         /// <param name="axis">The axes to perform the broadcasting.</param>
         /// <param name="size">Target sizes of the broadcasting axes.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastAxis(NDArrayOrSymbol data, NDShape axis = null, NDShape size = null, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -4007,7 +4639,8 @@ namespace Horker.MXNet.Operators
                 _broadcastAxisParamNames,
                 new[] { Convert(axis), Convert(size) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -4037,7 +4670,6 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">The input</param>
         /// <param name="shape">The shape of the desired array. We can set the dim to zero if it's same as the original. E.g `A = broadcast_to(B, shape=(10, 0, 0))` has the same meaning as `A = broadcast_axis(B, axis=0, size=10)`.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastTo(NDArrayOrSymbol data, NDShape shape = null, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -4045,7 +4677,26 @@ namespace Horker.MXNet.Operators
                 _broadcastToParamNames,
                 new[] { Convert(shape) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _broadcastBackwardParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BroadcastBackward(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_broadcast_backward",
+                _broadcastBackwardParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -4076,7 +4727,6 @@ namespace Horker.MXNet.Operators
         /// <param name="rhs">Second input.</param>
         /// <param name="lhs_axes">Axes to perform broadcast on in the first input array</param>
         /// <param name="rhs_axes">Axes to copy from the second input array</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastLike(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDShape lhsAxes = null, NDShape rhsAxes = null, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -4084,7 +4734,8 @@ namespace Horker.MXNet.Operators
                 _broadcastLikeParamNames,
                 new[] { Convert(lhsAxes), Convert(rhsAxes) },
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -4132,15 +4783,33 @@ namespace Horker.MXNet.Operators
         ///       and the matrix norms of these matrices are computed.</param>
         /// <param name="out_dtype">The data type of the output.</param>
         /// <param name="keepdims">If this is set to `True`, the reduced axis is left in the result as dimension with size one.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Norm(NDArrayOrSymbol data, int ord = 2, NDShape axis = null, NormOutDtype? outDtype = null, bool keepdims = false, NDArray output = null)
+        public static NDArray Norm(NDArrayOrSymbol data, int ord = 2, NDShape axis = null, string outDtype = null, bool keepdims = false, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "norm",
                 _normParamNames,
-                new[] { Convert(ord), Convert(axis), Convert((int)outDtype), Convert(keepdims) },
+                new[] { Convert(ord), Convert(axis), Convert(outDtype), Convert(keepdims) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardNormParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardNorm(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_norm",
+                _backwardNormParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -4189,19 +4858,19 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">The input.</param>
         /// <param name="stype">Output storage type.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray CastStorage(NDArrayOrSymbol data, CastStorageStype stype, NDArray output = null)
+        public static NDArray CastStorage(NDArrayOrSymbol data, string stype, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "cast_storage",
                 _castStorageParamNames,
-                new[] { Convert((int)stype) },
+                new[] { Convert(stype) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _whereParamNames = _empty;
+        private static string[] _whereParamNames = Empty;
 
         /// <summary>
         /// Return the elements, either from x or y, depending on the condition.
@@ -4236,15 +4905,33 @@ namespace Horker.MXNet.Operators
         /// <param name="condition">condition array</param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Where(NDArrayOrSymbol condition, NDArrayOrSymbol x, NDArrayOrSymbol y, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "where",
                 _whereParamNames,
-                _empty,
+                Empty,
                 new[] { condition.Handle, x.Handle, y.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardWhereParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardWhere(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_where",
+                _backwardWhereParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -4311,7 +4998,6 @@ namespace Horker.MXNet.Operators
         /// <param name="k">Diagonal in question. The default is 0. Use k>0 for diagonals above the main diagonal, and k<0 for diagonals below the main diagonal. If input has shape (S0 S1) k must be between -S0 and S1</param>
         /// <param name="axis1">The first axis of the sub-arrays of interest. Ignored when the input is a 1-D array.</param>
         /// <param name="axis2">The second axis of the sub-arrays of interest. Ignored when the input is a 1-D array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Diag(NDArrayOrSymbol data, int k = 0, int axis1 = 0, int axis2 = 1, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -4319,7 +5005,26 @@ namespace Horker.MXNet.Operators
                 _diagParamNames,
                 new[] { Convert(k), Convert(axis1), Convert(axis2) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardDiagParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardDiag(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_diag",
+                _backwardDiagParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -4379,15 +5084,35 @@ namespace Horker.MXNet.Operators
         /// <param name="transpose_a">If true then transpose the first input before dot.</param>
         /// <param name="transpose_b">If true then transpose the second input before dot.</param>
         /// <param name="forward_stype">The desired storage type of the forward output given by user, if thecombination of input storage types and this hint does not matchany implemented ones, the dot operator will perform fallback operationand still produce an output of the desired storage type.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Dot(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, bool transposeA = false, bool transposeB = false, DotForwardStype? forwardStype = null, NDArray output = null)
+        public static NDArray Dot(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, bool transposeA = false, bool transposeB = false, string forwardStype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "dot",
                 _dotParamNames,
-                new[] { Convert(transposeA), Convert(transposeB), Convert((int)forwardStype) },
+                new[] { Convert(transposeA), Convert(transposeB), Convert(forwardStype) },
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardDotParamNames = new[] { "transpose_a", "transpose_b", "forward_stype" };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="transpose_a">If true then transpose the first input before dot.</param>
+        /// <param name="transpose_b">If true then transpose the second input before dot.</param>
+        /// <param name="forward_stype">The desired storage type of the forward output given by user, if thecombination of input storage types and this hint does not matchany implemented ones, the dot operator will perform fallback operationand still produce an output of the desired storage type.</param>
+        public static NDArray BackwardDot(bool transposeA = false, bool transposeB = false, string forwardStype = null, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_dot",
+                _backwardDotParamNames,
+                new[] { Convert(transposeA), Convert(transposeB), Convert(forwardStype) },
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -4414,19 +5139,37 @@ namespace Horker.MXNet.Operators
         /// <param name="transpose_a">If true then transpose the first input before dot.</param>
         /// <param name="transpose_b">If true then transpose the second input before dot.</param>
         /// <param name="forward_stype">The desired storage type of the forward output given by user, if thecombination of input storage types and this hint does not matchany implemented ones, the dot operator will perform fallback operationand still produce an output of the desired storage type.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray BatchDot(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, bool transposeA = false, bool transposeB = false, BatchDotForwardStype? forwardStype = null, NDArray output = null)
+        public static NDArray BatchDot(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, bool transposeA = false, bool transposeB = false, string forwardStype = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "batch_dot",
                 _batchDotParamNames,
-                new[] { Convert(transposeA), Convert(transposeB), Convert((int)forwardStype) },
+                new[] { Convert(transposeA), Convert(transposeB), Convert(forwardStype) },
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastAddParamNames = _empty;
+        private static string[] _backwardBatchDotParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardBatchDot(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_batch_dot",
+                _backwardBatchDotParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _broadcastAddParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise sum of the input arrays with broadcasting.
@@ -4458,19 +5201,37 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastAdd(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_add",
                 _broadcastAddParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastSubParamNames = _empty;
+        private static string[] _backwardBroadcastAddParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardBroadcastAdd(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_broadcast_add",
+                _backwardBroadcastAddParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _broadcastSubParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise difference of the input arrays with broadcasting.
@@ -4502,19 +5263,37 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastSub(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_sub",
                 _broadcastSubParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastMulParamNames = _empty;
+        private static string[] _backwardBroadcastSubParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardBroadcastSub(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_broadcast_sub",
+                _backwardBroadcastSubParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _broadcastMulParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise product of the input arrays with broadcasting.
@@ -4540,19 +5319,37 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastMul(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_mul",
                 _broadcastMulParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastDivParamNames = _empty;
+        private static string[] _backwardBroadcastMulParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardBroadcastMul(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_broadcast_mul",
+                _backwardBroadcastMulParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _broadcastDivParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise division of the input arrays with broadcasting.
@@ -4578,19 +5375,37 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastDiv(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_div",
                 _broadcastDivParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastModParamNames = _empty;
+        private static string[] _backwardBroadcastDivParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardBroadcastDiv(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_broadcast_div",
+                _backwardBroadcastDivParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _broadcastModParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise modulo of the input arrays with broadcasting.
@@ -4612,19 +5427,37 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastMod(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_mod",
                 _broadcastModParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastPowerParamNames = _empty;
+        private static string[] _backwardBroadcastModParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardBroadcastMod(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_broadcast_mod",
+                _backwardBroadcastModParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _broadcastPowerParamNames = Empty;
 
         /// <summary>
         /// Returns result of first array elements raised to powers from second array, element-wise with broadcasting.
@@ -4646,19 +5479,37 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastPower(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_power",
                 _broadcastPowerParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastMaximumParamNames = _empty;
+        private static string[] _backwardBroadcastPowerParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardBroadcastPower(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_broadcast_power",
+                _backwardBroadcastPowerParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _broadcastMaximumParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise maximum of the input arrays with broadcasting.
@@ -4682,19 +5533,37 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastMaximum(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_maximum",
                 _broadcastMaximumParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastMinimumParamNames = _empty;
+        private static string[] _backwardBroadcastMaximumParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardBroadcastMaximum(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_broadcast_maximum",
+                _backwardBroadcastMaximumParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _broadcastMinimumParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise minimum of the input arrays with broadcasting.
@@ -4718,19 +5587,37 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastMinimum(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_minimum",
                 _broadcastMinimumParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastHypotParamNames = _empty;
+        private static string[] _backwardBroadcastMinimumParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardBroadcastMinimum(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_broadcast_minimum",
+                _backwardBroadcastMinimumParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _broadcastHypotParamNames = Empty;
 
         /// <summary>
         ///  Returns the hypotenuse of a right angled triangle, given its "legs"
@@ -4760,19 +5647,37 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastHypot(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_hypot",
                 _broadcastHypotParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastEqualParamNames = _empty;
+        private static string[] _backwardBroadcastHypotParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardBroadcastHypot(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_broadcast_hypot",
+                _backwardBroadcastHypotParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _broadcastEqualParamNames = Empty;
 
         /// <summary>
         /// Returns the result of element-wise **equal to** (==) comparison operation with broadcasting.
@@ -4794,19 +5699,19 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastEqual(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_equal",
                 _broadcastEqualParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastNotEqualParamNames = _empty;
+        private static string[] _broadcastNotEqualParamNames = Empty;
 
         /// <summary>
         /// Returns the result of element-wise **not equal to** (!=) comparison operation with broadcasting.
@@ -4828,19 +5733,19 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastNotEqual(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_not_equal",
                 _broadcastNotEqualParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastGreaterParamNames = _empty;
+        private static string[] _broadcastGreaterParamNames = Empty;
 
         /// <summary>
         /// Returns the result of element-wise **greater than** (>) comparison operation with broadcasting.
@@ -4862,19 +5767,19 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastGreater(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_greater",
                 _broadcastGreaterParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastGreaterEqualParamNames = _empty;
+        private static string[] _broadcastGreaterEqualParamNames = Empty;
 
         /// <summary>
         /// Returns the result of element-wise **greater than or equal to** (>=) comparison operation with broadcasting.
@@ -4896,19 +5801,19 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastGreaterEqual(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_greater_equal",
                 _broadcastGreaterEqualParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastLesserParamNames = _empty;
+        private static string[] _broadcastLesserParamNames = Empty;
 
         /// <summary>
         /// Returns the result of element-wise **lesser than** (<) comparison operation with broadcasting.
@@ -4930,19 +5835,19 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastLesser(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_lesser",
                 _broadcastLesserParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastLesserEqualParamNames = _empty;
+        private static string[] _broadcastLesserEqualParamNames = Empty;
 
         /// <summary>
         /// Returns the result of element-wise **lesser than or equal to** (<=) comparison operation with broadcasting.
@@ -4964,19 +5869,19 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastLesserEqual(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_lesser_equal",
                 _broadcastLesserEqualParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastLogicalAndParamNames = _empty;
+        private static string[] _broadcastLogicalAndParamNames = Empty;
 
         /// <summary>
         /// Returns the result of element-wise **logical and** with broadcasting.
@@ -4998,19 +5903,19 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastLogicalAnd(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_logical_and",
                 _broadcastLogicalAndParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastLogicalOrParamNames = _empty;
+        private static string[] _broadcastLogicalOrParamNames = Empty;
 
         /// <summary>
         /// Returns the result of element-wise **logical or** with broadcasting.
@@ -5032,19 +5937,19 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastLogicalOr(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_logical_or",
                 _broadcastLogicalOrParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _broadcastLogicalXorParamNames = _empty;
+        private static string[] _broadcastLogicalXorParamNames = Empty;
 
         /// <summary>
         /// Returns the result of element-wise **logical xor** with broadcasting.
@@ -5066,19 +5971,19 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input to the function</param>
         /// <param name="rhs">Second input to the function</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BroadcastLogicalXor(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "broadcast_logical_xor",
                 _broadcastLogicalXorParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _elemwiseAddParamNames = _empty;
+        private static string[] _elemwiseAddParamNames = Empty;
 
         /// <summary>
         /// Adds arguments element-wise.
@@ -5097,38 +6002,56 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray ElemwiseAdd(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "elemwise_add",
                 _elemwiseAddParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _gradAddParamNames = _empty;
+        private static string[] _gradAddParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray GradAdd(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_grad_add",
                 _gradAddParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _elemwiseSubParamNames = _empty;
+        private static string[] _backwardAddParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardAdd(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_add",
+                _backwardAddParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _elemwiseSubParamNames = Empty;
 
         /// <summary>
         /// Subtracts arguments element-wise.
@@ -5147,19 +6070,37 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray ElemwiseSub(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "elemwise_sub",
                 _elemwiseSubParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _elemwiseMulParamNames = _empty;
+        private static string[] _backwardSubParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSub(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_sub",
+                _backwardSubParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _elemwiseMulParamNames = Empty;
 
         /// <summary>
         /// Multiplies arguments element-wise.
@@ -5177,19 +6118,37 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray ElemwiseMul(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "elemwise_mul",
                 _elemwiseMulParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _elemwiseDivParamNames = _empty;
+        private static string[] _backwardMulParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardMul(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_mul",
+                _backwardMulParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _elemwiseDivParamNames = Empty;
 
         /// <summary>
         /// Divides arguments element-wise.
@@ -5200,95 +6159,185 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray ElemwiseDiv(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "elemwise_div",
                 _elemwiseDivParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _modParamNames = _empty;
+        private static string[] _backwardDivParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardDiv(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_div",
+                _backwardDivParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _modParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Mod(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_mod",
                 _modParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _powerParamNames = _empty;
+        private static string[] _backwardModParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardMod(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_mod",
+                _backwardModParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _powerParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Power(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_power",
                 _powerParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _maximumParamNames = _empty;
+        private static string[] _backwardPowerParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardPower(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_power",
+                _backwardPowerParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _maximumParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Maximum(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_maximum",
                 _maximumParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _minimumParamNames = _empty;
+        private static string[] _backwardMaximumParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardMaximum(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_maximum",
+                _backwardMaximumParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _minimumParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Minimum(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_minimum",
                 _minimumParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _hypotParamNames = _empty;
+        private static string[] _backwardMinimumParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardMinimum(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_minimum",
+                _backwardMinimumParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _hypotParamNames = Empty;
 
         /// <summary>
         /// Given the "legs" of a right triangle, return its hypotenuse.
@@ -5299,186 +6348,204 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Hypot(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_hypot",
                 _hypotParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _equalParamNames = _empty;
+        private static string[] _backwardHypotParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardHypot(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_hypot",
+                _backwardHypotParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _equalParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Equal(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_equal",
                 _equalParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _notEqualParamNames = _empty;
+        private static string[] _notEqualParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray NotEqual(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_not_equal",
                 _notEqualParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _greaterParamNames = _empty;
+        private static string[] _greaterParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Greater(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_greater",
                 _greaterParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _greaterEqualParamNames = _empty;
+        private static string[] _greaterEqualParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray GreaterEqual(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_greater_equal",
                 _greaterEqualParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _lesserParamNames = _empty;
+        private static string[] _lesserParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Lesser(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_lesser",
                 _lesserParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _lesserEqualParamNames = _empty;
+        private static string[] _lesserEqualParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LesserEqual(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_lesser_equal",
                 _lesserEqualParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _logicalAndParamNames = _empty;
+        private static string[] _logicalAndParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LogicalAnd(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_logical_and",
                 _logicalAndParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _logicalOrParamNames = _empty;
+        private static string[] _logicalOrParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LogicalOr(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_logical_or",
                 _logicalOrParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _logicalXorParamNames = _empty;
+        private static string[] _logicalXorParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LogicalXor(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_logical_xor",
                 _logicalXorParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -5489,15 +6556,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray PlusScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray PlusScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_plus_scalar",
                 _plusScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -5508,15 +6575,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray MinusScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray MinusScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_minus_scalar",
                 _minusScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -5527,15 +6594,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RminusScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray RminusScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_rminus_scalar",
                 _rminusScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -5556,15 +6623,34 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray MulScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray MulScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_mul_scalar",
                 _mulScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardMulScalarParamNames = new[] { "scalar" };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data">source input</param>
+        /// <param name="scalar">scalar input</param>
+        public static NDArray BackwardMulScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_mul_scalar",
+                _backwardMulScalarParamNames,
+                new[] { Convert(scalar) },
+                new[] { data.Handle },
+                output
+            );
             return result;
         }
 
@@ -5585,15 +6671,34 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray DivScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray DivScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_div_scalar",
                 _divScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardDivScalarParamNames = new[] { "scalar" };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data">source input</param>
+        /// <param name="scalar">scalar input</param>
+        public static NDArray BackwardDivScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_div_scalar",
+                _backwardDivScalarParamNames,
+                new[] { Convert(scalar) },
+                new[] { data.Handle },
+                output
+            );
             return result;
         }
 
@@ -5604,15 +6709,35 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RdivScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray RdivScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_rdiv_scalar",
                 _rdivScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardRdivScalarParamNames = new[] { "scalar" };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        /// <param name="scalar">scalar value</param>
+        public static NDArray BackwardRdivScalar(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, double scalar, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_rdiv_scalar",
+                _backwardRdivScalarParamNames,
+                new[] { Convert(scalar) },
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
             return result;
         }
 
@@ -5623,15 +6748,35 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray ModScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray ModScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_mod_scalar",
                 _modScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardModScalarParamNames = new[] { "scalar" };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        /// <param name="scalar">scalar value</param>
+        public static NDArray BackwardModScalar(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, double scalar, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_mod_scalar",
+                _backwardModScalarParamNames,
+                new[] { Convert(scalar) },
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
             return result;
         }
 
@@ -5642,15 +6787,35 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RmodScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray RmodScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_rmod_scalar",
                 _rmodScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardRmodScalarParamNames = new[] { "scalar" };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        /// <param name="scalar">scalar value</param>
+        public static NDArray BackwardRmodScalar(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, double scalar, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_rmod_scalar",
+                _backwardRmodScalarParamNames,
+                new[] { Convert(scalar) },
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
             return result;
         }
 
@@ -5661,15 +6826,35 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray MaximumScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray MaximumScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_maximum_scalar",
                 _maximumScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardMaximumScalarParamNames = new[] { "scalar" };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        /// <param name="scalar">scalar value</param>
+        public static NDArray BackwardMaximumScalar(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, double scalar, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_maximum_scalar",
+                _backwardMaximumScalarParamNames,
+                new[] { Convert(scalar) },
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
             return result;
         }
 
@@ -5680,15 +6865,35 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray MinimumScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray MinimumScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_minimum_scalar",
                 _minimumScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardMinimumScalarParamNames = new[] { "scalar" };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        /// <param name="scalar">scalar value</param>
+        public static NDArray BackwardMinimumScalar(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, double scalar, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_minimum_scalar",
+                _backwardMinimumScalarParamNames,
+                new[] { Convert(scalar) },
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
             return result;
         }
 
@@ -5699,15 +6904,35 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray PowerScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray PowerScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_power_scalar",
                 _powerScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardPowerScalarParamNames = new[] { "scalar" };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        /// <param name="scalar">scalar value</param>
+        public static NDArray BackwardPowerScalar(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, double scalar, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_power_scalar",
+                _backwardPowerScalarParamNames,
+                new[] { Convert(scalar) },
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
             return result;
         }
 
@@ -5718,15 +6943,35 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray RpowerScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray RpowerScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_rpower_scalar",
                 _rpowerScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardRpowerScalarParamNames = new[] { "scalar" };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        /// <param name="scalar">scalar value</param>
+        public static NDArray BackwardRpowerScalar(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, double scalar, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_rpower_scalar",
+                _backwardRpowerScalarParamNames,
+                new[] { Convert(scalar) },
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
             return result;
         }
 
@@ -5737,15 +6982,35 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray HypotScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray HypotScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_hypot_scalar",
                 _hypotScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardHypotScalarParamNames = new[] { "scalar" };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        /// <param name="scalar">scalar value</param>
+        public static NDArray BackwardHypotScalar(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, double scalar, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_hypot_scalar",
+                _backwardHypotScalarParamNames,
+                new[] { Convert(scalar) },
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
             return result;
         }
 
@@ -5775,15 +7040,34 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SmoothL1(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray SmoothL1(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "smooth_l1",
                 _smoothL1ParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSmoothL1ParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardSmoothL1(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_smooth_l1",
+                _backwardSmoothL1ParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
             return result;
         }
 
@@ -5794,15 +7078,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray EqualScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray EqualScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_equal_scalar",
                 _equalScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -5813,15 +7097,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray NotEqualScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray NotEqualScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_not_equal_scalar",
                 _notEqualScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -5832,15 +7116,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray GreaterScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray GreaterScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_greater_scalar",
                 _greaterScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -5851,15 +7135,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray GreaterEqualScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray GreaterEqualScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_greater_equal_scalar",
                 _greaterEqualScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -5870,15 +7154,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray LesserScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray LesserScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_lesser_scalar",
                 _lesserScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -5889,15 +7173,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray LesserEqualScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray LesserEqualScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_lesser_equal_scalar",
                 _lesserEqualScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -5908,15 +7192,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray LogicalAndScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray LogicalAndScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_logical_and_scalar",
                 _logicalAndScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -5927,15 +7211,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray LogicalOrScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray LogicalOrScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_logical_or_scalar",
                 _logicalOrScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -5946,19 +7230,19 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray LogicalXorScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray LogicalXorScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_logical_xor_scalar",
                 _logicalXorScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _scatterElemwiseDivParamNames = _empty;
+        private static string[] _scatterElemwiseDivParamNames = Empty;
 
         /// <summary>
         /// Divides arguments element-wise.  If the left-hand-side input is 'row_sparse', then
@@ -5977,15 +7261,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">first input</param>
         /// <param name="rhs">second input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray ScatterElemwiseDiv(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_scatter_elemwise_div",
                 _scatterElemwiseDivParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -6007,15 +7291,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray ScatterPlusScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray ScatterPlusScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_scatter_plus_scalar",
                 _scatterPlusScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -6037,19 +7321,19 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">source input</param>
         /// <param name="scalar">scalar input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray ScatterMinusScalar(NDArrayOrSymbol data, float scalar, NDArray output = null)
+        public static NDArray ScatterMinusScalar(NDArrayOrSymbol data, double scalar, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_scatter_minus_scalar",
                 _scatterMinusScalarParamNames,
                 new[] { Convert(scalar) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _reluParamNames = _empty;
+        private static string[] _reluParamNames = Empty;
 
         /// <summary>
         /// Computes rectified linear activation.
@@ -6068,19 +7352,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L85
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Relu(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "relu",
                 _reluParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _sigmoidParamNames = _empty;
+        private static string[] _backwardReluParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardRelu(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_relu",
+                _backwardReluParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _sigmoidParamNames = Empty;
 
         /// <summary>
         /// Computes sigmoid of x element-wise.
@@ -6095,15 +7398,34 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L119
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Sigmoid(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "sigmoid",
                 _sigmoidParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSigmoidParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardSigmoid(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_sigmoid",
+                _backwardSigmoidParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
             return result;
         }
 
@@ -6122,19 +7444,37 @@ namespace Horker.MXNet.Operators
         /// <param name="data">The input array.</param>
         /// <param name="alpha">Slope of hard sigmoid</param>
         /// <param name="beta">Bias of hard sigmoid.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray HardSigmoid(NDArrayOrSymbol data, float alpha = 0.200000003f, float beta = 0.5f, NDArray output = null)
+        public static NDArray HardSigmoid(NDArrayOrSymbol data, double alpha = 0.200000003, double beta = 0.5, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "hard_sigmoid",
                 _hardSigmoidParamNames,
                 new[] { Convert(alpha), Convert(beta) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _softsignParamNames = _empty;
+        private static string[] _backwardHardSigmoidParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardHardSigmoid(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_hard_sigmoid",
+                _backwardHardSigmoidParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _softsignParamNames = Empty;
 
         /// <summary>
         /// Computes softsign of x element-wise.
@@ -6149,19 +7489,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L163
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Softsign(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "softsign",
                 _softsignParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _copyParamNames = _empty;
+        private static string[] _backwardSoftsignParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardSoftsign(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_softsign",
+                _backwardSoftsignParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _copyParamNames = Empty;
 
         /// <summary>
         /// Returns a copy of the input.
@@ -6169,19 +7528,55 @@ namespace Horker.MXNet.Operators
         /// From:C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:218
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Copy(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_copy",
                 _copyParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _BlockGradParamNames = _empty;
+        private static string[] _backwardCopyParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardCopy(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_copy",
+                _backwardCopyParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardReshapeParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardReshape(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_reshape",
+                _backwardReshapeParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _BlockGradParamNames = Empty;
 
         /// <summary>
         /// Stops gradient computation.
@@ -6214,19 +7609,19 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L299
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BlockGrad(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "BlockGrad",
                 _BlockGradParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _makeLossParamNames = _empty;
+        private static string[] _makeLossParamNames = Empty;
 
         /// <summary>
         /// Make your own loss function in network construction.
@@ -6255,38 +7650,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L332
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray MakeLoss(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "make_loss",
                 _makeLossParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _identityWithAttrLikeRhsParamNames = _empty;
+        private static string[] _identityWithAttrLikeRhsParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="lhs">First input.</param>
         /// <param name="rhs">Second input.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray IdentityWithAttrLikeRhs(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_identity_with_attr_like_rhs",
                 _identityWithAttrLikeRhsParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _reshapeLikeParamNames = _empty;
+        private static string[] _reshapeLikeParamNames = Empty;
 
         /// <summary>
         /// Reshape some or all dimensions of `lhs` to have the same shape as some or all dimensions of `rhs`.
@@ -6320,15 +7715,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="lhs">First input.</param>
         /// <param name="rhs">Second input.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray ReshapeLike(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "reshape_like",
                 _reshapeLikeParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -6350,7 +7745,6 @@ namespace Horker.MXNet.Operators
         /// <param name="lhs_end">Defaults to None. The ending index along which the lhs dimensions are to be used for reshaping. Supports negative indices.</param>
         /// <param name="rhs_begin">Defaults to 0. The beginning index along which the rhs dimensions are to be used for reshaping. Supports negative indices.</param>
         /// <param name="rhs_end">Defaults to None. The ending index along which the rhs dimensions are to be used for reshaping. Supports negative indices.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray ShapeArray(NDArrayOrSymbol data, int? lhsBegin = null, int? lhsEnd = null, int? rhsBegin = null, int? rhsEnd = null, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -6358,11 +7752,12 @@ namespace Horker.MXNet.Operators
                 _shapeArrayParamNames,
                 new[] { Convert(lhsBegin), Convert(lhsEnd), Convert(rhsBegin), Convert(rhsEnd) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _sizeArrayParamNames = _empty;
+        private static string[] _sizeArrayParamNames = Empty;
 
         /// <summary>
         /// Returns a 1D int64 array containing the size of data.
@@ -6376,15 +7771,15 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L596
         /// </summary>
         /// <param name="data">Input Array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray SizeArray(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "size_array",
                 _sizeArrayParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -6407,19 +7802,37 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">The input.</param>
         /// <param name="dtype">Output data type.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Cast(NDArrayOrSymbol data, DType dtype, NDArray output = null)
+        public static NDArray Cast(NDArrayOrSymbol data, string dtype, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "Cast",
                 _CastParamNames,
                 new[] { Convert(dtype) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _negativeParamNames = _empty;
+        private static string[] _backwardCastParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardCast(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_cast",
+                _backwardCastParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _negativeParamNames = Empty;
 
         /// <summary>
         /// Numerical negative of the argument, element-wise.
@@ -6433,19 +7846,19 @@ namespace Horker.MXNet.Operators
         /// 
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Negative(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "negative",
                 _negativeParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _reciprocalParamNames = _empty;
+        private static string[] _reciprocalParamNames = Empty;
 
         /// <summary>
         /// Returns the reciprocal of the argument, element-wise.
@@ -6461,19 +7874,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L686
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Reciprocal(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "reciprocal",
                 _reciprocalParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _absParamNames = _empty;
+        private static string[] _backwardReciprocalParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardReciprocal(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_reciprocal",
+                _backwardReciprocalParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _absParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise absolute value of the input.
@@ -6493,19 +7925,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L708
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Abs(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "abs",
                 _absParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _signParamNames = _empty;
+        private static string[] _backwardAbsParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardAbs(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_abs",
+                _backwardAbsParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _signParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise sign of the input.
@@ -6525,19 +7976,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L727
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Sign(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "sign",
                 _signParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _roundParamNames = _empty;
+        private static string[] _backwardSignParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardSign(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_sign",
+                _backwardSignParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _roundParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise rounded value to the nearest integer of the input.
@@ -6557,19 +8027,19 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L746
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Round(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "round",
                 _roundParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _rintParamNames = _empty;
+        private static string[] _rintParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise rounded value to the nearest integer of the input.
@@ -6593,19 +8063,19 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L767
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Rint(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "rint",
                 _rintParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _ceilParamNames = _empty;
+        private static string[] _ceilParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise ceiling of the input.
@@ -6627,19 +8097,19 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L786
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Ceil(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "ceil",
                 _ceilParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _floorParamNames = _empty;
+        private static string[] _floorParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise floor of the input.
@@ -6661,19 +8131,19 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L805
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Floor(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "floor",
                 _floorParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _truncParamNames = _empty;
+        private static string[] _truncParamNames = Empty;
 
         /// <summary>
         /// Return the element-wise truncated value of the input.
@@ -6696,19 +8166,19 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L825
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Trunc(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "trunc",
                 _truncParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _fixParamNames = _empty;
+        private static string[] _fixParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise rounded value to the nearest \
@@ -6729,19 +8199,19 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L843
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Fix(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "fix",
                 _fixParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _squareParamNames = _empty;
+        private static string[] _squareParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise squared value of the input.
@@ -6764,19 +8234,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L883
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Square(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "square",
                 _squareParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _sqrtParamNames = _empty;
+        private static string[] _backwardSquareParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardSquare(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_square",
+                _backwardSquareParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _sqrtParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise square-root value of the input.
@@ -6799,19 +8288,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L907
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Sqrt(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "sqrt",
                 _sqrtParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _rsqrtParamNames = _empty;
+        private static string[] _backwardSqrtParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardSqrt(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_sqrt",
+                _backwardSqrtParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _rsqrtParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise inverse square-root value of the input.
@@ -6830,19 +8338,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L927
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Rsqrt(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "rsqrt",
                 _rsqrtParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _cbrtParamNames = _empty;
+        private static string[] _backwardRsqrtParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardRsqrt(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_rsqrt",
+                _backwardRsqrtParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _cbrtParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise cube-root value of the input.
@@ -6865,19 +8392,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L950
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Cbrt(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "cbrt",
                 _cbrtParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _erfParamNames = _empty;
+        private static string[] _backwardCbrtParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardCbrt(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_cbrt",
+                _backwardCbrtParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _erfParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise gauss error function of the input.
@@ -6891,19 +8437,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L964
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Erf(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "erf",
                 _erfParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _erfinvParamNames = _empty;
+        private static string[] _backwardErfParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardErf(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_erf",
+                _backwardErfParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _erfinvParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise inverse gauss error function of the input.
@@ -6917,19 +8482,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L985
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Erfinv(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "erfinv",
                 _erfinvParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _rcbrtParamNames = _empty;
+        private static string[] _backwardErfinvParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardErfinv(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_erfinv",
+                _backwardErfinvParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _rcbrtParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise inverse cube-root value of the input.
@@ -6946,19 +8530,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L1004
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Rcbrt(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "rcbrt",
                 _rcbrtParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _expParamNames = _empty;
+        private static string[] _backwardRcbrtParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardRcbrt(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_rcbrt",
+                _backwardRcbrtParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _expParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise exponential value of the input.
@@ -6977,19 +8580,19 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L1044
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Exp(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "exp",
                 _expParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _logParamNames = _empty;
+        private static string[] _logParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise Natural logarithmic value of the input.
@@ -7003,19 +8606,19 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L1057
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Log(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "log",
                 _logParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _log10ParamNames = _empty;
+        private static string[] _log10ParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise Base-10 logarithmic value of the input.
@@ -7029,19 +8632,19 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L1074
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Log10(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "log10",
                 _log10ParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _log2ParamNames = _empty;
+        private static string[] _log2ParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise Base-2 logarithmic value of the input.
@@ -7055,19 +8658,76 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L1086
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Log2(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "log2",
                 _log2ParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _log1pParamNames = _empty;
+        private static string[] _backwardLogParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardLog(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_log",
+                _backwardLogParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardLog10ParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardLog10(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_log10",
+                _backwardLog10ParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardLog2ParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardLog2(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_log2",
+                _backwardLog2ParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _log1pParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise ``log(1 + x)`` value of the input.
@@ -7086,19 +8746,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L1171
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Log1p(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "log1p",
                 _log1pParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _expm1ParamNames = _empty;
+        private static string[] _backwardLog1pParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardLog1p(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_log1p",
+                _backwardLog1pParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _expm1ParamNames = Empty;
 
         /// <summary>
         /// Returns ``exp(x) - 1`` computed element-wise on the input.
@@ -7116,19 +8795,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_basic.cc:L1189
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Expm1(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "expm1",
                 _expm1ParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _gammaParamNames = _empty;
+        private static string[] _backwardExpm1ParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardExpm1(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_expm1",
+                _backwardExpm1ParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _gammaParamNames = Empty;
 
         /// <summary>
         /// Returns the gamma function (extension of the factorial function \
@@ -7139,19 +8837,38 @@ namespace Horker.MXNet.Operators
         /// 
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Gamma(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "gamma",
                 _gammaParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _gammalnParamNames = _empty;
+        private static string[] _backwardGammaParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardGamma(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_gamma",
+                _backwardGammaParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _gammalnParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise log of the absolute value of the gamma function \
@@ -7162,19 +8879,38 @@ namespace Horker.MXNet.Operators
         /// 
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Gammaln(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "gammaln",
                 _gammalnParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _logicalNotParamNames = _empty;
+        private static string[] _backwardGammalnParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardGammaln(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_gammaln",
+                _backwardGammalnParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _logicalNotParamNames = Empty;
 
         /// <summary>
         /// Returns the result of logical NOT (!) function
@@ -7185,19 +8921,19 @@ namespace Horker.MXNet.Operators
         /// 
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LogicalNot(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "logical_not",
                 _logicalNotParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _sinParamNames = _empty;
+        private static string[] _sinParamNames = Empty;
 
         /// <summary>
         /// Computes the element-wise sine of the input array.
@@ -7218,19 +8954,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_trig.cc:L46
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Sin(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "sin",
                 _sinParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _cosParamNames = _empty;
+        private static string[] _backwardSinParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardSin(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_sin",
+                _backwardSinParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _cosParamNames = Empty;
 
         /// <summary>
         /// Computes the element-wise cosine of the input array.
@@ -7247,19 +9002,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_trig.cc:L89
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Cos(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "cos",
                 _cosParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _tanParamNames = _empty;
+        private static string[] _backwardCosParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardCos(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_cos",
+                _backwardCosParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _tanParamNames = Empty;
 
         /// <summary>
         /// Computes the element-wise tangent of the input array.
@@ -7280,19 +9054,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_trig.cc:L139
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Tan(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "tan",
                 _tanParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _arcsinParamNames = _empty;
+        private static string[] _backwardTanParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardTan(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_tan",
+                _backwardTanParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _arcsinParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise inverse sine of the input array.
@@ -7314,19 +9107,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_trig.cc:L160
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Arcsin(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "arcsin",
                 _arcsinParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _arccosParamNames = _empty;
+        private static string[] _backwardArcsinParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardArcsin(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_arcsin",
+                _backwardArcsinParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _arccosParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise inverse cosine of the input array.
@@ -7344,19 +9156,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_trig.cc:L179
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Arccos(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "arccos",
                 _arccosParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _arctanParamNames = _empty;
+        private static string[] _backwardArccosParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardArccos(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_arccos",
+                _backwardArccosParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _arctanParamNames = Empty;
 
         /// <summary>
         /// Returns element-wise inverse tangent of the input array.
@@ -7377,19 +9208,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_trig.cc:L200
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Arctan(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "arctan",
                 _arctanParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _degreesParamNames = _empty;
+        private static string[] _backwardArctanParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardArctan(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_arctan",
+                _backwardArctanParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _degreesParamNames = Empty;
 
         /// <summary>
         /// Converts each element of the input array from radians to degrees.
@@ -7408,19 +9258,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_trig.cc:L219
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Degrees(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "degrees",
                 _degreesParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _radiansParamNames = _empty;
+        private static string[] _backwardDegreesParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardDegrees(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_degrees",
+                _backwardDegreesParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _radiansParamNames = Empty;
 
         /// <summary>
         /// Converts each element of the input array from degrees to radians.
@@ -7439,19 +9308,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_trig.cc:L238
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Radians(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "radians",
                 _radiansParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _sinhParamNames = _empty;
+        private static string[] _backwardRadiansParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardRadians(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_radians",
+                _backwardRadiansParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _sinhParamNames = Empty;
 
         /// <summary>
         /// Returns the hyperbolic sine of the input array, computed element-wise.
@@ -7470,19 +9358,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_trig.cc:L257
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Sinh(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "sinh",
                 _sinhParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _coshParamNames = _empty;
+        private static string[] _backwardSinhParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardSinh(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_sinh",
+                _backwardSinhParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _coshParamNames = Empty;
 
         /// <summary>
         /// Returns the hyperbolic cosine  of the input array, computed element-wise.
@@ -7497,19 +9404,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_trig.cc:L272
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Cosh(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "cosh",
                 _coshParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _tanhParamNames = _empty;
+        private static string[] _backwardCoshParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardCosh(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_cosh",
+                _backwardCoshParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _tanhParamNames = Empty;
 
         /// <summary>
         /// Returns the hyperbolic tangent of the input array, computed element-wise.
@@ -7528,19 +9454,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_trig.cc:L290
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Tanh(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "tanh",
                 _tanhParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _arcsinhParamNames = _empty;
+        private static string[] _backwardTanhParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardTanh(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_tanh",
+                _backwardTanhParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _arcsinhParamNames = Empty;
 
         /// <summary>
         /// Returns the element-wise inverse hyperbolic sine of the input array, \
@@ -7557,19 +9502,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_trig.cc:L306
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Arcsinh(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "arcsinh",
                 _arcsinhParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _arccoshParamNames = _empty;
+        private static string[] _backwardArcsinhParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardArcsinh(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_arcsinh",
+                _backwardArcsinhParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _arccoshParamNames = Empty;
 
         /// <summary>
         /// Returns the element-wise inverse hyperbolic cosine of the input array, \
@@ -7582,19 +9546,38 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_trig.cc:L320
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Arccosh(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "arccosh",
                 _arccoshParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _arctanhParamNames = _empty;
+        private static string[] _backwardArccoshParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardArccosh(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_arccosh",
+                _backwardArccoshParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
+            return result;
+        }
+
+        private static string[] _arctanhParamNames = Empty;
 
         /// <summary>
         /// Returns the element-wise inverse hyperbolic tangent of the input array, \
@@ -7611,15 +9594,34 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\elemwise_unary_op_trig.cc:L337
         /// </summary>
         /// <param name="data">The input array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Arctanh(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "arctanh",
                 _arctanhParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardArctanhParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lhs">first input</param>
+        /// <param name="rhs">second input</param>
+        public static NDArray BackwardArctanh(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_arctanh",
+                _backwardArctanhParamNames,
+                Empty,
+                new[] { lhs.Handle, rhs.Handle },
+                output
+            );
             return result;
         }
 
@@ -7644,15 +9646,15 @@ namespace Horker.MXNet.Operators
         /// <param name="bins">Input ndarray</param>
         /// <param name="bin_cnt">Number of bins for uniform case</param>
         /// <param name="range">The lower and upper range of the bins. if not provided, range is simply (a.min(), a.max()). values outside the range are ignored. the first element of the range must be less than or equal to the second. range affects the automatic bin computation as well. while bin width is computed to be optimal based on the actual data within range, the bin count will fill the entire range including portions containing no data.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Histogram(NDArrayOrSymbol data, NDArrayOrSymbol bins, int? binCnt = null, Tuple<double> range = null, NDArray output = null)
+        public static NDArray Histogram(NDArrayOrSymbol data, NDArrayOrSymbol bins, int? binCnt = null, double? range = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_histogram",
                 _histogramParamNames,
                 new[] { Convert(binCnt), Convert(range) },
                 new[] { data.Handle, bins.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -7719,15 +9721,51 @@ namespace Horker.MXNet.Operators
         /// <param name="output_dim">Dimension of the embedding vectors.</param>
         /// <param name="dtype">Data type of weight.</param>
         /// <param name="sparse_grad">Compute row sparse gradient in the backward calculation. If set to True, the grad's storage type is row_sparse.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Embedding(NDArrayOrSymbol data, NDArrayOrSymbol weight, int inputDim, int outputDim, DType dtype = null, bool sparseGrad = false, NDArray output = null)
+        public static NDArray Embedding(NDArrayOrSymbol data, NDArrayOrSymbol weight, int inputDim, int outputDim, string dtype = "float32", bool sparseGrad = false, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "Embedding",
                 _EmbeddingParamNames,
                 new[] { Convert(inputDim), Convert(outputDim), Convert(dtype), Convert(sparseGrad) },
                 new[] { data.Handle, weight.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardEmbeddingParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardEmbedding(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_Embedding",
+                _backwardEmbeddingParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSparseEmbeddingParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSparseEmbedding(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_SparseEmbedding",
+                _backwardSparseEmbeddingParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -7791,19 +9829,37 @@ namespace Horker.MXNet.Operators
         /// <param name="indices">The indices of the values to be extracted.</param>
         /// <param name="axis">The axis of input array to be taken.For input tensor of rank r, it could be in the range of [-r, r-1]</param>
         /// <param name="mode">Specify how out-of-bound indices bahave. Default is "clip". "clip" means clip to the range. So, if all indices mentioned are too large, they are replaced by the index that addresses the last element along an axis.  "wrap" means to wrap around.  "raise" means to raise an error, not supported yet.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Take(NDArrayOrSymbol a, NDArrayOrSymbol indices, int axis = 0, TakeMode mode = TakeMode.Clip, NDArray output = null)
+        public static NDArray Take(NDArrayOrSymbol a, NDArrayOrSymbol indices, int axis = 0, string mode = "clip", NDArray output = null)
         {
             var result = Operator.Invoke(
                 "take",
                 _takeParamNames,
-                new[] { Convert(axis), Convert((int)mode) },
+                new[] { Convert(axis), Convert(mode) },
                 new[] { a.Handle, indices.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _batchTakeParamNames = _empty;
+        private static string[] _backwardTakeParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardTake(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_take",
+                _backwardTakeParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _batchTakeParamNames = Empty;
 
         /// <summary>
         /// Takes elements from a data batch.
@@ -7831,15 +9887,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="a">The input array</param>
         /// <param name="indices">The index array</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BatchTake(NDArrayOrSymbol a, NDArrayOrSymbol indices, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "batch_take",
                 _batchTakeParamNames,
-                _empty,
+                Empty,
                 new[] { a.Handle, indices.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -7887,19 +9943,19 @@ namespace Horker.MXNet.Operators
         /// <param name="on_value">The value assigned to the locations represented by indices.</param>
         /// <param name="off_value">The value assigned to the locations not represented by indices.</param>
         /// <param name="dtype">DType of the output</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray OneHot(NDArrayOrSymbol indices, int depth, double onValue = 1, double offValue = 0, DType dtype = null, NDArray output = null)
+        public static NDArray OneHot(NDArrayOrSymbol indices, int depth, double onValue = 1, double offValue = 0, string dtype = "float32", NDArray output = null)
         {
             var result = Operator.Invoke(
                 "one_hot",
                 _oneHotParamNames,
                 new[] { Convert(depth), Convert(onValue), Convert(offValue), Convert(dtype) },
                 new[] { indices.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _gatherNdParamNames = _empty;
+        private static string[] _gatherNdParamNames = Empty;
 
         /// <summary>
         /// Gather elements or slices from `data` and store to a tensor whose
@@ -7930,15 +9986,15 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">data</param>
         /// <param name="indices">indices</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray GatherNd(NDArrayOrSymbol data, NDArrayOrSymbol indices, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "gather_nd",
                 _gatherNdParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle, indices.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -7993,7 +10049,6 @@ namespace Horker.MXNet.Operators
         /// <param name="data">data</param>
         /// <param name="indices">indices</param>
         /// <param name="shape">Shape of output.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray ScatterNd(NDArrayOrSymbol data, NDArrayOrSymbol indices, NDShape shape, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -8001,7 +10056,59 @@ namespace Horker.MXNet.Operators
                 _scatterNdParamNames,
                 new[] { Convert(shape) },
                 new[] { data.Handle, indices.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardGatherNdParamNames = new[] { "shape" };
+
+        /// <summary>
+        /// Accumulates data according to indices and get the result. It's the backward of
+        /// `gather_nd`.
+        /// 
+        /// Given `data` with shape `(Y_0, ..., Y_{K-1}, X_M, ..., X_{N-1})` and indices with shape
+        /// `(M, Y_0, ..., Y_{K-1})`, the output will have shape `(X_0, X_1, ..., X_{N-1})`,
+        /// where `M <= N`. If `M == N`, data shape should simply be `(Y_0, ..., Y_{K-1})`.
+        /// 
+        /// The elements in output is defined as follows::
+        /// 
+        ///   output[indices[0, y_0, ..., y_{K-1}],
+        ///          ...,
+        ///          indices[M-1, y_0, ..., y_{K-1}],
+        ///          x_M, ..., x_{N-1}] += data[y_0, ..., y_{K-1}, x_M, ..., x_{N-1}]
+        /// 
+        /// all other entries in output are 0 or the original value if AddTo is triggered.
+        /// 
+        /// Examples::
+        /// 
+        ///   data = [2, 3, 0]
+        ///   indices = [[1, 1, 0], [0, 1, 0]]
+        ///   shape = (2, 2)
+        ///   _backward_gather_nd(data, indices, shape) = [[0, 0], [2, 3]] # Same as scatter_nd
+        /// 
+        ///   # The difference between scatter_nd and scatter_nd_acc is the latter will accumulate
+        ///   #  the values that point to the same index.
+        /// 
+        ///   data = [2, 3, 0]
+        ///   indices = [[1, 1, 0], [1, 1, 0]]
+        ///   shape = (2, 2)
+        ///   _backward_gather_nd(data, indices, shape) = [[0, 0], [0, 5]]
+        /// 
+        /// 
+        /// </summary>
+        /// <param name="data">data</param>
+        /// <param name="indices">indices</param>
+        /// <param name="shape">Shape of output.</param>
+        public static NDArray BackwardGatherNd(NDArrayOrSymbol data, NDArrayOrSymbol indices, NDShape shape, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_gather_nd",
+                _backwardGatherNdParamNames,
+                new[] { Convert(shape) },
+                new[] { data.Handle, indices.Handle },
+                output
+            );
             return result;
         }
 
@@ -8029,7 +10136,6 @@ namespace Horker.MXNet.Operators
         /// <param name="rhs">value to assign</param>
         /// <param name="indices">indices</param>
         /// <param name="shape">Shape of output.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray ScatterSetNd(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDArrayOrSymbol indices, NDShape shape, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -8037,7 +10143,8 @@ namespace Horker.MXNet.Operators
                 _scatterSetNdParamNames,
                 new[] { Convert(shape) },
                 new[] { lhs.Handle, rhs.Handle, indices.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -8049,15 +10156,15 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">The shape of the output</param>
         /// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n).Only used for imperative calls.</param>
         /// <param name="dtype">Target data type.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray ZerosWithoutDtype(NDShape shape = null, Context ctx = null, DType dtype = null, NDArray output = null)
+        public static NDArray ZerosWithoutDtype(NDShape shape = null, string ctx = "", int dtype = -1, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_zeros_without_dtype",
                 _zerosWithoutDtypeParamNames,
                 new[] { Convert(shape), Convert(ctx), Convert(dtype) },
-                _emptyInput,
-                output);
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -8069,15 +10176,15 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">The shape of the output</param>
         /// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n).Only used for imperative calls.</param>
         /// <param name="dtype">Target data type.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Zeros(NDShape shape = null, Context ctx = null, DType dtype = null, NDArray output = null)
+        public static NDArray Zeros(NDShape shape = null, string ctx = "", string dtype = "float32", NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_zeros",
                 _zerosParamNames,
                 new[] { Convert(shape), Convert(ctx), Convert(dtype) },
-                _emptyInput,
-                output);
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -8091,15 +10198,15 @@ namespace Horker.MXNet.Operators
         /// <param name="k">Index of the diagonal. 0 (the default) refers to the main diagonal.A positive value refers to an upper diagonal.A negative value to a lower diagonal.</param>
         /// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n).Only used for imperative calls.</param>
         /// <param name="dtype">Target data type.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Eye(Tuple<double> N, int M = 0, int k = 0, Context ctx = null, DType dtype = null, NDArray output = null)
+        public static NDArray Eye(double? N, double? M = 0, double? k = 0, string ctx = "", string dtype = "float32", NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_eye",
                 _eyeParamNames,
                 new[] { Convert(N), Convert(M), Convert(k), Convert(ctx), Convert(dtype) },
-                _emptyInput,
-                output);
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -8111,19 +10218,19 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">The shape of the output</param>
         /// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n).Only used for imperative calls.</param>
         /// <param name="dtype">Target data type.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Ones(NDShape shape = null, Context ctx = null, DType dtype = null, NDArray output = null)
+        public static NDArray Ones(NDShape shape = null, string ctx = "", string dtype = "float32", NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_ones",
                 _onesParamNames,
                 new[] { Convert(shape), Convert(ctx), Convert(dtype) },
-                _emptyInput,
-                output);
+                EmptyInput,
+                output
+            );
             return result;
         }
 
-        private static string[] _fullParamNames = new[] { "value", "shape", "ctx", "dtype" };
+        private static string[] _fullParamNames = new[] { "shape", "ctx", "dtype", "value" };
 
         /// <summary>
         /// fill target with a scalar value
@@ -8132,15 +10239,15 @@ namespace Horker.MXNet.Operators
         /// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n).Only used for imperative calls.</param>
         /// <param name="dtype">Target data type.</param>
         /// <param name="value">Value with which to fill newly created tensor</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Full(double value, NDShape shape = null, Context ctx = null, DType dtype = null, NDArray output = null)
+        public static NDArray Full(double value, NDShape shape = null, string ctx = "", string dtype = "float32", NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_full",
                 _fullParamNames,
-                new[] { Convert(value), Convert(shape), Convert(ctx), Convert(dtype) },
-                _emptyInput,
-                output);
+                new[] { Convert(shape), Convert(ctx), Convert(dtype), Convert(value) },
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -8156,15 +10263,15 @@ namespace Horker.MXNet.Operators
         /// <param name="infer_range">When set to True, infer the stop position from the start, step, repeat, and output tensor size.</param>
         /// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n).Only used for imperative calls.</param>
         /// <param name="dtype">Target data type.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Arange(double start, double? stop = null, double step = 1, int repeat = 1, bool inferRange = false, Context ctx = null, DType dtype = null, NDArray output = null)
+        public static NDArray Arange(double start, double? stop = null, double step = 1, int repeat = 1, bool inferRange = false, string ctx = "", string dtype = "float32", NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_arange",
                 _arangeParamNames,
                 new[] { Convert(start), Convert(stop), Convert(step), Convert(repeat), Convert(inferRange), Convert(ctx), Convert(dtype) },
-                _emptyInput,
-                output);
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -8180,19 +10287,19 @@ namespace Horker.MXNet.Operators
         /// <param name="infer_range">When set to True, infer the stop position from the start, step, repeat, and output tensor size.</param>
         /// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n).Only used for imperative calls.</param>
         /// <param name="dtype">Target data type.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Linspace(double start, double? stop = null, double step = 1, int repeat = 1, bool inferRange = false, Context ctx = null, DType dtype = null, NDArray output = null)
+        public static NDArray Linspace(double start, double? stop = null, double step = 1, int repeat = 1, bool inferRange = false, string ctx = "", string dtype = "float32", NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_linspace",
                 _linspaceParamNames,
                 new[] { Convert(start), Convert(stop), Convert(step), Convert(repeat), Convert(inferRange), Convert(ctx), Convert(dtype) },
-                _emptyInput,
-                output);
+                EmptyInput,
+                output
+            );
             return result;
         }
 
-        private static string[] _zerosLikeParamNames = _empty;
+        private static string[] _zerosLikeParamNames = Empty;
 
         /// <summary>
         /// Return an array of zeros with the same shape, type and storage type
@@ -8215,19 +10322,19 @@ namespace Horker.MXNet.Operators
         /// 
         /// </summary>
         /// <param name="data">The input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray ZerosLike(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "zeros_like",
                 _zerosLikeParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _onesLikeParamNames = _empty;
+        private static string[] _onesLikeParamNames = Empty;
 
         /// <summary>
         /// Return an array of ones with the same shape and type
@@ -8244,15 +10351,15 @@ namespace Horker.MXNet.Operators
         /// 
         /// </summary>
         /// <param name="data">The input</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray OnesLike(NDArrayOrSymbol data, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "ones_like",
                 _onesLikeParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -8318,7 +10425,6 @@ namespace Horker.MXNet.Operators
         /// <param name="alpha">Scalar factor multiplied with A*B.</param>
         /// <param name="beta">Scalar factor multiplied with C.</param>
         /// <param name="axis">Axis corresponding to the matrix rows.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LinalgGemm(NDArrayOrSymbol A, NDArrayOrSymbol B, NDArrayOrSymbol C, bool transposeA = false, bool transposeB = false, double alpha = 1, double beta = 1, int axis = -2, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -8326,7 +10432,26 @@ namespace Horker.MXNet.Operators
                 _linalgGemmParamNames,
                 new[] { Convert(transposeA), Convert(transposeB), Convert(alpha), Convert(beta), Convert(axis) },
                 new[] { A.Handle, B.Handle, C.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardLinalgGemmParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLinalgGemm(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_linalg_gemm",
+                _backwardLinalgGemmParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -8387,7 +10512,6 @@ namespace Horker.MXNet.Operators
         /// <param name="transpose_b">Multiply with transposed of second input (B).</param>
         /// <param name="alpha">Scalar factor multiplied with A*B.</param>
         /// <param name="axis">Axis corresponding to the matrix row indices.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LinalgGemm2(NDArrayOrSymbol A, NDArrayOrSymbol B, bool transposeA = false, bool transposeB = false, double alpha = 1, int axis = -2, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -8395,11 +10519,30 @@ namespace Horker.MXNet.Operators
                 _linalgGemm2ParamNames,
                 new[] { Convert(transposeA), Convert(transposeB), Convert(alpha), Convert(axis) },
                 new[] { A.Handle, B.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _linalgPotrfParamNames = _empty;
+        private static string[] _backwardLinalgGemm2ParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLinalgGemm2(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_linalg_gemm2",
+                _backwardLinalgGemm2ParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _linalgPotrfParamNames = Empty;
 
         /// <summary>
         /// Performs Cholesky factorization of a symmetric positive-definite matrix.
@@ -8431,19 +10574,37 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\la_op.cc:L214
         /// </summary>
         /// <param name="A">Tensor of input matrices to be decomposed</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LinalgPotrf(NDArrayOrSymbol A, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_linalg_potrf",
                 _linalgPotrfParamNames,
-                _empty,
+                Empty,
                 new[] { A.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _linalgPotriParamNames = _empty;
+        private static string[] _backwardLinalgPotrfParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLinalgPotrf(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_linalg_potrf",
+                _backwardLinalgPotrfParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _linalgPotriParamNames = Empty;
 
         /// <summary>
         /// Performs matrix inversion from a Cholesky factorization.
@@ -8484,15 +10645,33 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\la_op.cc:L275
         /// </summary>
         /// <param name="A">Tensor of lower triangular matrices</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LinalgPotri(NDArrayOrSymbol A, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_linalg_potri",
                 _linalgPotriParamNames,
-                _empty,
+                Empty,
                 new[] { A.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardLinalgPotriParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLinalgPotri(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_linalg_potri",
+                _backwardLinalgPotriParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -8542,7 +10721,6 @@ namespace Horker.MXNet.Operators
         /// <param name="rightside">Multiply triangular matrix from the right to non-triangular one.</param>
         /// <param name="lower">True if the triangular matrix is lower triangular, false if it is upper triangular.</param>
         /// <param name="alpha">Scalar factor to be applied to the result.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LinalgTrmm(NDArrayOrSymbol A, NDArrayOrSymbol B, bool transpose = false, bool rightside = false, bool lower = true, double alpha = 1, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -8550,7 +10728,26 @@ namespace Horker.MXNet.Operators
                 _linalgTrmmParamNames,
                 new[] { Convert(transpose), Convert(rightside), Convert(lower), Convert(alpha) },
                 new[] { A.Handle, B.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardLinalgTrmmParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLinalgTrmm(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_linalg_trmm",
+                _backwardLinalgTrmmParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -8601,7 +10798,6 @@ namespace Horker.MXNet.Operators
         /// <param name="rightside">Multiply triangular matrix from the right to non-triangular one.</param>
         /// <param name="lower">True if the triangular matrix is lower triangular, false if it is upper triangular.</param>
         /// <param name="alpha">Scalar factor to be applied to the result.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LinalgTrsm(NDArrayOrSymbol A, NDArrayOrSymbol B, bool transpose = false, bool rightside = false, bool lower = true, double alpha = 1, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -8609,11 +10805,30 @@ namespace Horker.MXNet.Operators
                 _linalgTrsmParamNames,
                 new[] { Convert(transpose), Convert(rightside), Convert(lower), Convert(alpha) },
                 new[] { A.Handle, B.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _linalgSumlogdiagParamNames = _empty;
+        private static string[] _backwardLinalgTrsmParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLinalgTrsm(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_linalg_trsm",
+                _backwardLinalgTrsmParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _linalgSumlogdiagParamNames = Empty;
 
         /// <summary>
         /// Computes the sum of the logarithms of the diagonal elements of a square matrix.
@@ -8641,15 +10856,33 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\la_op.cc:L445
         /// </summary>
         /// <param name="A">Tensor of square matrices</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LinalgSumlogdiag(NDArrayOrSymbol A, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_linalg_sumlogdiag",
                 _linalgSumlogdiagParamNames,
-                _empty,
+                Empty,
                 new[] { A.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardLinalgSumlogdiagParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLinalgSumlogdiag(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_linalg_sumlogdiag",
+                _backwardLinalgSumlogdiagParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -8689,7 +10922,6 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="A">Tensor of square matrices</param>
         /// <param name="offset">Offset of the diagonal versus the main diagonal. 0 corresponds to the main diagonal, a negative/positive value to diagonals below/above the main diagonal.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LinalgExtractdiag(NDArrayOrSymbol A, int offset = 0, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -8697,7 +10929,26 @@ namespace Horker.MXNet.Operators
                 _linalgExtractdiagParamNames,
                 new[] { Convert(offset) },
                 new[] { A.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardLinalgExtractdiagParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLinalgExtractdiag(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_linalg_extractdiag",
+                _backwardLinalgExtractdiagParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -8738,7 +10989,6 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="A">Tensor of diagonal entries</param>
         /// <param name="offset">Offset of the diagonal versus the main diagonal. 0 corresponds to the main diagonal, a negative/positive value to diagonals below/above the main diagonal.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LinalgMakediag(NDArrayOrSymbol A, int offset = 0, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -8746,7 +10996,26 @@ namespace Horker.MXNet.Operators
                 _linalgMakediagParamNames,
                 new[] { Convert(offset) },
                 new[] { A.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardLinalgMakediagParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLinalgMakediag(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_linalg_makediag",
+                _backwardLinalgMakediagParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -8794,7 +11063,6 @@ namespace Horker.MXNet.Operators
         /// <param name="A">Tensor of square matrices</param>
         /// <param name="offset">Offset of the diagonal versus the main diagonal. 0 corresponds to the main diagonal, a negative/positive value to diagonals below/above the main diagonal.</param>
         /// <param name="lower">Refer to the lower triangular matrix if lower=true, refer to the upper otherwise. Only relevant when offset=0</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LinalgExtracttrian(NDArrayOrSymbol A, int offset = 0, bool lower = true, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -8802,7 +11070,26 @@ namespace Horker.MXNet.Operators
                 _linalgExtracttrianParamNames,
                 new[] { Convert(offset), Convert(lower) },
                 new[] { A.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardLinalgExtracttrianParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLinalgExtracttrian(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_linalg_extracttrian",
+                _backwardLinalgExtracttrianParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -8860,7 +11147,6 @@ namespace Horker.MXNet.Operators
         /// <param name="A">Tensor of triangular matrices stored as vectors</param>
         /// <param name="offset">Offset of the diagonal versus the main diagonal. 0 corresponds to the main diagonal, a negative/positive value to diagonals below/above the main diagonal.</param>
         /// <param name="lower">Refer to the lower triangular matrix if lower=true, refer to the upper otherwise. Only relevant when offset=0</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LinalgMaketrian(NDArrayOrSymbol A, int offset = 0, bool lower = true, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -8868,7 +11154,26 @@ namespace Horker.MXNet.Operators
                 _linalgMaketrianParamNames,
                 new[] { Convert(offset), Convert(lower) },
                 new[] { A.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardLinalgMaketrianParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLinalgMaketrian(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_linalg_maketrian",
+                _backwardLinalgMaketrianParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -8915,7 +11220,6 @@ namespace Horker.MXNet.Operators
         /// <param name="A">Tensor of input matrices</param>
         /// <param name="transpose">Use transpose of input matrix.</param>
         /// <param name="alpha">Scalar factor to be applied to the result.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LinalgSyrk(NDArrayOrSymbol A, bool transpose = false, double alpha = 1, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -8923,11 +11227,30 @@ namespace Horker.MXNet.Operators
                 _linalgSyrkParamNames,
                 new[] { Convert(transpose), Convert(alpha) },
                 new[] { A.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _linalgGelqfParamNames = _empty;
+        private static string[] _backwardLinalgSyrkParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLinalgSyrk(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_linalg_syrk",
+                _backwardLinalgSyrkParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _linalgGelqfParamNames = Empty;
 
         /// <summary>
         /// LQ factorization for general matrix.
@@ -8979,19 +11302,37 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\la_op.cc:L798
         /// </summary>
         /// <param name="A">Tensor of input matrices to be factorized</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LinalgGelqf(NDArrayOrSymbol A, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_linalg_gelqf",
                 _linalgGelqfParamNames,
-                _empty,
+                Empty,
                 new[] { A.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _linalgSyevdParamNames = _empty;
+        private static string[] _backwardLinalgGelqfParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLinalgGelqf(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_linalg_gelqf",
+                _backwardLinalgGelqfParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _linalgSyevdParamNames = Empty;
 
         /// <summary>
         /// Eigendecomposition for symmetric matrix.
@@ -9042,19 +11383,37 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\la_op.cc:L867
         /// </summary>
         /// <param name="A">Tensor of input matrices to be factorized</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LinalgSyevd(NDArrayOrSymbol A, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_linalg_syevd",
                 _linalgSyevdParamNames,
-                _empty,
+                Empty,
                 new[] { A.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _linalgInverseParamNames = _empty;
+        private static string[] _backwardLinalgSyevdParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLinalgSyevd(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_linalg_syevd",
+                _backwardLinalgSyevdParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _linalgInverseParamNames = Empty;
 
         /// <summary>
         /// Compute the inverse of a matrix.
@@ -9085,19 +11444,37 @@ namespace Horker.MXNet.Operators
         /// Defined in C:\Jenkins\workspace\mxnet-tag\mxnet\src\operator\tensor\la_op.cc:L917
         /// </summary>
         /// <param name="A">Tensor of square matrix</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray LinalgInverse(NDArrayOrSymbol A, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_linalg_inverse",
                 _linalgInverseParamNames,
-                _empty,
+                Empty,
                 new[] { A.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _ReshapeParamNames = new[] { "shape", "reverse" };
+        private static string[] _backwardLinalgInverseParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLinalgInverse(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_linalg_inverse",
+                _backwardLinalgInverseParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _ReshapeParamNames = new[] { "shape", "reverse", "target_shape", "keep_highest" };
 
         /// <summary>
         /// Reshapes the input array.
@@ -9168,15 +11545,17 @@ namespace Horker.MXNet.Operators
         /// <param name="data">Input data to reshape.</param>
         /// <param name="shape">The target shape</param>
         /// <param name="reverse">If true then the special values are inferred from right to left</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Reshape(NDArrayOrSymbol data, NDShape shape = null, bool reverse = false, NDArray output = null)
+        /// <param name="target_shape">(Deprecated! Use ``shape`` instead.) Target new shape. One and only one dim can be 0, in which case it will be inferred from the rest of dims</param>
+        /// <param name="keep_highest">(Deprecated! Use ``shape`` instead.) Whether keep the highest dim unchanged.If set to true, then the first dim in target_shape is ignored,and always fixed as input</param>
+        public static NDArray Reshape(NDArrayOrSymbol data, NDShape shape = null, bool reverse = false, NDShape targetShape = null, bool keepHighest = false, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "Reshape",
                 _ReshapeParamNames,
-                new[] { Convert(shape), Convert(reverse) },
+                new[] { Convert(shape), Convert(reverse), Convert(targetShape), Convert(keepHighest) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -9216,7 +11595,6 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">Source input</param>
         /// <param name="axes">Target axis order. By default the axes will be inverted.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Transpose(NDArrayOrSymbol data, NDShape axes = null, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -9224,7 +11602,8 @@ namespace Horker.MXNet.Operators
                 _transposeParamNames,
                 new[] { Convert(axes) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -9242,7 +11621,6 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">Source input</param>
         /// <param name="axis">Position where new axis is to be inserted. Suppose that the input `NDArray`'s dimension is `ndim`, the range of the inserted axis is `[-ndim, ndim]`</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray ExpandDims(NDArrayOrSymbol data, int axis, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -9250,7 +11628,8 @@ namespace Horker.MXNet.Operators
                 _expandDimsParamNames,
                 new[] { Convert(axis) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -9309,7 +11688,6 @@ namespace Horker.MXNet.Operators
         /// <param name="begin">starting indices for the slice operation, supports negative indices.</param>
         /// <param name="end">ending indices for the slice operation, supports negative indices.</param>
         /// <param name="step">step for the slice operation, supports negative values.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Slice(NDArrayOrSymbol data, NDShape begin, NDShape end, NDShape step = null, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -9317,7 +11695,26 @@ namespace Horker.MXNet.Operators
                 _sliceParamNames,
                 new[] { Convert(begin), Convert(end), Convert(step) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSliceParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSlice(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_slice",
+                _backwardSliceParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -9339,7 +11736,6 @@ namespace Horker.MXNet.Operators
         /// <param name="begin">starting indices for the slice operation, supports negative indices.</param>
         /// <param name="end">ending indices for the slice operation, supports negative indices.</param>
         /// <param name="step">step for the slice operation, supports negative values.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray SliceAssign(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDShape begin, NDShape end, NDShape step = null, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -9347,11 +11743,12 @@ namespace Horker.MXNet.Operators
                 _sliceAssignParamNames,
                 new[] { Convert(begin), Convert(end), Convert(step) },
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _sliceAssignScalarParamNames = new[] { "begin", "end", "scalar", "step" };
+        private static string[] _sliceAssignScalarParamNames = new[] { "scalar", "begin", "end", "step" };
 
         /// <summary>
         /// (Assign the scalar to a cropped subset of the input.
@@ -9368,15 +11765,15 @@ namespace Horker.MXNet.Operators
         /// <param name="begin">starting indices for the slice operation, supports negative indices.</param>
         /// <param name="end">ending indices for the slice operation, supports negative indices.</param>
         /// <param name="step">step for the slice operation, supports negative values.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray SliceAssignScalar(NDArrayOrSymbol data, NDShape begin, NDShape end, double scalar = 0, NDShape step = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_slice_assign_scalar",
                 _sliceAssignScalarParamNames,
-                new[] { Convert(begin), Convert(end), Convert(scalar), Convert(step) },
+                new[] { Convert(scalar), Convert(begin), Convert(end), Convert(step) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -9412,7 +11809,6 @@ namespace Horker.MXNet.Operators
         /// <param name="axis">Axis along which to be sliced, supports negative indexes.</param>
         /// <param name="begin">The beginning index along the axis to be sliced,  supports negative indexes.</param>
         /// <param name="end">The ending index along the axis to be sliced,  supports negative indexes.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray SliceAxis(NDArrayOrSymbol data, int axis, int begin, int? end, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -9420,7 +11816,26 @@ namespace Horker.MXNet.Operators
                 _sliceAxisParamNames,
                 new[] { Convert(axis), Convert(begin), Convert(end) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSliceAxisParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSliceAxis(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_slice_axis",
+                _backwardSliceAxisParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -9484,7 +11899,6 @@ namespace Horker.MXNet.Operators
         /// <param name="data">Source input</param>
         /// <param name="shape_like">Shape like input</param>
         /// <param name="axes">List of axes on which input data will be sliced according to the corresponding size of the second input. By default will slice on all axes. Negative axes are supported.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray SliceLike(NDArrayOrSymbol data, NDArrayOrSymbol shapeLike, NDShape axes = null, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -9492,7 +11906,26 @@ namespace Horker.MXNet.Operators
                 _sliceLikeParamNames,
                 new[] { Convert(axes) },
                 new[] { data.Handle, shapeLike.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSliceLikeParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSliceLike(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_slice_like",
+                _backwardSliceLikeParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -9530,15 +11963,33 @@ namespace Horker.MXNet.Operators
         /// <param name="data">Input array.</param>
         /// <param name="a_min">Minimum value</param>
         /// <param name="a_max">Maximum value</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Clip(NDArrayOrSymbol data, float aMin, float aMax, NDArray output = null)
+        public static NDArray Clip(NDArrayOrSymbol data, double aMin, double aMax, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "clip",
                 _clipParamNames,
                 new[] { Convert(aMin), Convert(aMax) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardClipParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardClip(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_clip",
+                _backwardClipParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -9575,7 +12026,6 @@ namespace Horker.MXNet.Operators
         /// <param name="data">Input data array</param>
         /// <param name="repeats">The number of repetitions for each element.</param>
         /// <param name="axis">The axis along which to repeat values. The negative numbers are interpreted counting from the backward. By default, use the flattened input array, and return a flat output array.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Repeat(NDArrayOrSymbol data, int repeats, int? axis = null, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -9583,7 +12033,26 @@ namespace Horker.MXNet.Operators
                 _repeatParamNames,
                 new[] { Convert(repeats), Convert(axis) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardRepeatParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardRepeat(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_repeat",
+                _backwardRepeatParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -9630,7 +12099,6 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">Input data array</param>
         /// <param name="reps">The number of times for repeating the tensor a. Each dim size of reps must be a positive integer. If reps has length d, the result will have dimension of max(d, a.ndim); If a.ndim < d, a is promoted to be d-dimensional by prepending new axes. If a.ndim > d, reps is promoted to a.ndim by pre-pending 1's to it.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Tile(NDArrayOrSymbol data, NDShape reps, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -9638,7 +12106,26 @@ namespace Horker.MXNet.Operators
                 _tileParamNames,
                 new[] { Convert(reps) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardTileParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardTile(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_tile",
+                _backwardTileParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -9665,7 +12152,6 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">Input data array</param>
         /// <param name="axis">The axis which to reverse elements.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Reverse(NDArrayOrSymbol data, NDShape axis, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -9673,7 +12159,62 @@ namespace Horker.MXNet.Operators
                 _reverseParamNames,
                 new[] { Convert(axis) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardReverseParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardReverse(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_reverse",
+                _backwardReverseParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardStackParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardStack(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_stack",
+                _backwardStackParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSqueezeParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSqueeze(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_squeeze",
+                _backwardSqueezeParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -9718,7 +12259,6 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">Input ndarray</param>
         /// <param name="block_size">Blocks of [block_size. block_size] are moved</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray DepthToSpace(NDArrayOrSymbol data, int blockSize, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -9726,7 +12266,8 @@ namespace Horker.MXNet.Operators
                 _depthToSpaceParamNames,
                 new[] { Convert(blockSize) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -9773,7 +12314,6 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">Input ndarray</param>
         /// <param name="block_size">Blocks of [block_size. block_size] are moved</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray SpaceToDepth(NDArrayOrSymbol data, int blockSize, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -9781,7 +12321,8 @@ namespace Horker.MXNet.Operators
                 _spaceToDepthParamNames,
                 new[] { Convert(blockSize) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -9863,7 +12404,6 @@ namespace Horker.MXNet.Operators
         /// <param name="axis">Axis along which to split.</param>
         /// <param name="squeeze_axis">If true, Removes the axis with length 1 from the shapes of the output arrays. **Note** that setting `squeeze_axis` to ``true`` removes axis with length 1 only along the `axis` which it is split. Also `squeeze_axis` can be set to ``true`` only if ``input.shape[axis] == num_outputs``.</param>
         /// <param name="sections">Number of sections if equally splitted. Default to 0 which means split by indices.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray SplitV2(NDArrayOrSymbol data, NDShape indices, int axis = 1, bool squeezeAxis = false, int sections = 0, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -9871,7 +12411,26 @@ namespace Horker.MXNet.Operators
                 _splitV2ParamNames,
                 new[] { Convert(indices), Convert(axis), Convert(squeezeAxis), Convert(sections) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _splitV2BackwardParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray SplitV2Backward(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_split_v2_backward",
+                _splitV2BackwardParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -9916,15 +12475,33 @@ namespace Horker.MXNet.Operators
         ///  "value" means to return the top k values, "indices" means to return the indices of the top k values, "mask" means to return a mask array containing 0 and 1. 1 means the top k values. "both" means to return a list of both values and indices of top k elements.</param>
         /// <param name="is_ascend">Whether to choose k largest or k smallest elements. Top K largest elements will be chosen if set to false.</param>
         /// <param name="dtype">DType of the output indices when ret_typ is "indices" or "both". An error will be raised if the selected data type cannot precisely represent the indices.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Topk(NDArrayOrSymbol data, int? axis = -1, int k = 1, TopkRetTyp retTyp = TopkRetTyp.Indices, bool isAscend = false, DType dtype = null, NDArray output = null)
+        public static NDArray Topk(NDArrayOrSymbol data, int? axis = -1, int k = 1, string retTyp = "indices", bool isAscend = false, string dtype = "float32", NDArray output = null)
         {
             var result = Operator.Invoke(
                 "topk",
                 _topkParamNames,
-                new[] { Convert(axis), Convert(k), Convert((int)retTyp), Convert(isAscend), Convert(dtype) },
+                new[] { Convert(axis), Convert(k), Convert(retTyp), Convert(isAscend), Convert(dtype) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardTopkParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardTopk(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_topk",
+                _backwardTopkParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -9960,7 +12537,6 @@ namespace Horker.MXNet.Operators
         /// <param name="data">The input array</param>
         /// <param name="axis">Axis along which to choose sort the input tensor. If not given, the flattened array is used. Default is -1.</param>
         /// <param name="is_ascend">Whether to sort in ascending or descending order.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Sort(NDArrayOrSymbol data, int? axis = -1, bool isAscend = true, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -9968,7 +12544,8 @@ namespace Horker.MXNet.Operators
                 _sortParamNames,
                 new[] { Convert(axis), Convert(isAscend) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -10003,15 +12580,15 @@ namespace Horker.MXNet.Operators
         /// <param name="axis">Axis along which to sort the input tensor. If not given, the flattened array is used. Default is -1.</param>
         /// <param name="is_ascend">Whether to sort in ascending or descending order.</param>
         /// <param name="dtype">DType of the output indices. It is only valid when ret_typ is "indices" or "both". An error will be raised if the selected data type cannot precisely represent the indices.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Argsort(NDArrayOrSymbol data, int? axis = -1, bool isAscend = true, DType dtype = null, NDArray output = null)
+        public static NDArray Argsort(NDArrayOrSymbol data, int? axis = -1, bool isAscend = true, string dtype = "float32", NDArray output = null)
         {
             var result = Operator.Invoke(
                 "argsort",
                 _argsortParamNames,
                 new[] { Convert(axis), Convert(isAscend), Convert(dtype) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -10032,7 +12609,6 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">Batch of multi-indices</param>
         /// <param name="shape">Shape of the array into which the multi-indices apply.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray RavelMultiIndex(NDArrayOrSymbol data, NDShape shape = null, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -10040,7 +12616,8 @@ namespace Horker.MXNet.Operators
                 _ravelMultiIndexParamNames,
                 new[] { Convert(shape) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -10061,7 +12638,6 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">Array of flat indices</param>
         /// <param name="shape">Shape of the array into which the multi-indices apply.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray UnravelIndex(NDArrayOrSymbol data, NDShape shape = null, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -10069,11 +12645,12 @@ namespace Horker.MXNet.Operators
                 _unravelIndexParamNames,
                 new[] { Convert(shape) },
                 new[] { data.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _sparseRetainParamNames = _empty;
+        private static string[] _sparseRetainParamNames = Empty;
 
         /// <summary>
         /// pick rows specified by user input index array from a row sparse matrix
@@ -10101,15 +12678,33 @@ namespace Horker.MXNet.Operators
         /// </summary>
         /// <param name="data">The input array for sparse_retain operator.</param>
         /// <param name="indices">The index array of rows ids that will be retained.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray SparseRetain(NDArrayOrSymbol data, NDArrayOrSymbol indices, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_sparse_retain",
                 _sparseRetainParamNames,
-                _empty,
+                Empty,
                 new[] { data.Handle, indices.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSparseRetainParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSparseRetain(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_sparse_retain",
+                _backwardSparseRetainParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -10149,7 +12744,6 @@ namespace Horker.MXNet.Operators
         ///       Negative values means indexing from right to left.</param>
         /// <param name="keepdims">If this is set to `True`, the reduced axes are left in the result as dimension with size one.</param>
         /// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray SquareSum(NDArrayOrSymbol data, NDShape axis = null, bool keepdims = false, bool exclude = false, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -10157,7 +12751,44 @@ namespace Horker.MXNet.Operators
                 _squareSumParamNames,
                 new[] { Convert(axis), Convert(keepdims), Convert(exclude) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSquareSumParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSquareSum(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_square_sum",
+                _backwardSquareSumParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardBatchNormV1ParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardBatchNormV1(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_BatchNorm_v1",
+                _backwardBatchNormV1ParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -10242,7 +12873,6 @@ namespace Horker.MXNet.Operators
         /// <param name="data">Input data to the BilinearsamplerOp.</param>
         /// <param name="grid">Input grid to the BilinearsamplerOp.grid has two channels: x_src, y_src</param>
         /// <param name="cudnn_off">whether to turn cudnn off</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray BilinearSampler(NDArrayOrSymbol data, NDArrayOrSymbol grid, bool? cudnnOff = null, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -10250,11 +12880,30 @@ namespace Horker.MXNet.Operators
                 _BilinearSamplerParamNames,
                 new[] { Convert(cudnnOff) },
                 new[] { data.Handle, grid.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _ConvolutionV1ParamNames = new[] { "kernel", "num_filter", "stride", "dilate", "pad", "num_group", "workspace", "no_bias", "cudnn_tune", "cudnn_off", "layout" };
+        private static string[] _backwardBilinearSamplerParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardBilinearSampler(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_BilinearSampler",
+                _backwardBilinearSamplerParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _ConvolutionV1ParamNames = new[] { "kernel", "stride", "dilate", "pad", "num_filter", "num_group", "workspace", "no_bias", "cudnn_tune", "cudnn_off", "layout" };
 
         /// <summary>
         /// This operator is DEPRECATED. Apply convolution to input then add a bias.
@@ -10282,15 +12931,33 @@ namespace Horker.MXNet.Operators
         /// <param name="cudnn_off">Turn off cudnn for this layer.</param>
         /// <param name="layout">Set layout for input, output and weight. Empty for
         ///     default layout: NCHW for 2d and NCDHW for 3d.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray ConvolutionV1(NDArrayOrSymbol data, NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, uint numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, uint numGroup = 1, ulong workspace = 1024, bool noBias = false, ConvolutionV1CudnnTune? cudnnTune = null, bool cudnnOff = false, ConvolutionV1Layout? layout = null, NDArray output = null)
+        public static NDArray ConvolutionV1(NDArrayOrSymbol data, NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, int numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, int numGroup = 1, long workspace = 1024, bool noBias = false, string cudnnTune = null, bool cudnnOff = false, string layout = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "Convolution_v1",
                 _ConvolutionV1ParamNames,
-                new[] { Convert(kernel), Convert(numFilter), Convert(stride), Convert(dilate), Convert(pad), Convert(numGroup), Convert(workspace), Convert(noBias), Convert((int)cudnnTune), Convert(cudnnOff), Convert((int)layout) },
+                new[] { Convert(kernel), Convert(stride), Convert(dilate), Convert(pad), Convert(numFilter), Convert(numGroup), Convert(workspace), Convert(noBias), Convert(cudnnTune), Convert(cudnnOff), Convert(layout) },
                 new[] { data.Handle, weight.Handle, bias.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardConvolutionV1ParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardConvolutionV1(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_Convolution_v1",
+                _backwardConvolutionV1ParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -10340,32 +13007,123 @@ namespace Horker.MXNet.Operators
         /// <param name="stride2">stride2 quantize data2 within the neighborhood centered around data1</param>
         /// <param name="pad_size">pad for Correlation</param>
         /// <param name="is_multiply">operation type is either multiplication or subduction</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray Correlation(NDArrayOrSymbol data1, NDArrayOrSymbol data2, uint kernelSize = 1, uint maxDisplacement = 1, uint stride1 = 1, uint stride2 = 1, uint padSize = 0, bool isMultiply = true, NDArray output = null)
+        public static NDArray Correlation(NDArrayOrSymbol data1, NDArrayOrSymbol data2, int kernelSize = 1, int maxDisplacement = 1, int stride1 = 1, int stride2 = 1, int padSize = 0, bool isMultiply = true, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "Correlation",
                 _CorrelationParamNames,
                 new[] { Convert(kernelSize), Convert(maxDisplacement), Convert(stride1), Convert(stride2), Convert(padSize), Convert(isMultiply) },
                 new[] { data1.Handle, data2.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _CrossDeviceCopyParamNames = _empty;
+        private static string[] _backwardCorrelationParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardCorrelation(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_Correlation",
+                _backwardCorrelationParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardCropParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardCrop(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_Crop",
+                _backwardCropParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _CrossDeviceCopyParamNames = Empty;
 
         /// <summary>
         /// Special op to copy data cross device
         /// </summary>
-        /// <param name="symbol_name">name of the resulting symbol</param>
+
         public static NDArray CrossDeviceCopy(NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_CrossDeviceCopy",
                 _CrossDeviceCopyParamNames,
-                _empty,
-                _emptyInput,
-                output);
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backward_CrossDeviceCopyParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray Backward_CrossDeviceCopy(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward__CrossDeviceCopy",
+                _backward_CrossDeviceCopyParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backward_NativeParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray Backward_Native(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward__Native",
+                _backward_NativeParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backward_NDArrayParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray Backward_NDArray(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward__NDArray",
+                _backward_NDArrayParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -10377,15 +13135,51 @@ namespace Horker.MXNet.Operators
         /// <param name="data">Input data to the function.</param>
         /// <param name="transform_type">The type of transformation. For `affine`, input data should be an affine matrix of size (batch, 6). For `warp`, input data should be an optical flow of size (batch, 2, h, w).</param>
         /// <param name="target_shape">Specifies the output shape (H, W). This is required if transformation type is `affine`. If transformation type is `warp`, this parameter is ignored.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray GridGenerator(NDArrayOrSymbol data, GridgeneratorTransformType transformType, NDShape targetShape = null, NDArray output = null)
+        public static NDArray GridGenerator(NDArrayOrSymbol data, string transformType, NDShape targetShape = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "GridGenerator",
                 _GridGeneratorParamNames,
-                new[] { Convert((int)transformType), Convert(targetShape) },
+                new[] { Convert(transformType), Convert(targetShape) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardGridGeneratorParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardGridGenerator(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_GridGenerator",
+                _backwardGridGeneratorParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardIdentityAttachKLSparseRegParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardIdentityAttachKLSparseReg(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_IdentityAttachKLSparseReg",
+                _backwardIdentityAttachKLSparseRegParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -10439,15 +13233,33 @@ namespace Horker.MXNet.Operators
         /// <param name="gamma">A vector of length 'channel', which multiplies the normalized input.</param>
         /// <param name="beta">A vector of length 'channel', which is added to the product of the normalized input and the weight.</param>
         /// <param name="eps">An `epsilon` parameter to prevent division by 0.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray InstanceNorm(NDArrayOrSymbol data, NDArrayOrSymbol gamma, NDArrayOrSymbol beta, float eps = 0.00100000005f, NDArray output = null)
+        public static NDArray InstanceNorm(NDArrayOrSymbol data, NDArrayOrSymbol gamma, NDArrayOrSymbol beta, double eps = 0.00100000005, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "InstanceNorm",
                 _InstanceNormParamNames,
                 new[] { Convert(eps) },
                 new[] { data.Handle, gamma.Handle, beta.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardInstanceNormParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardInstanceNorm(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_InstanceNorm",
+                _backwardInstanceNormParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -10513,15 +13325,87 @@ namespace Horker.MXNet.Operators
         /// <param name="data">Input array to normalize.</param>
         /// <param name="eps">A small constant for numerical stability.</param>
         /// <param name="mode">Specify the dimension along which to compute L2 norm.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray L2Normalization(NDArrayOrSymbol data, float eps = 1.00000001e-10f, L2normalizationMode mode = L2normalizationMode.Instance, NDArray output = null)
+        public static NDArray L2Normalization(NDArrayOrSymbol data, double eps = 1.00000001e-10, string mode = "instance", NDArray output = null)
         {
             var result = Operator.Invoke(
                 "L2Normalization",
                 _L2NormalizationParamNames,
-                new[] { Convert(eps), Convert((int)mode) },
+                new[] { Convert(eps), Convert(mode) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardL2NormalizationParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardL2Normalization(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_L2Normalization",
+                _backwardL2NormalizationParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardLeakyReLUParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardLeakyReLU(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_LeakyReLU",
+                _backwardLeakyReLUParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardMakeLossParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardMakeLoss(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_MakeLoss",
+                _backwardMakeLossParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardPadParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardPad(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_Pad",
+                _backwardPadParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -10576,15 +13460,33 @@ namespace Horker.MXNet.Operators
         /// <param name="pooling_convention">Pooling convention to be applied.</param>
         /// <param name="stride">stride: for pooling (y, x) or (d, y, x)</param>
         /// <param name="pad">pad for pooling: (y, x) or (d, y, x)</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray PoolingV1(NDArrayOrSymbol data, NDShape kernel = null, PoolingV1PoolType poolType = PoolingV1PoolType.Max, bool globalPool = false, PoolingV1PoolingConvention poolingConvention = PoolingV1PoolingConvention.Valid, NDShape stride = null, NDShape pad = null, NDArray output = null)
+        public static NDArray PoolingV1(NDArrayOrSymbol data, NDShape kernel = null, string poolType = "max", bool globalPool = false, string poolingConvention = "valid", NDShape stride = null, NDShape pad = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "Pooling_v1",
                 _PoolingV1ParamNames,
-                new[] { Convert(kernel), Convert((int)poolType), Convert(globalPool), Convert((int)poolingConvention), Convert(stride), Convert(pad) },
+                new[] { Convert(kernel), Convert(poolType), Convert(globalPool), Convert(poolingConvention), Convert(stride), Convert(pad) },
                 new[] { data.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardPoolingV1ParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardPoolingV1(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_Pooling_v1",
+                _backwardPoolingV1ParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -10642,15 +13544,33 @@ namespace Horker.MXNet.Operators
         /// <param name="rois">Bounding box coordinates, a 2D array of [[batch_index, x1, y1, x2, y2]], where (x1, y1) and (x2, y2) are top left and bottom right corners of designated region of interest. `batch_index` indicates the index of corresponding image in the input array</param>
         /// <param name="pooled_size">ROI pooling output shape (h,w) </param>
         /// <param name="spatial_scale">Ratio of input feature map height (or w) to raw image height (or w). Equals the reciprocal of total stride in convolutional layers</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray ROIPooling(NDArrayOrSymbol data, NDArrayOrSymbol rois, NDShape pooledSize, float spatialScale, NDArray output = null)
+        public static NDArray ROIPooling(NDArrayOrSymbol data, NDArrayOrSymbol rois, NDShape pooledSize, double spatialScale, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "ROIPooling",
                 _ROIPoolingParamNames,
                 new[] { Convert(pooledSize), Convert(spatialScale) },
                 new[] { data.Handle, rois.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardROIPoolingParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardROIPooling(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_ROIPooling",
+                _backwardROIPoolingParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -10709,7 +13629,6 @@ namespace Horker.MXNet.Operators
         /// <param name="sequence_length">vector of sequence lengths of the form [batch_size]</param>
         /// <param name="use_sequence_length">If set to true, this layer takes in an extra input parameter `sequence_length` to specify variable length sequence</param>
         /// <param name="axis">The sequence axis. Only values of 0 and 1 are currently supported.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray SequenceLast(NDArrayOrSymbol data, NDArrayOrSymbol sequenceLength, bool useSequenceLength = false, int axis = 0, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -10717,7 +13636,26 @@ namespace Horker.MXNet.Operators
                 _SequenceLastParamNames,
                 new[] { Convert(useSequenceLength), Convert(axis) },
                 new[] { data.Handle, sequenceLength.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSequenceLastParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSequenceLast(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_SequenceLast",
+                _backwardSequenceLastParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -10799,15 +13737,33 @@ namespace Horker.MXNet.Operators
         /// <param name="use_sequence_length">If set to true, this layer takes in an extra input parameter `sequence_length` to specify variable length sequence</param>
         /// <param name="value">The value to be used as a mask.</param>
         /// <param name="axis">The sequence axis. Only values of 0 and 1 are currently supported.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SequenceMask(NDArrayOrSymbol data, NDArrayOrSymbol sequenceLength, bool useSequenceLength = false, float value = 0f, int axis = 0, NDArray output = null)
+        public static NDArray SequenceMask(NDArrayOrSymbol data, NDArrayOrSymbol sequenceLength, bool useSequenceLength = false, double value = 0, int axis = 0, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "SequenceMask",
                 _SequenceMaskParamNames,
                 new[] { Convert(useSequenceLength), Convert(value), Convert(axis) },
                 new[] { data.Handle, sequenceLength.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSequenceMaskParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSequenceMask(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_SequenceMask",
+                _backwardSequenceMaskParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -10887,7 +13843,6 @@ namespace Horker.MXNet.Operators
         /// <param name="sequence_length">vector of sequence lengths of the form [batch_size]</param>
         /// <param name="use_sequence_length">If set to true, this layer takes in an extra input parameter `sequence_length` to specify variable length sequence</param>
         /// <param name="axis">The sequence axis. Only 0 is currently supported.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray SequenceReverse(NDArrayOrSymbol data, NDArrayOrSymbol sequenceLength, bool useSequenceLength = false, int axis = 0, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -10895,11 +13850,48 @@ namespace Horker.MXNet.Operators
                 _SequenceReverseParamNames,
                 new[] { Convert(useSequenceLength), Convert(axis) },
                 new[] { data.Handle, sequenceLength.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _SpatialTransformerParamNames = new[] { "transform_type", "sampler_type", "target_shape", "cudnn_off" };
+        private static string[] _backwardSequenceReverseParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSequenceReverse(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_SequenceReverse",
+                _backwardSequenceReverseParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSliceChannelParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSliceChannel(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_SliceChannel",
+                _backwardSliceChannelParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _SpatialTransformerParamNames = new[] { "target_shape", "transform_type", "sampler_type", "cudnn_off" };
 
         /// <summary>
         /// Applies a spatial transformer to input feature map.
@@ -10910,15 +13902,33 @@ namespace Horker.MXNet.Operators
         /// <param name="transform_type">transformation type</param>
         /// <param name="sampler_type">sampling type</param>
         /// <param name="cudnn_off">whether to turn cudnn off</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SpatialTransformer(NDArrayOrSymbol data, NDArrayOrSymbol loc, SpatialtransformerTransformType transformType, SpatialtransformerSamplerType samplerType, NDShape targetShape = null, bool? cudnnOff = null, NDArray output = null)
+        public static NDArray SpatialTransformer(NDArrayOrSymbol data, NDArrayOrSymbol loc, string transformType, string samplerType, NDShape targetShape = null, bool? cudnnOff = null, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "SpatialTransformer",
                 _SpatialTransformerParamNames,
-                new[] { Convert((int)transformType), Convert((int)samplerType), Convert(targetShape), Convert(cudnnOff) },
+                new[] { Convert(targetShape), Convert(transformType), Convert(samplerType), Convert(cudnnOff) },
                 new[] { data.Handle, loc.Handle },
-                output);
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSpatialTransformerParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSpatialTransformer(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_SpatialTransformer",
+                _backwardSpatialTransformerParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
             return result;
         }
 
@@ -10937,38 +13947,92 @@ namespace Horker.MXNet.Operators
         /// <param name="margin">The loss function penalizes outputs that lie outside this margin. Default margin is 1.</param>
         /// <param name="regularization_coefficient">Regularization parameter for the SVM. This balances the tradeoff between coefficient size and error.</param>
         /// <param name="use_linear">Whether to use L1-SVM objective. L2-SVM objective is used by default.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray SVMOutput(NDArrayOrSymbol data, NDArrayOrSymbol label, float margin = 1f, float regularizationCoefficient = 1f, bool useLinear = false, NDArray output = null)
+        public static NDArray SVMOutput(NDArrayOrSymbol data, NDArrayOrSymbol label, double margin = 1, double regularizationCoefficient = 1, bool useLinear = false, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "SVMOutput",
                 _SVMOutputParamNames,
                 new[] { Convert(margin), Convert(regularizationCoefficient), Convert(useLinear) },
                 new[] { data.Handle, label.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _onehotEncodeParamNames = _empty;
+        private static string[] _backwardSVMOutputParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSVMOutput(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_SVMOutput",
+                _backwardSVMOutputParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _backwardSwapAxisParamNames = Empty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        public static NDArray BackwardSwapAxis(NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_backward_SwapAxis",
+                _backwardSwapAxisParamNames,
+                Empty,
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _setValueParamNames = new[] { "src" };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="src">Source input to the function.</param>
+        public static NDArray SetValue(double src, NDArray output = null)
+        {
+            var result = Operator.Invoke(
+                "_set_value",
+                _setValueParamNames,
+                new[] { Convert(src) },
+                EmptyInput,
+                output
+            );
+            return result;
+        }
+
+        private static string[] _onehotEncodeParamNames = Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="lhs">Left operand to the function.</param>
         /// <param name="rhs">Right operand to the function.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray OnehotEncode(Symbol lhs, Symbol rhs, NDArray output = null)
+        public static NDArray OnehotEncode(NDArray lhs, NDArray rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "_onehot_encode",
                 _onehotEncodeParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
-        private static string[] _fillElement0indexParamNames = _empty;
+        private static string[] _fillElement0indexParamNames = Empty;
 
         /// <summary>
         /// Fill one element of each line(row for python, column for R/Julia) in lhs according to index indicated by rhs and values indicated by mhs. This function assume rhs uses 0-based index.
@@ -10976,15 +14040,15 @@ namespace Horker.MXNet.Operators
         /// <param name="lhs">Left operand to the function.</param>
         /// <param name="mhs">Middle operand to the function.</param>
         /// <param name="rhs">Right operand to the function.</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
-        public static NDArray FillElement0index(Symbol lhs, Symbol mhs, Symbol rhs, NDArray output = null)
+        public static NDArray FillElement0index(NDArray lhs, NDArray mhs, NDArray rhs, NDArray output = null)
         {
             var result = Operator.Invoke(
                 "fill_element_0index",
                 _fillElement0indexParamNames,
-                _empty,
+                Empty,
                 new[] { lhs.Handle, mhs.Handle, rhs.Handle },
-                output);
+                output
+            );
             return result;
         }
 
@@ -11001,7 +14065,6 @@ namespace Horker.MXNet.Operators
         /// <param name="y1">y1</param>
         /// <param name="c">channel</param>
         /// <param name="size">length of str_img</param>
-        /// <param name="symbol_name">name of the resulting symbol</param>
         public static NDArray Imdecode(NDArrayOrSymbol mean, int index, int x0, int y0, int x1, int y1, int c, int size, NDArray output = null)
         {
             var result = Operator.Invoke(
@@ -11009,8 +14072,10 @@ namespace Horker.MXNet.Operators
                 _imdecodeParamNames,
                 new[] { Convert(index), Convert(x0), Convert(y0), Convert(x1), Convert(y1), Convert(c), Convert(size) },
                 new[] { mean.Handle },
-                output);
+                output
+            );
             return result;
         }
+
     }
 }

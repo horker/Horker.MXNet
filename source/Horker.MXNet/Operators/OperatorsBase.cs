@@ -9,55 +9,60 @@ namespace Horker.MXNet.Operators
 {
     public class OperatorsBase
     {
-        protected static string[] _empty = new string[0];
-        protected static IntPtr[] _emptyInput = new IntPtr[0];
+        internal static readonly string[] Empty = new string[0];
+        internal static readonly IntPtr[] EmptyInput = new IntPtr[0];
 
-        public static string Convert(double value)
+        internal static string Convert(object value)
+        {
+            throw new NotImplementedException("Parameter of object type is not implemented");
+        }
+
+        internal static string Convert(double value)
         {
             return value.ToString();
         }
 
-        public static string Convert(double? value)
+        internal static string Convert(double? value)
         {
             return value.Value.ToString();
         }
 
-        public static string Convert(float value)
+        internal static string Convert(float value)
         {
             return value.ToString();
         }
 
-        public static string Convert(float? value)
+        internal static string Convert(float? value)
         {
             return value.Value.ToString();
         }
 
-        public static string Convert(string value)
+        internal static string Convert(string value)
         {
             return value;
         }
 
-        public static string Convert(int value)
+        internal static string Convert(int value)
         {
             return value.ToString();
         }
 
-        public static string Convert(bool value)
+        internal static string Convert(bool value)
         {
             return value ? "1" : "0";
         }
 
-        public static string Convert(bool? value)
+        internal static string Convert(bool? value)
         {
             return value.HasValue ? (value.Value ? "1" : "0") : "0";
         }
 
-        public static string Convert(Tuple<double> value)
+        internal static string Convert(Tuple<double> value)
         {
             return value.Item1.ToString();
         }
 
-        public static string Convert(Context value)
+        internal static string Convert(Context value)
         {
             if (value == null)
                 value = Context.DefaultContext;
@@ -65,7 +70,7 @@ namespace Horker.MXNet.Operators
             return value.ToString();
         }
 
-        public static string Convert(DType value)
+        internal static string Convert(DType value)
         {
             if (value == null)
                 value = DType.Float16;
@@ -73,7 +78,7 @@ namespace Horker.MXNet.Operators
             return value.ToString();
         }
 
-        public static string Convert(NDShape value)
+        internal static string Convert(NDShape value)
         {
             if (value == null)
                 return "()";

@@ -66,7 +66,8 @@ namespace Horker.MXNet.Core
 
             var result = Operator.Invoke("_zeros",
                 new string[] { "shape", "ctx", "dtype" },
-                new string[] { shape, ctx, type });
+                new string[] { shape, ctx, type },
+                OperatorsBase.EmptyInput);
 
             return result;
         }
@@ -77,7 +78,9 @@ namespace Horker.MXNet.Core
 
             var result = Operator.Invoke("_zeros",
                 new string[] { "shape", "ctx", "dtype" },
-                new string[] { array.Shape, ctx, array.DType });
+                new string[] { array.Shape, ctx, array.DType },
+                OperatorsBase.EmptyInput);
+
 
             return result;
         }
@@ -89,7 +92,8 @@ namespace Horker.MXNet.Core
 
             var result = Operator.Invoke("_ones",
                 new string[] { "shape", "ctx", "dtype" },
-                new string[] { shape, ctx, type });
+                new string[] { shape, ctx, type },
+                OperatorsBase.EmptyInput);
 
             return result;
         }
@@ -100,7 +104,8 @@ namespace Horker.MXNet.Core
 
             var result = Operator.Invoke("_ones",
                 new string[] { "shape", "ctx", "dtype" },
-                new string[] { array.Shape, ctx, array.DType });
+                new string[] { array.Shape, ctx, array.DType },
+                OperatorsBase.EmptyInput);
 
             return result;
         }
