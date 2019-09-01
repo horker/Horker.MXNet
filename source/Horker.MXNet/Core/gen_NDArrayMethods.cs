@@ -218,7 +218,7 @@ namespace Horker.MXNet.Core
         /// <param name="slope">Init slope for the activation. (For leaky and elu only)</param>
         /// <param name="lower_bound">Lower bound of random slope. (For rrelu only)</param>
         /// <param name="upper_bound">Upper bound of random slope. (For rrelu only)</param>
-        public NDArray LeakyReLU(NDArrayOrSymbol gamma, string actType = "leaky", double slope = 0.25, double lowerBound = 0.125, double upperBound = 0.333999991, NDArray output = null)
+        public NDArray LeakyReLU(NDArrayOrSymbol gamma, LeakyReLUActType actType = null, double slope = 0.25, double lowerBound = 0.125, double upperBound = 0.333999991, NDArray output = null)
         {
             return Op.LeakyReLU(this, gamma, actType, slope, lowerBound, upperBound, output);
         }
@@ -280,7 +280,7 @@ namespace Horker.MXNet.Core
         /// </summary>
         /// <param name="data">The input array.</param>
         /// <param name="act_type">Activation function to be applied.</param>
-        public NDArray Activation(string actType, NDArray output = null)
+        public NDArray Activation(ActType actType, NDArray output = null)
         {
             return Op.Activation(this, actType, output);
         }
@@ -448,7 +448,7 @@ namespace Horker.MXNet.Core
         /// <param name="cudnn_off">Turn off cudnn for this layer.</param>
         /// <param name="layout">Set layout for input, output and weight. Empty for
         ///     default layout: NCW for 1d, NCHW for 2d and NCDHW for 3d.NHWC and NDHWC are only supported on GPU.</param>
-        public NDArray Convolution(NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, int numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, int numGroup = 1, long workspace = 1024, bool noBias = false, string cudnnTune = null, bool cudnnOff = false, string layout = null, NDArray output = null)
+        public NDArray Convolution(NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, int numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, int numGroup = 1, long workspace = 1024, bool noBias = false, CuDNNTuneType cudnnTune = null, bool cudnnOff = false, LayoutType layout = null, NDArray output = null)
         {
             return Op.Convolution(this, weight, bias, kernel, numFilter, stride, dilate, pad, numGroup, workspace, noBias, cudnnTune, cudnnOff, layout, output);
         }
@@ -510,7 +510,7 @@ namespace Horker.MXNet.Core
         /// <param name="use_data_lengths">Whether the data lenghts are decided by `data_lengths`. If false, the lengths are equal to the max sequence length.</param>
         /// <param name="use_label_lengths">Whether the label lenghts are decided by `label_lengths`, or derived from `padding_mask`. If false, the lengths are derived from the first occurrence of the value of `padding_mask`. The value of `padding_mask` is ``0`` when first CTC label is reserved for blank, and ``-1`` when last label is reserved for blank. See `blank_label`.</param>
         /// <param name="blank_label">Set the label that is reserved for blank label.If "first", 0-th label is reserved, and label values for tokens in the vocabulary are between ``1`` and ``alphabet_size-1``, and the padding mask is ``-1``. If "last", last label value ``alphabet_size-1`` is reserved for blank label instead, and label values for tokens in the vocabulary are between ``0`` and ``alphabet_size-2``, and the padding mask is ``0``.</param>
-        public NDArray CTCLoss(NDArrayOrSymbol label, NDArrayOrSymbol dataLengths, NDArrayOrSymbol labelLengths, bool useDataLengths = false, bool useLabelLengths = false, string blankLabel = "first", NDArray output = null)
+        public NDArray CTCLoss(NDArrayOrSymbol label, NDArrayOrSymbol dataLengths, NDArrayOrSymbol labelLengths, bool useDataLengths = false, bool useLabelLengths = false, BlankLabelType blankLabel = null, NDArray output = null)
         {
             return Op.CTCLoss(this, label, dataLengths, labelLengths, useDataLengths, useLabelLengths, blankLabel, output);
         }
@@ -554,7 +554,7 @@ namespace Horker.MXNet.Core
         /// <param name="cudnn_tune">Whether to pick convolution algorithm by running performance test.</param>
         /// <param name="cudnn_off">Turn off cudnn for this layer.</param>
         /// <param name="layout">Set layout for input, output and weight. Empty for default layout, NCW for 1d, NCHW for 2d and NCDHW for 3d.NHWC and NDHWC are only supported on GPU.</param>
-        public NDArray Deconvolution(NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, int numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, NDShape adj = null, NDShape targetShape = null, int numGroup = 1, long workspace = 512, bool noBias = true, string cudnnTune = null, bool cudnnOff = false, string layout = null, NDArray output = null)
+        public NDArray Deconvolution(NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, int numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, NDShape adj = null, NDShape targetShape = null, int numGroup = 1, long workspace = 512, bool noBias = true, CuDNNTuneType cudnnTune = null, bool cudnnOff = false, LayoutType layout = null, NDArray output = null)
         {
             return Op.Deconvolution(this, weight, bias, kernel, numFilter, stride, dilate, pad, adj, targetShape, numGroup, workspace, noBias, cudnnTune, cudnnOff, layout, output);
         }
@@ -818,7 +818,7 @@ namespace Horker.MXNet.Core
         /// <param name="count_include_pad">Only used for AvgPool, specify whether to count padding elements for averagecalculation. For example, with a 5*5 kernel on a 3*3 corner of a image,the sum of the 9 valid elements will be divided by 25 if this is set to true,or it will be divided by 9 if this is set to false. Defaults to true.</param>
         /// <param name="layout">Set layout for input and output. Empty for
         ///     default layout: NCW for 1d, NCHW for 2d and NCDHW for 3d.</param>
-        public NDArray Pooling(NDShape kernel = null, string poolType = "max", bool globalPool = false, bool cudnnOff = false, string poolingConvention = "valid", NDShape stride = null, NDShape pad = null, int? pValue = null, bool? countIncludePad = null, string layout = null, NDArray output = null)
+        public NDArray Pooling(NDShape kernel = null, PoolType poolType = null, bool globalPool = false, bool cudnnOff = false, string poolingConvention = "valid", NDShape stride = null, NDShape pad = null, int? pValue = null, bool? countIncludePad = null, LayoutType layout = null, NDArray output = null)
         {
             return Op.Pooling(this, kernel, poolType, globalPool, cudnnOff, poolingConvention, stride, pad, pValue, countIncludePad, layout, output);
         }
@@ -854,7 +854,7 @@ namespace Horker.MXNet.Core
         /// <param name="axis">The axis along which to compute softmax.</param>
         /// <param name="temperature">Temperature parameter in softmax</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to the same as input's dtype if not defined (dtype=None).</param>
-        public NDArray Softmax(int axis = -1, double? temperature = null, string dtype = null, NDArray output = null)
+        public NDArray Softmax(int axis = -1, double? temperature = null, DType dtype = null, NDArray output = null)
         {
             return Op.Softmax(this, axis, temperature, dtype, output);
         }
@@ -891,7 +891,7 @@ namespace Horker.MXNet.Core
         /// <param name="axis">The axis along which to compute softmax.</param>
         /// <param name="temperature">Temperature parameter in softmax</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to the same as input's dtype if not defined (dtype=None).</param>
-        public NDArray Softmin(int axis = -1, double? temperature = null, string dtype = null, NDArray output = null)
+        public NDArray Softmin(int axis = -1, double? temperature = null, DType dtype = null, NDArray output = null)
         {
             return Op.Softmin(this, axis, temperature, dtype, output);
         }
@@ -918,7 +918,7 @@ namespace Horker.MXNet.Core
         /// <param name="axis">The axis along which to compute softmax.</param>
         /// <param name="temperature">Temperature parameter in softmax</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to the same as input's dtype if not defined (dtype=None).</param>
-        public NDArray LogSoftmax(int axis = -1, double? temperature = null, string dtype = null, NDArray output = null)
+        public NDArray LogSoftmax(int axis = -1, double? temperature = null, DType dtype = null, NDArray output = null)
         {
             return Op.LogSoftmax(this, axis, temperature, dtype, output);
         }
@@ -1601,7 +1601,7 @@ namespace Horker.MXNet.Core
         /// <param name="shape">Shape to be sampled from each random distribution.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         /// <param name="high">Upper bounds of the distributions.</param>
-        public NDArray SampleUniform(NDArrayOrSymbol high, NDShape shape = null, string dtype = null, NDArray output = null)
+        public NDArray SampleUniform(NDArrayOrSymbol high, NDShape shape = null, DType dtype = null, NDArray output = null)
         {
             return Op.SampleUniform(this, high, shape, dtype, output);
         }
@@ -1640,7 +1640,7 @@ namespace Horker.MXNet.Core
         /// <param name="shape">Shape to be sampled from each random distribution.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         /// <param name="sigma">Standard deviations of the distributions.</param>
-        public NDArray SampleNormal(NDArrayOrSymbol sigma, NDShape shape = null, string dtype = null, NDArray output = null)
+        public NDArray SampleNormal(NDArrayOrSymbol sigma, NDShape shape = null, DType dtype = null, NDArray output = null)
         {
             return Op.SampleNormal(this, sigma, shape, dtype, output);
         }
@@ -1679,7 +1679,7 @@ namespace Horker.MXNet.Core
         /// <param name="shape">Shape to be sampled from each random distribution.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         /// <param name="beta">Beta (scale) parameters of the distributions.</param>
-        public NDArray SampleGamma(NDArrayOrSymbol beta, NDShape shape = null, string dtype = null, NDArray output = null)
+        public NDArray SampleGamma(NDArrayOrSymbol beta, NDShape shape = null, DType dtype = null, NDArray output = null)
         {
             return Op.SampleGamma(this, beta, shape, dtype, output);
         }
@@ -1716,7 +1716,7 @@ namespace Horker.MXNet.Core
         /// <param name="lam">Lambda (rate) parameters of the distributions.</param>
         /// <param name="shape">Shape to be sampled from each random distribution.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
-        public NDArray SampleExponential(NDShape shape = null, string dtype = null, NDArray output = null)
+        public NDArray SampleExponential(NDShape shape = null, DType dtype = null, NDArray output = null)
         {
             return Op.SampleExponential(this, shape, dtype, output);
         }
@@ -1755,7 +1755,7 @@ namespace Horker.MXNet.Core
         /// <param name="lam">Lambda (rate) parameters of the distributions.</param>
         /// <param name="shape">Shape to be sampled from each random distribution.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
-        public NDArray SamplePoisson(NDShape shape = null, string dtype = null, NDArray output = null)
+        public NDArray SamplePoisson(NDShape shape = null, DType dtype = null, NDArray output = null)
         {
             return Op.SamplePoisson(this, shape, dtype, output);
         }
@@ -1796,7 +1796,7 @@ namespace Horker.MXNet.Core
         /// <param name="shape">Shape to be sampled from each random distribution.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         /// <param name="p">Failure probabilities in each experiment.</param>
-        public NDArray SampleNegativeBinomial(NDArrayOrSymbol p, NDShape shape = null, string dtype = null, NDArray output = null)
+        public NDArray SampleNegativeBinomial(NDArrayOrSymbol p, NDShape shape = null, DType dtype = null, NDArray output = null)
         {
             return Op.SampleNegativeBinomial(this, p, shape, dtype, output);
         }
@@ -1837,7 +1837,7 @@ namespace Horker.MXNet.Core
         /// <param name="shape">Shape to be sampled from each random distribution.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         /// <param name="alpha">Alpha (dispersion) parameters of the distributions.</param>
-        public NDArray SampleGeneralizedNegativeBinomial(NDArrayOrSymbol alpha, NDShape shape = null, string dtype = null, NDArray output = null)
+        public NDArray SampleGeneralizedNegativeBinomial(NDArrayOrSymbol alpha, NDShape shape = null, DType dtype = null, NDArray output = null)
         {
             return Op.SampleGeneralizedNegativeBinomial(this, alpha, shape, dtype, output);
         }
@@ -1877,7 +1877,7 @@ namespace Horker.MXNet.Core
         /// <param name="shape">Shape to be sampled from each random distribution.</param>
         /// <param name="get_prob">Whether to also return the log probability of sampled result. This is usually used for differentiating through stochastic variables, e.g. in reinforcement learning.</param>
         /// <param name="dtype">DType of the output in case this can't be inferred.</param>
-        public NDArray SampleMultinomial(NDShape shape = null, bool getProb = false, string dtype = "int32", NDArray output = null)
+        public NDArray SampleMultinomial(NDShape shape = null, bool getProb = false, DType dtype = null, NDArray output = null)
         {
             return Op.SampleMultinomial(this, shape, getProb, dtype, output);
         }
@@ -2240,7 +2240,7 @@ namespace Horker.MXNet.Core
         /// <param name="normalization">Normalizes the gradient.</param>
         /// <param name="out_grad">Multiplies gradient with output gradient element-wise.</param>
         /// <param name="smooth_alpha">Constant for computing a label smoothed version of cross-entropyfor the backwards pass.  This constant gets subtracted from theone-hot encoding of the gold label and distributed uniformly toall other labels.</param>
-        public NDArray SoftmaxOutput(NDArrayOrSymbol label, double gradScale = 1, double ignoreLabel = -1, bool multiOutput = false, bool useIgnore = false, bool preserveShape = false, string normalization = "null", bool outGrad = false, double smoothAlpha = 0, NDArray output = null)
+        public NDArray SoftmaxOutput(NDArrayOrSymbol label, double gradScale = 1, double ignoreLabel = -1, bool multiOutput = false, bool useIgnore = false, bool preserveShape = false, NormalizationType normalization = null, bool outGrad = false, double smoothAlpha = 0, NDArray output = null)
         {
             return Op.SoftmaxOutput(this, label, gradScale, ignoreLabel, multiOutput, useIgnore, preserveShape, normalization, outGrad, smoothAlpha, output);
         }
@@ -2286,7 +2286,7 @@ namespace Horker.MXNet.Core
         /// </summary>
         /// <param name="data">The input.</param>
         /// <param name="dtype">Output data type.</param>
-        public NDArray AmpCast(string dtype, NDArray output = null)
+        public NDArray AmpCast(DType dtype, NDArray output = null)
         {
             return Op.AmpCast(this, dtype, output);
         }
@@ -2798,7 +2798,7 @@ namespace Horker.MXNet.Core
         ///       and the matrix norms of these matrices are computed.</param>
         /// <param name="out_dtype">The data type of the output.</param>
         /// <param name="keepdims">If this is set to `True`, the reduced axis is left in the result as dimension with size one.</param>
-        public NDArray Norm(int ord = 2, NDShape axis = null, string outDtype = null, bool keepdims = false, NDArray output = null)
+        public NDArray Norm(int ord = 2, NDShape axis = null, DType outDtype = null, bool keepdims = false, NDArray output = null)
         {
             return Op.Norm(this, ord, axis, outDtype, keepdims, output);
         }
@@ -2846,7 +2846,7 @@ namespace Horker.MXNet.Core
         /// </summary>
         /// <param name="data">The input.</param>
         /// <param name="stype">Output storage type.</param>
-        public NDArray CastStorage(string stype, NDArray output = null)
+        public NDArray CastStorage(SType stype, NDArray output = null)
         {
             return Op.CastStorage(this, stype, output);
         }
@@ -3009,7 +3009,7 @@ namespace Horker.MXNet.Core
         /// <param name="transpose_a">If true then transpose the first input before dot.</param>
         /// <param name="transpose_b">If true then transpose the second input before dot.</param>
         /// <param name="forward_stype">The desired storage type of the forward output given by user, if thecombination of input storage types and this hint does not matchany implemented ones, the dot operator will perform fallback operationand still produce an output of the desired storage type.</param>
-        public NDArray Dot(NDArrayOrSymbol rhs, bool transposeA = false, bool transposeB = false, string forwardStype = null, NDArray output = null)
+        public NDArray Dot(NDArrayOrSymbol rhs, bool transposeA = false, bool transposeB = false, SType forwardStype = null, NDArray output = null)
         {
             return Op.Dot(this, rhs, transposeA, transposeB, forwardStype, output);
         }
@@ -3035,7 +3035,7 @@ namespace Horker.MXNet.Core
         /// <param name="transpose_a">If true then transpose the first input before dot.</param>
         /// <param name="transpose_b">If true then transpose the second input before dot.</param>
         /// <param name="forward_stype">The desired storage type of the forward output given by user, if thecombination of input storage types and this hint does not matchany implemented ones, the dot operator will perform fallback operationand still produce an output of the desired storage type.</param>
-        public NDArray BatchDot(NDArrayOrSymbol rhs, bool transposeA = false, bool transposeB = false, string forwardStype = null, NDArray output = null)
+        public NDArray BatchDot(NDArrayOrSymbol rhs, bool transposeA = false, bool transposeB = false, SType forwardStype = null, NDArray output = null)
         {
             return Op.BatchDot(this, rhs, transposeA, transposeB, forwardStype, output);
         }
@@ -4501,7 +4501,7 @@ namespace Horker.MXNet.Core
         /// </summary>
         /// <param name="data">The input.</param>
         /// <param name="dtype">Output data type.</param>
-        public NDArray Cast(string dtype, NDArray output = null)
+        public NDArray Cast(DType dtype, NDArray output = null)
         {
             return Op.Cast(this, dtype, output);
         }
@@ -5745,7 +5745,7 @@ namespace Horker.MXNet.Core
         /// <param name="output_dim">Dimension of the embedding vectors.</param>
         /// <param name="dtype">Data type of weight.</param>
         /// <param name="sparse_grad">Compute row sparse gradient in the backward calculation. If set to True, the grad's storage type is row_sparse.</param>
-        public NDArray Embedding(NDArrayOrSymbol weight, int inputDim, int outputDim, string dtype = "float32", bool sparseGrad = false, NDArray output = null)
+        public NDArray Embedding(NDArrayOrSymbol weight, int inputDim, int outputDim, DType dtype = null, bool sparseGrad = false, NDArray output = null)
         {
             return Op.Embedding(this, weight, inputDim, outputDim, dtype, sparseGrad, output);
         }
@@ -5886,7 +5886,7 @@ namespace Horker.MXNet.Core
         /// <param name="on_value">The value assigned to the locations represented by indices.</param>
         /// <param name="off_value">The value assigned to the locations not represented by indices.</param>
         /// <param name="dtype">DType of the output</param>
-        public NDArray OneHot(int depth, double onValue = 1, double offValue = 0, string dtype = "float32", NDArray output = null)
+        public NDArray OneHot(int depth, double onValue = 1, double offValue = 0, DType dtype = null, NDArray output = null)
         {
             return Op.OneHot(this, depth, onValue, offValue, dtype, output);
         }
@@ -7484,7 +7484,7 @@ namespace Horker.MXNet.Core
         ///  "value" means to return the top k values, "indices" means to return the indices of the top k values, "mask" means to return a mask array containing 0 and 1. 1 means the top k values. "both" means to return a list of both values and indices of top k elements.</param>
         /// <param name="is_ascend">Whether to choose k largest or k smallest elements. Top K largest elements will be chosen if set to false.</param>
         /// <param name="dtype">DType of the output indices when ret_typ is "indices" or "both". An error will be raised if the selected data type cannot precisely represent the indices.</param>
-        public NDArray Topk(int? axis = -1, int k = 1, string retTyp = "indices", bool isAscend = false, string dtype = "float32", NDArray output = null)
+        public NDArray Topk(int? axis = -1, int k = 1, RetType retTyp = null, bool isAscend = false, DType dtype = null, NDArray output = null)
         {
             return Op.Topk(this, axis, k, retTyp, isAscend, dtype, output);
         }
@@ -7553,7 +7553,7 @@ namespace Horker.MXNet.Core
         /// <param name="axis">Axis along which to sort the input tensor. If not given, the flattened array is used. Default is -1.</param>
         /// <param name="is_ascend">Whether to sort in ascending or descending order.</param>
         /// <param name="dtype">DType of the output indices. It is only valid when ret_typ is "indices" or "both". An error will be raised if the selected data type cannot precisely represent the indices.</param>
-        public NDArray Argsort(int? axis = -1, bool isAscend = true, string dtype = "float32", NDArray output = null)
+        public NDArray Argsort(int? axis = -1, bool isAscend = true, DType dtype = null, NDArray output = null)
         {
             return Op.Argsort(this, axis, isAscend, dtype, output);
         }
@@ -7778,7 +7778,7 @@ namespace Horker.MXNet.Core
         /// <param name="cudnn_off">Turn off cudnn for this layer.</param>
         /// <param name="layout">Set layout for input, output and weight. Empty for
         ///     default layout: NCHW for 2d and NCDHW for 3d.</param>
-        public NDArray ConvolutionV1(NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, int numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, int numGroup = 1, long workspace = 1024, bool noBias = false, string cudnnTune = null, bool cudnnOff = false, string layout = null, NDArray output = null)
+        public NDArray ConvolutionV1(NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, int numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, int numGroup = 1, long workspace = 1024, bool noBias = false, CuDNNTuneType cudnnTune = null, bool cudnnOff = false, LayoutType layout = null, NDArray output = null)
         {
             return Op.ConvolutionV1(this, weight, bias, kernel, numFilter, stride, dilate, pad, numGroup, workspace, noBias, cudnnTune, cudnnOff, layout, output);
         }
@@ -7838,7 +7838,7 @@ namespace Horker.MXNet.Core
         /// <param name="data">Input data to the function.</param>
         /// <param name="transform_type">The type of transformation. For `affine`, input data should be an affine matrix of size (batch, 6). For `warp`, input data should be an optical flow of size (batch, 2, h, w).</param>
         /// <param name="target_shape">Specifies the output shape (H, W). This is required if transformation type is `affine`. If transformation type is `warp`, this parameter is ignored.</param>
-        public NDArray GridGenerator(string transformType, NDShape targetShape = null, NDArray output = null)
+        public NDArray GridGenerator(TransformType transformType, NDShape targetShape = null, NDArray output = null)
         {
             return Op.GridGenerator(this, transformType, targetShape, output);
         }
@@ -8010,7 +8010,7 @@ namespace Horker.MXNet.Core
         /// <param name="pooling_convention">Pooling convention to be applied.</param>
         /// <param name="stride">stride: for pooling (y, x) or (d, y, x)</param>
         /// <param name="pad">pad for pooling: (y, x) or (d, y, x)</param>
-        public NDArray PoolingV1(NDShape kernel = null, string poolType = "max", bool globalPool = false, string poolingConvention = "valid", NDShape stride = null, NDShape pad = null, NDArray output = null)
+        public NDArray PoolingV1(NDShape kernel = null, PoolType poolType = null, bool globalPool = false, string poolingConvention = "valid", NDShape stride = null, NDShape pad = null, NDArray output = null)
         {
             return Op.PoolingV1(this, kernel, poolType, globalPool, poolingConvention, stride, pad, output);
         }
@@ -8299,7 +8299,7 @@ namespace Horker.MXNet.Core
         /// <param name="transform_type">transformation type</param>
         /// <param name="sampler_type">sampling type</param>
         /// <param name="cudnn_off">whether to turn cudnn off</param>
-        public NDArray SpatialTransformer(NDArrayOrSymbol loc, string transformType, string samplerType, NDShape targetShape = null, bool? cudnnOff = null, NDArray output = null)
+        public NDArray SpatialTransformer(NDArrayOrSymbol loc, TransformType transformType, SampleType samplerType, NDShape targetShape = null, bool? cudnnOff = null, NDArray output = null)
         {
             return Op.SpatialTransformer(this, loc, transformType, samplerType, targetShape, cudnnOff, output);
         }

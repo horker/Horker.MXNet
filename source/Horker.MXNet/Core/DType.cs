@@ -15,7 +15,8 @@ namespace Horker.MXNet.Core
         UInt8 = 3,
         Int32 = 4,
         Int8 = 5,
-        Int64 = 6
+        Int64 = 6,
+        Auto = 7 // Used as operator arguments
     }
 
     public class DType
@@ -27,7 +28,8 @@ namespace Horker.MXNet.Core
             "uint8",
             "int32",
             "int8",
-            "int64"
+            "int64",
+            "auto"
         };
 
         private static readonly Type[] _types = new[]
@@ -38,7 +40,8 @@ namespace Horker.MXNet.Core
             typeof(byte),
             typeof(int),
             typeof(sbyte),
-            typeof(long)
+            typeof(long),
+            null
         };
 
         private static DType[] _instances;
@@ -57,6 +60,7 @@ namespace Horker.MXNet.Core
             Int32 = _instances[4];
             Int8 = _instances[5];
             Int64 = _instances[6];
+            Auto = _instances[7];
 
             DefaultDType = _instances[0];
         }
@@ -68,6 +72,7 @@ namespace Horker.MXNet.Core
         public static DType Int32 { get; private set; }
         public static DType Int8 { get; private set; }
         public static DType Int64 { get; private set; }
+        public static DType Auto { get; private set; }
 
         public static DType DefaultDType { get; set; }
 

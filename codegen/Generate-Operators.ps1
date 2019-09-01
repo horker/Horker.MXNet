@@ -91,21 +91,51 @@ $TypeMap = @{
     "" = "double?" # experimental
 }
 
+$EnumMap = @{
+    "act_type" = "ActType"
+    "blank_label" = "BlankLabelType"
+    "cudnn_tune" = "CuDNNTuneType"
+    "dtype" = "DType"
+    "format" ="FormatType"
+    "forward_stype" = "SType"
+    "in_format" = "FormatType"
+    "layout" = "LayoutType"
+    "multi_input_mode" = "MultiInputType"
+    "normalization" = "NormalizationType"
+    "out_dtype" = "DType"
+    "out_format" = "FormatType"
+    "out_type" = "DType"
+    "pool_type" = "PoolType"
+    "pooling_type_convention" = "PoolingTypeConvention"
+    "ret_typ" = "RetType"
+    "sample_type" = "SampleType"
+    "sampler_type" = "SampleType"
+    "stype" = "SType"
+    "transform_type" = "TransformType"
+}
+
 function Convert-TypeName {
     param(
-        [string]$ArgTypeInfos
+        [string]$OpName,
+        [string]$ArgName,
+        [string]$ArgType
     )
 
-    if ($ArgTypeInfos.StartsWith("{")) {
+    if ($ArgType.StartsWith("{")) {
+        if ($ArgName -eq "act_type" -and $OpName -eq "LeakyReLU") {
+            return "LeakyReLUActType"
+        }
+        if ($EnumMap.ContainsKey($ArgName)) {
+            return $EnumMap[$ArgName]
+        }
         return "string"
     }
 
-    if ($ArgTypeInfos.IndexOf("[]") -gt 0) {
+    if ($ArgType.IndexOf("[]") -gt 0) {
         throw (New-Object ApplicationException "Array parameter is not supported: $ArgTypeInfos")
     }
 
-    $name = ($ArgTypeInfos -split ",")[0]
-    $TypeMap[$name]
+    $TypeMap[$ArgType]
 }
 
 ############################################################
@@ -212,7 +242,7 @@ function Get-FixedParamNamesString {
         return "Empty"
     }
 
-    "new[] { `"" + ($names -join "`", `"") + "`" }"
+    "new string[] { `"" + ($names -join "`", `"") + "`" }"
 }
 
 ############################################################
@@ -238,14 +268,24 @@ function Get-ArgumentsString {
         $Op
     )
 
-    $args = @(Get-Arguments $Op)
+    $args = @()
+    for ($i = 0; $i -lt $Op.NumArgs; ++$i) {
+        $name = $Op.ArgNames[$i]
+        $typeInfo = $Op.ArgTypeInfos[$i]
+        if (-not $name.EndsWith("?") -and -not (Test-Input $typeInfo)) {
+            $n = Convert-SnailCaseToCamelCase $name
+            if (-not $Op.ArgTypeInfos[$i].StartsWith("{")) {
+                $n = "Convert($n)"
+            }
+            $args += $n
+        }
+    }
 
     if ($args.Length -eq 0) {
         return "Empty"
     }
 
-    $args = $args | foreach { "Convert($_)" }
-    "new[] { " + ($args -join ", ") + " }"
+    "new string[] { " + ($args -join ", ") + " }"
 }
 
 ############################################################
@@ -288,7 +328,7 @@ function Get-InputsString {
     }
 
     $in = $in | foreach { $_ + ".Handle" }
-    "new[] { " + ($in -join ", ") + " }"
+    "new IntPtr[] { " + ($in -join ", ") + " }"
 }
 
 ############################################################
@@ -322,6 +362,10 @@ function Get-DefaultValueString {
     }
 
     if ($Type -eq "NDShape" -and ($DefaultValue -eq "[]" -or $DefaultValue -eq "[0 0]")) {
+        return "null"
+    }
+
+    if ($Type.EndsWith("Type")) {
         return "null"
     }
 
@@ -364,7 +408,7 @@ function Get-SignatureString {
         $name = $Op.ArgNames[$i]
         $type, $req, $defaultValue = Split-ArgTypeInfos $Op.ArgTypeInfos[$i]
 
-        $t = Convert-TypeName $type
+        $t = Convert-TypeName $Op.Name $name $type
         $param = $t + " " + (Convert-SnailCaseToCamelCase $name)
         if ([string]::IsNullOrEmpty($defaultValue)) {
             $required += $param
@@ -482,9 +526,6 @@ namespace Horker.MXNet.Core
 "@
 
     foreach ($op in $ops) {
-        $opName = $op.Name
-        Write-Host $opName
-
         if ($op.ArgTypeInfos.Length -eq 0 -or -not (Test-Input -NoSymbol $op.ArgTypeInfos[0])) {
             Write-Host "$($op.Name) does not have NDArray or NDArrayOrSymbol as the first parameter"
             continue
@@ -512,4 +553,4 @@ namespace Horker.MXNet.Core
 ############################################################
 
 Generate-Op | Set-Content $opOutFile
-Generate-NDArrayMethods | Set-Content $ndArrayMethodsOutFile
+#Generate-NDArrayMethods | Set-Content $ndArrayMethodsOutFile

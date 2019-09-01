@@ -86,6 +86,11 @@
     <Compile Include="Core\gen_CApi.cs" />
     <Compile Include="Core\gen_CApiDeclaration.cs" />
     <Compile Include="Core\gen_NDArrayMethods.cs" />
+    <Compile Include="Operators\Enumerations.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Enumerations.tt</DependentUpon>
+    </Compile>
     <Compile Include="Operators\gen_Op.cs" />
     <Compile Include="Core\NDArrayExtensions.cs" />
     <Compile Include="Core\NDArrayOperators.cs">
@@ -115,6 +120,11 @@
     <Content Include="Core\NDArrayOperators.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>NDArrayOperators.cs</LastGenOutput>
+    </Content>
+    <Content Include="Operators\Enumerations.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Enumerations.cs</LastGenOutput>
+      <LastOutputs>.\Enumerations1.cs</LastOutputs>
     </Content>
   </ItemGroup>
   <ItemGroup>

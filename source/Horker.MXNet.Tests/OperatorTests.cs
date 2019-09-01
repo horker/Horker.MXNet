@@ -39,17 +39,16 @@ namespace Horker.MXNet.Tests
             var values = result.ToArray<int>();
             Assert.Equal(new int[] { 5, 7, 9 }, values);
         }
-/*
+
         [Fact]
         public void TestOperatorDot()
         {
             NDArray a = NDArray.FromArray(new double[] { 1, 2 }, new int[] { 1, 2 });
             NDArray b = NDArray.FromArray(new double[] { 4, 5 }, new int[] { 2, 1 });
-            var result = Op.Dot(a, b);
+            var result = Op.Dot(a, b, false, false, SType.Default);
 
             var values = result.ToArray<double>();
             Assert.Equal(new double[] { 1 * 4 + 2 * 5 }, values);
         }
-        */
     }
 }
