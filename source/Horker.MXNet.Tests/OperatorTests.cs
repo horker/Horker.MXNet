@@ -45,7 +45,7 @@ namespace Horker.MXNet.Tests
         {
             NDArray a = NDArray.FromArray(new double[] { 1, 2 }, new int[] { 1, 2 });
             NDArray b = NDArray.FromArray(new double[] { 4, 5 }, new int[] { 2, 1 });
-            var result = Op.Dot(a, b, false, false, SType.Default);
+            var result = Op.Dot(a, b);
 
             var values = result.ToArray<double>();
             Assert.Equal(new double[] { 1 * 4 + 2 * 5 }, values);

@@ -5,13 +5,13 @@ $opOutFile = "$PSScriptRoot\..\source\Horker.MXNet\Operators\gen_Op.cs"
 $ndArrayMethodsOutFile = "$PSScriptRoot\..\source\Horker.MXNet\Core\gen_NDArrayMethods.cs"
 
 ############################################################
-# Convert-SnailCaseToCamelCase function
+# ConvertTo-CamelCase function
 ############################################################
 
 $cultureInfo = [Threading.Thread]::CurrentThread.CurrentCulture
 $textInfo = $cultureInfo.TextInfo
 
-function Convert-SnailCaseToCamelCase {
+function ConvertTo-CamelCase {
     param(
         [string]$Name,
         [switch]$Pascal
@@ -43,6 +43,18 @@ function Convert-SnailCaseToCamelCase {
     }
 
     $builder.ToString()
+}
+
+############################################################
+# Test-Omittable function
+############################################################
+
+function Test-Omittable {
+    param(
+        [string]$ArgTypeInfos
+    )
+
+    $ArgTypeInfos -match "default\s*=\s*'?None'?"
 }
 
 ############################################################
@@ -191,10 +203,10 @@ function Get-ParamNames {
         if (-not $name.EndsWith("?")) {
             $typeInfo = $Op.ArgTypeInfos[$i]
             if ($typeInfo -match "Default") {
-                $optional += Convert-SnailCaseToCamelCase $name
+                $optional += ConvertTo-CamelCase $name
             }
             else {
-                $required += Convert-SnailCaseToCamelCase $name
+                $required += ConvertTo-CamelCase $name
             }
         }
     }
@@ -219,9 +231,9 @@ function Get-FixedParamNames {
     for ($i = 0; $i -lt $Op.NumArgs; ++$i) {
         $name = $Op.ArgNames[$i]
         $typeInfo = $Op.ArgTypeInfos[$i]
-        if (-not $name.EndsWith("?") -and -not (Test-Input $typeInfo)) {
+        if (-not $name.EndsWith("?") -and -not (Test-Input $typeInfo) -and -not (Test-Omittable $typeInfo)) {
             if ($CamelCase) {
-                Convert-SnailCaseToCamelCase $name
+                ConvertTo-CamelCase $name
             }
             else {
                 $name
@@ -257,8 +269,8 @@ function Get-Arguments {
     for ($i = 0; $i -lt $Op.NumArgs; ++$i) {
         $name = $Op.ArgNames[$i]
         $typeInfo = $Op.ArgTypeInfos[$i]
-        if (-not $name.EndsWith("?") -and -not (Test-Input $typeInfo)) {
-            Convert-SnailCaseToCamelCase $name
+        if (-not $name.EndsWith("?") -and -not (Test-Input $typeInfo) -and -not (Test-Omittable $typeInfo)) {
+            ConvertTo-CamelCase $name
         }
     }
 }
@@ -272,8 +284,8 @@ function Get-ArgumentsString {
     for ($i = 0; $i -lt $Op.NumArgs; ++$i) {
         $name = $Op.ArgNames[$i]
         $typeInfo = $Op.ArgTypeInfos[$i]
-        if (-not $name.EndsWith("?") -and -not (Test-Input $typeInfo)) {
-            $n = Convert-SnailCaseToCamelCase $name
+        if (-not $name.EndsWith("?") -and -not (Test-Input $typeInfo) -and -not (Test-Omittable $typeInfo)) {
+            $n = ConvertTo-CamelCase $name
             if (-not $Op.ArgTypeInfos[$i].StartsWith("{")) {
                 $n = "Convert($n)"
             }
@@ -286,6 +298,20 @@ function Get-ArgumentsString {
     }
 
     "new string[] { " + ($args -join ", ") + " }"
+}
+
+function Get-SingleArgumentString {
+    param(
+        [string]$ArgName,
+        [string]$ArgTypeInfos
+    )
+
+    $n = ConvertTo-CamelCase $ArgName
+    if (-not $ArgTypeInfos.StartsWith("{")) {
+        $n = "Convert($n)"
+    }
+
+    $n
 }
 
 ############################################################
@@ -305,7 +331,7 @@ function Get-Inputs {
         }
 
         $name = $Op.ArgNames[$i]
-        $results += Convert-SnailCaseToCamelCase $name
+        $results += ConvertTo-CamelCase $name
     }
 
     $results
@@ -409,7 +435,7 @@ function Get-SignatureString {
         $type, $req, $defaultValue = Split-ArgTypeInfos $Op.ArgTypeInfos[$i]
 
         $t = Convert-TypeName $Op.Name $name $type
-        $param = $t + " " + (Convert-SnailCaseToCamelCase $name)
+        $param = $t + " " + (ConvertTo-CamelCase $name)
         if ([string]::IsNullOrEmpty($defaultValue)) {
             $required += $param
         }
@@ -465,6 +491,7 @@ function Generate-Op {
 
 @"
 using System;
+using System.Collections.Generic;
 using Horker.MXNet.Core;
 
 namespace Horker.MXNet.Operators
@@ -476,9 +503,51 @@ namespace Horker.MXNet.Operators
     foreach ($op in $ops) {
         $opName = $op.Name
 
-        $camelName = Convert-SnailCaseToCamelCase $op.Name
-        $pascalName = Convert-SnailCaseToCamelCase $op.Name -Pascal
+        $camelName = ConvertTo-CamelCase $op.Name
+        $pascalName = ConvertTo-CamelCase $op.Name -Pascal
+
+        $hasOmittable = !!($op.argTypeInfos | where { Test-Omittable $_ })
+
         try {
+            if ($hasOmittable) {
+                # When there are omittable parameters.
+@"
+        private static string[] _$($camelName)ParamNames = $(Get-FixedParamNamesString $op);
+
+        $(Get-DescriptionString $op)
+        public static NDArray $pascalName($(Get-SignatureString $op))
+        {
+            var keys = new List<string>(_$($camelName)ParamNames);
+            var values = new List<string>($(Get-ArgumentsString $op -CamelCase));
+
+"@
+                for ($i = 0; $i -lt $op.NumArgs; ++$i) {
+                    if (Test-Omittable $op.ArgTypeInfos[$i]) {
+@"
+            if ($(ConvertTo-CamelCase $op.ArgNames[$i]) != null) {
+                keys.Add("$($op.ArgNames[$i])");
+                values.Add($(Get-SingleArgumentString $op.ArgNames[$i] $op.ArgTypeInfos[$i]));
+            }
+
+"@
+                    }
+
+                }
+@"
+            var result = Operator.Invoke(
+                "$opName",
+                keys.ToArray(),
+                values.ToArray(),
+                $(Get-InputsString $op),
+                output
+            );
+            return result;
+        }
+
+"@
+            }
+            else {
+                # When all parameters are not omittable; Generate a simpler code.
 @"
         private static string[] _$($camelName)ParamNames = $(Get-FixedParamNamesString $op);
 
@@ -496,6 +565,7 @@ namespace Horker.MXNet.Operators
         }
 
 "@
+            }
         }
         catch [ApplicationException] {
             write-host "Skip: $($_.Exception.Message)"
@@ -531,7 +601,7 @@ namespace Horker.MXNet.Core
             continue
         }
 
-        $pascalName = Convert-SnailCaseToCamelCase $op.Name -Pascal
+        $pascalName = ConvertTo-CamelCase $op.Name -Pascal
 @"
         $(Get-DescriptionString $op)
         public NDArray $pascalName($(Get-SignatureString -SkipFirst $op))

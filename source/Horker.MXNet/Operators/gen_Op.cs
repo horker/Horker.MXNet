@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Horker.MXNet.Core;
 
 namespace Horker.MXNet.Operators
@@ -701,7 +702,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _ConvolutionParamNames = new string[] { "kernel", "stride", "dilate", "pad", "num_filter", "num_group", "workspace", "no_bias", "cudnn_tune", "cudnn_off", "layout" };
+        private static string[] _ConvolutionParamNames = new string[] { "kernel", "stride", "dilate", "pad", "num_filter", "num_group", "workspace", "no_bias", "cudnn_off" };
 
         /// <summary>
         /// Compute *N*-D convolution on *(N+2)*-D input.
@@ -797,10 +798,23 @@ namespace Horker.MXNet.Operators
         ///     default layout: NCW for 1d, NCHW for 2d and NCDHW for 3d.NHWC and NDHWC are only supported on GPU.</param>
         public static NDArray Convolution(NDArrayOrSymbol data, NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, int numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, int numGroup = 1, long workspace = 1024, bool noBias = false, CuDNNTuneType cudnnTune = null, bool cudnnOff = false, LayoutType layout = null, NDArray output = null)
         {
+            var keys = new List<string>(_ConvolutionParamNames);
+            var values = new List<string>(new string[] { Convert(kernel), Convert(stride), Convert(dilate), Convert(pad), Convert(numFilter), Convert(numGroup), Convert(workspace), Convert(noBias), Convert(cudnnOff) });
+
+            if (cudnnTune != null) {
+                keys.Add("cudnn_tune");
+                values.Add(cudnnTune);
+            }
+
+            if (layout != null) {
+                keys.Add("layout");
+                values.Add(layout);
+            }
+
             var result = Operator.Invoke(
                 "Convolution",
-                _ConvolutionParamNames,
-                new string[] { Convert(kernel), Convert(stride), Convert(dilate), Convert(pad), Convert(numFilter), Convert(numGroup), Convert(workspace), Convert(noBias), cudnnTune, Convert(cudnnOff), layout },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle, weight.Handle, bias.Handle },
                 output
             );
@@ -958,7 +972,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _DeconvolutionParamNames = new string[] { "kernel", "stride", "dilate", "pad", "adj", "target_shape", "num_filter", "num_group", "workspace", "no_bias", "cudnn_tune", "cudnn_off", "layout" };
+        private static string[] _DeconvolutionParamNames = new string[] { "kernel", "stride", "dilate", "pad", "adj", "target_shape", "num_filter", "num_group", "workspace", "no_bias", "cudnn_off" };
 
         /// <summary>
         /// Computes 1D or 2D transposed convolution (aka fractionally strided convolution) of the input tensor. This operation can be seen as the gradient of Convolution operation with respect to its input. Convolution usually reduces the size of the input. Transposed convolution works the other way, going from a smaller input to a larger output while preserving the connectivity pattern.
@@ -981,10 +995,23 @@ namespace Horker.MXNet.Operators
         /// <param name="layout">Set layout for input, output and weight. Empty for default layout, NCW for 1d, NCHW for 2d and NCDHW for 3d.NHWC and NDHWC are only supported on GPU.</param>
         public static NDArray Deconvolution(NDArrayOrSymbol data, NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, int numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, NDShape adj = null, NDShape targetShape = null, int numGroup = 1, long workspace = 512, bool noBias = true, CuDNNTuneType cudnnTune = null, bool cudnnOff = false, LayoutType layout = null, NDArray output = null)
         {
+            var keys = new List<string>(_DeconvolutionParamNames);
+            var values = new List<string>(new string[] { Convert(kernel), Convert(stride), Convert(dilate), Convert(pad), Convert(adj), Convert(targetShape), Convert(numFilter), Convert(numGroup), Convert(workspace), Convert(noBias), Convert(cudnnOff) });
+
+            if (cudnnTune != null) {
+                keys.Add("cudnn_tune");
+                values.Add(cudnnTune);
+            }
+
+            if (layout != null) {
+                keys.Add("layout");
+                values.Add(layout);
+            }
+
             var result = Operator.Invoke(
                 "Deconvolution",
-                _DeconvolutionParamNames,
-                new string[] { Convert(kernel), Convert(stride), Convert(dilate), Convert(pad), Convert(adj), Convert(targetShape), Convert(numFilter), Convert(numGroup), Convert(workspace), Convert(noBias), cudnnTune, Convert(cudnnOff), layout },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle, weight.Handle, bias.Handle },
                 output
             );
@@ -1273,7 +1300,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _momentsParamNames = new string[] { "axes", "keepdims" };
+        private static string[] _momentsParamNames = new string[] { "keepdims" };
 
         /// <summary>
         /// 
@@ -1304,10 +1331,18 @@ namespace Horker.MXNet.Operators
         /// <param name="keepdims">produce moments with the same dimensionality as the input.</param>
         public static NDArray Moments(NDArrayOrSymbol data, NDShape axes = null, bool keepdims = false, NDArray output = null)
         {
+            var keys = new List<string>(_momentsParamNames);
+            var values = new List<string>(new string[] { Convert(keepdims) });
+
+            if (axes != null) {
+                keys.Add("axes");
+                values.Add(Convert(axes));
+            }
+
             var result = Operator.Invoke(
                 "moments",
-                _momentsParamNames,
-                new string[] { Convert(axes), Convert(keepdims) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
@@ -1331,7 +1366,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _PoolingParamNames = new string[] { "kernel", "pool_type", "global_pool", "cudnn_off", "pooling_convention", "stride", "pad", "p_value", "count_include_pad", "layout" };
+        private static string[] _PoolingParamNames = new string[] { "kernel", "pool_type", "global_pool", "cudnn_off", "pooling_convention", "stride", "pad" };
 
         /// <summary>
         /// Performs pooling on the input.
@@ -1401,10 +1436,28 @@ namespace Horker.MXNet.Operators
         ///     default layout: NCW for 1d, NCHW for 2d and NCDHW for 3d.</param>
         public static NDArray Pooling(NDArrayOrSymbol data, NDShape kernel = null, PoolType poolType = null, bool globalPool = false, bool cudnnOff = false, string poolingConvention = "valid", NDShape stride = null, NDShape pad = null, int? pValue = null, bool? countIncludePad = null, LayoutType layout = null, NDArray output = null)
         {
+            var keys = new List<string>(_PoolingParamNames);
+            var values = new List<string>(new string[] { Convert(kernel), poolType, Convert(globalPool), Convert(cudnnOff), poolingConvention, Convert(stride), Convert(pad) });
+
+            if (pValue != null) {
+                keys.Add("p_value");
+                values.Add(Convert(pValue));
+            }
+
+            if (countIncludePad != null) {
+                keys.Add("count_include_pad");
+                values.Add(Convert(countIncludePad));
+            }
+
+            if (layout != null) {
+                keys.Add("layout");
+                values.Add(layout);
+            }
+
             var result = Operator.Invoke(
                 "Pooling",
-                _PoolingParamNames,
-                new string[] { Convert(kernel), poolType, Convert(globalPool), Convert(cudnnOff), poolingConvention, Convert(stride), Convert(pad), Convert(pValue), Convert(countIncludePad), layout },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
@@ -1428,7 +1481,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _softmaxParamNames = new string[] { "axis", "temperature", "dtype" };
+        private static string[] _softmaxParamNames = new string[] { "axis" };
 
         /// <summary>
         /// Applies the softmax function.
@@ -1463,17 +1516,30 @@ namespace Horker.MXNet.Operators
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to the same as input's dtype if not defined (dtype=None).</param>
         public static NDArray Softmax(NDArrayOrSymbol data, int axis = -1, double? temperature = null, DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_softmaxParamNames);
+            var values = new List<string>(new string[] { Convert(axis) });
+
+            if (temperature != null) {
+                keys.Add("temperature");
+                values.Add(Convert(temperature));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "softmax",
-                _softmaxParamNames,
-                new string[] { Convert(axis), Convert(temperature), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
             return result;
         }
 
-        private static string[] _softminParamNames = new string[] { "axis", "temperature", "dtype" };
+        private static string[] _softminParamNames = new string[] { "axis" };
 
         /// <summary>
         /// Applies the softmin function.
@@ -1509,17 +1575,30 @@ namespace Horker.MXNet.Operators
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to the same as input's dtype if not defined (dtype=None).</param>
         public static NDArray Softmin(NDArrayOrSymbol data, int axis = -1, double? temperature = null, DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_softminParamNames);
+            var values = new List<string>(new string[] { Convert(axis) });
+
+            if (temperature != null) {
+                keys.Add("temperature");
+                values.Add(Convert(temperature));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "softmin",
-                _softminParamNames,
-                new string[] { Convert(axis), Convert(temperature), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
             return result;
         }
 
-        private static string[] _logSoftmaxParamNames = new string[] { "axis", "temperature", "dtype" };
+        private static string[] _logSoftmaxParamNames = new string[] { "axis" };
 
         /// <summary>
         /// Computes the log softmax of the input.
@@ -1545,10 +1624,23 @@ namespace Horker.MXNet.Operators
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to the same as input's dtype if not defined (dtype=None).</param>
         public static NDArray LogSoftmax(NDArrayOrSymbol data, int axis = -1, double? temperature = null, DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_logSoftmaxParamNames);
+            var values = new List<string>(new string[] { Convert(axis) });
+
+            if (temperature != null) {
+                keys.Add("temperature");
+                values.Add(Convert(temperature));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "log_softmax",
-                _logSoftmaxParamNames,
-                new string[] { Convert(axis), Convert(temperature), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
@@ -2386,7 +2478,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _sampleUniformParamNames = new string[] { "shape", "dtype" };
+        private static string[] _sampleUniformParamNames = Empty;
 
         /// <summary>
         /// Concurrent sampling from multiple
@@ -2424,17 +2516,30 @@ namespace Horker.MXNet.Operators
         /// <param name="high">Upper bounds of the distributions.</param>
         public static NDArray SampleUniform(NDArrayOrSymbol low, NDArrayOrSymbol high, NDShape shape = null, DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_sampleUniformParamNames);
+            var values = new List<string>(Empty);
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "_sample_uniform",
-                _sampleUniformParamNames,
-                new string[] { Convert(shape), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { low.Handle, high.Handle },
                 output
             );
             return result;
         }
 
-        private static string[] _sampleNormalParamNames = new string[] { "shape", "dtype" };
+        private static string[] _sampleNormalParamNames = Empty;
 
         /// <summary>
         /// Concurrent sampling from multiple
@@ -2472,17 +2577,30 @@ namespace Horker.MXNet.Operators
         /// <param name="sigma">Standard deviations of the distributions.</param>
         public static NDArray SampleNormal(NDArrayOrSymbol mu, NDArrayOrSymbol sigma, NDShape shape = null, DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_sampleNormalParamNames);
+            var values = new List<string>(Empty);
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "_sample_normal",
-                _sampleNormalParamNames,
-                new string[] { Convert(shape), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { mu.Handle, sigma.Handle },
                 output
             );
             return result;
         }
 
-        private static string[] _sampleGammaParamNames = new string[] { "shape", "dtype" };
+        private static string[] _sampleGammaParamNames = Empty;
 
         /// <summary>
         /// Concurrent sampling from multiple
@@ -2520,17 +2638,30 @@ namespace Horker.MXNet.Operators
         /// <param name="beta">Beta (scale) parameters of the distributions.</param>
         public static NDArray SampleGamma(NDArrayOrSymbol alpha, NDArrayOrSymbol beta, NDShape shape = null, DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_sampleGammaParamNames);
+            var values = new List<string>(Empty);
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "_sample_gamma",
-                _sampleGammaParamNames,
-                new string[] { Convert(shape), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { alpha.Handle, beta.Handle },
                 output
             );
             return result;
         }
 
-        private static string[] _sampleExponentialParamNames = new string[] { "shape", "dtype" };
+        private static string[] _sampleExponentialParamNames = Empty;
 
         /// <summary>
         /// Concurrent sampling from multiple
@@ -2566,17 +2697,30 @@ namespace Horker.MXNet.Operators
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         public static NDArray SampleExponential(NDArrayOrSymbol lam, NDShape shape = null, DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_sampleExponentialParamNames);
+            var values = new List<string>(Empty);
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "_sample_exponential",
-                _sampleExponentialParamNames,
-                new string[] { Convert(shape), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { lam.Handle },
                 output
             );
             return result;
         }
 
-        private static string[] _samplePoissonParamNames = new string[] { "shape", "dtype" };
+        private static string[] _samplePoissonParamNames = Empty;
 
         /// <summary>
         /// Concurrent sampling from multiple
@@ -2614,17 +2758,30 @@ namespace Horker.MXNet.Operators
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         public static NDArray SamplePoisson(NDArrayOrSymbol lam, NDShape shape = null, DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_samplePoissonParamNames);
+            var values = new List<string>(Empty);
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "_sample_poisson",
-                _samplePoissonParamNames,
-                new string[] { Convert(shape), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { lam.Handle },
                 output
             );
             return result;
         }
 
-        private static string[] _sampleNegativeBinomialParamNames = new string[] { "shape", "dtype" };
+        private static string[] _sampleNegativeBinomialParamNames = Empty;
 
         /// <summary>
         /// Concurrent sampling from multiple
@@ -2664,17 +2821,30 @@ namespace Horker.MXNet.Operators
         /// <param name="p">Failure probabilities in each experiment.</param>
         public static NDArray SampleNegativeBinomial(NDArrayOrSymbol k, NDArrayOrSymbol p, NDShape shape = null, DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_sampleNegativeBinomialParamNames);
+            var values = new List<string>(Empty);
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "_sample_negative_binomial",
-                _sampleNegativeBinomialParamNames,
-                new string[] { Convert(shape), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { k.Handle, p.Handle },
                 output
             );
             return result;
         }
 
-        private static string[] _sampleGeneralizedNegativeBinomialParamNames = new string[] { "shape", "dtype" };
+        private static string[] _sampleGeneralizedNegativeBinomialParamNames = Empty;
 
         /// <summary>
         /// Concurrent sampling from multiple
@@ -2714,10 +2884,23 @@ namespace Horker.MXNet.Operators
         /// <param name="alpha">Alpha (dispersion) parameters of the distributions.</param>
         public static NDArray SampleGeneralizedNegativeBinomial(NDArrayOrSymbol mu, NDArrayOrSymbol alpha, NDShape shape = null, DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_sampleGeneralizedNegativeBinomialParamNames);
+            var values = new List<string>(Empty);
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "_sample_generalized_negative_binomial",
-                _sampleGeneralizedNegativeBinomialParamNames,
-                new string[] { Convert(shape), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { mu.Handle, alpha.Handle },
                 output
             );
@@ -2790,7 +2973,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _randomUniformParamNames = new string[] { "low", "high", "shape", "ctx", "dtype" };
+        private static string[] _randomUniformParamNames = new string[] { "low", "high", "ctx" };
 
         /// <summary>
         /// Draw random samples from a uniform distribution.
@@ -2816,17 +2999,30 @@ namespace Horker.MXNet.Operators
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         public static NDArray RandomUniform(double low = 0, double high = 1, NDShape shape = null, string ctx = "", DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_randomUniformParamNames);
+            var values = new List<string>(new string[] { Convert(low), Convert(high), Convert(ctx) });
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "_random_uniform",
-                _randomUniformParamNames,
-                new string[] { Convert(low), Convert(high), Convert(shape), Convert(ctx), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 EmptyInput,
                 output
             );
             return result;
         }
 
-        private static string[] _randomNormalParamNames = new string[] { "loc", "scale", "shape", "ctx", "dtype" };
+        private static string[] _randomNormalParamNames = new string[] { "loc", "scale", "ctx" };
 
         /// <summary>
         /// Draw random samples from a normal (Gaussian) distribution.
@@ -2851,17 +3047,30 @@ namespace Horker.MXNet.Operators
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         public static NDArray RandomNormal(double loc = 0, double scale = 1, NDShape shape = null, string ctx = "", DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_randomNormalParamNames);
+            var values = new List<string>(new string[] { Convert(loc), Convert(scale), Convert(ctx) });
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "_random_normal",
-                _randomNormalParamNames,
-                new string[] { Convert(loc), Convert(scale), Convert(shape), Convert(ctx), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 EmptyInput,
                 output
             );
             return result;
         }
 
-        private static string[] _randomGammaParamNames = new string[] { "alpha", "beta", "shape", "ctx", "dtype" };
+        private static string[] _randomGammaParamNames = new string[] { "alpha", "beta", "ctx" };
 
         /// <summary>
         /// Draw random samples from a gamma distribution.
@@ -2883,17 +3092,30 @@ namespace Horker.MXNet.Operators
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         public static NDArray RandomGamma(double alpha = 1, double beta = 1, NDShape shape = null, string ctx = "", DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_randomGammaParamNames);
+            var values = new List<string>(new string[] { Convert(alpha), Convert(beta), Convert(ctx) });
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "_random_gamma",
-                _randomGammaParamNames,
-                new string[] { Convert(alpha), Convert(beta), Convert(shape), Convert(ctx), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 EmptyInput,
                 output
             );
             return result;
         }
 
-        private static string[] _randomExponentialParamNames = new string[] { "lam", "shape", "ctx", "dtype" };
+        private static string[] _randomExponentialParamNames = new string[] { "lam", "ctx" };
 
         /// <summary>
         /// Draw random samples from an exponential distribution.
@@ -2914,17 +3136,30 @@ namespace Horker.MXNet.Operators
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         public static NDArray RandomExponential(double lam = 1, NDShape shape = null, string ctx = "", DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_randomExponentialParamNames);
+            var values = new List<string>(new string[] { Convert(lam), Convert(ctx) });
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "_random_exponential",
-                _randomExponentialParamNames,
-                new string[] { Convert(lam), Convert(shape), Convert(ctx), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 EmptyInput,
                 output
             );
             return result;
         }
 
-        private static string[] _randomPoissonParamNames = new string[] { "lam", "shape", "ctx", "dtype" };
+        private static string[] _randomPoissonParamNames = new string[] { "lam", "ctx" };
 
         /// <summary>
         /// Draw random samples from a Poisson distribution.
@@ -2946,17 +3181,30 @@ namespace Horker.MXNet.Operators
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         public static NDArray RandomPoisson(double lam = 1, NDShape shape = null, string ctx = "", DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_randomPoissonParamNames);
+            var values = new List<string>(new string[] { Convert(lam), Convert(ctx) });
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "_random_poisson",
-                _randomPoissonParamNames,
-                new string[] { Convert(lam), Convert(shape), Convert(ctx), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 EmptyInput,
                 output
             );
             return result;
         }
 
-        private static string[] _randomNegativeBinomialParamNames = new string[] { "k", "p", "shape", "ctx", "dtype" };
+        private static string[] _randomNegativeBinomialParamNames = new string[] { "k", "p", "ctx" };
 
         /// <summary>
         /// Draw random samples from a negative binomial distribution.
@@ -2980,17 +3228,30 @@ namespace Horker.MXNet.Operators
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         public static NDArray RandomNegativeBinomial(int k = 1, double p = 1, NDShape shape = null, string ctx = "", DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_randomNegativeBinomialParamNames);
+            var values = new List<string>(new string[] { Convert(k), Convert(p), Convert(ctx) });
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "_random_negative_binomial",
-                _randomNegativeBinomialParamNames,
-                new string[] { Convert(k), Convert(p), Convert(shape), Convert(ctx), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 EmptyInput,
                 output
             );
             return result;
         }
 
-        private static string[] _randomGeneralizedNegativeBinomialParamNames = new string[] { "mu", "alpha", "shape", "ctx", "dtype" };
+        private static string[] _randomGeneralizedNegativeBinomialParamNames = new string[] { "mu", "alpha", "ctx" };
 
         /// <summary>
         /// Draw random samples from a generalized negative binomial distribution.
@@ -3015,17 +3276,30 @@ namespace Horker.MXNet.Operators
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
         public static NDArray RandomGeneralizedNegativeBinomial(double mu = 1, double alpha = 1, NDShape shape = null, string ctx = "", DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_randomGeneralizedNegativeBinomialParamNames);
+            var values = new List<string>(new string[] { Convert(mu), Convert(alpha), Convert(ctx) });
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "_random_generalized_negative_binomial",
-                _randomGeneralizedNegativeBinomialParamNames,
-                new string[] { Convert(mu), Convert(alpha), Convert(shape), Convert(ctx), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 EmptyInput,
                 output
             );
             return result;
         }
 
-        private static string[] _randomRandintParamNames = new string[] { "low", "high", "shape", "ctx", "dtype" };
+        private static string[] _randomRandintParamNames = new string[] { "low", "high", "ctx" };
 
         /// <summary>
         /// Draw random samples from a discrete uniform distribution.
@@ -3049,10 +3323,23 @@ namespace Horker.MXNet.Operators
         /// <param name="dtype">DType of the output in case this can't be inferred. Defaults to int32 if not defined (dtype=None).</param>
         public static NDArray RandomRandint(double? low, double? high, NDShape shape = null, string ctx = "", DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_randomRandintParamNames);
+            var values = new List<string>(new string[] { Convert(low), Convert(high), Convert(ctx) });
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
+            if (dtype != null) {
+                keys.Add("dtype");
+                values.Add(dtype);
+            }
+
             var result = Operator.Invoke(
                 "_random_randint",
-                _randomRandintParamNames,
-                new string[] { Convert(low), Convert(high), Convert(shape), Convert(ctx), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 EmptyInput,
                 output
             );
@@ -3301,7 +3588,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _sampleUniqueZipfianParamNames = new string[] { "range_max", "shape" };
+        private static string[] _sampleUniqueZipfianParamNames = new string[] { "range_max" };
 
         /// <summary>
         /// Draw random samples from an an approximately log-uniform
@@ -3334,10 +3621,18 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">2-D shape of the output, where shape[0] is the batch size, and shape[1] is the number of candidates to sample for each batch.</param>
         public static NDArray SampleUniqueZipfian(int rangeMax, NDShape shape = null, NDArray output = null)
         {
+            var keys = new List<string>(_sampleUniqueZipfianParamNames);
+            var values = new List<string>(new string[] { Convert(rangeMax) });
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
             var result = Operator.Invoke(
                 "_sample_unique_zipfian",
-                _sampleUniqueZipfianParamNames,
-                new string[] { Convert(rangeMax), Convert(shape) },
+                keys.ToArray(),
+                values.ToArray(),
                 EmptyInput,
                 output
             );
@@ -3524,7 +3819,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _RNNParamNames = new string[] { "state_size", "num_layers", "bidirectional", "mode", "p", "state_outputs", "projection_size", "lstm_state_clip_min", "lstm_state_clip_max", "lstm_state_clip_nan", "use_sequence_length" };
+        private static string[] _RNNParamNames = new string[] { "state_size", "num_layers", "bidirectional", "mode", "p", "state_outputs", "lstm_state_clip_nan", "use_sequence_length" };
 
         /// <summary>
         /// Applies recurrent layers to input data. Currently, vanilla RNN, LSTM and GRU are
@@ -3602,10 +3897,28 @@ namespace Horker.MXNet.Operators
         /// <param name="use_sequence_length">If set to true, this layer takes in an extra input parameter `sequence_length` to specify variable length sequence</param>
         public static NDArray RNN(NDArrayOrSymbol data, NDArrayOrSymbol parameters, NDArrayOrSymbol state, NDArrayOrSymbol stateCell, NDArrayOrSymbol sequenceLength, int stateSize, int numLayers, string mode, bool bidirectional = false, double p = 0, bool stateOutputs = false, int? projectionSize = null, double? lstmStateClipMin = null, double? lstmStateClipMax = null, bool lstmStateClipNan = false, bool useSequenceLength = false, NDArray output = null)
         {
+            var keys = new List<string>(_RNNParamNames);
+            var values = new List<string>(new string[] { Convert(stateSize), Convert(numLayers), Convert(bidirectional), mode, Convert(p), Convert(stateOutputs), Convert(lstmStateClipNan), Convert(useSequenceLength) });
+
+            if (projectionSize != null) {
+                keys.Add("projection_size");
+                values.Add(Convert(projectionSize));
+            }
+
+            if (lstmStateClipMin != null) {
+                keys.Add("lstm_state_clip_min");
+                values.Add(Convert(lstmStateClipMin));
+            }
+
+            if (lstmStateClipMax != null) {
+                keys.Add("lstm_state_clip_max");
+                values.Add(Convert(lstmStateClipMax));
+            }
+
             var result = Operator.Invoke(
                 "RNN",
-                _RNNParamNames,
-                new string[] { Convert(stateSize), Convert(numLayers), Convert(bidirectional), mode, Convert(p), Convert(stateOutputs), Convert(projectionSize), Convert(lstmStateClipMin), Convert(lstmStateClipMax), Convert(lstmStateClipNan), Convert(useSequenceLength) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle, parameters.Handle, state.Handle, stateCell.Handle, sequenceLength.Handle },
                 output
             );
@@ -3950,7 +4263,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _argmaxParamNames = new string[] { "axis", "keepdims" };
+        private static string[] _argmaxParamNames = new string[] { "keepdims" };
 
         /// <summary>
         /// Returns indices of the maximum values along an axis.
@@ -3982,17 +4295,25 @@ namespace Horker.MXNet.Operators
         /// <param name="keepdims">If this is set to `True`, the reduced axis is left in the result as dimension with size one.</param>
         public static NDArray Argmax(NDArrayOrSymbol data, int? axis = null, bool keepdims = false, NDArray output = null)
         {
+            var keys = new List<string>(_argmaxParamNames);
+            var values = new List<string>(new string[] { Convert(keepdims) });
+
+            if (axis != null) {
+                keys.Add("axis");
+                values.Add(Convert(axis));
+            }
+
             var result = Operator.Invoke(
                 "argmax",
-                _argmaxParamNames,
-                new string[] { Convert(axis), Convert(keepdims) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
             return result;
         }
 
-        private static string[] _argminParamNames = new string[] { "axis", "keepdims" };
+        private static string[] _argminParamNames = new string[] { "keepdims" };
 
         /// <summary>
         /// Returns indices of the minimum values along an axis.
@@ -4024,10 +4345,18 @@ namespace Horker.MXNet.Operators
         /// <param name="keepdims">If this is set to `True`, the reduced axis is left in the result as dimension with size one.</param>
         public static NDArray Argmin(NDArrayOrSymbol data, int? axis = null, bool keepdims = false, NDArray output = null)
         {
+            var keys = new List<string>(_argminParamNames);
+            var values = new List<string>(new string[] { Convert(keepdims) });
+
+            if (axis != null) {
+                keys.Add("axis");
+                values.Add(Convert(axis));
+            }
+
             var result = Operator.Invoke(
                 "argmin",
-                _argminParamNames,
-                new string[] { Convert(axis), Convert(keepdims) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
@@ -4150,7 +4479,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _sumParamNames = new string[] { "axis", "keepdims", "exclude" };
+        private static string[] _sumParamNames = new string[] { "keepdims", "exclude" };
 
         /// <summary>
         /// Computes the sum of array elements over given axes.
@@ -4210,10 +4539,18 @@ namespace Horker.MXNet.Operators
         /// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
         public static NDArray Sum(NDArrayOrSymbol data, NDShape axis = null, bool keepdims = false, bool exclude = false, NDArray output = null)
         {
+            var keys = new List<string>(_sumParamNames);
+            var values = new List<string>(new string[] { Convert(keepdims), Convert(exclude) });
+
+            if (axis != null) {
+                keys.Add("axis");
+                values.Add(Convert(axis));
+            }
+
             var result = Operator.Invoke(
                 "sum",
-                _sumParamNames,
-                new string[] { Convert(axis), Convert(keepdims), Convert(exclude) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
@@ -4237,7 +4574,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _meanParamNames = new string[] { "axis", "keepdims", "exclude" };
+        private static string[] _meanParamNames = new string[] { "keepdims", "exclude" };
 
         /// <summary>
         /// Computes the mean of array elements over given axes.
@@ -4263,10 +4600,18 @@ namespace Horker.MXNet.Operators
         /// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
         public static NDArray Mean(NDArrayOrSymbol data, NDShape axis = null, bool keepdims = false, bool exclude = false, NDArray output = null)
         {
+            var keys = new List<string>(_meanParamNames);
+            var values = new List<string>(new string[] { Convert(keepdims), Convert(exclude) });
+
+            if (axis != null) {
+                keys.Add("axis");
+                values.Add(Convert(axis));
+            }
+
             var result = Operator.Invoke(
                 "mean",
-                _meanParamNames,
-                new string[] { Convert(axis), Convert(keepdims), Convert(exclude) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
@@ -4290,7 +4635,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _prodParamNames = new string[] { "axis", "keepdims", "exclude" };
+        private static string[] _prodParamNames = new string[] { "keepdims", "exclude" };
 
         /// <summary>
         /// Computes the product of array elements over given axes.
@@ -4316,10 +4661,18 @@ namespace Horker.MXNet.Operators
         /// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
         public static NDArray Prod(NDArrayOrSymbol data, NDShape axis = null, bool keepdims = false, bool exclude = false, NDArray output = null)
         {
+            var keys = new List<string>(_prodParamNames);
+            var values = new List<string>(new string[] { Convert(keepdims), Convert(exclude) });
+
+            if (axis != null) {
+                keys.Add("axis");
+                values.Add(Convert(axis));
+            }
+
             var result = Operator.Invoke(
                 "prod",
-                _prodParamNames,
-                new string[] { Convert(axis), Convert(keepdims), Convert(exclude) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
@@ -4343,7 +4696,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _nansumParamNames = new string[] { "axis", "keepdims", "exclude" };
+        private static string[] _nansumParamNames = new string[] { "keepdims", "exclude" };
 
         /// <summary>
         /// Computes the sum of array elements over given axes treating Not a Numbers (``NaN``) as zero.
@@ -4371,10 +4724,18 @@ namespace Horker.MXNet.Operators
         /// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
         public static NDArray Nansum(NDArrayOrSymbol data, NDShape axis = null, bool keepdims = false, bool exclude = false, NDArray output = null)
         {
+            var keys = new List<string>(_nansumParamNames);
+            var values = new List<string>(new string[] { Convert(keepdims), Convert(exclude) });
+
+            if (axis != null) {
+                keys.Add("axis");
+                values.Add(Convert(axis));
+            }
+
             var result = Operator.Invoke(
                 "nansum",
-                _nansumParamNames,
-                new string[] { Convert(axis), Convert(keepdims), Convert(exclude) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
@@ -4398,7 +4759,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _nanprodParamNames = new string[] { "axis", "keepdims", "exclude" };
+        private static string[] _nanprodParamNames = new string[] { "keepdims", "exclude" };
 
         /// <summary>
         /// Computes the product of array elements over given axes treating Not a Numbers (``NaN``) as one.
@@ -4426,10 +4787,18 @@ namespace Horker.MXNet.Operators
         /// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
         public static NDArray Nanprod(NDArrayOrSymbol data, NDShape axis = null, bool keepdims = false, bool exclude = false, NDArray output = null)
         {
+            var keys = new List<string>(_nanprodParamNames);
+            var values = new List<string>(new string[] { Convert(keepdims), Convert(exclude) });
+
+            if (axis != null) {
+                keys.Add("axis");
+                values.Add(Convert(axis));
+            }
+
             var result = Operator.Invoke(
                 "nanprod",
-                _nanprodParamNames,
-                new string[] { Convert(axis), Convert(keepdims), Convert(exclude) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
@@ -4453,7 +4822,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _maxParamNames = new string[] { "axis", "keepdims", "exclude" };
+        private static string[] _maxParamNames = new string[] { "keepdims", "exclude" };
 
         /// <summary>
         /// Computes the max of array elements over given axes.
@@ -4479,10 +4848,18 @@ namespace Horker.MXNet.Operators
         /// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
         public static NDArray Max(NDArrayOrSymbol data, NDShape axis = null, bool keepdims = false, bool exclude = false, NDArray output = null)
         {
+            var keys = new List<string>(_maxParamNames);
+            var values = new List<string>(new string[] { Convert(keepdims), Convert(exclude) });
+
+            if (axis != null) {
+                keys.Add("axis");
+                values.Add(Convert(axis));
+            }
+
             var result = Operator.Invoke(
                 "max",
-                _maxParamNames,
-                new string[] { Convert(axis), Convert(keepdims), Convert(exclude) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
@@ -4506,7 +4883,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _minParamNames = new string[] { "axis", "keepdims", "exclude" };
+        private static string[] _minParamNames = new string[] { "keepdims", "exclude" };
 
         /// <summary>
         /// Computes the min of array elements over given axes.
@@ -4532,10 +4909,18 @@ namespace Horker.MXNet.Operators
         /// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
         public static NDArray Min(NDArrayOrSymbol data, NDShape axis = null, bool keepdims = false, bool exclude = false, NDArray output = null)
         {
+            var keys = new List<string>(_minParamNames);
+            var values = new List<string>(new string[] { Convert(keepdims), Convert(exclude) });
+
+            if (axis != null) {
+                keys.Add("axis");
+                values.Add(Convert(axis));
+            }
+
             var result = Operator.Invoke(
                 "min",
-                _minParamNames,
-                new string[] { Convert(axis), Convert(keepdims), Convert(exclude) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
@@ -4655,7 +5040,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _broadcastLikeParamNames = new string[] { "lhs_axes", "rhs_axes" };
+        private static string[] _broadcastLikeParamNames = Empty;
 
         /// <summary>
         /// Broadcasts lhs to have the same shape as rhs.
@@ -4684,17 +5069,30 @@ namespace Horker.MXNet.Operators
         /// <param name="rhs_axes">Axes to copy from the second input array</param>
         public static NDArray BroadcastLike(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, NDShape lhsAxes = null, NDShape rhsAxes = null, NDArray output = null)
         {
+            var keys = new List<string>(_broadcastLikeParamNames);
+            var values = new List<string>(Empty);
+
+            if (lhsAxes != null) {
+                keys.Add("lhs_axes");
+                values.Add(Convert(lhsAxes));
+            }
+
+            if (rhsAxes != null) {
+                keys.Add("rhs_axes");
+                values.Add(Convert(rhsAxes));
+            }
+
             var result = Operator.Invoke(
                 "broadcast_like",
-                _broadcastLikeParamNames,
-                new string[] { Convert(lhsAxes), Convert(rhsAxes) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { lhs.Handle, rhs.Handle },
                 output
             );
             return result;
         }
 
-        private static string[] _normParamNames = new string[] { "ord", "axis", "out_dtype", "keepdims" };
+        private static string[] _normParamNames = new string[] { "ord", "keepdims" };
 
         /// <summary>
         /// Computes the norm on an NDArray.
@@ -4740,10 +5138,23 @@ namespace Horker.MXNet.Operators
         /// <param name="keepdims">If this is set to `True`, the reduced axis is left in the result as dimension with size one.</param>
         public static NDArray Norm(NDArrayOrSymbol data, int ord = 2, NDShape axis = null, DType outDtype = null, bool keepdims = false, NDArray output = null)
         {
+            var keys = new List<string>(_normParamNames);
+            var values = new List<string>(new string[] { Convert(ord), Convert(keepdims) });
+
+            if (axis != null) {
+                keys.Add("axis");
+                values.Add(Convert(axis));
+            }
+
+            if (outDtype != null) {
+                keys.Add("out_dtype");
+                values.Add(outDtype);
+            }
+
             var result = Operator.Invoke(
                 "norm",
-                _normParamNames,
-                new string[] { Convert(ord), Convert(axis), outDtype, Convert(keepdims) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
@@ -4980,7 +5391,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _dotParamNames = new string[] { "transpose_a", "transpose_b", "forward_stype" };
+        private static string[] _dotParamNames = new string[] { "transpose_a", "transpose_b" };
 
         /// <summary>
         /// Dot product of two arrays.
@@ -5038,17 +5449,25 @@ namespace Horker.MXNet.Operators
         /// <param name="forward_stype">The desired storage type of the forward output given by user, if thecombination of input storage types and this hint does not matchany implemented ones, the dot operator will perform fallback operationand still produce an output of the desired storage type.</param>
         public static NDArray Dot(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, bool transposeA = false, bool transposeB = false, SType forwardStype = null, NDArray output = null)
         {
+            var keys = new List<string>(_dotParamNames);
+            var values = new List<string>(new string[] { Convert(transposeA), Convert(transposeB) });
+
+            if (forwardStype != null) {
+                keys.Add("forward_stype");
+                values.Add(forwardStype);
+            }
+
             var result = Operator.Invoke(
                 "dot",
-                _dotParamNames,
-                new string[] { Convert(transposeA), Convert(transposeB), forwardStype },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { lhs.Handle, rhs.Handle },
                 output
             );
             return result;
         }
 
-        private static string[] _backwardDotParamNames = new string[] { "transpose_a", "transpose_b", "forward_stype" };
+        private static string[] _backwardDotParamNames = new string[] { "transpose_a", "transpose_b" };
 
         /// <summary>
         /// 
@@ -5058,17 +5477,25 @@ namespace Horker.MXNet.Operators
         /// <param name="forward_stype">The desired storage type of the forward output given by user, if thecombination of input storage types and this hint does not matchany implemented ones, the dot operator will perform fallback operationand still produce an output of the desired storage type.</param>
         public static NDArray BackwardDot(bool transposeA = false, bool transposeB = false, SType forwardStype = null, NDArray output = null)
         {
+            var keys = new List<string>(_backwardDotParamNames);
+            var values = new List<string>(new string[] { Convert(transposeA), Convert(transposeB) });
+
+            if (forwardStype != null) {
+                keys.Add("forward_stype");
+                values.Add(forwardStype);
+            }
+
             var result = Operator.Invoke(
                 "_backward_dot",
-                _backwardDotParamNames,
-                new string[] { Convert(transposeA), Convert(transposeB), forwardStype },
+                keys.ToArray(),
+                values.ToArray(),
                 EmptyInput,
                 output
             );
             return result;
         }
 
-        private static string[] _batchDotParamNames = new string[] { "transpose_a", "transpose_b", "forward_stype" };
+        private static string[] _batchDotParamNames = new string[] { "transpose_a", "transpose_b" };
 
         /// <summary>
         /// Batchwise dot product.
@@ -5093,10 +5520,18 @@ namespace Horker.MXNet.Operators
         /// <param name="forward_stype">The desired storage type of the forward output given by user, if thecombination of input storage types and this hint does not matchany implemented ones, the dot operator will perform fallback operationand still produce an output of the desired storage type.</param>
         public static NDArray BatchDot(NDArrayOrSymbol lhs, NDArrayOrSymbol rhs, bool transposeA = false, bool transposeB = false, SType forwardStype = null, NDArray output = null)
         {
+            var keys = new List<string>(_batchDotParamNames);
+            var values = new List<string>(new string[] { Convert(transposeA), Convert(transposeB) });
+
+            if (forwardStype != null) {
+                keys.Add("forward_stype");
+                values.Add(forwardStype);
+            }
+
             var result = Operator.Invoke(
                 "batch_dot",
-                _batchDotParamNames,
-                new string[] { Convert(transposeA), Convert(transposeB), forwardStype },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { lhs.Handle, rhs.Handle },
                 output
             );
@@ -7657,7 +8092,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _shapeArrayParamNames = new string[] { "lhs_begin", "lhs_end", "rhs_begin", "rhs_end" };
+        private static string[] _shapeArrayParamNames = Empty;
 
         /// <summary>
         /// Returns a 1D int64 array containing the shape of data.
@@ -7677,10 +8112,33 @@ namespace Horker.MXNet.Operators
         /// <param name="rhs_end">Defaults to None. The ending index along which the rhs dimensions are to be used for reshaping. Supports negative indices.</param>
         public static NDArray ShapeArray(NDArrayOrSymbol data, int? lhsBegin = null, int? lhsEnd = null, int? rhsBegin = null, int? rhsEnd = null, NDArray output = null)
         {
+            var keys = new List<string>(_shapeArrayParamNames);
+            var values = new List<string>(Empty);
+
+            if (lhsBegin != null) {
+                keys.Add("lhs_begin");
+                values.Add(Convert(lhsBegin));
+            }
+
+            if (lhsEnd != null) {
+                keys.Add("lhs_end");
+                values.Add(Convert(lhsEnd));
+            }
+
+            if (rhsBegin != null) {
+                keys.Add("rhs_begin");
+                values.Add(Convert(rhsBegin));
+            }
+
+            if (rhsEnd != null) {
+                keys.Add("rhs_end");
+                values.Add(Convert(rhsEnd));
+            }
+
             var result = Operator.Invoke(
                 "shape_array",
-                _shapeArrayParamNames,
-                new string[] { Convert(lhsBegin), Convert(lhsEnd), Convert(rhsBegin), Convert(rhsEnd) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
@@ -9554,7 +10012,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _histogramParamNames = new string[] { "bin_cnt", "range" };
+        private static string[] _histogramParamNames = Empty;
 
         /// <summary>
         /// This operators implements the histogram function.
@@ -9577,10 +10035,23 @@ namespace Horker.MXNet.Operators
         /// <param name="range">The lower and upper range of the bins. if not provided, range is simply (a.min(), a.max()). values outside the range are ignored. the first element of the range must be less than or equal to the second. range affects the automatic bin computation as well. while bin width is computed to be optimal based on the actual data within range, the bin count will fill the entire range including portions containing no data.</param>
         public static NDArray Histogram(NDArrayOrSymbol data, NDArrayOrSymbol bins, int? binCnt = null, double? range = null, NDArray output = null)
         {
+            var keys = new List<string>(_histogramParamNames);
+            var values = new List<string>(Empty);
+
+            if (binCnt != null) {
+                keys.Add("bin_cnt");
+                values.Add(Convert(binCnt));
+            }
+
+            if (range != null) {
+                keys.Add("range");
+                values.Add(Convert(range));
+            }
+
             var result = Operator.Invoke(
                 "_histogram",
-                _histogramParamNames,
-                new string[] { Convert(binCnt), Convert(range) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle, bins.Handle },
                 output
             );
@@ -10074,7 +10545,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _zerosWithoutDtypeParamNames = new string[] { "shape", "ctx", "dtype" };
+        private static string[] _zerosWithoutDtypeParamNames = new string[] { "ctx", "dtype" };
 
         /// <summary>
         /// fill target with zeros without default dtype
@@ -10084,10 +10555,18 @@ namespace Horker.MXNet.Operators
         /// <param name="dtype">Target data type.</param>
         public static NDArray ZerosWithoutDtype(NDShape shape = null, string ctx = "", int dtype = -1, NDArray output = null)
         {
+            var keys = new List<string>(_zerosWithoutDtypeParamNames);
+            var values = new List<string>(new string[] { Convert(ctx), Convert(dtype) });
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
             var result = Operator.Invoke(
                 "_zeros_without_dtype",
-                _zerosWithoutDtypeParamNames,
-                new string[] { Convert(shape), Convert(ctx), Convert(dtype) },
+                keys.ToArray(),
+                values.ToArray(),
                 EmptyInput,
                 output
             );
@@ -10156,7 +10635,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _fullParamNames = new string[] { "shape", "ctx", "dtype", "value" };
+        private static string[] _fullParamNames = new string[] { "ctx", "dtype", "value" };
 
         /// <summary>
         /// fill target with a scalar value
@@ -10167,17 +10646,25 @@ namespace Horker.MXNet.Operators
         /// <param name="value">Value with which to fill newly created tensor</param>
         public static NDArray Full(double value, NDShape shape = null, string ctx = "", DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_fullParamNames);
+            var values = new List<string>(new string[] { Convert(ctx), dtype, Convert(value) });
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
             var result = Operator.Invoke(
                 "_full",
-                _fullParamNames,
-                new string[] { Convert(shape), Convert(ctx), dtype, Convert(value) },
+                keys.ToArray(),
+                values.ToArray(),
                 EmptyInput,
                 output
             );
             return result;
         }
 
-        private static string[] _arangeParamNames = new string[] { "start", "stop", "step", "repeat", "infer_range", "ctx", "dtype" };
+        private static string[] _arangeParamNames = new string[] { "start", "step", "repeat", "infer_range", "ctx", "dtype" };
 
         /// <summary>
         /// Return evenly spaced values within a given interval. Similar to Numpy
@@ -10191,17 +10678,25 @@ namespace Horker.MXNet.Operators
         /// <param name="dtype">Target data type.</param>
         public static NDArray Arange(double start, double? stop = null, double step = 1, int repeat = 1, bool inferRange = false, string ctx = "", DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_arangeParamNames);
+            var values = new List<string>(new string[] { Convert(start), Convert(step), Convert(repeat), Convert(inferRange), Convert(ctx), dtype });
+
+            if (stop != null) {
+                keys.Add("stop");
+                values.Add(Convert(stop));
+            }
+
             var result = Operator.Invoke(
                 "_arange",
-                _arangeParamNames,
-                new string[] { Convert(start), Convert(stop), Convert(step), Convert(repeat), Convert(inferRange), Convert(ctx), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 EmptyInput,
                 output
             );
             return result;
         }
 
-        private static string[] _linspaceParamNames = new string[] { "start", "stop", "step", "repeat", "infer_range", "ctx", "dtype" };
+        private static string[] _linspaceParamNames = new string[] { "start", "step", "repeat", "infer_range", "ctx", "dtype" };
 
         /// <summary>
         /// Return evenly spaced numbers over a specified interval. Similar to Numpy
@@ -10215,10 +10710,18 @@ namespace Horker.MXNet.Operators
         /// <param name="dtype">Target data type.</param>
         public static NDArray Linspace(double start, double? stop = null, double step = 1, int repeat = 1, bool inferRange = false, string ctx = "", DType dtype = null, NDArray output = null)
         {
+            var keys = new List<string>(_linspaceParamNames);
+            var values = new List<string>(new string[] { Convert(start), Convert(step), Convert(repeat), Convert(inferRange), Convert(ctx), dtype });
+
+            if (stop != null) {
+                keys.Add("stop");
+                values.Add(Convert(stop));
+            }
+
             var result = Operator.Invoke(
                 "_linspace",
-                _linspaceParamNames,
-                new string[] { Convert(start), Convert(stop), Convert(step), Convert(repeat), Convert(inferRange), Convert(ctx), dtype },
+                keys.ToArray(),
+                values.ToArray(),
                 EmptyInput,
                 output
             );
@@ -11900,7 +12403,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _repeatParamNames = new string[] { "repeats", "axis" };
+        private static string[] _repeatParamNames = new string[] { "repeats" };
 
         /// <summary>
         /// Repeats elements of an array.
@@ -11935,10 +12438,18 @@ namespace Horker.MXNet.Operators
         /// <param name="axis">The axis along which to repeat values. The negative numbers are interpreted counting from the backward. By default, use the flattened input array, and return a flat output array.</param>
         public static NDArray Repeat(NDArrayOrSymbol data, int repeats, int? axis = null, NDArray output = null)
         {
+            var keys = new List<string>(_repeatParamNames);
+            var values = new List<string>(new string[] { Convert(repeats) });
+
+            if (axis != null) {
+                keys.Add("axis");
+                values.Add(Convert(axis));
+            }
+
             var result = Operator.Invoke(
                 "repeat",
-                _repeatParamNames,
-                new string[] { Convert(repeats), Convert(axis) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
@@ -12492,7 +13003,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _ravelMultiIndexParamNames = new string[] { "shape" };
+        private static string[] _ravelMultiIndexParamNames = Empty;
 
         /// <summary>
         /// Converts a batch of index arrays into an array of flat indices. The operator follows numpy conventions so a single multi index is given by a column of the input matrix. The leading dimension may be left unspecified by using -1 as placeholder.  
@@ -12511,17 +13022,25 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">Shape of the array into which the multi-indices apply.</param>
         public static NDArray RavelMultiIndex(NDArrayOrSymbol data, NDShape shape = null, NDArray output = null)
         {
+            var keys = new List<string>(_ravelMultiIndexParamNames);
+            var values = new List<string>(Empty);
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
             var result = Operator.Invoke(
                 "_ravel_multi_index",
-                _ravelMultiIndexParamNames,
-                new string[] { Convert(shape) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
             return result;
         }
 
-        private static string[] _unravelIndexParamNames = new string[] { "shape" };
+        private static string[] _unravelIndexParamNames = Empty;
 
         /// <summary>
         /// Converts an array of flat indices into a batch of index arrays. The operator follows numpy conventions so a single multi index is given by a column of the output matrix. The leading dimension may be left unspecified by using -1 as placeholder.  
@@ -12540,10 +13059,18 @@ namespace Horker.MXNet.Operators
         /// <param name="shape">Shape of the array into which the multi-indices apply.</param>
         public static NDArray UnravelIndex(NDArrayOrSymbol data, NDShape shape = null, NDArray output = null)
         {
+            var keys = new List<string>(_unravelIndexParamNames);
+            var values = new List<string>(Empty);
+
+            if (shape != null) {
+                keys.Add("shape");
+                values.Add(Convert(shape));
+            }
+
             var result = Operator.Invoke(
                 "_unravel_index",
-                _unravelIndexParamNames,
-                new string[] { Convert(shape) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
@@ -12607,7 +13134,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _squareSumParamNames = new string[] { "axis", "keepdims", "exclude" };
+        private static string[] _squareSumParamNames = new string[] { "keepdims", "exclude" };
 
         /// <summary>
         /// Computes the square sum of array elements over a given axis
@@ -12645,10 +13172,18 @@ namespace Horker.MXNet.Operators
         /// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
         public static NDArray SquareSum(NDArrayOrSymbol data, NDShape axis = null, bool keepdims = false, bool exclude = false, NDArray output = null)
         {
+            var keys = new List<string>(_squareSumParamNames);
+            var values = new List<string>(new string[] { Convert(keepdims), Convert(exclude) });
+
+            if (axis != null) {
+                keys.Add("axis");
+                values.Add(Convert(axis));
+            }
+
             var result = Operator.Invoke(
                 "_square_sum",
-                _squareSumParamNames,
-                new string[] { Convert(axis), Convert(keepdims), Convert(exclude) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle },
                 output
             );
@@ -12689,7 +13224,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _BilinearSamplerParamNames = new string[] { "cudnn_off" };
+        private static string[] _BilinearSamplerParamNames = Empty;
 
         /// <summary>
         /// Applies bilinear sampling to input feature map.
@@ -12772,10 +13307,18 @@ namespace Horker.MXNet.Operators
         /// <param name="cudnn_off">whether to turn cudnn off</param>
         public static NDArray BilinearSampler(NDArrayOrSymbol data, NDArrayOrSymbol grid, bool? cudnnOff = null, NDArray output = null)
         {
+            var keys = new List<string>(_BilinearSamplerParamNames);
+            var values = new List<string>(Empty);
+
+            if (cudnnOff != null) {
+                keys.Add("cudnn_off");
+                values.Add(Convert(cudnnOff));
+            }
+
             var result = Operator.Invoke(
                 "BilinearSampler",
-                _BilinearSamplerParamNames,
-                new string[] { Convert(cudnnOff) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle, grid.Handle },
                 output
             );
@@ -12799,7 +13342,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _ConvolutionV1ParamNames = new string[] { "kernel", "stride", "dilate", "pad", "num_filter", "num_group", "workspace", "no_bias", "cudnn_tune", "cudnn_off", "layout" };
+        private static string[] _ConvolutionV1ParamNames = new string[] { "kernel", "stride", "dilate", "pad", "num_filter", "num_group", "workspace", "no_bias", "cudnn_off" };
 
         /// <summary>
         /// This operator is DEPRECATED. Apply convolution to input then add a bias.
@@ -12829,10 +13372,23 @@ namespace Horker.MXNet.Operators
         ///     default layout: NCHW for 2d and NCDHW for 3d.</param>
         public static NDArray ConvolutionV1(NDArrayOrSymbol data, NDArrayOrSymbol weight, NDArrayOrSymbol bias, NDShape kernel, int numFilter, NDShape stride = null, NDShape dilate = null, NDShape pad = null, int numGroup = 1, long workspace = 1024, bool noBias = false, CuDNNTuneType cudnnTune = null, bool cudnnOff = false, LayoutType layout = null, NDArray output = null)
         {
+            var keys = new List<string>(_ConvolutionV1ParamNames);
+            var values = new List<string>(new string[] { Convert(kernel), Convert(stride), Convert(dilate), Convert(pad), Convert(numFilter), Convert(numGroup), Convert(workspace), Convert(noBias), Convert(cudnnOff) });
+
+            if (cudnnTune != null) {
+                keys.Add("cudnn_tune");
+                values.Add(cudnnTune);
+            }
+
+            if (layout != null) {
+                keys.Add("layout");
+                values.Add(layout);
+            }
+
             var result = Operator.Invoke(
                 "Convolution_v1",
-                _ConvolutionV1ParamNames,
-                new string[] { Convert(kernel), Convert(stride), Convert(dilate), Convert(pad), Convert(numFilter), Convert(numGroup), Convert(workspace), Convert(noBias), cudnnTune, Convert(cudnnOff), layout },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle, weight.Handle, bias.Handle },
                 output
             );
@@ -13767,7 +14323,7 @@ namespace Horker.MXNet.Operators
             return result;
         }
 
-        private static string[] _SpatialTransformerParamNames = new string[] { "target_shape", "transform_type", "sampler_type", "cudnn_off" };
+        private static string[] _SpatialTransformerParamNames = new string[] { "target_shape", "transform_type", "sampler_type" };
 
         /// <summary>
         /// Applies a spatial transformer to input feature map.
@@ -13780,10 +14336,18 @@ namespace Horker.MXNet.Operators
         /// <param name="cudnn_off">whether to turn cudnn off</param>
         public static NDArray SpatialTransformer(NDArrayOrSymbol data, NDArrayOrSymbol loc, TransformType transformType, SampleType samplerType, NDShape targetShape = null, bool? cudnnOff = null, NDArray output = null)
         {
+            var keys = new List<string>(_SpatialTransformerParamNames);
+            var values = new List<string>(new string[] { Convert(targetShape), transformType, samplerType });
+
+            if (cudnnOff != null) {
+                keys.Add("cudnn_off");
+                values.Add(Convert(cudnnOff));
+            }
+
             var result = Operator.Invoke(
                 "SpatialTransformer",
-                _SpatialTransformerParamNames,
-                new string[] { Convert(targetShape), transformType, samplerType, Convert(cudnnOff) },
+                keys.ToArray(),
+                values.ToArray(),
                 new IntPtr[] { data.Handle, loc.Handle },
                 output
             );
