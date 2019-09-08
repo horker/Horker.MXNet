@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Horker.Numerics.DataMaps
 {
-    public class Column : IList
+    public class Column
     {
         private string _name;
         private IList _value;
@@ -51,8 +51,6 @@ namespace Horker.Numerics.DataMaps
         public object SyncRoot => _value.SyncRoot;
 
         public bool IsSynchronized => _value.IsSynchronized;
-
-        object IList.this[int index] { get => _value[index]; set => _value[index] = value; }
 
         public int Add(object item)
         {
@@ -112,11 +110,6 @@ namespace Horker.Numerics.DataMaps
         public void RemoveAt(int index)
         {
             _value.RemoveAt(index);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _value.GetEnumerator();
         }
 
         // Type converters
