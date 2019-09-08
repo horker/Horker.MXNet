@@ -1,19 +1,51 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Horker.Numerics.DataMaps
 {
-    public class DataMap : OrderedMap
+    public class DataMap : IList<Column>
     {
+        // Private fields
+
+        protected LinkedList<Column> _columns;
+        protected Dictionary<string, LinkedListNode<Column>> _nameMap;
+        protected IEqualityComparer<string> _keyComparer;
+
+        // Properties
+
+        public IEnumerable<Column> Columns => _columns;
+
+        public int ColumnCount => _columns.Count;
+
+        public IEnumerable<string> ColumnNames => _columns.Select(x => x.Name);
+
         public IEqualityComparer<string> ColumnNameComparer => _keyComparer;
 
-        public DataMap(IEqualityComparer<string> columnNameComparer = null)
-            : base(columnNameComparer)
+        public Column First => _columns.First.Value;
+        public Column Last => _columns.Last.Value;
+
+        public int RowCount
         {
+            get
+            {
+                if (_columns.Count > 0)
+                    return _columns.First.Value.Data.Count;
+                return 0;
+            }
+        }
+
+        // Constructors and factory methods
+
+        public DataMap(IEqualityComparer<string> keyComparaer = null)
+        {
+            _keyComparer = keyComparaer ?? StringComparer.InvariantCultureIgnoreCase;
+
+            _columns = new LinkedList<Column>();
+            _nameMap = new Dictionary<string, LinkedListNode<Column>>(keyComparaer);
         }
 
         public static DataMap CreateLike(DataMap source)
@@ -46,30 +78,107 @@ namespace Horker.Numerics.DataMaps
 
         public override bool Equals(object obj)
         {
-            if (obj == null || obj.GetType() != typeof(DataMap))
+            var other = obj as DataMap;
+            if (obj == null)
                 return false;
 
-            return TestEquality(obj as DataMap);
+            if (_columns.Count != other._columns.Count)
+                return false;
+
+            var c1 = _columns.GetEnumerator();
+            var c2 = other._columns.GetEnumerator();
+            while (c1.MoveNext())
+            {
+                c2.MoveNext();
+                if (!c1.Current.Equals(c2.Current))
+                    return false;
+            }
+
+            return true;
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return _columns.GetHashCode() * 17 + _nameMap.GetHashCode();
         }
 
-        // Other properties and methods
+        // IList implementation
 
-        public Column First => _columns.First.Value;
-        public Column Last => _columns.Last.Value;
-
-        public int RowCount
+        public Column this[int index]
         {
             get
             {
-                if (_columns.Count > 0)
-                    return _columns.First.Value.Data.Count;
-                return 0;
+                var i = 0;
+                foreach (var c in _columns)
+                {
+                    if (i == index)
+                        return c;
+                }
+                throw new ArgumentOutOfRangeException($"Index out of range ({index} for collection size {_columns.Count}");
             }
+            set => throw new NotImplementedException();
+        }
+
+        public int Count => _columns.Count;
+
+        public bool IsReadOnly => true;
+
+        public void Add(Column item)
+        {
+            AddLast(item.Name, item.Data);
+        }
+
+        public void Clear()
+        {
+            _columns.Clear();
+            _nameMap.Clear();
+        }
+
+        public bool Contains(Column item)
+        {
+            return Contains(item.Name);
+        }
+
+        public void CopyTo(Column[] array, int arrayIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator<Column> GetEnumerator()
+        {
+            return new DataMapEnumerator(this);
+        }
+
+        public int IndexOf(Column item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Insert(int index, Column item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove(Column item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveAt(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        // Other methods
+
+        public Column this[string name]
+        {
+            get => _nameMap[name].Value;
         }
 
         public IList<T> GetAs<T>(string name)
@@ -79,6 +188,68 @@ namespace Horker.Numerics.DataMaps
 
         public IList<T> FirstAs<T>() => First.AsList<T>();
         public IList<T> LastAs<T>() => Last.AsList<T>();
+
+        public void Add(string name, IList value)
+        {
+            AddLast(name, value);
+        }
+
+        public bool Contains(string name)
+        {
+            return _nameMap.ContainsKey(name);
+        }
+
+        public bool Remove(string name)
+        {
+            LinkedListNode<Column> column = null;
+            if (_nameMap.TryGetValue(name, out column))
+            {
+                _nameMap.Remove(name);
+                _columns.Remove(column);
+                return true;
+            }
+            return false;
+        }
+
+        public virtual void AddFirst(string name, IList value)
+        {
+            if (_nameMap.ContainsKey(name))
+                Remove(name);
+
+            var node = new LinkedListNode<Column>(new Column(name, value));
+            _columns.AddFirst(node);
+            _nameMap.Add(name, node);
+        }
+
+        public virtual void AddLast(string name, IList value)
+        {
+            if (_nameMap.ContainsKey(name))
+                Remove(name);
+
+            var node = new LinkedListNode<Column>(new Column(name, value));
+            _columns.AddLast(node);
+            _nameMap.Add(name, node);
+        }
+
+        public void MoveToFirst(string name)
+        {
+            var column = _nameMap[name];
+            _columns.Remove(column);
+            _columns.AddFirst(column);
+        }
+
+        public void MoveToLast(string name)
+        {
+            var column = _nameMap[name];
+            _columns.Remove(column);
+            _columns.AddLast(column);
+        }
+
+        public void SetOrder(params string[] columnNames)
+        {
+            foreach (var name in columnNames.Reverse())
+                MoveToFirst(name);
+        }
 
         public DataMap Select(params string[] selected)
         {
@@ -93,7 +264,7 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        protected DataMap Unselec(params string[] unselected)
+        public DataMap Unselec(params string[] unselected)
         {
             var result = new DataMap(ColumnNameComparer);
             var unselectedMap = new HashSet<string>(unselected);
@@ -133,13 +304,13 @@ namespace Horker.Numerics.DataMaps
             return filtered;
         }
 
-        public static DataMap Concatenate(params DataMap[] dfs)
+        public static DataMap Concatenate(params DataMap[] maps)
         {
-            var rowCount = dfs.Max(df => df.RowCount);
+            var rowCount = maps.Max(df => df.RowCount);
 
             var result = new DataMap();
 
-            foreach (var df in dfs)
+            foreach (var df in maps)
             {
                 foreach (var column in df.Columns)
                 {
@@ -177,5 +348,6 @@ namespace Horker.Numerics.DataMaps
 
             return d;
         }
+
     }
 }

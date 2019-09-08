@@ -22,14 +22,10 @@
             </CustomControl>
         </View>
         <View>
-            <Name>System.Collections.Generic.KeyValuePair`2[[System.String],[Horker.Numerics.DataMaps.Column]]</Name>
+            <Name>Horker.Numerics.DataMaps.Column</Name>
             <ViewSelectedBy>
-                <TypeName>System.Collections.Generic.KeyValuePair`2[[System.String],[Horker.Numerics.DataMaps.Column]]</TypeName>
+                <TypeName>Horker.Numerics.DataMaps.Column</TypeName>
             </ViewSelectedBy>
-            <!-- >System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[Horker.Numerics.DataMaps.Column, Horker.Numerics, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]</Name>
-            <ViewSelectedBy>
-                <TypeName>System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[Horker.Numerics.DataMaps.Column, Horker.Numerics, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]</TypeName>
-            </ViewSelectedBy> -->
             <TableControl>
                 <TableHeaders>
                     <TableColumnHeader>
@@ -49,22 +45,23 @@
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <ScriptBlock>$_.Value.Name</ScriptBlock>
+                                <ScriptBlock>$_.Name</ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <ScriptBlock>$_.Value.DataType</ScriptBlock>
+                                <ScriptBlock>$_.DataType</ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <ScriptBlock>$_.Value.Data.Count</ScriptBlock>
+                                <ScriptBlock>$_.Data.Count</ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <ScriptBlock>$_.Value.Data</ScriptBlock>
+                                <ScriptBlock>$_.Data</ScriptBlock>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
                  </TableRowEntries>
             </TableControl>
         </View>
+        <!--
         <View>
             <Name>Horker.Numerics.DataMaps.DataMap</Name>
             <ViewSelectedBy>
@@ -90,7 +87,6 @@
                 </CustomEntries>
             </CustomControl>
         </View>
-        <!--
         <View>
             <Name>Accord.Statistics.Analysis.MultinomialLogisticRegressionAnalysis</Name>
             <ViewSelectedBy>

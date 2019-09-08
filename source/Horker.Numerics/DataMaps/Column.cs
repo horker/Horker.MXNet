@@ -31,6 +31,9 @@ namespace Horker.Numerics.DataMaps
 
         public Column(string name, IList value)
         {
+            while (value is Column c)
+                value = c.Data;
+
             _name = name;
             _value = value;
         }
@@ -210,6 +213,8 @@ namespace Horker.Numerics.DataMaps
 
             return _value;
         }
+
+        // Implicit type converters
 
         public static implicit operator double[](Column value)
         {

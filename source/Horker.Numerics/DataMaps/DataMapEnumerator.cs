@@ -7,18 +7,16 @@ using System.Threading.Tasks;
 
 namespace Horker.Numerics.DataMaps
 {
-    public class OrderedMapEnumerator : IEnumerator<KeyValuePair<string, Column>>
+    public class DataMapEnumerator : IEnumerator<Column>
     {
-        private OrderedMap _map;
         private IEnumerator<Column> _e;
 
-        public OrderedMapEnumerator(OrderedMap map)
+        public DataMapEnumerator(DataMap map)
         {
-            _map = map;
             _e = map.Columns.GetEnumerator();
         }
 
-        public KeyValuePair<string, Column> Current => new KeyValuePair<string, Column>(_e.Current.Name, _e.Current);
+        public Column Current => _e.Current;
 
         object IEnumerator.Current => Current;
 

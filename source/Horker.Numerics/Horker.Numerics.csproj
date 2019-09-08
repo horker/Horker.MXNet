@@ -72,11 +72,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataMaps\OrderedMapEnumerator.cs" />
-    <Compile Include="DataMaps\OrderedMap.cs" />
+    <Compile Include="DataMaps\DataMap.cs" />
+    <Compile Include="DataMaps\DataMapEnumerator.cs" />
     <Compile Include="DataMaps\Column.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DataMaps\DataMap.cs" />
     <Compile Include="Utilities\SmartConverter.cs" />
   </ItemGroup>
   <ItemGroup>
