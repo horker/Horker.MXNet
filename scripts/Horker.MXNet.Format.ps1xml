@@ -21,11 +21,54 @@
                 </CustomEntries>
             </CustomControl>
         </View>
-        <!--
         <View>
-            <Name>Horker.Tensor.TensorMaps.DataFrame</Name>
+            <Name>System.Collections.Generic.KeyValuePair`2[[System.String],[Horker.Numerics.DataMaps.Column]]</Name>
             <ViewSelectedBy>
-                <TypeName>Horker.Tensor.TensorMaps.DataFrame</TypeName>
+                <TypeName>System.Collections.Generic.KeyValuePair`2[[System.String],[Horker.Numerics.DataMaps.Column]]</TypeName>
+            </ViewSelectedBy>
+            <!-- >System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[Horker.Numerics.DataMaps.Column, Horker.Numerics, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]</Name>
+            <ViewSelectedBy>
+                <TypeName>System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[Horker.Numerics.DataMaps.Column, Horker.Numerics, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]</TypeName>
+            </ViewSelectedBy> -->
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Label>Name</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>DataType</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Count</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Data</Label>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <ScriptBlock>$_.Value.Name</ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>$_.Value.DataType</ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>$_.Value.Data.Count</ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>$_.Value.Data</ScriptBlock>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                 </TableRowEntries>
+            </TableControl>
+        </View>
+        <View>
+            <Name>Horker.Numerics.DataMaps.DataMap</Name>
+            <ViewSelectedBy>
+                <TypeName>Horker.Numerics.DataMaps.DataMap</TypeName>
             </ViewSelectedBy>
             <CustomControl>
                 <CustomEntries>
@@ -33,18 +76,13 @@
                         <CustomItem>
                             <ExpressionBinding>
                                 <ScriptBlock>
-                                    $s = ($_.Columns |
+                                    $_.Columns |
                                     Select-Object `
                                         @{ n = "Name"; e = { $_.Name } },
-                                        @{ n = "Type"; e = { $_.Value.GetElementType().Name } },
-                                        @{ n = "Count"; e = { $_.Value.Data.Count } },
-                                        @{ n = "Values"; e = { [Horker.Tensor.Tensors.Convert]::ToStringInShortFormat($_.Value, $false) } } |
-                                    Format-Table | Out-String).Trim()
-
-                                    if (-not [string]::IsNullOrEmpty($_.Generator) -or -not [string]::IsNullOrEmpty($_.Note)) { $s += "`r`n" }
-                                    if (-not [string]::IsNullOrEmpty($_.Generator)) { $s += "`r`nGenerator: $($_.Generator)" }
-                                    if (-not [string]::IsNullOrEmpty($_.Note)) { $s += "`r`nNote: $($_.Note)" }
-                                    $s
+                                        @{ n = "DataType"; e = { $_.Value.DataType } },
+                                        @{ n = "Count"; e = { $_.Data.Count } },
+                                        @{ n = "Data"; e = { $_.Data } } |
+                                    Format-Table | Out-String
                                 </ScriptBlock>
                             </ExpressionBinding>
                         </CustomItem>
@@ -52,6 +90,7 @@
                 </CustomEntries>
             </CustomControl>
         </View>
+        <!--
         <View>
             <Name>Accord.Statistics.Analysis.MultinomialLogisticRegressionAnalysis</Name>
             <ViewSelectedBy>

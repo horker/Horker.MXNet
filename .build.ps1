@@ -19,9 +19,10 @@ $OBJECT_FILES = @(
     "Horker.MXNet.pdb"
     "Horker.MXNet.PowerShell.dll"
     "Horker.MXNet.PowerShell.pdb"
-#    "System.Buffers.dll"
-#    "System.Numerics.Vectors.dll"
-#    "System.Runtime.CompilerServices.Unsafe.dll"
+    "Horker.Numerics.dll"
+    "Horker.Numerics.pdb"
+    "Horker.Numerics.PowerShell.dll"
+    "Horker.Numerics.PowerShell.pdb"
 )
 
 #TODO

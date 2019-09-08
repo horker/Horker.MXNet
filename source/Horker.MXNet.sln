@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.705
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProgram", "TestProgram\TestProgram.csproj", "{FAE11C0D-4929-4C56-B371-711E28796DA2}"
 EndProject
@@ -14,6 +14,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horker.MXNet.Tests", "Horker.MXNet.Tests\Horker.MXNet.Tests.csproj", "{B8668A4B-C76D-4E46-BAD5-67962D045596}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OperatorCollector", "OperatorCollector\OperatorCollector.csproj", "{4C95860F-776F-479F-8596-5E9A8C4B267B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horker.Numerics.Tests", "Horker.Numerics.Tests\Horker.Numerics.Tests.csproj", "{C7466258-A4A7-4BC9-BE08-CAD5B4799F1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horker.Numerics.PowerShell", "Horker.Numerics.PowerShell\Horker.Numerics.PowerShell.csproj", "{9F1F3934-6E5F-406A-99E1-5EB048EE78B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +75,22 @@ Global
 		{4C95860F-776F-479F-8596-5E9A8C4B267B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4C95860F-776F-479F-8596-5E9A8C4B267B}.Release|x64.ActiveCfg = Release|x64
 		{4C95860F-776F-479F-8596-5E9A8C4B267B}.Release|x64.Build.0 = Release|x64
+		{C7466258-A4A7-4BC9-BE08-CAD5B4799F1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7466258-A4A7-4BC9-BE08-CAD5B4799F1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7466258-A4A7-4BC9-BE08-CAD5B4799F1A}.Debug|x64.ActiveCfg = Debug|x64
+		{C7466258-A4A7-4BC9-BE08-CAD5B4799F1A}.Debug|x64.Build.0 = Debug|x64
+		{C7466258-A4A7-4BC9-BE08-CAD5B4799F1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7466258-A4A7-4BC9-BE08-CAD5B4799F1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7466258-A4A7-4BC9-BE08-CAD5B4799F1A}.Release|x64.ActiveCfg = Release|Any CPU
+		{C7466258-A4A7-4BC9-BE08-CAD5B4799F1A}.Release|x64.Build.0 = Release|Any CPU
+		{9F1F3934-6E5F-406A-99E1-5EB048EE78B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F1F3934-6E5F-406A-99E1-5EB048EE78B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F1F3934-6E5F-406A-99E1-5EB048EE78B5}.Debug|x64.ActiveCfg = Debug|x64
+		{9F1F3934-6E5F-406A-99E1-5EB048EE78B5}.Debug|x64.Build.0 = Debug|x64
+		{9F1F3934-6E5F-406A-99E1-5EB048EE78B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F1F3934-6E5F-406A-99E1-5EB048EE78B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F1F3934-6E5F-406A-99E1-5EB048EE78B5}.Release|x64.ActiveCfg = Release|Any CPU
+		{9F1F3934-6E5F-406A-99E1-5EB048EE78B5}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

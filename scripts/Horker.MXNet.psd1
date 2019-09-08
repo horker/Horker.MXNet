@@ -60,7 +60,7 @@ DotNetFrameworkVersion = '4.7.2'
 # Assemblies that must be loaded prior to importing this module
 RequiredAssemblies = @(
     "Horker.MXNet.dll"
-    "Horker.MXNet.dll"
+    "Horker.Numerics.dll"
 )
 
 # Script files (.ps1) that are run in the caller's environment prior to importing this module.
@@ -77,6 +77,7 @@ FormatsToProcess = @(
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 NestedModules = @(
     "Horker.MXNet.PowerShell.dll"
+    "Horker.Numerics.PowerShell.dll"
 )
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
