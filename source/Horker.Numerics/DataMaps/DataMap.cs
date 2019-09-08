@@ -17,6 +17,11 @@ namespace Horker.Numerics.DataMaps
 
         // Properties
 
+        public static Type[] ConversionTypes { get; set; } = new Type[] {
+            typeof(int), typeof(Int64), typeof(double), typeof(bool), 
+            typeof(DateTime), typeof(DateTimeOffset), typeof(string)
+        };
+
         public IEnumerable<Column> Columns => _columns;
 
         public int ColumnCount => _columns.Count;
@@ -176,18 +181,25 @@ namespace Horker.Numerics.DataMaps
 
         // Other methods
 
-        public Column this[string name]
+        public virtual IList this[string name]
         {
-            get => _nameMap[name].Value;
+            get => _nameMap[name].Value.Data;
+            set
+            {
+                if (_nameMap.TryGetValue(name, out var node))
+                    node.Value.Data = value;
+                else
+                    AddLast(name, value);
+            }
         }
 
         public IList<T> GetAs<T>(string name)
         {
-            return _nameMap[name].Value.AsList<T>();
+            return _nameMap[name].Value.Data.AsList<T>();
         }
 
-        public IList<T> FirstAs<T>() => First.AsList<T>();
-        public IList<T> LastAs<T>() => Last.AsList<T>();
+        public IList<T> FirstAs<T>() => First.Data.AsList<T>();
+        public IList<T> LastAs<T>() => Last.Data.AsList<T>();
 
         public void Add(string name, IList value)
         {
@@ -258,7 +270,7 @@ namespace Horker.Numerics.DataMaps
             foreach (var n in selected)
             {
                 var c = this[n];
-                result.AddLast(n, c.Data);
+                result.AddLast(n, c);
             }
 
             return result;
@@ -339,12 +351,12 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        public DataMap TryTypeConversion(Type[] possibleTypes)
+        public DataMap TryTypeConversion(Type[] possibleTypes = null)
         {
             var d = new DataMap(ColumnNameComparer);
 
             foreach (var column in Columns)
-                d.Add(column.Name, column.ConvertTo(possibleTypes));
+                d.Add(column.Name, column.Data.Convert(possibleTypes));
 
             return d;
         }

@@ -166,7 +166,7 @@ namespace Horker.Numerics.Tests
             var d = new DataMap();
             d.Add("foo", t1);
 
-            var t2 = d["foo"].ConvertTo<bool>();
+            var t2 = d["foo"].Convert<bool>();
 
             Assert.Equal(new bool[] { true, false, false }, t2.ToArray());
         }

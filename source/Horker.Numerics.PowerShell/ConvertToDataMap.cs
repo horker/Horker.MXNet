@@ -16,10 +16,7 @@ namespace Horker.Numerics.PowerShell
         public PSObject InputObject;
 
         [Parameter(Position = 1, Mandatory = false)]
-        public Type[] PossibleTypes = new Type[] {
-            typeof(int), typeof(Int64), typeof(double), typeof(bool), 
-            typeof(DateTime), typeof(DateTimeOffset), typeof(string)
-        };
+        public Type[] PossibleTypes = null;
 
         [Parameter(Position = 2, Mandatory = false)]
         public SwitchParameter ConvertTypes;
