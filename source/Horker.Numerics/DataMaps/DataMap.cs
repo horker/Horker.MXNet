@@ -69,12 +69,24 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
+/*
         public static DataMap FromDictionary(IDictionary<string, IList> source)
         {
             var result = new DataMap();
 
             foreach (var entry in source)
                 result.AddLast(entry.Key, entry.Value);
+
+            return result;
+        }
+*/
+
+        public static DataMap FromDictionary(IDictionary source)
+        {
+            var result = new DataMap();
+
+            foreach (DictionaryEntry entry in source)
+                result.AddLast((string)entry.Key, (IList)entry.Value);
 
             return result;
         }

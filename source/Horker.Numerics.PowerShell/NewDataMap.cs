@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
@@ -13,9 +14,18 @@ namespace Horker.Numerics.PowerShell
     [OutputType(typeof(DataMap))]
     public class NewDataMap : PSCmdlet
     {
+        [Parameter(Position = 0, Mandatory = false)]
+        public IDictionary FromDictionary;
+
         protected override void BeginProcessing()
         {
-            var map = new DataMap();
+            DataMap map = null;
+
+            if (FromDictionary != null)
+                map = DataMap.FromDictionary(FromDictionary);
+            else
+                map = new DataMap();
+
             WriteObject(map);
         }
     }
