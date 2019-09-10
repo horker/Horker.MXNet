@@ -12,6 +12,9 @@ namespace Horker.Numerics.DataMaps
             if (value is Array)
                 return value.GetType().GetElementType();
 
+            if (value is SeriesBase s)
+                value = s.UnderlyingList;
+
             var ga = value.GetType().GetGenericArguments();
 
             if (ga == null || ga.Length == 0)

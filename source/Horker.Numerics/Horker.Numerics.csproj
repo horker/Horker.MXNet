@@ -72,6 +72,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataMaps\SortedListIndexSeries.cs" />
+    <Compile Include="DataMaps\RangeIndex.cs" />
+    <Compile Include="DataMaps\Series.cs" />
+    <Compile Include="DataMaps\SeriesBase.cs" />
     <Compile Include="DataMaps\DataMap.cs" />
     <Compile Include="DataMaps\DataMapEnumerator.cs" />
     <Compile Include="DataMaps\Column.cs" />

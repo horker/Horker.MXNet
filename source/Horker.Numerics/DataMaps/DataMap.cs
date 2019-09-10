@@ -181,7 +181,7 @@ namespace Horker.Numerics.DataMaps
 
         // Other methods
 
-        public virtual IList this[string name]
+        public virtual SeriesBase this[string name]
         {
             get => _nameMap[name].Value.Data;
             set
@@ -223,7 +223,7 @@ namespace Horker.Numerics.DataMaps
             return false;
         }
 
-        public virtual void AddFirst(string name, IList value)
+        public virtual void AddFirst(string name, SeriesBase value)
         {
             if (_nameMap.ContainsKey(name))
                 Remove(name);
@@ -233,7 +233,12 @@ namespace Horker.Numerics.DataMaps
             _nameMap.Add(name, node);
         }
 
-        public virtual void AddLast(string name, IList value)
+        public virtual void AddFirst(string name, IList value)
+        {
+            AddFirst(name, new Series(value));
+        }
+
+        public virtual void AddLast(string name, SeriesBase value)
         {
             if (_nameMap.ContainsKey(name))
                 Remove(name);
@@ -241,6 +246,11 @@ namespace Horker.Numerics.DataMaps
             var node = new LinkedListNode<Column>(new Column(name, value));
             _columns.AddLast(node);
             _nameMap.Add(name, node);
+        }
+
+        public virtual void AddLast(string name, IList value)
+        {
+            AddLast(name, new Series(value));
         }
 
         public void MoveToFirst(string name)

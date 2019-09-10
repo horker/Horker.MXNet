@@ -8,23 +8,20 @@ namespace Horker.Numerics.DataMaps
     public class Column
     {
         private string _name;
-        private IList _data;
+        private SeriesBase _data;
 
         public string Name => _name;
 
-        public IList Data
+        public SeriesBase Data
         {
             get => _data;
             internal set => _data = value;
         }
 
-        public Type DataType => _data.GetDataType();
+        public Type DataType => _data.DataType;
 
-        public Column(string name, IList data)
+        public Column(string name, SeriesBase data)
         {
-            while (data is Column c)
-                data = c.Data;
-
             _name = name;
             _data = data;
         }

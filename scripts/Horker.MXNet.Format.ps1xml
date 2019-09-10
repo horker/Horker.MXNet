@@ -36,6 +36,7 @@
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Count</Label>
+                        <Alignment>Right</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Data</Label>
