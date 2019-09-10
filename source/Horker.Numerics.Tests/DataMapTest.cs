@@ -42,7 +42,7 @@ namespace Horker.Numerics.Tests
 
             d.SetOrder(new string[] { "foo", "bar", "baz" });
 
-            DataMap d2 = d.Select("bar", "baz");
+            DataMap d2 = d.SelectColumns("bar", "baz");
 
             Assert.Equal(new string[] { "bar", "baz" }, d2.ColumnNames.ToArray());
         }
@@ -58,7 +58,7 @@ namespace Horker.Numerics.Tests
 
             d.SetOrder(new string[] { "foo", "bar" });
 
-            var result = d.FilterRow(i => i % 2 == 0);
+            var result = d.FilterRows(i => i % 2 == 0);
 
             Assert.Equal(3, result.RowCount);
             Assert.Equal(new string[] { "foo", "bar" }, result.ColumnNames.ToArray());

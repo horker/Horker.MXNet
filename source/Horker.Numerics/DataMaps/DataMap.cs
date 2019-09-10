@@ -273,7 +273,7 @@ namespace Horker.Numerics.DataMaps
                 MoveToFirst(name);
         }
 
-        public DataMap Select(params string[] selected)
+        public DataMap SelectColumns(params string[] selected)
         {
             var result = new DataMap(ColumnNameComparer);
 
@@ -286,7 +286,7 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        public DataMap Unselec(params string[] unselected)
+        public DataMap UnselectColumns(params string[] unselected)
         {
             var result = new DataMap(ColumnNameComparer);
             var unselectedMap = new HashSet<string>(unselected);
@@ -301,7 +301,7 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        public DataMap FilterRow(Func<int, bool> filterFunc)
+        public DataMap FilterRows(Func<int, bool> filterFunc)
         {
             var filtered = DataMap.CreateLike(this);
 
