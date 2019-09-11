@@ -252,6 +252,11 @@ namespace Horker.Numerics.DataMaps
             AddLast(name, value);
         }
 
+        public void Add(string name, Series value)
+        {
+            AddLast(name, value);
+        }
+
         public bool Contains(string name)
         {
             return _nameMap.ContainsKey(name);

@@ -41,7 +41,7 @@ namespace Horker.Numerics.DataMaps
                 return new List<T>(l);
 
             var result = new List<T>(value.Count);
-            for (var i = 0; i < result.Count; ++i)
+            for (var i = 0; i < value.Count; ++i)
                 result.Add((T)value[i]);
 
             return result;
@@ -69,7 +69,7 @@ namespace Horker.Numerics.DataMaps
                 return l;
 
             var result = new List<T>(value.Count);
-            for (var i = 0; i < result.Count; ++i)
+            for (var i = 0; i < value.Count; ++i)
                 result.Add((T)value[i]);
 
             return result;

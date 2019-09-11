@@ -128,10 +128,11 @@ namespace Horker.Numerics.Tests
 
             Assert.True(ReferenceEquals(t1, t2));
 
-            var t3 = d["foo"].AsList<float>();
+            var t3 = d["foo"].ToList<int>();
 
             Assert.False(ReferenceEquals(t1, t3));
         }
+
         [Fact]
         public void TestToArrayCopyData()
         {
