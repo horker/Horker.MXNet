@@ -15,7 +15,7 @@ namespace Horker.Numerics.DataMaps
         public SeriesBase Data
         {
             get => _data;
-            internal set => _data = value;
+            set => _data = value;
         }
 
         public Type DataType => _data.DataType;

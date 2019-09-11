@@ -43,6 +43,40 @@ namespace Horker.Numerics.DataMaps
             }
         }
 
+        public int MaxRowCount
+        {
+            get
+            {
+                var count = 0;
+                foreach (var column in _columns)
+                    count = Math.Max(column.Data.Count, count);
+
+                return count;
+            }
+        }
+
+        public int MinRowCount
+        {
+            get
+            {
+                var count = 0;
+                foreach (var column in _columns)
+                    count = Math.Min(column.Data.Count, count);
+
+                return count;
+            }
+        }
+
+        public bool HasSameRowCounts()
+        {
+            var first = RowCount;
+            foreach (var column in _columns)
+                if (column.Data.Count != first)
+                    return false;
+
+            return true;
+        }
+
         // Constructors and factory methods
 
         public DataMap(IEqualityComparer<string> keyComparaer = null)
@@ -383,5 +417,43 @@ namespace Horker.Numerics.DataMaps
             return d;
         }
 
+        public T[,] To2DArray<T>()
+        {
+            var columnCount = ColumnCount;
+            var maxRowCount = MaxRowCount;
+
+            var result = new T[columnCount, maxRowCount];
+
+            var c = 0;
+            foreach (var column in _columns)
+            {
+                var r = 0;
+                foreach (var e in column.Data.UnderlyingList)
+                    result[c, r++] = (T)e;
+                ++c;
+            }
+
+            return result;
+        }
+
+        public Array To2DArray(Type type = null)
+        {
+            type = type ?? First.DataType;
+
+            if (type == typeof(double)) return To2DArray<double>();
+            if (type == typeof(float)) return To2DArray<float>();
+            if (type == typeof(long)) return To2DArray<long>();
+            if (type == typeof(int)) return To2DArray<int>();
+            if (type == typeof(short)) return To2DArray<short>();
+            if (type == typeof(byte)) return To2DArray<byte>();
+            if (type == typeof(sbyte)) return To2DArray<sbyte>();
+            if (type == typeof(decimal)) return To2DArray<decimal>();
+            if (type == typeof(bool)) return To2DArray<bool>();
+            if (type == typeof(string)) return To2DArray<string>();
+            if (type == typeof(DateTime)) return To2DArray<DateTime>();
+            if (type == typeof(DateTimeOffset)) return To2DArray<DateTimeOffset>();
+
+            return To2DArray<object>();
+        }
     }
 }

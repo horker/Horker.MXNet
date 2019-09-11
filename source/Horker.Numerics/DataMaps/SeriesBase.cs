@@ -97,9 +97,49 @@ namespace Horker.Numerics.DataMaps
             return IListExtensions.ToArray<T>(UnderlyingList);
         }
 
+        public Array ToArray(Type type = null)
+        {
+            type = type ?? DataType;
+
+            if (type == typeof(double)) return ToArray<double>();
+            if (type == typeof(float)) return ToArray<float>();
+            if (type == typeof(long)) return ToArray<long>();
+            if (type == typeof(int)) return ToArray<int>();
+            if (type == typeof(short)) return ToArray<short>();
+            if (type == typeof(byte)) return ToArray<byte>();
+            if (type == typeof(sbyte)) return ToArray<sbyte>();
+            if (type == typeof(decimal)) return ToArray<decimal>();
+            if (type == typeof(bool)) return ToArray<bool>();
+            if (type == typeof(string)) return ToArray<string>();
+            if (type == typeof(DateTime)) return ToArray<DateTime>();
+            if (type == typeof(DateTimeOffset)) return ToArray<DateTimeOffset>();
+
+            return ToArray<object>();
+        }
+
         public IList<T> ToList<T>()
         {
             return IListExtensions.ToList<T>(UnderlyingList);
+        }
+
+        public object ToList(Type type = null)
+        {
+            type = type ?? DataType;
+
+            if (type == typeof(double)) return ToList<double>();
+            if (type == typeof(float)) return ToList<float>();
+            if (type == typeof(long)) return ToList<long>();
+            if (type == typeof(int)) return ToList<int>();
+            if (type == typeof(short)) return ToList<short>();
+            if (type == typeof(byte)) return ToList<byte>();
+            if (type == typeof(sbyte)) return ToList<sbyte>();
+            if (type == typeof(decimal)) return ToList<decimal>();
+            if (type == typeof(bool)) return ToList<bool>();
+            if (type == typeof(string)) return ToList<string>();
+            if (type == typeof(DateTime)) return ToList<DateTime>();
+            if (type == typeof(DateTimeOffset)) return ToList<DateTimeOffset>();
+
+            return ToList<object>();
         }
 
         public T[] AsArray<T>()
@@ -107,9 +147,49 @@ namespace Horker.Numerics.DataMaps
             return IListExtensions.AsArray<T>(UnderlyingList);
         }
 
+        public Array AsArray(Type type = null)
+        {
+            type = type ?? DataType;
+
+            if (type == typeof(double)) return AsArray<double>();
+            if (type == typeof(float)) return AsArray<float>();
+            if (type == typeof(long)) return AsArray<long>();
+            if (type == typeof(int)) return AsArray<int>();
+            if (type == typeof(short)) return AsArray<short>();
+            if (type == typeof(byte)) return AsArray<byte>();
+            if (type == typeof(sbyte)) return AsArray<sbyte>();
+            if (type == typeof(decimal)) return AsArray<decimal>();
+            if (type == typeof(bool)) return AsArray<bool>();
+            if (type == typeof(string)) return AsArray<string>();
+            if (type == typeof(DateTime)) return AsArray<DateTime>();
+            if (type == typeof(DateTimeOffset)) return AsArray<DateTimeOffset>();
+
+            return AsArray<object>();
+        }
+
         public IList<T> AsList<T>()
         {
             return IListExtensions.AsList<T>(UnderlyingList);
+        }
+
+        public object AsList(Type type = null)
+        {
+            type = type ?? DataType;
+
+            if (type == typeof(double)) return AsList<double>();
+            if (type == typeof(float)) return AsList<float>();
+            if (type == typeof(long)) return AsList<long>();
+            if (type == typeof(int)) return AsList<int>();
+            if (type == typeof(short)) return AsList<short>();
+            if (type == typeof(byte)) return AsList<byte>();
+            if (type == typeof(sbyte)) return AsList<sbyte>();
+            if (type == typeof(decimal)) return AsList<decimal>();
+            if (type == typeof(bool)) return AsList<bool>();
+            if (type == typeof(string)) return AsList<string>();
+            if (type == typeof(DateTime)) return AsList<DateTime>();
+            if (type == typeof(DateTimeOffset)) return AsList<DateTimeOffset>();
+
+            return AsList<object>();
         }
 
         public List<T> Convert<T>()
@@ -151,8 +231,6 @@ namespace Horker.Numerics.DataMaps
 
         public void Sort()
         {
-            var comparer = new Comparer(CultureInfo.CurrentCulture);
-
             var l = UnderlyingList;
 
             if (l is Array a)
@@ -181,6 +259,7 @@ namespace Horker.Numerics.DataMaps
             foreach (var e in l)
                 result.Add(e);
             result.Sort();
+
             UnderlyingList = result;
         }
     }
