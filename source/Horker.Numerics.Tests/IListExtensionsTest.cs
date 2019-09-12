@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Horker.Numerics.DataMaps;
+using Horker.Numerics.DataMaps.Extensions;
 using Xunit;
 
 namespace Horker.Numerics.Tests

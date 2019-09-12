@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Horker.Numerics.DataMaps
+namespace Horker.Numerics.DataMaps.Extensions
 {
     public static class IListExtensions
     {

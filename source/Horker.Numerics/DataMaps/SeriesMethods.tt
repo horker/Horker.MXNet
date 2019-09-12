@@ -1,0 +1,55 @@
+﻿<#@ template debug="true" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#   
+var methodNames = new string[]
+{
+	"CumulativeSum",
+	"FillCumulativeSum",
+	"Sort",
+	"FillSort"
+};
+#>
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Horker.Numerics.DataMaps
+{
+    public partial class SeriesBase : IList
+    {
+        enum MethodIndex
+        {
+<#   
+foreach (var name in methodNames) {
+#>
+			<#= name #>,
+<#
+}
+#>
+        }
+
+<#   
+foreach (var name in methodNames) {
+#>
+        public SeriesBase <#= name #>()
+        {
+            if (!_methodCache.TryGetValue(DataType, out var methodTable))
+                throw new InvalidOperationException($"<#= name #>() is not supported for type {DataType}");
+
+            var m = methodTable[(int)MethodIndex.<#= name #>];
+            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
+        }
+
+<#
+}
+#>
+	}
+}

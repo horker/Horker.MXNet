@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Horker.Numerics.Transformers;
 
 namespace Horker.Numerics.DataMaps
 {
@@ -274,17 +275,17 @@ namespace Horker.Numerics.DataMaps
             return false;
         }
 
-        public virtual void AddFirst(string name, SeriesBase value)
+        public void AddFirst(string name, SeriesBase value)
         {
             if (_nameMap.ContainsKey(name))
-                Remove(name);
+                throw new ArgumentException($"Column '{name}' already exits");
 
             var node = new LinkedListNode<Column>(new Column(name, value));
             _columns.AddFirst(node);
             _nameMap.Add(name, node);
         }
 
-        public virtual void AddFirst(string name, IList value)
+        public void AddFirst(string name, IList value)
         {
             AddFirst(name, new Series(value));
         }
@@ -292,16 +293,52 @@ namespace Horker.Numerics.DataMaps
         public virtual void AddLast(string name, SeriesBase value)
         {
             if (_nameMap.ContainsKey(name))
-                Remove(name);
+                throw new ArgumentException($"Column '{name}' already exits");
 
             var node = new LinkedListNode<Column>(new Column(name, value));
             _columns.AddLast(node);
             _nameMap.Add(name, node);
         }
 
-        public virtual void AddLast(string name, IList value)
+        public void AddLast(string name, IList value)
         {
             AddLast(name, new Series(value));
+        }
+
+        public void AddBefore(string before, string name, SeriesBase value)
+        {
+            if (_nameMap.ContainsKey(name))
+                throw new ArgumentException($"Column '{name}' already exits");
+
+            if (!_nameMap.TryGetValue(before, out var beforeNode))
+                throw new ArgumentException($"Column '{before}' does not exist");
+
+            var node = new LinkedListNode<Column>(new Column(name, value));
+            _columns.AddBefore(beforeNode, node);
+            _nameMap.Add(name, node);
+        }
+
+        public void AddBefore(string before, string name, IList value)
+        {
+            AddBefore(before, name, new Series(value));
+        }
+
+        public void AddAfter(string after, string name, SeriesBase value)
+        {
+            if (_nameMap.ContainsKey(name))
+                throw new ArgumentException($"Column '{name}' already exits");
+
+            if (!_nameMap.TryGetValue(after, out var afterNode))
+                throw new ArgumentException($"Column '{after}' does not exist");
+
+            var node = new LinkedListNode<Column>(new Column(name, value));
+            _columns.AddAfter(afterNode, node);
+            _nameMap.Add(name, node);
+        }
+
+        public void AddAfter(string before, string name, IList value)
+        {
+            AddAfter(before, name, new Series(value));
         }
 
         public void MoveToFirst(string name)
@@ -459,6 +496,19 @@ namespace Horker.Numerics.DataMaps
             if (type == typeof(DateTimeOffset)) return To2DArray<DateTimeOffset>();
 
             return To2DArray<object>();
+        }
+
+        // Transformers
+
+        public void OneHot(string columnName, OneHotType oneHotType = OneHotType.OneHot, string columnNameFormat = "{1}_{0}")
+        {
+            var format = string.Format(columnNameFormat, "{0}", columnName);
+            var oneHot = this[columnName].OneHot(oneHotType, format);
+
+            foreach (var column in oneHot)
+                AddBefore(columnName, column.Name, column.Data);
+
+            Remove(columnName);
         }
     }
 }

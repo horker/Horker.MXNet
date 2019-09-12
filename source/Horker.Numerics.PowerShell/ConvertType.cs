@@ -6,6 +6,7 @@ using System.Management.Automation;
 using System.Text;
 using System.Threading.Tasks;
 using Horker.Numerics.DataMaps;
+using Horker.Numerics.DataMaps.Extensions;
 
 namespace Horker.Numerics.PowerShell
 {

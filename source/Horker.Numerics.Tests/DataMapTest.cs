@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Horker.Numerics.DataMaps;
+using Horker.Numerics.Transformers;
 using Xunit;
 
 namespace Horker.Numerics.Tests
@@ -170,6 +171,23 @@ namespace Horker.Numerics.Tests
             var t2 = d["foo"].Convert<bool>();
 
             Assert.Equal(new bool[] { true, false, false }, t2.ToArray());
+        }
+
+        [Fact]
+        public void TestOneHost()
+        {
+            var t1 = new double[] { 20, 10, 30 };
+
+            var d = new DataMap();
+            d["xxx"] = t1;
+
+            d.OneHot("xxx", OneHotType.OneHot);
+
+            Assert.Equal(new[] { "xxx_10", "xxx_20", "xxx_30" }, d.ColumnNames);
+
+            Assert.Equal(new int[] { 1, 0, 0 }, d["xxx_20"]);
+            Assert.Equal(new int[] { 0, 1, 0 }, d["xxx_10"]);
+            Assert.Equal(new int[] { 0, 0, 1 }, d["xxx_30"]);
         }
     }
 }

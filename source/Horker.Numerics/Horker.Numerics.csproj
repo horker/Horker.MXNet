@@ -72,6 +72,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataMaps\MetaNumIListExtensions.cs" />
+    <Compile Include="DataMaps\OperatorFuncs.cs" />
+    <Compile Include="DataMaps\MetaNum.cs" />
     <Compile Include="DataMaps\SortedListIndexSeries.cs" />
     <Compile Include="DataMaps\RangeIndex.cs" />
     <Compile Include="DataMaps\Series.cs" />
@@ -80,7 +83,21 @@
     <Compile Include="DataMaps\DataMapEnumerator.cs" />
     <Compile Include="DataMaps\Column.cs" />
     <Compile Include="DataMaps\IListExtensions.cs" />
+    <Compile Include="DataMaps\GenericIListExtensions.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GenericIListExtensions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataMaps\SeriesMethods.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SeriesMethods.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transformers\OneHotSeriesTransformer.cs" />
+    <Compile Include="Transformers\SeriesTransformer.cs" />
+    <Compile Include="Utilities\FunctionCompiler.cs" />
+    <Compile Include="Utilities\ScriptBlock.cs" />
     <Compile Include="Utilities\SmartConverter.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +111,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DataMaps\GenericIListExtensions.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>GenericIListExtensions.cs</LastGenOutput>
+    </Content>
+    <Content Include="DataMaps\SeriesMethods.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SeriesMethods.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -5,10 +5,14 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
+using Horker.Numerics.Transformers;
+using Horker.Numerics.DataMaps.Extensions;
+using System.Management.Automation;
 
 namespace Horker.Numerics.DataMaps
 {
-    public class SeriesBase : IList
+    public partial class SeriesBase : IList
     {
         // Methods to be overrriden by subclasses
 
@@ -29,6 +33,41 @@ namespace Horker.Numerics.DataMaps
         public Type DataType
         {
             get => IListExtensions.GetDataType(UnderlyingList);
+        }
+
+        // Method cache
+
+        private static Dictionary<Type, MethodInfo[]> _methodCache;
+
+        private static readonly Type[] _types = new Type[]
+        {
+            typeof(double), typeof(float), typeof(long), typeof(int), typeof(short),
+            typeof(byte), typeof(sbyte), typeof(decimal),
+            typeof(bool), typeof(string), typeof(DateTime), typeof(DateTimeOffset)
+        };
+
+        static SeriesBase()
+        {
+            var methodNameIndexMap = new Dictionary<string, int>();
+
+            var names = typeof(MethodIndex).GetEnumNames();
+            for (var i = 0; i < names.Length; ++i)
+                methodNameIndexMap.Add(names[i], i);
+
+            _methodCache = new Dictionary<Type, MethodInfo[]>();
+
+            var methodCount = names.Length;
+
+            foreach (var t in _types)
+                _methodCache.Add(t, new MethodInfo[methodCount]);
+
+            foreach (var m in typeof(Extensions.GenericIListExtensions).GetMethods(BindingFlags.Static | BindingFlags.Public))
+            {
+                if (!methodNameIndexMap.TryGetValue(m.Name, out var index))
+                    continue;
+                var listType = m.GetParameters()[0].ParameterType.GetGenericArguments()[0];
+                _methodCache[listType][index] = m;
+            }
         }
 
         // IList implementation
@@ -227,40 +266,72 @@ namespace Horker.Numerics.DataMaps
         public static implicit operator SeriesBase(List<DateTime> value) { return new Series(value); }
         public static implicit operator SeriesBase(List<DateTimeOffset> value) { return new Series(value); }
 
-        // Manipulators
+        // LINQ-like methods
 
-        public void Sort()
+        private SeriesBase SelectByFunc<S, T>(Func<S, int, T> func)
         {
-            var l = UnderlyingList;
+            var result = new List<T>();
 
-            if (l is Array a)
+            var i = 0;
+            foreach (var e in UnderlyingList.AsList<S>())
             {
-                Array.Sort(a);
-                return;
+                var value = func.Invoke(e, i++);
+                result.Add(value);
             }
 
-            var t = l.GetType();
-            if (t.IsGenericType)
+            return new Series(result);
+        }
+
+        private SeriesBase SelectByScriptBlock<T>(ScriptBlock scriptBlock)
+        {
+            var result = new List<T>();
+
+            var parameters = new List<PSVariable>();
+            parameters.Add(new PSVariable("x"));
+            parameters.Add(new PSVariable("i"));
+
+            var i = 0;
+            foreach (var e in UnderlyingList)
             {
-                if (l is List<double> ld) { ld.Sort(); return; }
-                if (l is List<float> lf) { lf.Sort(); return; }
-                if (l is List<long> ll) { ll.Sort(); return; }
-                if (l is List<int> li) { li.Sort(); return; }
-                if (l is List<short> ls) { ls.Sort(); return; }
-                if (l is List<byte> lb) { lb.Sort(); return; }
-                if (l is List<sbyte> lsb) { lsb.Sort(); return; }
-                if (l is List<bool> lbo) { lbo.Sort(); return; }
-                if (l is List<string> lstr) { lstr.Sort(); return; }
-                if (l is List<DateTime> ldt) { ldt.Sort(); return; }
-                if (l is List<DateTimeOffset> ldto) { ldto.Sort(); return; }
+                parameters[0].Value = e;
+                parameters[1].Value = i++;
+                var rawValue = scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject;
+                var value = OperatorFuncs<T>.GetConvertOperatorFunc(rawValue.GetType()).Invoke(rawValue);
+                result.Add(value);
             }
 
-            var result = new List<object>(l.Count);
-            foreach (var e in l)
-                result.Add(e);
-            result.Sort();
+            return new Series(result);
+        }
 
-            UnderlyingList = result;
+        public SeriesBase Select(string funcString, Type returnType = null)
+        {
+            returnType = returnType ?? DataType;
+            var func = FunctionCompiler.Compile(funcString, new Type[] { DataType, typeof(int), returnType });
+
+            var m = typeof(SeriesBase).GetMethod("SelectByFunc", BindingFlags.NonPublic | BindingFlags.Instance);
+            var gm = m.MakeGenericMethod(new Type[] { DataType, returnType });
+            return (SeriesBase)gm.Invoke(this, new object[] { func });
+        }
+
+        public SeriesBase Select<S, T>(Func<S, int, T> func)
+        {
+            return SelectByFunc(func);
+        }
+
+        public SeriesBase Select(ScriptBlock scriptBlock, Type returnType = null)
+        {
+            returnType = returnType ?? DataType;
+            var m = typeof(SeriesBase).GetMethod("SelectByScriptBlock", BindingFlags.NonPublic | BindingFlags.Instance);
+            var gm = m.MakeGenericMethod(new Type[] { returnType });
+            return (SeriesBase)gm.Invoke(this, new object[] { scriptBlock });
+        }
+
+        // Transformers
+
+        public DataMap OneHot(OneHotType oneHotType = OneHotType.OneHot, string columnNameFormat = "{0}")
+        {
+            var trans = new OneHotSeriesTransformer(oneHotType, columnNameFormat);
+            return trans.FitTransformToDataMap(this);
         }
     }
 }

@@ -1,0 +1,54 @@
+﻿<#@ template debug="true" language="C#" hostspecific="true" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.Threading" #>
+<#@ output extension=".cs" #>
+<#
+var types = new string[] {
+	"double",
+	"float",
+	"long",
+	"int",
+	"short",
+	"byte",
+	"sbyte",
+	"decimal"
+};
+
+var templateDirectory = Path.GetDirectoryName(Host.TemplateFile);
+var baseFilePath = Path.Combine(templateDirectory, "MetaNumIListExtensions.cs");
+
+var  document = File.ReadAllText(baseFilePath);
+
+var start = document.IndexOf("CUT ABOVE") + "CUT ABOVE".Length;
+var end = document.IndexOf("// CUT BELOW") - "// CUT BELOW".Length;
+
+var doc = document.Substring(start, end - start);
+
+TextInfo textInfo = Thread.CurrentThread.CurrentCulture.TextInfo;
+#>
+using System;
+using System.Collections.Generic;
+
+namespace Horker.Numerics.DataMaps.Extensions
+{
+	public static partial class GenericIListExtensions
+	{
+<#
+foreach (var t in types)
+{
+	string capitalized = textInfo.ToTitleCase(t);
+	if (t == "sbyte")
+		capitalized = "SByte";
+	else
+		capitalized = textInfo.ToTitleCase(t);
+
+	var text = doc.Replace("MetaNum", t);
+	text = text.Replace("MetaFloat", t == "float" ? "float" : "double");
+#>
+<#= text #>
+<#
+}
+#>
+    }
+}

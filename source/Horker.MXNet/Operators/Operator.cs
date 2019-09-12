@@ -25,7 +25,7 @@ namespace Horker.MXNet.Operators
                 foreach (var c in creators)
                 {
                     // You must call this method for all symbols before use.
-                    // If not, the process will crash in an unexpected manner.
+                    // Otherwise, the process will crash in an unexpected manner.
                     CApi.MXSymbolGetAtomicSymbolInfo(
                         c,
                         out IntPtr namePtr,              // const char **
