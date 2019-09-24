@@ -59,7 +59,6 @@ namespace Horker.Numerics.DataMaps
             for (var i = 0; i < names.Length; ++i)
             {
                 var m = typeof(Extensions.IListExtensions).GetMethod(names[i], BindingFlags.Static | BindingFlags.Public);
-                Debug.Assert(m != null);
                 _fallbackMethodCache[i] = m;
             }
 
@@ -95,6 +94,12 @@ namespace Horker.Numerics.DataMaps
                 m = _fallbackMethodCache[(int)index];
             else
                 m = methodTable[(int)index];
+
+            if (m == null)
+            {
+                var methodName = typeof(MethodIndex).GetEnumName(index);
+                throw new InvalidOperationException($"Operation {methodName}() is not supported for type {DataType.Name}");
+            }
 
             return m;
         }

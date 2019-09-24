@@ -149,16 +149,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             m.Invoke(self, new object[0]);
         }
 
-        public static IList CumulativeSum(this IList self)
-        {
-            throw new InvalidOperationException("This object does not support this operation");
-        }
-
-        public static void CumulativeSumFill(this IList self)
-        {
-            throw new InvalidOperationException("This object does not support this operation");
-        }
-
         public static int CountNaN(this IList self)
         {
             int count = 0;

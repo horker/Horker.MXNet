@@ -38,6 +38,12 @@ namespace Horker.Numerics.Tests
             t1.CumulativeSumFill();
 
             Assert.Equal(new decimal[] { 1, 3, 6 }, t1.AsArray<decimal>());
+
+            var t3 = new Series(new string[] { "a", "b", "c" });
+
+            Assert.Throws<InvalidOperationException>(() => {
+                t3.CumulativeSum();
+            });
         }
     }
 }
