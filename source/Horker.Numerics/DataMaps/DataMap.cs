@@ -19,7 +19,7 @@ namespace Horker.Numerics.DataMaps
         // Properties
 
         public static Type[] ConversionTypes { get; set; } = new Type[] {
-            typeof(int), typeof(Int64), typeof(double), typeof(bool), 
+            typeof(int), typeof(Int64), typeof(double), typeof(bool),
             typeof(DateTime), typeof(DateTimeOffset), typeof(string)
         };
 
@@ -104,17 +104,17 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-/*
-        public static DataMap FromDictionary(IDictionary<string, IList> source)
-        {
-            var result = new DataMap();
+        /*
+                public static DataMap FromDictionary(IDictionary<string, IList> source)
+                {
+                    var result = new DataMap();
 
-            foreach (var entry in source)
-                result.AddLast(entry.Key, entry.Value);
+                    foreach (var entry in source)
+                        result.AddLast(entry.Key, entry.Value);
 
-            return result;
-        }
-*/
+                    return result;
+                }
+        */
 
         public static DataMap FromDictionary(IDictionary source)
         {
@@ -509,6 +509,28 @@ namespace Horker.Numerics.DataMaps
                 AddBefore(columnName, column.Name, column.Data);
 
             Remove(columnName);
+        }
+
+        public IEnumerable<ISummary> Describe()
+        {
+            foreach (var column in Columns)
+            {
+                ISummary result = null;
+                try
+                {
+                    result = column.Data.Describe();
+                }
+                catch (InvalidOperationException)
+                {
+                    result = new Summary<object>()
+                    {
+                        Count = column.Data.Count,
+                        NaNCount = column.Data.CountNaN()
+                    };
+                }
+                result.Name = column.Name;
+                yield return result;
+            }
         }
     }
 }

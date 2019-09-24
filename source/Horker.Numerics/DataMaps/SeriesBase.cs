@@ -9,6 +9,7 @@ using System.Reflection;
 using Horker.Numerics.Transformers;
 using Horker.Numerics.DataMaps.Extensions;
 using System.Management.Automation;
+using System.Diagnostics;
 
 namespace Horker.Numerics.DataMaps
 {
@@ -38,6 +39,7 @@ namespace Horker.Numerics.DataMaps
         // Method cache
 
         private static Dictionary<Type, MethodInfo[]> _methodCache;
+        private static MethodInfo[] _fallbackMethodCache;
 
         private static readonly Type[] _types = new Type[]
         {
@@ -48,26 +50,53 @@ namespace Horker.Numerics.DataMaps
 
         static SeriesBase()
         {
-            var methodNameIndexMap = new Dictionary<string, int>();
-
             var names = typeof(MethodIndex).GetEnumNames();
+
+            // Set up the fallback method cache.
+
+            _fallbackMethodCache = new MethodInfo[names.Length];
+
+            for (var i = 0; i < names.Length; ++i)
+            {
+                var m = typeof(Extensions.IListExtensions).GetMethod(names[i], BindingFlags.Static | BindingFlags.Public);
+                Debug.Assert(m != null);
+                _fallbackMethodCache[i] = m;
+            }
+
+            // Set up the method cache.
+
+            var methodNameIndexMap = new Dictionary<string, int>();
             for (var i = 0; i < names.Length; ++i)
                 methodNameIndexMap.Add(names[i], i);
 
             _methodCache = new Dictionary<Type, MethodInfo[]>();
 
-            var methodCount = names.Length;
-
             foreach (var t in _types)
-                _methodCache.Add(t, new MethodInfo[methodCount]);
+            {
+                var mi = new MethodInfo[names.Length];
+                Array.Copy(_fallbackMethodCache, mi, names.Length);
+                _methodCache.Add(t, mi);
+            }
 
             foreach (var m in typeof(Extensions.GenericIListExtensions).GetMethods(BindingFlags.Static | BindingFlags.Public))
             {
                 if (!methodNameIndexMap.TryGetValue(m.Name, out var index))
                     continue;
                 var listType = m.GetParameters()[0].ParameterType.GetGenericArguments()[0];
-                _methodCache[listType][index] = m;
+                if (_methodCache.TryGetValue(listType, out var cache))
+                    cache[index] = m;
             }
+        }
+
+        private MethodInfo GetMethodInfo(MethodIndex index)
+        {
+            MethodInfo m;
+            if (!_methodCache.TryGetValue(DataType, out var methodTable))
+                m = _fallbackMethodCache[(int)index];
+            else
+                m = methodTable[(int)index];
+
+            return m;
         }
 
         // IList implementation

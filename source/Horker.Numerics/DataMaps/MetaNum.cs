@@ -17,10 +17,30 @@
         public static MetaNum operator *(MetaNum lhs, MetaNum rhs) { return (MetaNum)0; }
         public static MetaNum operator /(MetaNum lhs, MetaNum rhs) { return (MetaNum)0; }
 
+        public static MetaNum operator +(MetaNum lhs, double rhs) { return (MetaNum)0; }
+        public static MetaNum operator -(MetaNum lhs, double rhs) { return (MetaNum)0; }
+        public static MetaNum operator *(MetaNum lhs, double rhs) { return (MetaNum)0; }
+        public static MetaNum operator /(MetaNum lhs, double rhs) { return (MetaNum)0; }
+
+        public static MetaNum operator +(double lhs, MetaNum rhs) { return (MetaNum)0; }
+        public static MetaNum operator -(double lhs, MetaNum rhs) { return (MetaNum)0; }
+        public static MetaNum operator *(double lhs, MetaNum rhs) { return (MetaNum)0; }
+        public static MetaNum operator /(double lhs, MetaNum rhs) { return (MetaNum)0; }
+
         public static bool operator <(MetaNum lhs, MetaNum rhs) { return false; }
         public static bool operator <=(MetaNum lhs, MetaNum rhs) { return false; }
         public static bool operator >(MetaNum lhs, MetaNum rhs) { return false; }
         public static bool operator >=(MetaNum lhs, MetaNum rhs) { return false; }
+
+        public static bool operator <(MetaNum lhs, double rhs) { return false; }
+        public static bool operator <=(MetaNum lhs, double rhs) { return false; }
+        public static bool operator >(MetaNum lhs, double rhs) { return false; }
+        public static bool operator >=(MetaNum lhs, double rhs) { return false; }
+
+        public static bool operator <(double lhs, MetaNum rhs) { return false; }
+        public static bool operator <=(double lhs, MetaNum rhs) { return false; }
+        public static bool operator >(double lhs, MetaNum rhs) { return false; }
+        public static bool operator >=(double lhs, MetaNum rhs) { return false; }
 
         public static explicit operator MetaNum(double value)
         {
@@ -39,7 +59,7 @@
             : base(value)
         { }
 
-        public static implicit operator double(MetaFloat value)
+        public static explicit operator double(MetaFloat value)
         {
             return 0;
         }

@@ -29,6 +29,7 @@ TextInfo textInfo = Thread.CurrentThread.CurrentCulture.TextInfo;
 #>
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Horker.Numerics.DataMaps.Extensions
 {

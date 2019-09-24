@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Horker.Numerics.DataMaps.Extensions
 {
@@ -13,7 +14,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void FillSort(this IList<double> self)
+        public static void SortFill(this IList<double> self)
         {
             if (self is Array a)
             {
@@ -50,7 +51,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void FillCumulativeSum(this IList<double> self)
+        public static void CumulativeSumFill(this IList<double> self)
         {
             double sum = (double)0;
 
@@ -62,6 +63,44 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+        public static int CountNaN(this IList<double> self)
+        {
+            int count = 0;
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    ++count;
+            }
+
+            return count;
+        }
+
+        public static Summary<double> Describe(this IList<double> self)
+        {
+            var count = self.Count;
+            var sorted = self.ToArray();
+            Array.Sort(sorted);
+
+            var even = count % 2 == 0;
+            var q = count % 4 == 0;
+
+            double sum = (double)0;
+            foreach (var e in sorted)
+                sum += (double)e;
+
+            var summary = new Summary<double>();
+            summary.Count = count;
+            summary.NaNCount = CountNaN(self);
+            summary.Min = sorted[0];
+            summary.Q1 = (double)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
+            summary.Mean = (double)(sum / count);
+            summary.Median = (double)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
+            summary.Q3 = (double)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
+            summary.Max = sorted[count - 1];
+
+            return summary;
+        }
+
         public static List<float> Sort(this IList<float> self)
         {
             var result = new List<float>(self);
@@ -69,7 +108,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void FillSort(this IList<float> self)
+        public static void SortFill(this IList<float> self)
         {
             if (self is Array a)
             {
@@ -106,7 +145,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void FillCumulativeSum(this IList<float> self)
+        public static void CumulativeSumFill(this IList<float> self)
         {
             float sum = (float)0;
 
@@ -118,6 +157,44 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+        public static int CountNaN(this IList<float> self)
+        {
+            int count = 0;
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    ++count;
+            }
+
+            return count;
+        }
+
+        public static Summary<float> Describe(this IList<float> self)
+        {
+            var count = self.Count;
+            var sorted = self.ToArray();
+            Array.Sort(sorted);
+
+            var even = count % 2 == 0;
+            var q = count % 4 == 0;
+
+            float sum = (float)0;
+            foreach (var e in sorted)
+                sum += (float)e;
+
+            var summary = new Summary<float>();
+            summary.Count = count;
+            summary.NaNCount = CountNaN(self);
+            summary.Min = sorted[0];
+            summary.Q1 = (float)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
+            summary.Mean = (float)(sum / count);
+            summary.Median = (float)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
+            summary.Q3 = (float)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
+            summary.Max = sorted[count - 1];
+
+            return summary;
+        }
+
         public static List<long> Sort(this IList<long> self)
         {
             var result = new List<long>(self);
@@ -125,7 +202,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void FillSort(this IList<long> self)
+        public static void SortFill(this IList<long> self)
         {
             if (self is Array a)
             {
@@ -162,7 +239,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void FillCumulativeSum(this IList<long> self)
+        public static void CumulativeSumFill(this IList<long> self)
         {
             long sum = (long)0;
 
@@ -174,6 +251,44 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+        public static int CountNaN(this IList<long> self)
+        {
+            int count = 0;
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    ++count;
+            }
+
+            return count;
+        }
+
+        public static Summary<long> Describe(this IList<long> self)
+        {
+            var count = self.Count;
+            var sorted = self.ToArray();
+            Array.Sort(sorted);
+
+            var even = count % 2 == 0;
+            var q = count % 4 == 0;
+
+            long sum = (long)0;
+            foreach (var e in sorted)
+                sum += (long)e;
+
+            var summary = new Summary<long>();
+            summary.Count = count;
+            summary.NaNCount = CountNaN(self);
+            summary.Min = sorted[0];
+            summary.Q1 = (long)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
+            summary.Mean = (long)(sum / count);
+            summary.Median = (long)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
+            summary.Q3 = (long)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
+            summary.Max = sorted[count - 1];
+
+            return summary;
+        }
+
         public static List<int> Sort(this IList<int> self)
         {
             var result = new List<int>(self);
@@ -181,7 +296,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void FillSort(this IList<int> self)
+        public static void SortFill(this IList<int> self)
         {
             if (self is Array a)
             {
@@ -218,7 +333,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void FillCumulativeSum(this IList<int> self)
+        public static void CumulativeSumFill(this IList<int> self)
         {
             int sum = (int)0;
 
@@ -230,6 +345,44 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+        public static int CountNaN(this IList<int> self)
+        {
+            int count = 0;
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    ++count;
+            }
+
+            return count;
+        }
+
+        public static Summary<int> Describe(this IList<int> self)
+        {
+            var count = self.Count;
+            var sorted = self.ToArray();
+            Array.Sort(sorted);
+
+            var even = count % 2 == 0;
+            var q = count % 4 == 0;
+
+            int sum = (int)0;
+            foreach (var e in sorted)
+                sum += (int)e;
+
+            var summary = new Summary<int>();
+            summary.Count = count;
+            summary.NaNCount = CountNaN(self);
+            summary.Min = sorted[0];
+            summary.Q1 = (int)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
+            summary.Mean = (int)(sum / count);
+            summary.Median = (int)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
+            summary.Q3 = (int)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
+            summary.Max = sorted[count - 1];
+
+            return summary;
+        }
+
         public static List<short> Sort(this IList<short> self)
         {
             var result = new List<short>(self);
@@ -237,7 +390,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void FillSort(this IList<short> self)
+        public static void SortFill(this IList<short> self)
         {
             if (self is Array a)
             {
@@ -274,7 +427,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void FillCumulativeSum(this IList<short> self)
+        public static void CumulativeSumFill(this IList<short> self)
         {
             short sum = (short)0;
 
@@ -286,6 +439,44 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+        public static int CountNaN(this IList<short> self)
+        {
+            int count = 0;
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    ++count;
+            }
+
+            return count;
+        }
+
+        public static Summary<short> Describe(this IList<short> self)
+        {
+            var count = self.Count;
+            var sorted = self.ToArray();
+            Array.Sort(sorted);
+
+            var even = count % 2 == 0;
+            var q = count % 4 == 0;
+
+            short sum = (short)0;
+            foreach (var e in sorted)
+                sum += (short)e;
+
+            var summary = new Summary<short>();
+            summary.Count = count;
+            summary.NaNCount = CountNaN(self);
+            summary.Min = sorted[0];
+            summary.Q1 = (short)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
+            summary.Mean = (short)(sum / count);
+            summary.Median = (short)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
+            summary.Q3 = (short)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
+            summary.Max = sorted[count - 1];
+
+            return summary;
+        }
+
         public static List<byte> Sort(this IList<byte> self)
         {
             var result = new List<byte>(self);
@@ -293,7 +484,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void FillSort(this IList<byte> self)
+        public static void SortFill(this IList<byte> self)
         {
             if (self is Array a)
             {
@@ -330,7 +521,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void FillCumulativeSum(this IList<byte> self)
+        public static void CumulativeSumFill(this IList<byte> self)
         {
             byte sum = (byte)0;
 
@@ -342,6 +533,44 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+        public static int CountNaN(this IList<byte> self)
+        {
+            int count = 0;
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    ++count;
+            }
+
+            return count;
+        }
+
+        public static Summary<byte> Describe(this IList<byte> self)
+        {
+            var count = self.Count;
+            var sorted = self.ToArray();
+            Array.Sort(sorted);
+
+            var even = count % 2 == 0;
+            var q = count % 4 == 0;
+
+            byte sum = (byte)0;
+            foreach (var e in sorted)
+                sum += (byte)e;
+
+            var summary = new Summary<byte>();
+            summary.Count = count;
+            summary.NaNCount = CountNaN(self);
+            summary.Min = sorted[0];
+            summary.Q1 = (byte)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
+            summary.Mean = (byte)(sum / count);
+            summary.Median = (byte)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
+            summary.Q3 = (byte)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
+            summary.Max = sorted[count - 1];
+
+            return summary;
+        }
+
         public static List<sbyte> Sort(this IList<sbyte> self)
         {
             var result = new List<sbyte>(self);
@@ -349,7 +578,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void FillSort(this IList<sbyte> self)
+        public static void SortFill(this IList<sbyte> self)
         {
             if (self is Array a)
             {
@@ -386,7 +615,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void FillCumulativeSum(this IList<sbyte> self)
+        public static void CumulativeSumFill(this IList<sbyte> self)
         {
             sbyte sum = (sbyte)0;
 
@@ -398,6 +627,44 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+        public static int CountNaN(this IList<sbyte> self)
+        {
+            int count = 0;
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    ++count;
+            }
+
+            return count;
+        }
+
+        public static Summary<sbyte> Describe(this IList<sbyte> self)
+        {
+            var count = self.Count;
+            var sorted = self.ToArray();
+            Array.Sort(sorted);
+
+            var even = count % 2 == 0;
+            var q = count % 4 == 0;
+
+            sbyte sum = (sbyte)0;
+            foreach (var e in sorted)
+                sum += (sbyte)e;
+
+            var summary = new Summary<sbyte>();
+            summary.Count = count;
+            summary.NaNCount = CountNaN(self);
+            summary.Min = sorted[0];
+            summary.Q1 = (sbyte)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
+            summary.Mean = (sbyte)(sum / count);
+            summary.Median = (sbyte)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
+            summary.Q3 = (sbyte)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
+            summary.Max = sorted[count - 1];
+
+            return summary;
+        }
+
         public static List<decimal> Sort(this IList<decimal> self)
         {
             var result = new List<decimal>(self);
@@ -405,7 +672,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void FillSort(this IList<decimal> self)
+        public static void SortFill(this IList<decimal> self)
         {
             if (self is Array a)
             {
@@ -442,7 +709,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void FillCumulativeSum(this IList<decimal> self)
+        public static void CumulativeSumFill(this IList<decimal> self)
         {
             decimal sum = (decimal)0;
 
@@ -452,6 +719,44 @@ namespace Horker.Numerics.DataMaps.Extensions
                 sum += value;
                 self[i++] = sum;
             }
+        }
+
+        public static int CountNaN(this IList<decimal> self)
+        {
+            int count = 0;
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    ++count;
+            }
+
+            return count;
+        }
+
+        public static Summary<decimal> Describe(this IList<decimal> self)
+        {
+            var count = self.Count;
+            var sorted = self.ToArray();
+            Array.Sort(sorted);
+
+            var even = count % 2 == 0;
+            var q = count % 4 == 0;
+
+            decimal sum = (decimal)0;
+            foreach (var e in sorted)
+                sum += (decimal)e;
+
+            var summary = new Summary<decimal>();
+            summary.Count = count;
+            summary.NaNCount = CountNaN(self);
+            summary.Min = sorted[0];
+            summary.Q1 = (decimal)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
+            summary.Mean = (decimal)(sum / count);
+            summary.Median = (decimal)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
+            summary.Q3 = (decimal)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
+            summary.Max = sorted[count - 1];
+
+            return summary;
         }
     }
 }

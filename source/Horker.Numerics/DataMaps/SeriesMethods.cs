@@ -13,45 +13,51 @@ namespace Horker.Numerics.DataMaps
         enum MethodIndex
         {
 			CumulativeSum,
-			FillCumulativeSum,
 			Sort,
-			FillSort,
+			CumulativeSumFill,
+			SortFill,
+			CountNaN,
+			Describe,
         }
 
         public SeriesBase CumulativeSum()
         {
-            if (!_methodCache.TryGetValue(DataType, out var methodTable))
-                throw new InvalidOperationException($"CumulativeSum() is not supported for type {DataType}");
-
-            var m = methodTable[(int)MethodIndex.CumulativeSum];
-            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
-        }
-
-        public SeriesBase FillCumulativeSum()
-        {
-            if (!_methodCache.TryGetValue(DataType, out var methodTable))
-                throw new InvalidOperationException($"FillCumulativeSum() is not supported for type {DataType}");
-
-            var m = methodTable[(int)MethodIndex.FillCumulativeSum];
+			var m = GetMethodInfo(MethodIndex.CumulativeSum);
             return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
         }
 
         public SeriesBase Sort()
         {
-            if (!_methodCache.TryGetValue(DataType, out var methodTable))
-                throw new InvalidOperationException($"Sort() is not supported for type {DataType}");
-
-            var m = methodTable[(int)MethodIndex.Sort];
+			var m = GetMethodInfo(MethodIndex.Sort);
             return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
         }
 
-        public SeriesBase FillSort()
+        public void CumulativeSumFill()
         {
-            if (!_methodCache.TryGetValue(DataType, out var methodTable))
-                throw new InvalidOperationException($"FillSort() is not supported for type {DataType}");
+			var m = GetMethodInfo(MethodIndex.CumulativeSumFill);
 
-            var m = methodTable[(int)MethodIndex.FillSort];
-            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
+            m.Invoke(null, new object[] { UnderlyingList });
+        }
+
+        public void SortFill()
+        {
+			var m = GetMethodInfo(MethodIndex.SortFill);
+
+            m.Invoke(null, new object[] { UnderlyingList });
+        }
+
+        public int CountNaN()
+        {
+			var m = GetMethodInfo(MethodIndex.CountNaN);
+
+            return (int)m.Invoke(null, new object[] { UnderlyingList });
+        }
+
+        public ISummary Describe()
+        {
+			var m = GetMethodInfo(MethodIndex.Describe);
+
+            return (ISummary)m.Invoke(null, new object[] { UnderlyingList });
         }
 
 	}

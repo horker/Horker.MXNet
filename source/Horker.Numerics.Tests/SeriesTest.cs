@@ -35,7 +35,7 @@ namespace Horker.Numerics.Tests
             Assert.IsType<Series>(t2);
             Assert.Equal(new decimal[] { 1, 3, 6 }, t2.AsArray<decimal>());
 
-            t1.FillCumulativeSum();
+            t1.CumulativeSumFill();
 
             Assert.Equal(new decimal[] { 1, 3, 6 }, t1.AsArray<decimal>());
         }

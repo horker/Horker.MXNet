@@ -118,5 +118,70 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             return value;
         }
+
+        // IList versions of GenericIListExtensions
+
+        public static IList Sort(this IList self)
+        {
+            var result = new List<object>(self.ToArray<object>());
+            result.Sort();
+            return result;
+        }
+
+        public static void SortFill(this IList self)
+        {
+            if (self is Array a)
+            {
+                Array.Sort(a);
+                return;
+            }
+
+            var t = self.GetType();
+            if (t.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                var l = self as List<MetaNum>;
+                l.Sort();
+                return;
+            }
+
+            var m = t.GetMethod("Sort", new Type[0]);
+            if (m == null)
+                throw new InvalidOperationException("This object does not support inplace Sort() operation");
+
+            m.Invoke(self, new object[0]);
+        }
+
+        public static IList CumulativeSum(this IList self)
+        {
+            throw new InvalidOperationException("This object does not support this operation");
+        }
+
+        public static void CumulativeSumFill(this IList self)
+        {
+            throw new InvalidOperationException("This object does not support this operation");
+        }
+
+        public static int CountNaN(this IList self)
+        {
+            int count = 0;
+            foreach (var value in self)
+            {
+                if (value == null)
+                    ++count;
+            }
+
+            return count;
+        }
+
+        public static ISummary Describe(this IList self)
+        {
+            var summary = new Summary<object>()
+            {
+                Count = self.Count,
+                NaNCount = CountNaN(self)
+            };
+
+            return summary;
+        }
     }
 }

@@ -8,9 +8,16 @@
 var methodNames = new string[]
 {
 	"CumulativeSum",
-	"FillCumulativeSum",
 	"Sort",
-	"FillSort"
+};
+
+var nonSeriesMethods = new Tuple<string, string>[]
+{
+	Tuple.Create("CumulativeSumFill", "void"),
+	Tuple.Create("SortFill", "void"),
+	Tuple.Create("CountNaN", "int"),
+	Tuple.Create("Describe", "ISummary")
+
 };
 #>
 using System;
@@ -33,6 +40,11 @@ foreach (var name in methodNames) {
 			<#= name #>,
 <#
 }
+foreach (var t in nonSeriesMethods) {
+#>
+			<#= t.Item1 #>,
+<#
+}
 #>
         }
 
@@ -41,11 +53,23 @@ foreach (var name in methodNames) {
 #>
         public SeriesBase <#= name #>()
         {
-            if (!_methodCache.TryGetValue(DataType, out var methodTable))
-                throw new InvalidOperationException($"<#= name #>() is not supported for type {DataType}");
-
-            var m = methodTable[(int)MethodIndex.<#= name #>];
+			var m = GetMethodInfo(MethodIndex.<#= name #>);
             return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
+        }
+
+<#
+}
+foreach (var t in nonSeriesMethods) {
+#>
+        public <#= t.Item2 #> <#= t.Item1 #>()
+        {
+			var m = GetMethodInfo(MethodIndex.<#= t.Item1 #>);
+
+<# if (t.Item2 == "void") { #>
+            m.Invoke(null, new object[] { UnderlyingList });
+<# } else { #>
+            return (<#= t.Item2 #>)m.Invoke(null, new object[] { UnderlyingList });
+<# } #>
         }
 
 <#
