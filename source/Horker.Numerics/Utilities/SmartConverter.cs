@@ -71,7 +71,11 @@ namespace Horker.Numerics
                 if (input is string)
                 {
                     var s = input as string;
+                    if (string.IsNullOrWhiteSpace(s))
+                        return double.NaN;
+
                     s = CURRENCY_RE.Replace(s, "");
+
                     var success = double.TryParse(s, NumberStyles.Any, NumberFormatInfo.InvariantInfo, out double result);
                     if (!success)
                         return ReturnFallbackValue(input, fallback, null);

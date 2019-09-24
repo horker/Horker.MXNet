@@ -94,15 +94,13 @@ namespace Horker.Numerics.DataMaps.Extensions
             possibleTypes = possibleTypes ?? DataMap.ConversionTypes;
 
             var type = GetDataType(value);
-            foreach (var t in possibleTypes)
-            {
-                if (t == type)
-                    return value;
-            }
 
             ArgumentException cause = null;
             foreach (var t in possibleTypes)
             {
+                if (t == type)
+                    return value;
+
                 try
                 {
                     return SmartConverter.ConvertTo(t, value);
