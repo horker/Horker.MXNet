@@ -19,8 +19,7 @@ namespace Horker.Numerics.DataMaps
         // Properties
 
         public static Type[] ConversionTypes { get; set; } = new Type[] {
-            typeof(int), typeof(Int64), typeof(double), typeof(bool),
-            typeof(DateTime), typeof(DateTimeOffset), typeof(string)
+            typeof(double), typeof(bool), typeof(DateTime), typeof(DateTimeOffset)
         };
 
         public IEnumerable<Column> Columns => _columns;

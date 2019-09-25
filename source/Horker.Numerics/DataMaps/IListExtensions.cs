@@ -89,21 +89,49 @@ namespace Horker.Numerics.DataMaps.Extensions
             return SmartConverter.ConvertTo(type, value);
         }
 
-        public static IList Convert(this IList value, Type[] possibleTypes = null, bool raiseError = false)
+        public static IList CastDownToFirstElementType(this IList self)
+        {
+            Type firstType = null;
+            foreach (var value in self)
+            {
+                if (value != null)
+                {
+                    firstType = value.GetType();
+                    break;
+                }
+            }
+
+            if (firstType != null)
+            {
+                var m = typeof(IListExtensions).GetMethod("AsArray").MakeGenericMethod(new Type[] { firstType });
+                try
+                {
+                    return (IList)m.Invoke(null, new object[] { self });
+                }
+                catch (InvalidCastException)
+                {
+                    return self;
+                }
+            }
+
+            return self;
+        }
+
+        public static IList Convert(this IList self, Type[] possibleTypes = null, bool raiseError = false)
         {
             possibleTypes = possibleTypes ?? DataMap.ConversionTypes;
 
-            var type = GetDataType(value);
+            var type = GetDataType(self);
 
             ArgumentException cause = null;
             foreach (var t in possibleTypes)
             {
                 if (t == type)
-                    return value;
+                    return self;
 
                 try
                 {
-                    return SmartConverter.ConvertTo(t, value);
+                    return SmartConverter.ConvertTo(t, self);
                 }
                 catch (ArgumentException ex)
                 {
@@ -111,10 +139,9 @@ namespace Horker.Numerics.DataMaps.Extensions
                 }
             }
 
-            if (raiseError)
-                throw new ArgumentException("Failed to convert to any possible types", cause);
+            // If any possible types are not adequate, try to cast down the type of the first non-null element.
 
-            return value;
+            return CastDownToFirstElementType(self);
         }
     }
 }
