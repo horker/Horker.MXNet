@@ -61,11 +61,11 @@ namespace Horker.Numerics.DataMaps
             return (int)m.Invoke(null, new object[] { UnderlyingList });
         }
 
-        public ISummary Describe()
+        public Summary Describe()
         {
 			var m = GetMethodInfo(MethodIndex.Describe);
 
-            return (ISummary)m.Invoke(null, new object[] { UnderlyingList });
+            return (Summary)m.Invoke(null, new object[] { UnderlyingList });
         }
 
         public void SortFill()

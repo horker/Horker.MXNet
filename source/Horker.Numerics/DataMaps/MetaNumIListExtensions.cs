@@ -96,7 +96,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return GetUnique(self).Count;
         }
 
-        public static Summary<MetaNum> Describe(this IList<MetaNum> self)
+        public static Summary Describe(this IList<MetaNum> self)
         {
             var count = self.Count;
             var sorted = self.ToArray();
@@ -109,7 +109,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var e in sorted)
                 sum += (MetaNum)e;
 
-            var summary = new Summary<MetaNum>();
+            var summary = new Summary();
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);

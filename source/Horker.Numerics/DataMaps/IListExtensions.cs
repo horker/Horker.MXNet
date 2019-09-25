@@ -175,9 +175,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             return GetUnique(self).Count;
         }
 
-        public static ISummary Describe(this IList self)
+        public static Summary Describe(this IList self)
         {
-            var summary = new Summary<object>()
+            var summary = new Summary()
             {
                 Count = self.Count,
                 NaN = CountNaN(self),

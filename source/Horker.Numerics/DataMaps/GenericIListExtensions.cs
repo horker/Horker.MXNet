@@ -89,7 +89,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return GetUnique(self).Count;
         }
 
-        public static Summary<double> Describe(this IList<double> self)
+        public static Summary Describe(this IList<double> self)
         {
             var count = self.Count;
             var sorted = self.ToArray();
@@ -102,7 +102,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var e in sorted)
                 sum += (double)e;
 
-            var summary = new Summary<double>();
+            var summary = new Summary();
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);
@@ -198,7 +198,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return GetUnique(self).Count;
         }
 
-        public static Summary<float> Describe(this IList<float> self)
+        public static Summary Describe(this IList<float> self)
         {
             var count = self.Count;
             var sorted = self.ToArray();
@@ -211,7 +211,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var e in sorted)
                 sum += (float)e;
 
-            var summary = new Summary<float>();
+            var summary = new Summary();
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);
@@ -307,7 +307,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return GetUnique(self).Count;
         }
 
-        public static Summary<long> Describe(this IList<long> self)
+        public static Summary Describe(this IList<long> self)
         {
             var count = self.Count;
             var sorted = self.ToArray();
@@ -320,7 +320,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var e in sorted)
                 sum += (long)e;
 
-            var summary = new Summary<long>();
+            var summary = new Summary();
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);
@@ -416,7 +416,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return GetUnique(self).Count;
         }
 
-        public static Summary<int> Describe(this IList<int> self)
+        public static Summary Describe(this IList<int> self)
         {
             var count = self.Count;
             var sorted = self.ToArray();
@@ -429,7 +429,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var e in sorted)
                 sum += (int)e;
 
-            var summary = new Summary<int>();
+            var summary = new Summary();
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);
@@ -525,7 +525,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return GetUnique(self).Count;
         }
 
-        public static Summary<short> Describe(this IList<short> self)
+        public static Summary Describe(this IList<short> self)
         {
             var count = self.Count;
             var sorted = self.ToArray();
@@ -538,7 +538,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var e in sorted)
                 sum += (short)e;
 
-            var summary = new Summary<short>();
+            var summary = new Summary();
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);
@@ -634,7 +634,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return GetUnique(self).Count;
         }
 
-        public static Summary<byte> Describe(this IList<byte> self)
+        public static Summary Describe(this IList<byte> self)
         {
             var count = self.Count;
             var sorted = self.ToArray();
@@ -647,7 +647,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var e in sorted)
                 sum += (byte)e;
 
-            var summary = new Summary<byte>();
+            var summary = new Summary();
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);
@@ -743,7 +743,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return GetUnique(self).Count;
         }
 
-        public static Summary<sbyte> Describe(this IList<sbyte> self)
+        public static Summary Describe(this IList<sbyte> self)
         {
             var count = self.Count;
             var sorted = self.ToArray();
@@ -756,7 +756,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var e in sorted)
                 sum += (sbyte)e;
 
-            var summary = new Summary<sbyte>();
+            var summary = new Summary();
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);
@@ -852,7 +852,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return GetUnique(self).Count;
         }
 
-        public static Summary<decimal> Describe(this IList<decimal> self)
+        public static Summary Describe(this IList<decimal> self)
         {
             var count = self.Count;
             var sorted = self.ToArray();
@@ -865,7 +865,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var e in sorted)
                 sum += (decimal)e;
 
-            var summary = new Summary<decimal>();
+            var summary = new Summary();
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);

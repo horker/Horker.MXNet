@@ -62,32 +62,98 @@
                  </TableRowEntries>
             </TableControl>
         </View>
-        <!--
         <View>
-            <Name>Horker.Numerics.DataMaps.DataMap</Name>
+            <Name>Horker.Numerics.DataMaps.Summary</Name>
             <ViewSelectedBy>
-                <TypeName>Horker.Numerics.DataMaps.DataMap</TypeName>
+                <TypeName>Horker.Numerics.DataMaps.Summary</TypeName>
             </ViewSelectedBy>
-            <CustomControl>
-                <CustomEntries>
-                    <CustomEntry>
-                        <CustomItem>
-                            <ExpressionBinding>
-                                <ScriptBlock>
-                                    $_.Columns |
-                                    Select-Object `
-                                        @{ n = "Name"; e = { $_.Name } },
-                                        @{ n = "DataType"; e = { $_.Value.DataType } },
-                                        @{ n = "Count"; e = { $_.Data.Count } },
-                                        @{ n = "Data"; e = { $_.Data } } |
-                                    Format-Table | Out-String
-                                </ScriptBlock>
-                            </ExpressionBinding>
-                        </CustomItem>
-                    </CustomEntry>
-                </CustomEntries>
-            </CustomControl>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Label>Name</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Count</Label>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>NaN</Label>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Unique</Label>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Min</Label>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Q1</Label>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Mean</Label>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Median</Label>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Q3</Label>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Max</Label>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>Name</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Count</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>NaN</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Unique</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Min</PropertyName>
+                                <FormatString>0.###</FormatString>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Q1</PropertyName>
+                                <FormatString>0.###</FormatString>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Mean</PropertyName>
+                                <FormatString>0.###</FormatString>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Median</PropertyName>
+                                <FormatString>0.###</FormatString>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Q3</PropertyName>
+                                <FormatString>0.###</FormatString>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Max</PropertyName>
+                                <FormatString>0.###</FormatString>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                 </TableRowEntries>
+            </TableControl>
         </View>
+        <!--
         <View>
             <Name>Accord.Statistics.Analysis.MultinomialLogisticRegressionAnalysis</Name>
             <ViewSelectedBy>

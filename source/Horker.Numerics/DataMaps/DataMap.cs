@@ -511,18 +511,18 @@ namespace Horker.Numerics.DataMaps
             Remove(columnName);
         }
 
-        public IEnumerable<ISummary> Describe()
+        public IEnumerable<Summary> Describe()
         {
             foreach (var column in Columns)
             {
-                ISummary result = null;
+                Summary result = null;
                 try
                 {
                     result = column.Data.Describe();
                 }
                 catch (InvalidOperationException)
                 {
-                    result = new Summary<object>()
+                    result = new Summary()
                     {
                         Count = column.Data.Count,
                         NaN = column.Data.CountNaN(),
