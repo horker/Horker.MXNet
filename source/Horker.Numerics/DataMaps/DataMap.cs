@@ -115,9 +115,9 @@ namespace Horker.Numerics.DataMaps
                 }
         */
 
-        public static DataMap FromDictionary(IDictionary source)
+        public static DataMap FromDictionary(IDictionary source, IEqualityComparer<string> keyComparaer = null)
         {
-            var result = new DataMap();
+            var result = new DataMap(keyComparaer);
 
             foreach (DictionaryEntry entry in source)
                 result.AddLast((string)entry.Key, (IList)entry.Value);
