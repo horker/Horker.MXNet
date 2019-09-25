@@ -75,6 +75,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return count;
         }
 
+        public static IList<double> GetUnique(this IList<double> self)
+        {
+            var unique = new HashSet<double>();
+            foreach (var value in self)
+                unique.Add(value);
+
+            return unique.ToList();
+        }
+
+        public static int CountUnique(this IList<double> self)
+        {
+            return GetUnique(self).Count;
+        }
+
         public static Summary<double> Describe(this IList<double> self)
         {
             var count = self.Count;
@@ -90,7 +104,8 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             var summary = new Summary<double>();
             summary.Count = count;
-            summary.NaNCount = CountNaN(self);
+            summary.NaN = CountNaN(self);
+            summary.Unique = CountUnique(self);
             summary.Min = sorted[0];
             summary.Q1 = (double)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (double)(sum / count);
@@ -169,6 +184,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return count;
         }
 
+        public static IList<float> GetUnique(this IList<float> self)
+        {
+            var unique = new HashSet<float>();
+            foreach (var value in self)
+                unique.Add(value);
+
+            return unique.ToList();
+        }
+
+        public static int CountUnique(this IList<float> self)
+        {
+            return GetUnique(self).Count;
+        }
+
         public static Summary<float> Describe(this IList<float> self)
         {
             var count = self.Count;
@@ -184,7 +213,8 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             var summary = new Summary<float>();
             summary.Count = count;
-            summary.NaNCount = CountNaN(self);
+            summary.NaN = CountNaN(self);
+            summary.Unique = CountUnique(self);
             summary.Min = sorted[0];
             summary.Q1 = (float)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (float)(sum / count);
@@ -263,6 +293,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return count;
         }
 
+        public static IList<long> GetUnique(this IList<long> self)
+        {
+            var unique = new HashSet<long>();
+            foreach (var value in self)
+                unique.Add(value);
+
+            return unique.ToList();
+        }
+
+        public static int CountUnique(this IList<long> self)
+        {
+            return GetUnique(self).Count;
+        }
+
         public static Summary<long> Describe(this IList<long> self)
         {
             var count = self.Count;
@@ -278,7 +322,8 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             var summary = new Summary<long>();
             summary.Count = count;
-            summary.NaNCount = CountNaN(self);
+            summary.NaN = CountNaN(self);
+            summary.Unique = CountUnique(self);
             summary.Min = sorted[0];
             summary.Q1 = (long)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (long)(sum / count);
@@ -357,6 +402,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return count;
         }
 
+        public static IList<int> GetUnique(this IList<int> self)
+        {
+            var unique = new HashSet<int>();
+            foreach (var value in self)
+                unique.Add(value);
+
+            return unique.ToList();
+        }
+
+        public static int CountUnique(this IList<int> self)
+        {
+            return GetUnique(self).Count;
+        }
+
         public static Summary<int> Describe(this IList<int> self)
         {
             var count = self.Count;
@@ -372,7 +431,8 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             var summary = new Summary<int>();
             summary.Count = count;
-            summary.NaNCount = CountNaN(self);
+            summary.NaN = CountNaN(self);
+            summary.Unique = CountUnique(self);
             summary.Min = sorted[0];
             summary.Q1 = (int)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (int)(sum / count);
@@ -451,6 +511,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return count;
         }
 
+        public static IList<short> GetUnique(this IList<short> self)
+        {
+            var unique = new HashSet<short>();
+            foreach (var value in self)
+                unique.Add(value);
+
+            return unique.ToList();
+        }
+
+        public static int CountUnique(this IList<short> self)
+        {
+            return GetUnique(self).Count;
+        }
+
         public static Summary<short> Describe(this IList<short> self)
         {
             var count = self.Count;
@@ -466,7 +540,8 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             var summary = new Summary<short>();
             summary.Count = count;
-            summary.NaNCount = CountNaN(self);
+            summary.NaN = CountNaN(self);
+            summary.Unique = CountUnique(self);
             summary.Min = sorted[0];
             summary.Q1 = (short)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (short)(sum / count);
@@ -545,6 +620,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return count;
         }
 
+        public static IList<byte> GetUnique(this IList<byte> self)
+        {
+            var unique = new HashSet<byte>();
+            foreach (var value in self)
+                unique.Add(value);
+
+            return unique.ToList();
+        }
+
+        public static int CountUnique(this IList<byte> self)
+        {
+            return GetUnique(self).Count;
+        }
+
         public static Summary<byte> Describe(this IList<byte> self)
         {
             var count = self.Count;
@@ -560,7 +649,8 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             var summary = new Summary<byte>();
             summary.Count = count;
-            summary.NaNCount = CountNaN(self);
+            summary.NaN = CountNaN(self);
+            summary.Unique = CountUnique(self);
             summary.Min = sorted[0];
             summary.Q1 = (byte)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (byte)(sum / count);
@@ -639,6 +729,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return count;
         }
 
+        public static IList<sbyte> GetUnique(this IList<sbyte> self)
+        {
+            var unique = new HashSet<sbyte>();
+            foreach (var value in self)
+                unique.Add(value);
+
+            return unique.ToList();
+        }
+
+        public static int CountUnique(this IList<sbyte> self)
+        {
+            return GetUnique(self).Count;
+        }
+
         public static Summary<sbyte> Describe(this IList<sbyte> self)
         {
             var count = self.Count;
@@ -654,7 +758,8 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             var summary = new Summary<sbyte>();
             summary.Count = count;
-            summary.NaNCount = CountNaN(self);
+            summary.NaN = CountNaN(self);
+            summary.Unique = CountUnique(self);
             summary.Min = sorted[0];
             summary.Q1 = (sbyte)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (sbyte)(sum / count);
@@ -733,6 +838,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return count;
         }
 
+        public static IList<decimal> GetUnique(this IList<decimal> self)
+        {
+            var unique = new HashSet<decimal>();
+            foreach (var value in self)
+                unique.Add(value);
+
+            return unique.ToList();
+        }
+
+        public static int CountUnique(this IList<decimal> self)
+        {
+            return GetUnique(self).Count;
+        }
+
         public static Summary<decimal> Describe(this IList<decimal> self)
         {
             var count = self.Count;
@@ -748,7 +867,8 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             var summary = new Summary<decimal>();
             summary.Count = count;
-            summary.NaNCount = CountNaN(self);
+            summary.NaN = CountNaN(self);
+            summary.Unique = CountUnique(self);
             summary.Min = sorted[0];
             summary.Q1 = (decimal)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (decimal)(sum / count);

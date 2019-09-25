@@ -161,12 +161,27 @@ namespace Horker.Numerics.DataMaps.Extensions
             return count;
         }
 
+        public static IList GetUnique(this IList self)
+        {
+            var unique = new HashSet<object>();
+            foreach (var value in self)
+                unique.Add(value);
+
+            return unique.ToList();
+        }
+
+        public static int CountUnique(this IList self)
+        {
+            return GetUnique(self).Count;
+        }
+
         public static ISummary Describe(this IList self)
         {
             var summary = new Summary<object>()
             {
                 Count = self.Count,
-                NaNCount = CountNaN(self)
+                NaN = CountNaN(self),
+                Unique = CountUnique(self)
             };
 
             return summary;

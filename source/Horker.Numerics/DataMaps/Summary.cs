@@ -8,7 +8,8 @@ namespace Horker.Numerics.DataMaps
     {
         string Name { get; set; }
         int Count { get; set; }
-        int NaNCount { get; set; }
+        int NaN { get; set; }
+        int Unique { get; set; }
         object Min { get; set; }
         object Q1 { get; set; }
         object Mean { get; set; }
@@ -21,7 +22,8 @@ namespace Horker.Numerics.DataMaps
     {
         public string Name { get; set; }
         public int Count { get; set; }
-        public int NaNCount { get; set; }
+        public int NaN { get; set; }
+        public int Unique { get; set; }
         public T Min { get; set; }
         public T Q1 { get; set; }
         public T Mean { get; set; }

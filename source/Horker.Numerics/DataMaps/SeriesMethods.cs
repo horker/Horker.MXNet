@@ -13,16 +13,24 @@ namespace Horker.Numerics.DataMaps
         enum MethodIndex
         {
 			CumulativeSum,
+			GetUnique,
 			Sort,
 			CumulativeSumFill,
-			SortFill,
 			CountNaN,
+			CountUnique,
 			Describe,
+			SortFill,
         }
 
         public SeriesBase CumulativeSum()
         {
 			var m = GetMethodInfo(MethodIndex.CumulativeSum);
+            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
+        }
+
+        public SeriesBase GetUnique()
+        {
+			var m = GetMethodInfo(MethodIndex.GetUnique);
             return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
         }
 
@@ -39,16 +47,16 @@ namespace Horker.Numerics.DataMaps
             m.Invoke(null, new object[] { UnderlyingList });
         }
 
-        public void SortFill()
-        {
-			var m = GetMethodInfo(MethodIndex.SortFill);
-
-            m.Invoke(null, new object[] { UnderlyingList });
-        }
-
         public int CountNaN()
         {
 			var m = GetMethodInfo(MethodIndex.CountNaN);
+
+            return (int)m.Invoke(null, new object[] { UnderlyingList });
+        }
+
+        public int CountUnique()
+        {
+			var m = GetMethodInfo(MethodIndex.CountUnique);
 
             return (int)m.Invoke(null, new object[] { UnderlyingList });
         }
@@ -58,6 +66,13 @@ namespace Horker.Numerics.DataMaps
 			var m = GetMethodInfo(MethodIndex.Describe);
 
             return (ISummary)m.Invoke(null, new object[] { UnderlyingList });
+        }
+
+        public void SortFill()
+        {
+			var m = GetMethodInfo(MethodIndex.SortFill);
+
+            m.Invoke(null, new object[] { UnderlyingList });
         }
 
 	}

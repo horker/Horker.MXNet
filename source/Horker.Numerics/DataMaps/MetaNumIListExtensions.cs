@@ -82,6 +82,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return count;
         }
 
+        public static IList<MetaNum> GetUnique(this IList<MetaNum> self)
+        {
+            var unique = new HashSet<MetaNum>();
+            foreach (var value in self)
+                unique.Add(value);
+
+            return unique.ToList();
+        }
+
+        public static int CountUnique(this IList<MetaNum> self)
+        {
+            return GetUnique(self).Count;
+        }
+
         public static Summary<MetaNum> Describe(this IList<MetaNum> self)
         {
             var count = self.Count;
@@ -97,7 +111,8 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             var summary = new Summary<MetaNum>();
             summary.Count = count;
-            summary.NaNCount = CountNaN(self);
+            summary.NaN = CountNaN(self);
+            summary.Unique = CountUnique(self);
             summary.Min = sorted[0];
             summary.Q1 = (MetaNum)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (MetaNum)(sum / count);

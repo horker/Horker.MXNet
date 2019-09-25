@@ -8,16 +8,17 @@
 var methodNames = new string[]
 {
 	"CumulativeSum",
-	"Sort",
+	"GetUnique",
+	"Sort"
 };
 
-var nonSeriesMethods = new Tuple<string, string>[]
+var nonSeriesMethods = new[]
 {
-	Tuple.Create("CumulativeSumFill", "void"),
-	Tuple.Create("SortFill", "void"),
-	Tuple.Create("CountNaN", "int"),
-	Tuple.Create("Describe", "ISummary")
-
+	Tuple.Create("CumulativeSumFill", "void", "", ""),
+	Tuple.Create("CountNaN", "int", "", ""),
+	Tuple.Create("CountUnique", "int", "", ""),
+	Tuple.Create("Describe", "ISummary", "", ""),
+	Tuple.Create("SortFill", "void", "", "")
 };
 #>
 using System;
@@ -61,14 +62,14 @@ foreach (var name in methodNames) {
 }
 foreach (var t in nonSeriesMethods) {
 #>
-        public <#= t.Item2 #> <#= t.Item1 #>()
+        public <#= t.Item2 #> <#= t.Item1 #>(<#= t.Item3 #>)
         {
 			var m = GetMethodInfo(MethodIndex.<#= t.Item1 #>);
 
 <# if (t.Item2 == "void") { #>
-            m.Invoke(null, new object[] { UnderlyingList });
+            m.Invoke(null, new object[] { UnderlyingList<#= t.Item4 #> });
 <# } else { #>
-            return (<#= t.Item2 #>)m.Invoke(null, new object[] { UnderlyingList });
+            return (<#= t.Item2 #>)m.Invoke(null, new object[] { UnderlyingList<#= t.Item4 #> });
 <# } #>
         }
 

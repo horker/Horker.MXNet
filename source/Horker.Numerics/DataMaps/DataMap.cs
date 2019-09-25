@@ -525,7 +525,8 @@ namespace Horker.Numerics.DataMaps
                     result = new Summary<object>()
                     {
                         Count = column.Data.Count,
-                        NaNCount = column.Data.CountNaN()
+                        NaN = column.Data.CountNaN(),
+                        Unique = column.Data.CountUnique()
                     };
                 }
                 result.Name = column.Name;
