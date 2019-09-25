@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataMaps\GenericIListExntesionsHandWritten.cs" />
+    <Compile Include="DataMaps\FallbackIListExtensions.cs" />
     <Compile Include="DataMaps\MetaStructIListExtensions.cs" />
     <Compile Include="DataMaps\MetaStruct.cs" />
     <Compile Include="DataMaps\NumericTrait.cs" />
@@ -125,15 +126,6 @@
     <Content Include="DataMaps\SeriesMethods.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SeriesMethods.cs</LastGenOutput>
-    </Content>
-    <Content Include="DataMaps\StructIListExtensions.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>StructIListExtensions.txt</LastGenOutput>
-    </Content>
-    <Content Include="DataMaps\StructIListExtensions.txt">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StructIListExtensions.tt</DependentUpon>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
