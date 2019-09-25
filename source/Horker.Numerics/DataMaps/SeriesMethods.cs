@@ -14,6 +14,7 @@ namespace Horker.Numerics.DataMaps
         {
 			CumulativeSum,
 			GetUnique,
+			RemoveNaN,
 			Sort,
 			CumulativeSumFill,
 			CountNaN,
@@ -31,6 +32,12 @@ namespace Horker.Numerics.DataMaps
         public SeriesBase GetUnique()
         {
 			var m = GetMethodInfo(MethodIndex.GetUnique);
+            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
+        }
+
+        public SeriesBase RemoveNaN()
+        {
+			var m = GetMethodInfo(MethodIndex.RemoveNaN);
             return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
         }
 

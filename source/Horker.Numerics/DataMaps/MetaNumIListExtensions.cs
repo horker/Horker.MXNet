@@ -123,6 +123,16 @@ namespace Horker.Numerics.DataMaps.Extensions
             return summary;
         }
 
+        public static IList<MetaNum> RemoveNaN(this IList<MetaNum> self)
+        {
+            var result = new List<MetaNum>(self.Count);
+            foreach (var value in self)
+                if (!IsNaN(value))
+                    result.Add(value);
+
+            return result;
+        }
+
         // CUT BELOW
     }
 }

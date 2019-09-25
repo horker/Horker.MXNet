@@ -116,6 +116,16 @@ namespace Horker.Numerics.DataMaps.Extensions
             return summary;
         }
 
+        public static IList<double> RemoveNaN(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+            foreach (var value in self)
+                if (!IsNaN(value))
+                    result.Add(value);
+
+            return result;
+        }
+
         public static List<float> Sort(this IList<float> self)
         {
             var result = new List<float>(self);
@@ -223,6 +233,16 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Max = sorted[count - 1];
 
             return summary;
+        }
+
+        public static IList<float> RemoveNaN(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+            foreach (var value in self)
+                if (!IsNaN(value))
+                    result.Add(value);
+
+            return result;
         }
 
         public static List<long> Sort(this IList<long> self)
@@ -334,6 +354,16 @@ namespace Horker.Numerics.DataMaps.Extensions
             return summary;
         }
 
+        public static IList<long> RemoveNaN(this IList<long> self)
+        {
+            var result = new List<long>(self.Count);
+            foreach (var value in self)
+                if (!IsNaN(value))
+                    result.Add(value);
+
+            return result;
+        }
+
         public static List<int> Sort(this IList<int> self)
         {
             var result = new List<int>(self);
@@ -441,6 +471,16 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Max = sorted[count - 1];
 
             return summary;
+        }
+
+        public static IList<int> RemoveNaN(this IList<int> self)
+        {
+            var result = new List<int>(self.Count);
+            foreach (var value in self)
+                if (!IsNaN(value))
+                    result.Add(value);
+
+            return result;
         }
 
         public static List<short> Sort(this IList<short> self)
@@ -552,6 +592,16 @@ namespace Horker.Numerics.DataMaps.Extensions
             return summary;
         }
 
+        public static IList<short> RemoveNaN(this IList<short> self)
+        {
+            var result = new List<short>(self.Count);
+            foreach (var value in self)
+                if (!IsNaN(value))
+                    result.Add(value);
+
+            return result;
+        }
+
         public static List<byte> Sort(this IList<byte> self)
         {
             var result = new List<byte>(self);
@@ -659,6 +709,16 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Max = sorted[count - 1];
 
             return summary;
+        }
+
+        public static IList<byte> RemoveNaN(this IList<byte> self)
+        {
+            var result = new List<byte>(self.Count);
+            foreach (var value in self)
+                if (!IsNaN(value))
+                    result.Add(value);
+
+            return result;
         }
 
         public static List<sbyte> Sort(this IList<sbyte> self)
@@ -770,6 +830,16 @@ namespace Horker.Numerics.DataMaps.Extensions
             return summary;
         }
 
+        public static IList<sbyte> RemoveNaN(this IList<sbyte> self)
+        {
+            var result = new List<sbyte>(self.Count);
+            foreach (var value in self)
+                if (!IsNaN(value))
+                    result.Add(value);
+
+            return result;
+        }
+
         public static List<decimal> Sort(this IList<decimal> self)
         {
             var result = new List<decimal>(self);
@@ -877,6 +947,316 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Max = sorted[count - 1];
 
             return summary;
+        }
+
+        public static IList<decimal> RemoveNaN(this IList<decimal> self)
+        {
+            var result = new List<decimal>(self.Count);
+            foreach (var value in self)
+                if (!IsNaN(value))
+                    result.Add(value);
+
+            return result;
+        }
+
+        public static List<bool> Sort(this IList<bool> self)
+        {
+            var result = new List<bool>(self);
+            result.Sort();
+            return result;
+        }
+
+        public static void SortFill(this IList<bool> self)
+        {
+            if (self is Array a)
+            {
+                Array.Sort(a);
+                return;
+            }
+
+            var t = self.GetType();
+            if (t.Name.StartsWith("List`"))
+            {
+                var l = self as List<bool>;
+                l.Sort();
+                return;
+            }
+
+            var m = t.GetMethod("Sort", new Type[0]);
+            if (m == null)
+                throw new InvalidOperationException("This object does not support inplace Sort() operation");
+
+            m.Invoke(self, new object[0]);
+        }
+
+        public static int CountNaN(this IList<bool> self)
+        {
+            int count = 0;
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    ++count;
+            }
+
+            return count;
+        }
+
+        public static IList<bool> GetUnique(this IList<bool> self)
+        {
+            var unique = new HashSet<bool>();
+            foreach (var value in self)
+                unique.Add(value);
+
+            return unique.ToList();
+        }
+
+        public static int CountUnique(this IList<bool> self)
+        {
+            return GetUnique(self).Count;
+        }
+
+        public static Summary Describe(this IList<bool> self)
+        {
+            var summary = new Summary();
+            summary.Count = self.Count;
+            summary.NaN = CountNaN(self);
+            summary.Unique = CountUnique(self);
+            return summary;
+        }
+
+        public static IList<bool> RemoveNaN(this IList<bool> self)
+        {
+            var result = new List<bool>(self.Count);
+            foreach (var value in self)
+                if (!IsNaN(value))
+                    result.Add(value);
+
+            return result;
+        }
+
+        public static List<DateTime> Sort(this IList<DateTime> self)
+        {
+            var result = new List<DateTime>(self);
+            result.Sort();
+            return result;
+        }
+
+        public static void SortFill(this IList<DateTime> self)
+        {
+            if (self is Array a)
+            {
+                Array.Sort(a);
+                return;
+            }
+
+            var t = self.GetType();
+            if (t.Name.StartsWith("List`"))
+            {
+                var l = self as List<DateTime>;
+                l.Sort();
+                return;
+            }
+
+            var m = t.GetMethod("Sort", new Type[0]);
+            if (m == null)
+                throw new InvalidOperationException("This object does not support inplace Sort() operation");
+
+            m.Invoke(self, new object[0]);
+        }
+
+        public static int CountNaN(this IList<DateTime> self)
+        {
+            int count = 0;
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    ++count;
+            }
+
+            return count;
+        }
+
+        public static IList<DateTime> GetUnique(this IList<DateTime> self)
+        {
+            var unique = new HashSet<DateTime>();
+            foreach (var value in self)
+                unique.Add(value);
+
+            return unique.ToList();
+        }
+
+        public static int CountUnique(this IList<DateTime> self)
+        {
+            return GetUnique(self).Count;
+        }
+
+        public static Summary Describe(this IList<DateTime> self)
+        {
+            var summary = new Summary();
+            summary.Count = self.Count;
+            summary.NaN = CountNaN(self);
+            summary.Unique = CountUnique(self);
+            return summary;
+        }
+
+        public static IList<DateTime> RemoveNaN(this IList<DateTime> self)
+        {
+            var result = new List<DateTime>(self.Count);
+            foreach (var value in self)
+                if (!IsNaN(value))
+                    result.Add(value);
+
+            return result;
+        }
+
+        public static List<DateTimeOffset> Sort(this IList<DateTimeOffset> self)
+        {
+            var result = new List<DateTimeOffset>(self);
+            result.Sort();
+            return result;
+        }
+
+        public static void SortFill(this IList<DateTimeOffset> self)
+        {
+            if (self is Array a)
+            {
+                Array.Sort(a);
+                return;
+            }
+
+            var t = self.GetType();
+            if (t.Name.StartsWith("List`"))
+            {
+                var l = self as List<DateTimeOffset>;
+                l.Sort();
+                return;
+            }
+
+            var m = t.GetMethod("Sort", new Type[0]);
+            if (m == null)
+                throw new InvalidOperationException("This object does not support inplace Sort() operation");
+
+            m.Invoke(self, new object[0]);
+        }
+
+        public static int CountNaN(this IList<DateTimeOffset> self)
+        {
+            int count = 0;
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    ++count;
+            }
+
+            return count;
+        }
+
+        public static IList<DateTimeOffset> GetUnique(this IList<DateTimeOffset> self)
+        {
+            var unique = new HashSet<DateTimeOffset>();
+            foreach (var value in self)
+                unique.Add(value);
+
+            return unique.ToList();
+        }
+
+        public static int CountUnique(this IList<DateTimeOffset> self)
+        {
+            return GetUnique(self).Count;
+        }
+
+        public static Summary Describe(this IList<DateTimeOffset> self)
+        {
+            var summary = new Summary();
+            summary.Count = self.Count;
+            summary.NaN = CountNaN(self);
+            summary.Unique = CountUnique(self);
+            return summary;
+        }
+
+        public static IList<DateTimeOffset> RemoveNaN(this IList<DateTimeOffset> self)
+        {
+            var result = new List<DateTimeOffset>(self.Count);
+            foreach (var value in self)
+                if (!IsNaN(value))
+                    result.Add(value);
+
+            return result;
+        }
+
+        public static List<string> Sort(this IList<string> self)
+        {
+            var result = new List<string>(self);
+            result.Sort();
+            return result;
+        }
+
+        public static void SortFill(this IList<string> self)
+        {
+            if (self is Array a)
+            {
+                Array.Sort(a);
+                return;
+            }
+
+            var t = self.GetType();
+            if (t.Name.StartsWith("List`"))
+            {
+                var l = self as List<string>;
+                l.Sort();
+                return;
+            }
+
+            var m = t.GetMethod("Sort", new Type[0]);
+            if (m == null)
+                throw new InvalidOperationException("This object does not support inplace Sort() operation");
+
+            m.Invoke(self, new object[0]);
+        }
+
+        public static int CountNaN(this IList<string> self)
+        {
+            int count = 0;
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    ++count;
+            }
+
+            return count;
+        }
+
+        public static IList<string> GetUnique(this IList<string> self)
+        {
+            var unique = new HashSet<string>();
+            foreach (var value in self)
+                unique.Add(value);
+
+            return unique.ToList();
+        }
+
+        public static int CountUnique(this IList<string> self)
+        {
+            return GetUnique(self).Count;
+        }
+
+        public static Summary Describe(this IList<string> self)
+        {
+            var summary = new Summary();
+            summary.Count = self.Count;
+            summary.NaN = CountNaN(self);
+            summary.Unique = CountUnique(self);
+            return summary;
+        }
+
+        public static IList<string> RemoveNaN(this IList<string> self)
+        {
+            var result = new List<string>(self.Count);
+            foreach (var value in self)
+                if (!IsNaN(value))
+                    result.Add(value);
+
+            return result;
         }
     }
 }

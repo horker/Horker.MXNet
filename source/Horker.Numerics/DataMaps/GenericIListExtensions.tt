@@ -4,7 +4,7 @@
 <#@ import namespace="System.Threading" #>
 <#@ output extension=".cs" #>
 <#
-var types = new string[] {
+var numericTypes = new [] {
 	"double",
 	"float",
 	"long",
@@ -15,16 +15,14 @@ var types = new string[] {
 	"decimal"
 };
 
-var templateDirectory = Path.GetDirectoryName(Host.TemplateFile);
-var baseFilePath = Path.Combine(templateDirectory, "MetaNumIListExtensions.cs");
+var structTypes = new[] {
+	"bool",
+	"DateTime",
+	"DateTimeOffset",
+	"string"
+};
 
-var  document = File.ReadAllText(baseFilePath);
-
-var start = document.IndexOf("CUT ABOVE") + "CUT ABOVE".Length;
-var end = document.IndexOf("// CUT BELOW") - "// CUT BELOW".Length;
-
-var doc = document.Substring(start, end - start);
-
+var doc = GetDocument("MetaNumIListExtensions.cs");
 TextInfo textInfo = Thread.CurrentThread.CurrentCulture.TextInfo;
 #>
 using System;
@@ -36,7 +34,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 	public static partial class GenericIListExtensions
 	{
 <#
-foreach (var t in types)
+foreach (var t in numericTypes)
 {
 	string capitalized = textInfo.ToTitleCase(t);
 	if (t == "sbyte")
@@ -51,5 +49,32 @@ foreach (var t in types)
 <#
 }
 #>
+<#
+doc = GetDocument("MetaStructIListExtensions.cs");
+foreach (var t in structTypes)
+{
+	string capitalized = textInfo.ToTitleCase(t);
+	var text = doc.Replace("MetaStruct", t);
+#>
+<#= text #>
+<#
+}
+#>
     }
 }
+<#+
+private string GetDocument(string baseFile)
+{
+	var templateDirectory = Path.GetDirectoryName(Host.TemplateFile);
+	var baseFilePath = Path.Combine(templateDirectory, baseFile);
+
+	var  document = File.ReadAllText(baseFilePath);
+
+	var start = document.IndexOf("CUT ABOVE") + "CUT ABOVE".Length;
+	var end = document.IndexOf("// CUT BELOW") - "// CUT BELOW".Length;
+
+	var doc = document.Substring(start, end - start);
+
+	return doc;
+}
+#>

@@ -9,6 +9,7 @@ var methodNames = new string[]
 {
 	"CumulativeSum",
 	"GetUnique",
+	"RemoveNaN",
 	"Sort"
 };
 

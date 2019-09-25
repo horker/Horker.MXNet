@@ -186,5 +186,15 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             return summary;
         }
+
+        public static IList RemoveNaN(this IList self)
+        {
+            var result = new List<object>(self.Count);
+            foreach (var value in self)
+                if (value != null)
+                    result.Add(value);
+
+            return result;
+        }
     }
 }
