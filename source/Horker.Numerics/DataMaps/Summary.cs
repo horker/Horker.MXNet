@@ -10,11 +10,11 @@ namespace Horker.Numerics.DataMaps
         public int Count { get; set; }
         public int NaN { get; set; }
         public int Unique { get; set; }
-        public object Min { get; set; }
-        public object Q1 { get; set; }
         public object Mean { get; set; }
+        public object Min { get; set; }
+        public object Q25 { get; set; }
         public object Median { get; set; }
-        public object Q3 { get; set; }
+        public object Q75 { get; set; }
         public object Max { get; set; }
     }
 }

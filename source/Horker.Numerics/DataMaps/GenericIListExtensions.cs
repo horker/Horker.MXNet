@@ -106,11 +106,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);
-            summary.Min = sorted[0];
-            summary.Q1 = (double)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (double)(sum / count);
+            summary.Min = sorted[0];
+            summary.Q25 = (double)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Median = (double)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q3 = (double)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
+            summary.Q75 = (double)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
 
             return summary;
@@ -215,11 +215,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);
-            summary.Min = sorted[0];
-            summary.Q1 = (float)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (float)(sum / count);
+            summary.Min = sorted[0];
+            summary.Q25 = (float)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Median = (float)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q3 = (float)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
+            summary.Q75 = (float)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
 
             return summary;
@@ -324,11 +324,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);
-            summary.Min = sorted[0];
-            summary.Q1 = (long)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (long)(sum / count);
+            summary.Min = sorted[0];
+            summary.Q25 = (long)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Median = (long)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q3 = (long)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
+            summary.Q75 = (long)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
 
             return summary;
@@ -433,11 +433,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);
-            summary.Min = sorted[0];
-            summary.Q1 = (int)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (int)(sum / count);
+            summary.Min = sorted[0];
+            summary.Q25 = (int)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Median = (int)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q3 = (int)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
+            summary.Q75 = (int)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
 
             return summary;
@@ -542,11 +542,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);
-            summary.Min = sorted[0];
-            summary.Q1 = (short)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (short)(sum / count);
+            summary.Min = sorted[0];
+            summary.Q25 = (short)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Median = (short)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q3 = (short)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
+            summary.Q75 = (short)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
 
             return summary;
@@ -651,11 +651,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);
-            summary.Min = sorted[0];
-            summary.Q1 = (byte)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (byte)(sum / count);
+            summary.Min = sorted[0];
+            summary.Q25 = (byte)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Median = (byte)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q3 = (byte)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
+            summary.Q75 = (byte)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
 
             return summary;
@@ -760,11 +760,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);
-            summary.Min = sorted[0];
-            summary.Q1 = (sbyte)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (sbyte)(sum / count);
+            summary.Min = sorted[0];
+            summary.Q25 = (sbyte)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Median = (sbyte)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q3 = (sbyte)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
+            summary.Q75 = (sbyte)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
 
             return summary;
@@ -869,11 +869,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);
-            summary.Min = sorted[0];
-            summary.Q1 = (decimal)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (decimal)(sum / count);
+            summary.Min = sorted[0];
+            summary.Q25 = (decimal)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Median = (decimal)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q3 = (decimal)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
+            summary.Q75 = (decimal)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
 
             return summary;

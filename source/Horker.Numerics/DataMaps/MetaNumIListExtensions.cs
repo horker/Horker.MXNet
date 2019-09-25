@@ -113,11 +113,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Count = count;
             summary.NaN = CountNaN(self);
             summary.Unique = CountUnique(self);
-            summary.Min = sorted[0];
-            summary.Q1 = (MetaNum)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Mean = (MetaNum)(sum / count);
+            summary.Min = sorted[0];
+            summary.Q25 = (MetaNum)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
             summary.Median = (MetaNum)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q3 = (MetaNum)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
+            summary.Q75 = (MetaNum)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
 
             return summary;

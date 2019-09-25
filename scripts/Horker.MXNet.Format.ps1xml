@@ -85,15 +85,15 @@
                         <Alignment>Right</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
+                        <Label>Mean</Label>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
                         <Label>Min</Label>
                         <Alignment>Right</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Q1</Label>
-                        <Alignment>Right</Alignment>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>Mean</Label>
+                        <Label>Q25</Label>
                         <Alignment>Right</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
@@ -101,7 +101,7 @@
                         <Alignment>Right</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
-                        <Label>Q3</Label>
+                        <Label>Q75</Label>
                         <Alignment>Right</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
@@ -125,15 +125,15 @@
                                 <PropertyName>Unique</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
+                                <PropertyName>Mean</PropertyName>
+                                <FormatString>0.###</FormatString>
+                            </TableColumnItem>
+                            <TableColumnItem>
                                 <PropertyName>Min</PropertyName>
                                 <FormatString>0.###</FormatString>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Q1</PropertyName>
-                                <FormatString>0.###</FormatString>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Mean</PropertyName>
+                                <PropertyName>Q25</PropertyName>
                                 <FormatString>0.###</FormatString>
                             </TableColumnItem>
                             <TableColumnItem>
@@ -141,7 +141,7 @@
                                 <FormatString>0.###</FormatString>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Q3</PropertyName>
+                                <PropertyName>Q75</PropertyName>
                                 <FormatString>0.###</FormatString>
                             </TableColumnItem>
                             <TableColumnItem>
