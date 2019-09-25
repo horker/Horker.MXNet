@@ -89,6 +89,29 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
+        public static IList<MetaStruct> FillNaN(this IList<MetaStruct> self, MetaStruct fillValue)
+        {
+            var result = new List<MetaStruct>(self.Count);
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    result.Add(value);
+                else
+                    result.Add(fillValue);
+            }
+
+            return result;
+        }
+
+        public static void FillNaNFill(this IList<MetaStruct> self, MetaStruct fillValue)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (IsNaN(self[i]))
+                    self[i] = fillValue;
+            }
+        }
+
         // CUT BELOW
     }
 }

@@ -13,6 +13,7 @@ namespace Horker.Numerics.DataMaps
         enum MethodIndex
         {
 			CumulativeSum,
+			FillNaN,
 			GetUnique,
 			RemoveNaN,
 			Sort,
@@ -20,6 +21,7 @@ namespace Horker.Numerics.DataMaps
 			CountNaN,
 			CountUnique,
 			Describe,
+			FillNaNFill,
 			SortFill,
         }
 
@@ -27,6 +29,12 @@ namespace Horker.Numerics.DataMaps
         {
 			var m = GetMethodInfo(MethodIndex.CumulativeSum);
             return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
+        }
+
+        public SeriesBase FillNaN(object fillValue)
+        {
+			var m = GetMethodInfo(MethodIndex.FillNaN);
+            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList, fillValue }));
         }
 
         public SeriesBase GetUnique()
@@ -73,6 +81,13 @@ namespace Horker.Numerics.DataMaps
 			var m = GetMethodInfo(MethodIndex.Describe);
 
             return (Summary)m.Invoke(null, new object[] { UnderlyingList });
+        }
+
+        public void FillNaNFill(object fillValue)
+        {
+			var m = GetMethodInfo(MethodIndex.FillNaNFill);
+
+            m.Invoke(null, new object[] { UnderlyingList, fillValue });
         }
 
         public void SortFill()

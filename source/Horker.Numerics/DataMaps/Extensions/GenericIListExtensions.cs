@@ -126,6 +126,29 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
+        public static IList<double> FillNaN(this IList<double> self, double fillValue)
+        {
+            var result = new List<double>(self.Count);
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    result.Add(fillValue);
+                else
+                    result.Add(value);
+            }
+
+            return result;
+        }
+
+        public static void FillNaNFill(this IList<double> self, double fillValue)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (IsNaN(self[i]))
+                    self[i] = fillValue;
+            }
+        }
+
         public static List<float> Sort(this IList<float> self)
         {
             var result = new List<float>(self);
@@ -243,6 +266,29 @@ namespace Horker.Numerics.DataMaps.Extensions
                     result.Add(value);
 
             return result;
+        }
+
+        public static IList<float> FillNaN(this IList<float> self, float fillValue)
+        {
+            var result = new List<float>(self.Count);
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    result.Add(fillValue);
+                else
+                    result.Add(value);
+            }
+
+            return result;
+        }
+
+        public static void FillNaNFill(this IList<float> self, float fillValue)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (IsNaN(self[i]))
+                    self[i] = fillValue;
+            }
         }
 
         public static List<long> Sort(this IList<long> self)
@@ -364,6 +410,29 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
+        public static IList<long> FillNaN(this IList<long> self, long fillValue)
+        {
+            var result = new List<long>(self.Count);
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    result.Add(fillValue);
+                else
+                    result.Add(value);
+            }
+
+            return result;
+        }
+
+        public static void FillNaNFill(this IList<long> self, long fillValue)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (IsNaN(self[i]))
+                    self[i] = fillValue;
+            }
+        }
+
         public static List<int> Sort(this IList<int> self)
         {
             var result = new List<int>(self);
@@ -481,6 +550,29 @@ namespace Horker.Numerics.DataMaps.Extensions
                     result.Add(value);
 
             return result;
+        }
+
+        public static IList<int> FillNaN(this IList<int> self, int fillValue)
+        {
+            var result = new List<int>(self.Count);
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    result.Add(fillValue);
+                else
+                    result.Add(value);
+            }
+
+            return result;
+        }
+
+        public static void FillNaNFill(this IList<int> self, int fillValue)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (IsNaN(self[i]))
+                    self[i] = fillValue;
+            }
         }
 
         public static List<short> Sort(this IList<short> self)
@@ -602,6 +694,29 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
+        public static IList<short> FillNaN(this IList<short> self, short fillValue)
+        {
+            var result = new List<short>(self.Count);
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    result.Add(fillValue);
+                else
+                    result.Add(value);
+            }
+
+            return result;
+        }
+
+        public static void FillNaNFill(this IList<short> self, short fillValue)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (IsNaN(self[i]))
+                    self[i] = fillValue;
+            }
+        }
+
         public static List<byte> Sort(this IList<byte> self)
         {
             var result = new List<byte>(self);
@@ -719,6 +834,29 @@ namespace Horker.Numerics.DataMaps.Extensions
                     result.Add(value);
 
             return result;
+        }
+
+        public static IList<byte> FillNaN(this IList<byte> self, byte fillValue)
+        {
+            var result = new List<byte>(self.Count);
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    result.Add(fillValue);
+                else
+                    result.Add(value);
+            }
+
+            return result;
+        }
+
+        public static void FillNaNFill(this IList<byte> self, byte fillValue)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (IsNaN(self[i]))
+                    self[i] = fillValue;
+            }
         }
 
         public static List<sbyte> Sort(this IList<sbyte> self)
@@ -840,6 +978,29 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
+        public static IList<sbyte> FillNaN(this IList<sbyte> self, sbyte fillValue)
+        {
+            var result = new List<sbyte>(self.Count);
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    result.Add(fillValue);
+                else
+                    result.Add(value);
+            }
+
+            return result;
+        }
+
+        public static void FillNaNFill(this IList<sbyte> self, sbyte fillValue)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (IsNaN(self[i]))
+                    self[i] = fillValue;
+            }
+        }
+
         public static List<decimal> Sort(this IList<decimal> self)
         {
             var result = new List<decimal>(self);
@@ -959,6 +1120,29 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
+        public static IList<decimal> FillNaN(this IList<decimal> self, decimal fillValue)
+        {
+            var result = new List<decimal>(self.Count);
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    result.Add(fillValue);
+                else
+                    result.Add(value);
+            }
+
+            return result;
+        }
+
+        public static void FillNaNFill(this IList<decimal> self, decimal fillValue)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (IsNaN(self[i]))
+                    self[i] = fillValue;
+            }
+        }
+
         public static List<bool> Sort(this IList<bool> self)
         {
             var result = new List<bool>(self);
@@ -1032,6 +1216,29 @@ namespace Horker.Numerics.DataMaps.Extensions
                     result.Add(value);
 
             return result;
+        }
+
+        public static IList<bool> FillNaN(this IList<bool> self, bool fillValue)
+        {
+            var result = new List<bool>(self.Count);
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    result.Add(value);
+                else
+                    result.Add(fillValue);
+            }
+
+            return result;
+        }
+
+        public static void FillNaNFill(this IList<bool> self, bool fillValue)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (IsNaN(self[i]))
+                    self[i] = fillValue;
+            }
         }
 
         public static List<DateTime> Sort(this IList<DateTime> self)
@@ -1109,6 +1316,29 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
+        public static IList<DateTime> FillNaN(this IList<DateTime> self, DateTime fillValue)
+        {
+            var result = new List<DateTime>(self.Count);
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    result.Add(value);
+                else
+                    result.Add(fillValue);
+            }
+
+            return result;
+        }
+
+        public static void FillNaNFill(this IList<DateTime> self, DateTime fillValue)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (IsNaN(self[i]))
+                    self[i] = fillValue;
+            }
+        }
+
         public static List<DateTimeOffset> Sort(this IList<DateTimeOffset> self)
         {
             var result = new List<DateTimeOffset>(self);
@@ -1184,6 +1414,29 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
+        public static IList<DateTimeOffset> FillNaN(this IList<DateTimeOffset> self, DateTimeOffset fillValue)
+        {
+            var result = new List<DateTimeOffset>(self.Count);
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    result.Add(value);
+                else
+                    result.Add(fillValue);
+            }
+
+            return result;
+        }
+
+        public static void FillNaNFill(this IList<DateTimeOffset> self, DateTimeOffset fillValue)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (IsNaN(self[i]))
+                    self[i] = fillValue;
+            }
+        }
+
         public static List<string> Sort(this IList<string> self)
         {
             var result = new List<string>(self);
@@ -1257,6 +1510,29 @@ namespace Horker.Numerics.DataMaps.Extensions
                     result.Add(value);
 
             return result;
+        }
+
+        public static IList<string> FillNaN(this IList<string> self, string fillValue)
+        {
+            var result = new List<string>(self.Count);
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    result.Add(value);
+                else
+                    result.Add(fillValue);
+            }
+
+            return result;
+        }
+
+        public static void FillNaNFill(this IList<string> self, string fillValue)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (IsNaN(self[i]))
+                    self[i] = fillValue;
+            }
         }
     }
 }

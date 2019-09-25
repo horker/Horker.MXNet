@@ -45,5 +45,20 @@ namespace Horker.Numerics.Tests
                 t3.CumulativeSum();
             });
         }
+
+        [Fact]
+        public void TestFillNaN()
+        {
+            var t1 = new Series(new double[] { 1, double.NaN, 2, double.NaN });
+
+            var t2 = t1.FillNaN(99);
+
+            Assert.IsType<Series>(t2);
+            Assert.Equal(new double[] { 1, 99, 2, 99 }, t2.AsArray<double>());
+
+            t1.FillNaNFill(999);
+
+            Assert.Equal(new double[] { 1, 999, 2, 999}, t1.AsArray<double>());
+        }
     }
 }

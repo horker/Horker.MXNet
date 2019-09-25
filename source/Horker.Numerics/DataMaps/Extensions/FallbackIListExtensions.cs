@@ -86,5 +86,29 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             return result;
         }
+
+        public static IList FillNaN(this IList self, object fillValue)
+        {
+            var result = new List<object>(self.Count);
+            foreach (var value in self)
+            {
+                if (value != null)
+                    result.Add(value);
+                else
+                    result.Add(fillValue);
+            }
+
+            return result;
+        }
+
+        public static void FillNaNFill(this IList self, object fillValue)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] == null)
+                    self[i] = fillValue;
+            }
+        }
+
     }
 }

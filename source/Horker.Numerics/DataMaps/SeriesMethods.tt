@@ -5,12 +5,13 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 <#   
-var methodNames = new string[]
+var methodNames = new []
 {
-	"CumulativeSum",
-	"GetUnique",
-	"RemoveNaN",
-	"Sort"
+	Tuple.Create("CumulativeSum", "", ""),
+	Tuple.Create("FillNaN", "object fillValue", ", fillValue"),
+	Tuple.Create("GetUnique", "", ""),
+	Tuple.Create("RemoveNaN", "", ""),
+	Tuple.Create("Sort", "", "")
 };
 
 var nonSeriesMethods = new[]
@@ -19,6 +20,7 @@ var nonSeriesMethods = new[]
 	Tuple.Create("CountNaN", "int", "", ""),
 	Tuple.Create("CountUnique", "int", "", ""),
 	Tuple.Create("Describe", "Summary", "", ""),
+	Tuple.Create("FillNaNFill", "void", "object fillValue", ", fillValue"),
 	Tuple.Create("SortFill", "void", "", "")
 };
 #>
@@ -37,9 +39,9 @@ namespace Horker.Numerics.DataMaps
         enum MethodIndex
         {
 <#   
-foreach (var name in methodNames) {
+foreach (var t in methodNames) {
 #>
-			<#= name #>,
+			<#= t.Item1 #>,
 <#
 }
 foreach (var t in nonSeriesMethods) {
@@ -51,12 +53,12 @@ foreach (var t in nonSeriesMethods) {
         }
 
 <#   
-foreach (var name in methodNames) {
+foreach (var t in methodNames) {
 #>
-        public SeriesBase <#= name #>()
+        public SeriesBase <#= t.Item1  #>(<#= t.Item2 #>)
         {
-			var m = GetMethodInfo(MethodIndex.<#= name #>);
-            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
+			var m = GetMethodInfo(MethodIndex.<#= t.Item1 #>);
+            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList<#= t.Item3 #> }));
         }
 
 <#

@@ -72,14 +72,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataMaps\GenericIListExntesionsHandWritten.cs" />
-    <Compile Include="DataMaps\FallbackIListExtensions.cs" />
-    <Compile Include="DataMaps\MetaStructIListExtensions.cs" />
-    <Compile Include="DataMaps\MetaStruct.cs" />
+    <Compile Include="DataMaps\Extensions\GenericIListExntesionsHandWritten.cs" />
+    <Compile Include="DataMaps\Extensions\FallbackIListExtensions.cs" />
+    <Compile Include="DataMaps\Extensions\MetaStructIListExtensions.cs" />
+    <Compile Include="DataMaps\Extensions\MetaStruct.cs" />
     <Compile Include="DataMaps\NumericTrait.cs" />
-    <Compile Include="DataMaps\MetaNumIListExtensions.cs" />
+    <Compile Include="DataMaps\Extensions\MetaNumIListExtensions.cs" />
     <Compile Include="DataMaps\OperatorFuncs.cs" />
-    <Compile Include="DataMaps\MetaNum.cs" />
+    <Compile Include="DataMaps\Extensions\MetaNum.cs" />
     <Compile Include="DataMaps\SortedListIndexSeries.cs" />
     <Compile Include="DataMaps\SeriesSlice.cs" />
     <Compile Include="DataMaps\Series.cs" />
@@ -87,8 +87,8 @@
     <Compile Include="DataMaps\DataMap.cs" />
     <Compile Include="DataMaps\DataMapEnumerator.cs" />
     <Compile Include="DataMaps\Column.cs" />
-    <Compile Include="DataMaps\IListExtensions.cs" />
-    <Compile Include="DataMaps\GenericIListExtensions.cs">
+    <Compile Include="DataMaps\Extensions\IListExtensions.cs" />
+    <Compile Include="DataMaps\Extensions\GenericIListExtensions.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>GenericIListExtensions.tt</DependentUpon>
@@ -119,7 +119,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DataMaps\GenericIListExtensions.tt">
+    <Content Include="DataMaps\Extensions\GenericIListExtensions.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>GenericIListExtensions.cs</LastGenOutput>
     </Content>

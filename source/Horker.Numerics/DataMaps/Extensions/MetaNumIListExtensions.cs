@@ -133,6 +133,29 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
+        public static IList<MetaNum> FillNaN(this IList<MetaNum> self, MetaNum fillValue)
+        {
+            var result = new List<MetaNum>(self.Count);
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    result.Add(fillValue);
+                else
+                    result.Add(value);
+            }
+
+            return result;
+        }
+
+        public static void FillNaNFill(this IList<MetaNum> self, MetaNum fillValue)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (IsNaN(self[i]))
+                    self[i] = fillValue;
+            }
+        }
+
         // CUT BELOW
     }
 }
