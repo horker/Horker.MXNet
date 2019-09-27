@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -1143,13 +1144,15 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+/*
+        // This is very confusing with Array.Sort() and List<>.Sort(), both of which are inplace operations.
         public static List<bool> Sort(this IList<bool> self)
         {
             var result = new List<bool>(self);
             result.Sort();
             return result;
         }
-
+*/
         public static void SortFill(this IList<bool> self)
         {
             if (self is Array a)
@@ -1159,7 +1162,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             var t = self.GetType();
-            if (t.Name.StartsWith("List`"))
+            if (t.GetGenericTypeDefinition() == typeof(List<>))
             {
                 var l = self as List<bool>;
                 l.Sort();
@@ -1241,13 +1244,15 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+/*
+        // This is very confusing with Array.Sort() and List<>.Sort(), both of which are inplace operations.
         public static List<DateTime> Sort(this IList<DateTime> self)
         {
             var result = new List<DateTime>(self);
             result.Sort();
             return result;
         }
-
+*/
         public static void SortFill(this IList<DateTime> self)
         {
             if (self is Array a)
@@ -1257,7 +1262,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             var t = self.GetType();
-            if (t.Name.StartsWith("List`"))
+            if (t.GetGenericTypeDefinition() == typeof(List<>))
             {
                 var l = self as List<DateTime>;
                 l.Sort();
@@ -1339,13 +1344,15 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+/*
+        // This is very confusing with Array.Sort() and List<>.Sort(), both of which are inplace operations.
         public static List<DateTimeOffset> Sort(this IList<DateTimeOffset> self)
         {
             var result = new List<DateTimeOffset>(self);
             result.Sort();
             return result;
         }
-
+*/
         public static void SortFill(this IList<DateTimeOffset> self)
         {
             if (self is Array a)
@@ -1355,7 +1362,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             var t = self.GetType();
-            if (t.Name.StartsWith("List`"))
+            if (t.GetGenericTypeDefinition() == typeof(List<>))
             {
                 var l = self as List<DateTimeOffset>;
                 l.Sort();
@@ -1437,13 +1444,15 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+/*
+        // This is very confusing with Array.Sort() and List<>.Sort(), both of which are inplace operations.
         public static List<string> Sort(this IList<string> self)
         {
             var result = new List<string>(self);
             result.Sort();
             return result;
         }
-
+*/
         public static void SortFill(this IList<string> self)
         {
             if (self is Array a)
@@ -1453,7 +1462,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             var t = self.GetType();
-            if (t.Name.StartsWith("List`"))
+            if (t.GetGenericTypeDefinition() == typeof(List<>))
             {
                 var l = self as List<string>;
                 l.Sort();
@@ -1527,6 +1536,106 @@ namespace Horker.Numerics.DataMaps.Extensions
         }
 
         public static void FillNaNFill(this IList<string> self, string fillValue)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (IsNaN(self[i]))
+                    self[i] = fillValue;
+            }
+        }
+
+/*
+        // This is very confusing with Array.Sort() and List<>.Sort(), both of which are inplace operations.
+        public static List<object> Sort(this IList self)
+        {
+            var result = new List<object>(self);
+            result.Sort();
+            return result;
+        }
+*/
+        public static void SortFill(this IList self)
+        {
+            if (self is Array a)
+            {
+                Array.Sort(a);
+                return;
+            }
+
+            var t = self.GetType();
+            if (t.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                var l = self as List<object>;
+                l.Sort();
+                return;
+            }
+
+            var m = t.GetMethod("Sort", new Type[0]);
+            if (m == null)
+                throw new InvalidOperationException("This object does not support inplace Sort() operation");
+
+            m.Invoke(self, new object[0]);
+        }
+
+        public static int CountNaN(this IList self)
+        {
+            int count = 0;
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    ++count;
+            }
+
+            return count;
+        }
+
+        public static IList GetUnique(this IList self)
+        {
+            var unique = new HashSet<object>();
+            foreach (var value in self)
+                unique.Add(value);
+
+            return unique.ToList();
+        }
+
+        public static int CountUnique(this IList self)
+        {
+            return GetUnique(self).Count;
+        }
+
+        public static Summary Describe(this IList self)
+        {
+            var summary = new Summary();
+            summary.Count = self.Count;
+            summary.NaN = CountNaN(self);
+            summary.Unique = CountUnique(self);
+            return summary;
+        }
+
+        public static IList RemoveNaN(this IList self)
+        {
+            var result = new List<object>(self.Count);
+            foreach (var value in self)
+                if (!IsNaN(value))
+                    result.Add(value);
+
+            return result;
+        }
+
+        public static IList FillNaN(this IList self, object fillValue)
+        {
+            var result = new List<object>(self.Count);
+            foreach (var value in self)
+            {
+                if (IsNaN(value))
+                    result.Add(value);
+                else
+                    result.Add(fillValue);
+            }
+
+            return result;
+        }
+
+        public static void FillNaNFill(this IList self, object fillValue)
         {
             for (var i = 0; i < self.Count; ++i)
             {

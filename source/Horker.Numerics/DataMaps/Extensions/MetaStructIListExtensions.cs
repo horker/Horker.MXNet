@@ -14,13 +14,15 @@ namespace Horker.Numerics.DataMaps.Extensions
         }
 
         // CUT ABOVE
+/*
+        // This is very confusing with Array.Sort() and List<>.Sort(), both of which are inplace operations.
         public static List<MetaStruct> Sort(this IList<MetaStruct> self)
         {
             var result = new List<MetaStruct>(self);
             result.Sort();
             return result;
         }
-
+*/
         public static void SortFill(this IList<MetaStruct> self)
         {
             if (self is Array a)
@@ -30,7 +32,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             var t = self.GetType();
-            if (t.Name.StartsWith("List`"))
+            if (t.GetGenericTypeDefinition() == typeof(List<>))
             {
                 var l = self as List<MetaStruct>;
                 l.Sort();

@@ -19,13 +19,15 @@ var structTypes = new[] {
 	"bool",
 	"DateTime",
 	"DateTimeOffset",
-	"string"
+	"string",
+	"object"
 };
 
 var doc = GetDocument("MetaNumIListExtensions.cs");
 TextInfo textInfo = Thread.CurrentThread.CurrentCulture.TextInfo;
 #>
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -54,7 +56,17 @@ doc = GetDocument("MetaStructIListExtensions.cs");
 foreach (var t in structTypes)
 {
 	string capitalized = textInfo.ToTitleCase(t);
-	var text = doc.Replace("MetaStruct", t);
+	string text;
+	if (t == "object")
+	{
+		text = doc.Replace("IList<MetaStruct>", "IList");
+		text = text.Replace("List<MetaStruct>", "List<object>");
+		text = text.Replace("MetaStruct", "object");
+	}
+	else
+	{
+		text = doc.Replace("MetaStruct", t);
+	}
 #>
 <#= text #>
 <#

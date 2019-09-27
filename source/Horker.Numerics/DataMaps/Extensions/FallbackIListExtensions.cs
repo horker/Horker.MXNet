@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
+/*
 namespace Horker.Numerics.DataMaps.Extensions
 {
     public static partial class IListExtensions
@@ -112,3 +112,4 @@ namespace Horker.Numerics.DataMaps.Extensions
 
     }
 }
+*/
