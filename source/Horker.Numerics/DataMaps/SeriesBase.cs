@@ -168,6 +168,12 @@ namespace Horker.Numerics.DataMaps
             UnderlyingList.RemoveAt(index);
         }
 
+        public void AddRange(IList other)
+        {
+            foreach (var value in other)
+                UnderlyingList.Add(value);
+        }
+
         // Conversion methods
 
         public T[] ToArray<T>()
@@ -529,7 +535,6 @@ namespace Horker.Numerics.DataMaps
         {
             return new Series((IList)UnderlyingList.Ge(value));
         }
-
 
         // Transformers
 
