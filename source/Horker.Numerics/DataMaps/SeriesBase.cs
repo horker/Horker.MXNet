@@ -118,7 +118,12 @@ namespace Horker.Numerics.DataMaps
 
         public bool IsSynchronized => UnderlyingList.IsSynchronized;
 
-        public int Add(object value)
+        public void Add(object value)
+        {
+            UnderlyingList.Add(value);
+        }
+
+        int IList.Add(object value)
         {
             return UnderlyingList.Add(value);
         }
