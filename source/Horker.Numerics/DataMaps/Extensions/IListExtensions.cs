@@ -264,6 +264,26 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+        public static bool All<T>(this IList<T> self, Func<T, int, bool> func)
+        {
+            for (int i = 0; i < self.Count; ++i)
+            {
+                if (!func.Invoke(self[i], i))
+                    return false;
+            }
+            return true;
+        }
+
+        public static bool Any<T>(this IList<T> self, Func<T, int, bool> func)
+        {
+            for (int i = 0; i < self.Count; ++i)
+            {
+                if (func.Invoke(self[i], i))
+                    return true;
+            }
+            return false;
+        }
+
         private static object InvokeFuncString(string funcString, Type[] funcTypes, string funcName, Type[] methodGenericTypes, bool hasReturnValue, object[] arguments)
         {
             var func = FunctionCompiler.Compile(funcString, funcTypes, hasReturnValue);
@@ -339,6 +359,22 @@ namespace Horker.Numerics.DataMaps.Extensions
                 new Type[] { typeof(T[]), typeof(int) },
                 "RollingApply", new Type[] { typeof(T) }, true,
                 new object[] { self, null, window });
+        }
+
+        public static bool AllFuncString<T>(this IList<T> self, string funcString)
+        {
+            return (bool)InvokeFuncString(funcString,
+                new Type[] { typeof(T), typeof(int), typeof(bool) },
+                "All", new Type[] { typeof(T) }, true,
+                new object[] { self, null });
+        }
+
+        public static bool AnyFuncString<T>(this IList<T> self, string funcString)
+        {
+            return (bool)InvokeFuncString(funcString,
+                new Type[] { typeof(T), typeof(int), typeof(bool) },
+                "Any", new Type[] { typeof(T) }, true,
+                new object[] { self, null });
         }
 
         public static IList<U> ApplyScriptBlock<T, U>(this IList<T> self, ScriptBlock scriptBlock)
@@ -521,6 +557,42 @@ namespace Horker.Numerics.DataMaps.Extensions
                 var value = scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject;
                 self[i] = (T)value;
             }
+        }
+
+        public static bool AllScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock)
+        {
+            var parameters = new List<PSVariable>();
+            parameters.Add(new PSVariable("value"));
+            parameters.Add(new PSVariable("index"));
+
+            var i = 0;
+            foreach (var e in self)
+            {
+                parameters[0].Value = e;
+                parameters[1].Value = i++;
+                if (!(bool)scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject)
+                    return false;
+            }
+
+            return true;
+        }
+
+        public static bool AnyScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock)
+        {
+            var parameters = new List<PSVariable>();
+            parameters.Add(new PSVariable("value"));
+            parameters.Add(new PSVariable("index"));
+
+            var i = 0;
+            foreach (var e in self)
+            {
+                parameters[0].Value = e;
+                parameters[1].Value = i++;
+                if ((bool)scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject)
+                    return true;
+            }
+
+            return false;
         }
 
         // Comparison operators

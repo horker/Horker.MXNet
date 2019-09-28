@@ -435,6 +435,34 @@ namespace Horker.Numerics.DataMaps
             gm.Invoke(null, new object[] { UnderlyingList, lambda });
         }
 
+        public bool All(object lambda)
+        {
+            var dataType = DataType;
+
+            var methodName = ChooseApplyMethodName(lambda, "AllFuncString", "AllScriptBlock");
+
+            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            Debug.Assert(m != null);
+            var gm = m.MakeGenericMethod(new Type[] { dataType });
+
+            var result = (bool)gm.Invoke(null, new object[] { UnderlyingList, lambda });
+            return result;
+        }
+
+        public bool Any(object lambda)
+        {
+            var dataType = DataType;
+
+            var methodName = ChooseApplyMethodName(lambda, "AnyFuncString", "AnyScriptBlock");
+
+            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            Debug.Assert(m != null);
+            var gm = m.MakeGenericMethod(new Type[] { dataType });
+
+            var result = (bool)gm.Invoke(null, new object[] { UnderlyingList, lambda });
+            return result;
+        }
+
         // Comparison operators
 
         public SeriesBase Eq(IList other)
