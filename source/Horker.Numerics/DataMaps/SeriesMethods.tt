@@ -7,6 +7,9 @@
 <#   
 var methodNames = new []
 {
+	Tuple.Create("CumulativeMax", "", ""),
+	Tuple.Create("CumulativeMin", "", ""),
+	Tuple.Create("CumulativeProduct", "", ""),
 	Tuple.Create("CumulativeSum", "", ""),
 	Tuple.Create("FillNaN", "object fillValue", ", fillValue"),
 	Tuple.Create("GetUnique", "", ""),
@@ -15,6 +18,9 @@ var methodNames = new []
 
 var nonSeriesMethods = new[]
 {
+	Tuple.Create("CumulativeMaxFill", "void", "", ""),
+	Tuple.Create("CumulativeMinFill", "void", "", ""),
+	Tuple.Create("CumulativeProductFill", "void", "", ""),
 	Tuple.Create("CumulativeSumFill", "void", "", ""),
 	Tuple.Create("CountNaN", "int", "", ""),
 	Tuple.Create("CountUnique", "int", "", ""),

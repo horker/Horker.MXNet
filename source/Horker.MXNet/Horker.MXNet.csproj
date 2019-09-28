@@ -123,7 +123,6 @@
     </Content>
     <Content Include="Operators\Enumerations.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Enumerations.cs</LastGenOutput>
       <LastOutputs>.\Enumerations1.cs</LastOutputs>
     </Content>
   </ItemGroup>

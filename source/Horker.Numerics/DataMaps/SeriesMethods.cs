@@ -12,16 +12,40 @@ namespace Horker.Numerics.DataMaps
     {
         enum MethodIndex
         {
+			CumulativeMax,
+			CumulativeMin,
+			CumulativeProduct,
 			CumulativeSum,
 			FillNaN,
 			GetUnique,
 			RemoveNaN,
+			CumulativeMaxFill,
+			CumulativeMinFill,
+			CumulativeProductFill,
 			CumulativeSumFill,
 			CountNaN,
 			CountUnique,
 			Describe,
 			FillNaNFill,
 			SortFill,
+        }
+
+        public SeriesBase CumulativeMax()
+        {
+			var m = GetMethodInfo(MethodIndex.CumulativeMax);
+            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
+        }
+
+        public SeriesBase CumulativeMin()
+        {
+			var m = GetMethodInfo(MethodIndex.CumulativeMin);
+            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
+        }
+
+        public SeriesBase CumulativeProduct()
+        {
+			var m = GetMethodInfo(MethodIndex.CumulativeProduct);
+            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
         }
 
         public SeriesBase CumulativeSum()
@@ -46,6 +70,27 @@ namespace Horker.Numerics.DataMaps
         {
 			var m = GetMethodInfo(MethodIndex.RemoveNaN);
             return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
+        }
+
+        public void CumulativeMaxFill()
+        {
+			var m = GetMethodInfo(MethodIndex.CumulativeMaxFill);
+
+            m.Invoke(null, new object[] { UnderlyingList });
+        }
+
+        public void CumulativeMinFill()
+        {
+			var m = GetMethodInfo(MethodIndex.CumulativeMinFill);
+
+            m.Invoke(null, new object[] { UnderlyingList });
+        }
+
+        public void CumulativeProductFill()
+        {
+			var m = GetMethodInfo(MethodIndex.CumulativeProductFill);
+
+            m.Invoke(null, new object[] { UnderlyingList });
         }
 
         public void CumulativeSumFill()

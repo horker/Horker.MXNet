@@ -39,6 +39,100 @@ namespace Horker.Numerics.DataMaps.Extensions
             m.Invoke(self, new object[0]);
         }
 
+        public static List<MetaNum> CumulativeMax(this IList<MetaNum> self)
+        {
+            var result = new List<MetaNum>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            MetaNum max = (MetaNum)self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+                result.Add(max);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMaxFill(this IList<MetaNum> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            MetaNum max = (MetaNum)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
+                self[i] = max;
+            }
+        }
+
+        public static List<MetaNum> CumulativeMin(this IList<MetaNum> self)
+        {
+            var result = new List<MetaNum>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            MetaNum min = (MetaNum)self[0];
+
+            foreach (var value in self)
+            {
+                if (value < min)
+                    min = value;
+                result.Add(min);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMinFill(this IList<MetaNum> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            MetaNum min = (MetaNum)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                    min = self[i];
+                self[i] = min;
+            }
+        }
+
+        public static List<MetaNum> CumulativeProduct(this IList<MetaNum> self)
+        {
+            var result = new List<MetaNum>(self.Count);
+            MetaNum product = (MetaNum)1;
+
+            foreach (var value in self)
+            {
+                product *= value;
+                result.Add(product);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeProductFill(this IList<MetaNum> self)
+        {
+            MetaNum product = (MetaNum)1;
+
+            var i = 0;
+            foreach (var value in self)
+            {
+                product *= value;
+                self[i++] = product;
+            }
+        }
+
         public static List<MetaNum> CumulativeSum(this IList<MetaNum> self)
         {
             var result = new List<MetaNum>(self.Count);

@@ -38,6 +38,100 @@ namespace Horker.Numerics.DataMaps.Extensions
             m.Invoke(self, new object[0]);
         }
 
+        public static List<double> CumulativeMax(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            double max = (double)self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+                result.Add(max);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMaxFill(this IList<double> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            double max = (double)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
+                self[i] = max;
+            }
+        }
+
+        public static List<double> CumulativeMin(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            double min = (double)self[0];
+
+            foreach (var value in self)
+            {
+                if (value < min)
+                    min = value;
+                result.Add(min);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMinFill(this IList<double> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            double min = (double)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                    min = self[i];
+                self[i] = min;
+            }
+        }
+
+        public static List<double> CumulativeProduct(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+            double product = (double)1;
+
+            foreach (var value in self)
+            {
+                product *= value;
+                result.Add(product);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeProductFill(this IList<double> self)
+        {
+            double product = (double)1;
+
+            var i = 0;
+            foreach (var value in self)
+            {
+                product *= value;
+                self[i++] = product;
+            }
+        }
+
         public static List<double> CumulativeSum(this IList<double> self)
         {
             var result = new List<double>(self.Count);
@@ -178,6 +272,100 @@ namespace Horker.Numerics.DataMaps.Extensions
                 throw new InvalidOperationException("This object does not support inplace Sort() operation");
 
             m.Invoke(self, new object[0]);
+        }
+
+        public static List<float> CumulativeMax(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            float max = (float)self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+                result.Add(max);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMaxFill(this IList<float> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            float max = (float)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
+                self[i] = max;
+            }
+        }
+
+        public static List<float> CumulativeMin(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            float min = (float)self[0];
+
+            foreach (var value in self)
+            {
+                if (value < min)
+                    min = value;
+                result.Add(min);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMinFill(this IList<float> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            float min = (float)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                    min = self[i];
+                self[i] = min;
+            }
+        }
+
+        public static List<float> CumulativeProduct(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+            float product = (float)1;
+
+            foreach (var value in self)
+            {
+                product *= value;
+                result.Add(product);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeProductFill(this IList<float> self)
+        {
+            float product = (float)1;
+
+            var i = 0;
+            foreach (var value in self)
+            {
+                product *= value;
+                self[i++] = product;
+            }
         }
 
         public static List<float> CumulativeSum(this IList<float> self)
@@ -322,6 +510,100 @@ namespace Horker.Numerics.DataMaps.Extensions
             m.Invoke(self, new object[0]);
         }
 
+        public static List<long> CumulativeMax(this IList<long> self)
+        {
+            var result = new List<long>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            long max = (long)self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+                result.Add(max);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMaxFill(this IList<long> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            long max = (long)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
+                self[i] = max;
+            }
+        }
+
+        public static List<long> CumulativeMin(this IList<long> self)
+        {
+            var result = new List<long>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            long min = (long)self[0];
+
+            foreach (var value in self)
+            {
+                if (value < min)
+                    min = value;
+                result.Add(min);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMinFill(this IList<long> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            long min = (long)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                    min = self[i];
+                self[i] = min;
+            }
+        }
+
+        public static List<long> CumulativeProduct(this IList<long> self)
+        {
+            var result = new List<long>(self.Count);
+            long product = (long)1;
+
+            foreach (var value in self)
+            {
+                product *= value;
+                result.Add(product);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeProductFill(this IList<long> self)
+        {
+            long product = (long)1;
+
+            var i = 0;
+            foreach (var value in self)
+            {
+                product *= value;
+                self[i++] = product;
+            }
+        }
+
         public static List<long> CumulativeSum(this IList<long> self)
         {
             var result = new List<long>(self.Count);
@@ -462,6 +744,100 @@ namespace Horker.Numerics.DataMaps.Extensions
                 throw new InvalidOperationException("This object does not support inplace Sort() operation");
 
             m.Invoke(self, new object[0]);
+        }
+
+        public static List<int> CumulativeMax(this IList<int> self)
+        {
+            var result = new List<int>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            int max = (int)self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+                result.Add(max);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMaxFill(this IList<int> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            int max = (int)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
+                self[i] = max;
+            }
+        }
+
+        public static List<int> CumulativeMin(this IList<int> self)
+        {
+            var result = new List<int>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            int min = (int)self[0];
+
+            foreach (var value in self)
+            {
+                if (value < min)
+                    min = value;
+                result.Add(min);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMinFill(this IList<int> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            int min = (int)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                    min = self[i];
+                self[i] = min;
+            }
+        }
+
+        public static List<int> CumulativeProduct(this IList<int> self)
+        {
+            var result = new List<int>(self.Count);
+            int product = (int)1;
+
+            foreach (var value in self)
+            {
+                product *= value;
+                result.Add(product);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeProductFill(this IList<int> self)
+        {
+            int product = (int)1;
+
+            var i = 0;
+            foreach (var value in self)
+            {
+                product *= value;
+                self[i++] = product;
+            }
         }
 
         public static List<int> CumulativeSum(this IList<int> self)
@@ -606,6 +982,100 @@ namespace Horker.Numerics.DataMaps.Extensions
             m.Invoke(self, new object[0]);
         }
 
+        public static List<short> CumulativeMax(this IList<short> self)
+        {
+            var result = new List<short>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            short max = (short)self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+                result.Add(max);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMaxFill(this IList<short> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            short max = (short)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
+                self[i] = max;
+            }
+        }
+
+        public static List<short> CumulativeMin(this IList<short> self)
+        {
+            var result = new List<short>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            short min = (short)self[0];
+
+            foreach (var value in self)
+            {
+                if (value < min)
+                    min = value;
+                result.Add(min);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMinFill(this IList<short> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            short min = (short)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                    min = self[i];
+                self[i] = min;
+            }
+        }
+
+        public static List<short> CumulativeProduct(this IList<short> self)
+        {
+            var result = new List<short>(self.Count);
+            short product = (short)1;
+
+            foreach (var value in self)
+            {
+                product *= value;
+                result.Add(product);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeProductFill(this IList<short> self)
+        {
+            short product = (short)1;
+
+            var i = 0;
+            foreach (var value in self)
+            {
+                product *= value;
+                self[i++] = product;
+            }
+        }
+
         public static List<short> CumulativeSum(this IList<short> self)
         {
             var result = new List<short>(self.Count);
@@ -746,6 +1216,100 @@ namespace Horker.Numerics.DataMaps.Extensions
                 throw new InvalidOperationException("This object does not support inplace Sort() operation");
 
             m.Invoke(self, new object[0]);
+        }
+
+        public static List<byte> CumulativeMax(this IList<byte> self)
+        {
+            var result = new List<byte>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            byte max = (byte)self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+                result.Add(max);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMaxFill(this IList<byte> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            byte max = (byte)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
+                self[i] = max;
+            }
+        }
+
+        public static List<byte> CumulativeMin(this IList<byte> self)
+        {
+            var result = new List<byte>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            byte min = (byte)self[0];
+
+            foreach (var value in self)
+            {
+                if (value < min)
+                    min = value;
+                result.Add(min);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMinFill(this IList<byte> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            byte min = (byte)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                    min = self[i];
+                self[i] = min;
+            }
+        }
+
+        public static List<byte> CumulativeProduct(this IList<byte> self)
+        {
+            var result = new List<byte>(self.Count);
+            byte product = (byte)1;
+
+            foreach (var value in self)
+            {
+                product *= value;
+                result.Add(product);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeProductFill(this IList<byte> self)
+        {
+            byte product = (byte)1;
+
+            var i = 0;
+            foreach (var value in self)
+            {
+                product *= value;
+                self[i++] = product;
+            }
         }
 
         public static List<byte> CumulativeSum(this IList<byte> self)
@@ -890,6 +1454,100 @@ namespace Horker.Numerics.DataMaps.Extensions
             m.Invoke(self, new object[0]);
         }
 
+        public static List<sbyte> CumulativeMax(this IList<sbyte> self)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            sbyte max = (sbyte)self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+                result.Add(max);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMaxFill(this IList<sbyte> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            sbyte max = (sbyte)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
+                self[i] = max;
+            }
+        }
+
+        public static List<sbyte> CumulativeMin(this IList<sbyte> self)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            sbyte min = (sbyte)self[0];
+
+            foreach (var value in self)
+            {
+                if (value < min)
+                    min = value;
+                result.Add(min);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMinFill(this IList<sbyte> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            sbyte min = (sbyte)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                    min = self[i];
+                self[i] = min;
+            }
+        }
+
+        public static List<sbyte> CumulativeProduct(this IList<sbyte> self)
+        {
+            var result = new List<sbyte>(self.Count);
+            sbyte product = (sbyte)1;
+
+            foreach (var value in self)
+            {
+                product *= value;
+                result.Add(product);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeProductFill(this IList<sbyte> self)
+        {
+            sbyte product = (sbyte)1;
+
+            var i = 0;
+            foreach (var value in self)
+            {
+                product *= value;
+                self[i++] = product;
+            }
+        }
+
         public static List<sbyte> CumulativeSum(this IList<sbyte> self)
         {
             var result = new List<sbyte>(self.Count);
@@ -1030,6 +1688,100 @@ namespace Horker.Numerics.DataMaps.Extensions
                 throw new InvalidOperationException("This object does not support inplace Sort() operation");
 
             m.Invoke(self, new object[0]);
+        }
+
+        public static List<decimal> CumulativeMax(this IList<decimal> self)
+        {
+            var result = new List<decimal>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            decimal max = (decimal)self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+                result.Add(max);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMaxFill(this IList<decimal> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            decimal max = (decimal)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
+                self[i] = max;
+            }
+        }
+
+        public static List<decimal> CumulativeMin(this IList<decimal> self)
+        {
+            var result = new List<decimal>(self.Count);
+
+            if (self.Count == 0)
+                return result;
+
+            decimal min = (decimal)self[0];
+
+            foreach (var value in self)
+            {
+                if (value < min)
+                    min = value;
+                result.Add(min);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeMinFill(this IList<decimal> self)
+        {
+            if (self.Count == 0)
+                return;
+
+            decimal min = (decimal)self[0];
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                    min = self[i];
+                self[i] = min;
+            }
+        }
+
+        public static List<decimal> CumulativeProduct(this IList<decimal> self)
+        {
+            var result = new List<decimal>(self.Count);
+            decimal product = (decimal)1;
+
+            foreach (var value in self)
+            {
+                product *= value;
+                result.Add(product);
+            }
+
+            return result;
+        }
+
+        public static void CumulativeProductFill(this IList<decimal> self)
+        {
+            decimal product = (decimal)1;
+
+            var i = 0;
+            foreach (var value in self)
+            {
+                product *= value;
+                self[i++] = product;
+            }
         }
 
         public static List<decimal> CumulativeSum(this IList<decimal> self)
