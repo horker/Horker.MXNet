@@ -690,6 +690,33 @@ namespace Horker.Numerics.DataMaps.Extensions
             return CompareScalar(self, value, x => x >= 0);
         }
 
+        public static IList<bool> Between(this IList self, object left, object right, bool inclusive = true)
+        {
+            var result = new List<bool>(self.Count);
+            var comparer = Comparer.Default;
+
+            if (inclusive)
+            {
+                for (var i = 0; i < self.Count; ++i)
+                {
+                    var r = comparer.Compare(left, self[i]) <= 0;
+                    var l = comparer.Compare(self[i], right) <= 0;
+                    result.Add(r && l);
+                }
+            }
+            else
+            {
+                for (var i = 0; i < self.Count; ++i)
+                {
+                    var r = comparer.Compare(left, self[i]) < 0;
+                    var l = comparer.Compare(self[i], right) < 0;
+                    result.Add(r && l);
+                }
+            }
+
+            return result;
+        }
+
         // Other operations
 
         public static IList<T> Map<T>(this IList<T> self, IDictionary map)

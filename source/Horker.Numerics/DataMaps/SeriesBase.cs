@@ -536,6 +536,11 @@ namespace Horker.Numerics.DataMaps
             return new Series((IList)UnderlyingList.Ge(value));
         }
 
+        public SeriesBase Between(object left, object right, bool inclusive = true)
+        {
+            return new Series((IList)UnderlyingList.Between(left, right, inclusive));
+        }
+
         // Transformers
 
         public DataMap OneHot(OneHotType oneHotType = OneHotType.OneHot, string columnNameFormat = "{0}")
