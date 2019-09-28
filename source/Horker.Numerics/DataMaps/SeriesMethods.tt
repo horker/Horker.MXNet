@@ -11,7 +11,6 @@ var methodNames = new []
 	Tuple.Create("FillNaN", "object fillValue", ", fillValue"),
 	Tuple.Create("GetUnique", "", ""),
 	Tuple.Create("RemoveNaN", "", ""),
-	Tuple.Create("Sort", "", "")
 };
 
 var nonSeriesMethods = new[]

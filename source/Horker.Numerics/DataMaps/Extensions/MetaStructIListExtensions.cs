@@ -8,12 +8,6 @@ namespace Horker.Numerics.DataMaps.Extensions
 {
     internal static class MetaStructIListExtensions
     {
-        public static bool IsNaN(MetaStruct self)
-        {
-            return false;
-        }
-
-        // CUT ABOVE
 /*
         // This is very confusing with Array.Sort() and List<>.Sort(), both of which are inplace operations.
         public static List<MetaStruct> Sort(this IList<MetaStruct> self)
@@ -23,6 +17,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 */
+        // CUT ABOVE
         public static void SortFill(this IList<MetaStruct> self)
         {
             if (self is Array a)
@@ -51,7 +46,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     ++count;
             }
 
@@ -85,7 +80,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<MetaStruct>(self.Count);
             foreach (var value in self)
-                if (!IsNaN(value))
+                if (!TypeTrait.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -96,7 +91,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<MetaStruct>(self.Count);
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     result.Add(value);
                 else
                     result.Add(fillValue);
@@ -109,7 +104,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (IsNaN(self[i]))
+                if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }

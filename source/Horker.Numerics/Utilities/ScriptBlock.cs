@@ -18,7 +18,7 @@ namespace Horker.Numerics.ScriptBlocks
 
         public ScriptBlock(string functionString, Type[] parameterTypes)
         {
-            _func = FunctionCompiler.Compile(functionString, parameterTypes);
+            _func = FunctionCompiler.Compile(functionString, parameterTypes, true);
             _toString = functionString;
         }
 

@@ -300,64 +300,130 @@ namespace Horker.Numerics.DataMaps
         public static implicit operator SeriesBase(List<DateTime> value) { return new Series(value); }
         public static implicit operator SeriesBase(List<DateTimeOffset> value) { return new Series(value); }
 
-        // LINQ-like methods
+        // Apply
 
-        private SeriesBase SelectByFunc<S, T>(Func<S, int, T> func)
+
+        public SeriesBase Apply(object lambda, Type returnType = null)
         {
-            var result = new List<T>();
+            var dataType = DataType;
+            returnType = returnType ?? dataType;
 
-            var i = 0;
-            foreach (var e in UnderlyingList.AsList<S>())
-            {
-                var value = func.Invoke(e, i++);
-                result.Add(value);
-            }
+            string methodName;
+            if (lambda is string)
+                methodName = "ApplyFuncString";
+            else if (lambda is ScriptBlock)
+                methodName = "ApplyScriptBlock";
+            else
+                throw new ArgumentException("Invalid script block");
 
+            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            Debug.Assert(m != null);
+            var gm = m.MakeGenericMethod(new Type[] { dataType, returnType });
+
+            var result = (IList)gm.Invoke(null, new object[] { UnderlyingList, lambda });
             return new Series(result);
         }
 
-        private SeriesBase SelectByScriptBlock<T>(ScriptBlock scriptBlock)
+        public void ApplyFill(object lambda)
         {
-            var result = new List<T>();
+            var dataType = DataType;
 
-            var parameters = new List<PSVariable>();
-            parameters.Add(new PSVariable("x"));
-            parameters.Add(new PSVariable("i"));
+            string methodName;
+            if (lambda is string)
+                methodName = "ApplyFillFuncString";
+            else if (lambda is ScriptBlock)
+                methodName = "ApplyFillScriptBlock";
+            else
+                throw new ArgumentException("Invalid script block");
 
-            var i = 0;
-            foreach (var e in UnderlyingList)
+            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            Debug.Assert(m != null);
+            var gm = m.MakeGenericMethod(new Type[] { dataType });
+            gm.Invoke(null, new object[] { UnderlyingList, lambda });
+        }
+
+        public void ForEach(object lambda)
+        {
+            var dataType = DataType;
+
+            string methodName;
+            if (lambda is string)
+                methodName = "ForEachFuncString";
+            else if (lambda is ScriptBlock)
+                methodName = "ForEachScriptBlock";
+            else
+                throw new ArgumentException("Invalid script block");
+
+            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            Debug.Assert(m != null);
+            var gm = m.MakeGenericMethod(new Type[] { dataType });
+            gm.Invoke(null, new object[] { UnderlyingList, lambda });
+        }
+
+        public object Reduce(object lambda, object initialValue, Type returnType = null)
+        {
+            var dataType = DataType;
+
+            if (returnType == null)
             {
-                parameters[0].Value = e;
-                parameters[1].Value = i++;
-                var rawValue = scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject;
-                var value = OperatorFuncs<T>.GetConvertOperatorFunc(rawValue.GetType()).Invoke(rawValue);
-                result.Add(value);
+                if (initialValue is PSObject pso)
+                    returnType = pso.BaseObject.GetType();
+                else
+                    returnType = initialValue.GetType();
             }
 
+            string methodName;
+            if (lambda is string)
+                methodName = "ReduceFuncString";
+            else if (lambda is ScriptBlock)
+                methodName = "ReduceScriptBlock";
+            else
+                throw new ArgumentException("Invalid script block");
+
+            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            Debug.Assert(m != null);
+            var gm = m.MakeGenericMethod(new Type[] { dataType, returnType });
+
+            return gm.Invoke(null, new object[] { UnderlyingList, lambda, initialValue });
+        }
+
+        public int CountIf(object lambda)
+        {
+            var dataType = DataType;
+
+            string methodName;
+            if (lambda is string)
+                methodName = "CountIfFuncString";
+            else if (lambda is ScriptBlock)
+                methodName = "CountIfScriptBlock";
+            else
+                throw new ArgumentException("Invalid script block");
+
+            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            Debug.Assert(m != null);
+            var gm = m.MakeGenericMethod(new Type[] { dataType });
+
+            return (int)gm.Invoke(null, new object[] { UnderlyingList, lambda });
+        }
+
+        public SeriesBase RemoveIf(object lambda)
+        {
+            var dataType = DataType;
+
+            string methodName;
+            if (lambda is string)
+                methodName = "RemoveIfFuncString";
+            else if (lambda is ScriptBlock)
+                methodName = "RemoveIfScriptBlock";
+            else
+                throw new ArgumentException("Invalid script block");
+
+            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            Debug.Assert(m != null);
+            var gm = m.MakeGenericMethod(new Type[] { dataType });
+
+            var result = (IList)gm.Invoke(null, new object[] { UnderlyingList, lambda });
             return new Series(result);
-        }
-
-        public SeriesBase Select(string funcString, Type returnType = null)
-        {
-            returnType = returnType ?? DataType;
-            var func = FunctionCompiler.Compile(funcString, new Type[] { DataType, typeof(int), returnType });
-
-            var m = typeof(SeriesBase).GetMethod("SelectByFunc", BindingFlags.NonPublic | BindingFlags.Instance);
-            var gm = m.MakeGenericMethod(new Type[] { DataType, returnType });
-            return (SeriesBase)gm.Invoke(this, new object[] { func });
-        }
-
-        public SeriesBase Select<S, T>(Func<S, int, T> func)
-        {
-            return SelectByFunc(func);
-        }
-
-        public SeriesBase Select(ScriptBlock scriptBlock, Type returnType = null)
-        {
-            returnType = returnType ?? DataType;
-            var m = typeof(SeriesBase).GetMethod("SelectByScriptBlock", BindingFlags.NonPublic | BindingFlags.Instance);
-            var gm = m.MakeGenericMethod(new Type[] { returnType });
-            return (SeriesBase)gm.Invoke(this, new object[] { scriptBlock });
         }
 
         // Transformers

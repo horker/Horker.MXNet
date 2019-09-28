@@ -72,7 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataMaps\Extensions\GenericIListExntesionsHandWritten.cs" />
+    <Compile Include="DataMaps\Extensions\TypeTrait.cs" />
     <Compile Include="DataMaps\Extensions\FallbackIListExtensions.cs" />
     <Compile Include="DataMaps\Extensions\MetaStructIListExtensions.cs" />
     <Compile Include="DataMaps\Extensions\MetaStruct.cs" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Horker.Numerics.DataMaps.Extensions
 {
-    public static partial class GenericIListExtensions
+    public static partial class TypeTrait
     {
         public static bool IsNaN(double self) { return double.IsNaN(self); }
         public static bool IsNaN(float self) { return double.IsNaN(self); }

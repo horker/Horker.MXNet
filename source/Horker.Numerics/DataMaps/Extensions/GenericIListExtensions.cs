@@ -69,7 +69,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     ++count;
             }
 
@@ -121,7 +121,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<double>(self.Count);
             foreach (var value in self)
-                if (!IsNaN(value))
+                if (!TypeTrait.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -132,7 +132,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<double>(self.Count);
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -145,7 +145,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (IsNaN(self[i]))
+                if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
@@ -211,7 +211,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     ++count;
             }
 
@@ -263,7 +263,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<float>(self.Count);
             foreach (var value in self)
-                if (!IsNaN(value))
+                if (!TypeTrait.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -274,7 +274,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<float>(self.Count);
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -287,7 +287,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (IsNaN(self[i]))
+                if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
@@ -353,7 +353,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     ++count;
             }
 
@@ -405,7 +405,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<long>(self.Count);
             foreach (var value in self)
-                if (!IsNaN(value))
+                if (!TypeTrait.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -416,7 +416,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<long>(self.Count);
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -429,7 +429,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (IsNaN(self[i]))
+                if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
@@ -495,7 +495,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     ++count;
             }
 
@@ -547,7 +547,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<int>(self.Count);
             foreach (var value in self)
-                if (!IsNaN(value))
+                if (!TypeTrait.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -558,7 +558,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<int>(self.Count);
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -571,7 +571,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (IsNaN(self[i]))
+                if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
@@ -637,7 +637,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     ++count;
             }
 
@@ -689,7 +689,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<short>(self.Count);
             foreach (var value in self)
-                if (!IsNaN(value))
+                if (!TypeTrait.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -700,7 +700,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<short>(self.Count);
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -713,7 +713,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (IsNaN(self[i]))
+                if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
@@ -779,7 +779,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     ++count;
             }
 
@@ -831,7 +831,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<byte>(self.Count);
             foreach (var value in self)
-                if (!IsNaN(value))
+                if (!TypeTrait.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -842,7 +842,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<byte>(self.Count);
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -855,7 +855,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (IsNaN(self[i]))
+                if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
@@ -921,7 +921,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     ++count;
             }
 
@@ -973,7 +973,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<sbyte>(self.Count);
             foreach (var value in self)
-                if (!IsNaN(value))
+                if (!TypeTrait.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -984,7 +984,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<sbyte>(self.Count);
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -997,7 +997,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (IsNaN(self[i]))
+                if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
@@ -1063,7 +1063,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     ++count;
             }
 
@@ -1115,7 +1115,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<decimal>(self.Count);
             foreach (var value in self)
-                if (!IsNaN(value))
+                if (!TypeTrait.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -1126,7 +1126,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<decimal>(self.Count);
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -1139,20 +1139,11 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (IsNaN(self[i]))
+                if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
 
-/*
-        // This is very confusing with Array.Sort() and List<>.Sort(), both of which are inplace operations.
-        public static List<bool> Sort(this IList<bool> self)
-        {
-            var result = new List<bool>(self);
-            result.Sort();
-            return result;
-        }
-*/
         public static void SortFill(this IList<bool> self)
         {
             if (self is Array a)
@@ -1181,7 +1172,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     ++count;
             }
 
@@ -1215,7 +1206,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<bool>(self.Count);
             foreach (var value in self)
-                if (!IsNaN(value))
+                if (!TypeTrait.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -1226,7 +1217,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<bool>(self.Count);
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     result.Add(value);
                 else
                     result.Add(fillValue);
@@ -1239,20 +1230,11 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (IsNaN(self[i]))
+                if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
 
-/*
-        // This is very confusing with Array.Sort() and List<>.Sort(), both of which are inplace operations.
-        public static List<DateTime> Sort(this IList<DateTime> self)
-        {
-            var result = new List<DateTime>(self);
-            result.Sort();
-            return result;
-        }
-*/
         public static void SortFill(this IList<DateTime> self)
         {
             if (self is Array a)
@@ -1281,7 +1263,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     ++count;
             }
 
@@ -1315,7 +1297,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<DateTime>(self.Count);
             foreach (var value in self)
-                if (!IsNaN(value))
+                if (!TypeTrait.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -1326,7 +1308,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<DateTime>(self.Count);
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     result.Add(value);
                 else
                     result.Add(fillValue);
@@ -1339,20 +1321,11 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (IsNaN(self[i]))
+                if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
 
-/*
-        // This is very confusing with Array.Sort() and List<>.Sort(), both of which are inplace operations.
-        public static List<DateTimeOffset> Sort(this IList<DateTimeOffset> self)
-        {
-            var result = new List<DateTimeOffset>(self);
-            result.Sort();
-            return result;
-        }
-*/
         public static void SortFill(this IList<DateTimeOffset> self)
         {
             if (self is Array a)
@@ -1381,7 +1354,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     ++count;
             }
 
@@ -1415,7 +1388,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<DateTimeOffset>(self.Count);
             foreach (var value in self)
-                if (!IsNaN(value))
+                if (!TypeTrait.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -1426,7 +1399,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<DateTimeOffset>(self.Count);
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     result.Add(value);
                 else
                     result.Add(fillValue);
@@ -1439,20 +1412,11 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (IsNaN(self[i]))
+                if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
 
-/*
-        // This is very confusing with Array.Sort() and List<>.Sort(), both of which are inplace operations.
-        public static List<string> Sort(this IList<string> self)
-        {
-            var result = new List<string>(self);
-            result.Sort();
-            return result;
-        }
-*/
         public static void SortFill(this IList<string> self)
         {
             if (self is Array a)
@@ -1481,7 +1445,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     ++count;
             }
 
@@ -1515,7 +1479,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<string>(self.Count);
             foreach (var value in self)
-                if (!IsNaN(value))
+                if (!TypeTrait.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -1526,7 +1490,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<string>(self.Count);
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     result.Add(value);
                 else
                     result.Add(fillValue);
@@ -1539,20 +1503,15 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (IsNaN(self[i]))
+                if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
+    }
 
-/*
-        // This is very confusing with Array.Sort() and List<>.Sort(), both of which are inplace operations.
-        public static List<object> Sort(this IList self)
-        {
-            var result = new List<object>(self);
-            result.Sort();
-            return result;
-        }
-*/
+	public static partial class IListExtensions
+	{
+
         public static void SortFill(this IList self)
         {
             if (self is Array a)
@@ -1581,7 +1540,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     ++count;
             }
 
@@ -1615,7 +1574,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<object>(self.Count);
             foreach (var value in self)
-                if (!IsNaN(value))
+                if (!TypeTrait.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -1626,7 +1585,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<object>(self.Count);
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     result.Add(value);
                 else
                     result.Add(fillValue);
@@ -1639,7 +1598,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (IsNaN(self[i]))
+                if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }

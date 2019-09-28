@@ -14,12 +14,12 @@ namespace Horker.Numerics.Tests
         {
             var t1 = new Series(new int[] { 1, 2, 3 });
 
-            var t2 = t1.Select("(x, i) => x * 2");
+            var t2 = t1.Apply("(x, i) => x * 2");
 
             Assert.IsType<Series>(t2);
             Assert.Equal(new int[] { 2, 4, 6 }, t2.AsArray<int>());
 
-            var t3 = t1.Select("(x, i) => x * i", typeof(double));
+            var t3 = t1.Apply("(x, i) => x * i", typeof(double));
 
             Assert.IsType<Series>(t3);
             Assert.Equal(new double[] { 0, 2, 6 }, t3.AsArray<double>());

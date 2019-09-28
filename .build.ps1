@@ -140,6 +140,11 @@ task Clean {
   Remove-Item2 "$MODULE_PATH_DEBUG\*"
 }
 
+task PublishLocal {
+    & "$PSScriptRoot\tools\Publish-Local.ps1"
+    Update-Module Horker.MXNet -force
+}
+
 task Pack {
     nuget.exe pack source\Horker.MXNet\Horker.MXNet.csproj -Prop Configuration=Release -Symbol -OutputDirectory nuget\
 }

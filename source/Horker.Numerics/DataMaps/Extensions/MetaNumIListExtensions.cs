@@ -8,11 +8,6 @@ namespace Horker.Numerics.DataMaps.Extensions
 {
     public static partial class MetaNumIListExtensions
     {
-        public static bool IsNaN(MetaNum self)
-        {
-            return false;
-        }
-
         // CUT ABOVE
         public static List<MetaNum> Sort(this IList<MetaNum> self)
         {
@@ -75,7 +70,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     ++count;
             }
 
@@ -127,7 +122,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<MetaNum>(self.Count);
             foreach (var value in self)
-                if (!IsNaN(value))
+                if (!TypeTrait.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -138,7 +133,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<MetaNum>(self.Count);
             foreach (var value in self)
             {
-                if (IsNaN(value))
+                if (TypeTrait.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -151,7 +146,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (IsNaN(self[i]))
+                if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }

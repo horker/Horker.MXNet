@@ -17,7 +17,7 @@ namespace Horker.Numerics
 
         private static readonly string Namespace = "Horker.Numerics.DynamicallyGeneratedClasses";
 
-        private static readonly string SourceCodeTemplate = @"
+        private static readonly string FuncSourceCode = @"
 using System;
 namespace {0} {{
     public static class {1}
@@ -25,6 +25,19 @@ namespace {0} {{
         public static Func<{2}> f()
         {{
             return new Func<{3}>({4});
+        }}
+    }}
+}}
+";
+
+        private static readonly string ActionSourceCode = @"
+using System;
+namespace {0} {{
+    public static class {1}
+    {{
+        public static Action<{2}> f()
+        {{
+            return new Action<{3}>({4});
         }}
     }}
 }}
@@ -63,14 +76,20 @@ namespace {0} {{
             return cr.CompiledAssembly;
         }
 
-        public static Delegate Compile(string funcString, Type[] parameterTypes, string compilerVersion = "v4.0")
+        public static Delegate Compile(string funcString, Type[] parameterTypes, bool func, string compilerVersion = "v4.0")
         {
             if (CodeCache.TryGetValue(funcString, out var f))
                 return f;
 
+            string sourceCode;
+            if (func)
+                sourceCode = FuncSourceCode;
+            else
+                sourceCode = ActionSourceCode;
+
             var className = "Func" + classNameSuffix++;
             var typeString = string.Join(", ", parameterTypes.Select(x => x.FullName));
-            var sourceString = string.Format(SourceCodeTemplate, Namespace, className, typeString, typeString, funcString);
+            var sourceString = string.Format(sourceCode, Namespace, className, typeString, typeString, funcString);
 
             var assembly = CompileString(sourceString, "v3.5");
 
