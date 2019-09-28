@@ -12,6 +12,8 @@ namespace Horker.Numerics.DataMaps.Extensions
     {
         public static Type GetDataType(this IList value)
         {
+            // Types and type conversions
+
             if (value is Array)
                 return value.GetType().GetElementType();
 
@@ -148,7 +150,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return CastDownToFirstElementType(self);
         }
 
-        // Apply
+        // Apply and friends
 
         public static IList<U> Apply<T, U>(this IList<T> self, Func<T, int, U> func)
         {
@@ -207,66 +209,136 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
+        public static IList<U> RollingApply<T, U>(this IList<T> self, Func<T[], int, U> func, int window)
+        {
+            var result = new List<U>();
+            T[] slice;
+
+            var i = 0;
+            for (;  i < window - 1; ++i)
+            {
+                slice = new T[i + 1];
+                for (var j = 0; j <= i; ++j)
+                    slice[j] = self[j];
+
+                var value = func.Invoke(slice, i);
+                result.Add(value);
+            }
+
+            slice = new T[window];
+            for (; i < self.Count; ++i)
+            {
+                for (var j = 0; j < window; ++j)
+                    slice[j] = self[i - window + 1 + j];
+
+                var value = func.Invoke(slice, i);
+                result.Add(value);
+            }
+
+            return result;
+        }
+
+        public static void RollingApplyFill<T>(this IList<T> self, Func<T[], int, T> func, int window)
+        {
+            T[] slice;
+
+            var i = 0;
+            for (;  i < window - 1; ++i)
+            {
+                slice = new T[i + 1];
+                for (var j = 0; j <= i; ++j)
+                    slice[j] = self[j];
+
+                var value = func.Invoke(slice, i);
+                self[i] = value;
+            }
+
+            slice = new T[window];
+            for (; i < self.Count; ++i)
+            {
+                for (var j = 0; j < window; ++j)
+                    slice[j] = self[i - window + 1 + j];
+
+                var value = func.Invoke(slice, i);
+                self[i] = value;
+            }
+        }
+
+        private static object InvokeFuncString(string funcString, Type[] funcTypes, string funcName, Type[] methodGenericTypes, bool hasReturnValue, object[] arguments)
+        {
+            var func = FunctionCompiler.Compile(funcString, funcTypes, hasReturnValue);
+            arguments[1] = func;
+
+            var m = typeof(IListExtensions).GetMethod(funcName, BindingFlags.Public | BindingFlags.Static);
+            Debug.Assert(m != null);
+
+            var gm = m.MakeGenericMethod(methodGenericTypes);
+
+            return gm.Invoke(null, arguments);
+        }
+
         public static IList<U> ApplyFuncString<T, U>(this IList<T> self, string funcString)
         {
-            var result = new List<U>(self.Count);
-
-            var func = FunctionCompiler.Compile(funcString, new Type[] { typeof(T), typeof(int), typeof(U) }, true);
-
-            var m = typeof(IListExtensions).GetMethod("Apply", BindingFlags.Public | BindingFlags.Static);
-            Debug.Assert(m != null);
-            var gm = m.MakeGenericMethod(new Type[] { typeof(T), typeof(U) });
-            return (IList<U>)gm.Invoke(null, new object[] { self, func });
+            return (IList<U>)InvokeFuncString(funcString,
+                new Type[] { typeof(T), typeof(int), typeof(U) },
+                "Apply", new Type[] { typeof(T), typeof(U) }, true,
+                new object[] { self, null });
         }
 
         public static void ApplyFillFuncString<T>(this IList<T> self, string funcString)
         {
-            var func = FunctionCompiler.Compile(funcString, new Type[] { typeof(T), typeof(int), typeof(T) }, true);
-
-            var m = typeof(IListExtensions).GetMethod("ApplyFill", BindingFlags.Public | BindingFlags.Static);
-            Debug.Assert(m != null);
-            var gm = m.MakeGenericMethod(new Type[] { typeof(T) });
-            gm.Invoke(null, new object[] { self, func });
+            InvokeFuncString(funcString,
+                new Type[] { typeof(T), typeof(int), typeof(T) },
+                "ApplyFill", new Type[] { typeof(T) }, true,
+                new object[] { self, null });
         }
 
         public static void ForEachFuncString<T>(this IList<T> self, string funcString)
         {
-            var func = FunctionCompiler.Compile(funcString, new Type[] { typeof(T), typeof(int) }, false);
-
-            var m = typeof(IListExtensions).GetMethod("ForEach", BindingFlags.Public | BindingFlags.Static);
-            Debug.Assert(m != null);
-            var gm = m.MakeGenericMethod(new Type[] { typeof(T) });
-            gm.Invoke(null, new object[] { self, func });
+            InvokeFuncString(funcString,
+                new Type[] { typeof(T), typeof(int) },
+                "ForEach", new Type[] { typeof(T) }, true,
+                new object[] { self, null });
         }
 
         public static U ReduceFuncString<T, U>(this IList<T> self, string funcString, U initialValue)
         {
-            var func = FunctionCompiler.Compile(funcString, new Type[] { typeof(T), typeof(int), typeof(U), typeof(U) }, true);
-
-            var m = typeof(IListExtensions).GetMethod("Reduce", BindingFlags.Public | BindingFlags.Static);
-            Debug.Assert(m != null);
-            var gm = m.MakeGenericMethod(new Type[] { typeof(T), typeof(U) });
-            return (U)gm.Invoke(null, new object[] { self, func, initialValue });
+            return (U)InvokeFuncString(funcString,
+                new Type[] { typeof(T), typeof(int), typeof(U), typeof(U) },
+                "Reduce", new Type[] { typeof(T), typeof(U) }, true,
+                new object[] { self, null, initialValue });
         }
 
         public static int CountIfFuncString<T>(this IList<T> self, string funcString)
         {
-            var func = FunctionCompiler.Compile(funcString, new Type[] { typeof(T), typeof(int), typeof(bool) }, true);
-
-            var m = typeof(IListExtensions).GetMethod("CountIf", BindingFlags.Public | BindingFlags.Static);
-            Debug.Assert(m != null);
-            var gm = m.MakeGenericMethod(new Type[] { typeof(T) });
-            return (int)gm.Invoke(null, new object[] { self, func });
+            return (int)InvokeFuncString(funcString,
+                new Type[] { typeof(T), typeof(int), typeof(bool) },
+                "CountIf", new Type[] { typeof(T) }, true,
+                new object[] { self, null });
         }
 
         public static IList<T> RemoveIfFuncString<T>(this IList<T> self, string funcString)
         {
-            var func = FunctionCompiler.Compile(funcString, new Type[] { typeof(T), typeof(int), typeof(bool) }, true);
+            return (IList<T>)InvokeFuncString(funcString,
+                new Type[] { typeof(T), typeof(int), typeof(bool) },
+                "RemoveIf", new Type[] { typeof(T) }, true,
+                new object[] { self, null });
+        }
 
-            var m = typeof(IListExtensions).GetMethod("RemoveIf", BindingFlags.Public | BindingFlags.Static);
-            Debug.Assert(m != null);
-            var gm = m.MakeGenericMethod(new Type[] { typeof(T) });
-            return (IList<T>)gm.Invoke(null, new object[] { self, func });
+        public static IList<U> RollingApplyFuncString<T, U>(this IList<T> self, string funcString, int window)
+        {
+            return (IList<U>)InvokeFuncString(funcString,
+                new Type[] { typeof(T[]), typeof(int), typeof(U) },
+                "RollingApply", new Type[] { typeof(T), typeof(U) }, true,
+                new object[] { self, null, window });
+        }
+
+        public static void RollingApplyFillFuncString<T>(this IList<T> self, string funcString, int window)
+        {
+            InvokeFuncString(funcString,
+                new Type[] { typeof(T[]), typeof(int) },
+                "RollingApply", new Type[] { typeof(T) }, true,
+                new object[] { self, null, window });
         }
 
         public static IList<U> ApplyScriptBlock<T, U>(this IList<T> self, ScriptBlock scriptBlock)
@@ -379,5 +451,197 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             return result;
         }
+
+        public static IList<U> RollingApplyScriptBlock<T, U>(this IList<T> self, ScriptBlock scriptBlock, int window)
+        {
+            var parameters = new List<PSVariable>();
+            parameters.Add(new PSVariable("values"));
+            parameters.Add(new PSVariable("index"));
+
+            var result = new List<U>();
+            T[] slice;
+
+            var i = 0;
+            for (;  i < window - 1; ++i)
+            {
+                slice = new T[i + 1];
+                for (var j = 0; j <= i; ++j)
+                    slice[j] = self[j];
+
+                parameters[0].Value = slice;
+                parameters[1].Value = i;
+                var value = scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject;
+                result.Add((U)value);
+            }
+
+            slice = new T[window];
+            for (; i < self.Count; ++i)
+            {
+                for (var j = 0; j < window; ++j)
+                    slice[j] = self[i - window + 1 + j];
+
+                parameters[0].Value = slice;
+                parameters[1].Value = i;
+                var value = scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject;
+                result.Add((U)value);
+            }
+
+            return result;
+        }
+
+        public static void RollingApplyFill<T>(this IList<T> self, ScriptBlock scriptBlock, int window)
+        {
+            var parameters = new List<PSVariable>();
+            parameters.Add(new PSVariable("values"));
+            parameters.Add(new PSVariable("index"));
+
+            T[] slice;
+
+            var i = 0;
+            for (;  i < window - 1; ++i)
+            {
+                slice = new T[i + 1];
+                for (var j = 0; j <= i; ++j)
+                    slice[j] = self[j];
+
+                parameters[0].Value = slice;
+                parameters[1].Value = i;
+                var value = scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject;
+                self[i] = (T)value;
+            }
+
+            slice = new T[window];
+            for (; i < self.Count; ++i)
+            {
+                for (var j = 0; j < window; ++j)
+                    slice[j] = self[i - window + 1 + j];
+
+                parameters[0].Value = slice;
+                parameters[1].Value = i;
+                var value = scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject;
+                self[i] = (T)value;
+            }
+        }
+
+        // Comparison operators
+
+        private static IList<bool> CompareIList(this IList self, IList other, Func<int, bool> cond)
+        {
+            var result = new List<bool>(self.Count);
+            var comparer = Comparer.Default;
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(false);
+                else
+                {
+                    var c = cond.Invoke(comparer.Compare(self[i], other[i]));
+                    result.Add(c);
+                }
+            }
+
+            return result;
+        }
+
+        private static IList<bool> CompareScalar(this IList self, object value, Func<int, bool> cond)
+        {
+            var result = new List<bool>(self.Count);
+            var comparer = Comparer.Default;
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                var c = cond.Invoke(comparer.Compare(self[i], value));
+                result.Add(c);
+            }
+
+            return result;
+        }
+
+        public static IList<bool> Eq(this IList self, IList other)
+        {
+            return CompareIList(self, other, x => x == 0);
+        }
+
+        public static IList<bool> Eq(this IList self, object value)
+        {
+            return CompareScalar(self, value, x => x == 0);
+        }
+
+        public static IList<bool> Ne(this IList self, IList other)
+        {
+            return CompareIList(self, other, x => x != 0);
+        }
+
+        public static IList<bool> Ne(this IList self, object value)
+        {
+            return CompareScalar(self, value, x => x != 0);
+        }
+
+        public static IList<bool> Lt(this IList self, IList other)
+        {
+            return CompareIList(self, other, x => x < 0);
+        }
+
+        public static IList<bool> Lt(this IList self, object value)
+        {
+            return CompareScalar(self, value, x => x < 0);
+        }
+
+        public static IList<bool> Le(this IList self, IList other)
+        {
+            return CompareIList(self, other, x => x <= 0);
+        }
+
+        public static IList<bool> Le(this IList self, object value)
+        {
+            return CompareScalar(self, value, x => x <= 0);
+        }
+
+        public static IList<bool> Gt(this IList self, IList other)
+        {
+            return CompareIList(self, other, x => x > 0);
+        }
+
+        public static IList<bool> Gt(this IList self, object value)
+        {
+            return CompareScalar(self, value, x => x > 0);
+        }
+
+        public static IList<bool> Ge(this IList self, IList other)
+        {
+            return CompareIList(self, other, x => x >= 0);
+        }
+
+        public static IList<bool> Ge(this IList self, object value)
+        {
+            return CompareScalar(self, value, x => x >= 0);
+        }
+
+        // Other operations
+
+        public static IList<T> Map<T>(this IList<T> self, IDictionary map)
+        {
+            var result = new List<T>();
+            foreach (var value in self)
+            {
+                if (map.Contains(value))
+                    result.Add((T)map[value]);
+                else
+                    result.Add(value);
+            }
+
+            return result;
+        }
+
+        public static void MapFill<T>(this IList<T> self, IDictionary map)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (map.Contains(self[i]))
+                    self[i] = (T)map[self[i]];
+            }
+        }
+
     }
 }

@@ -60,5 +60,29 @@ namespace Horker.Numerics.Tests
             var count = s.CountIfFuncString("(x, i) => x >= 2");
             Assert.Equal(2, count);
         }
+
+        [Fact]
+        public void TestRollingApply()
+        {
+            var s = new double[] { 1, 2, 3, 4, 5 };
+
+            var t1 = s.RollingApplyFuncString<double, double>("(values, i) => values[values.Length - 1] ", 3);
+            Assert.Equal(new double[] { 1, 2, 3, 4, 5 }, t1);
+
+            var t2 = s.RollingApplyFuncString<double, double>("(values, i) => values.Average()", 3);
+            Assert.Equal(new double[] { 1, 1.5, 2, 3, 4 }, t2);
+        }
+
+        [Fact]
+        public void TestComparisons()
+        {
+            var s = new double[] { 1, 2, 3, 4, 5 };
+
+            var t1 = s.Eq(new double[] { 1, 1, 3, 3, 3 });
+            Assert.Equal(new bool[] { true, false, true, false, false }, t1);
+
+            var t2 = s.Le(3.0);
+            Assert.Equal(new bool[] { true, true, true, false, false }, t2);
+        }
     }
 }

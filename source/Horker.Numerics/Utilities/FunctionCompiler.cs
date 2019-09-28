@@ -19,6 +19,7 @@ namespace Horker.Numerics
 
         private static readonly string FuncSourceCode = @"
 using System;
+using System.Linq;
 namespace {0} {{
     public static class {1}
     {{
@@ -32,6 +33,7 @@ namespace {0} {{
 
         private static readonly string ActionSourceCode = @"
 using System;
+using System.Linq;
 namespace {0} {{
     public static class {1}
     {{

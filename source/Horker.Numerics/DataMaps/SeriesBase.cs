@@ -300,21 +300,30 @@ namespace Horker.Numerics.DataMaps
         public static implicit operator SeriesBase(List<DateTime> value) { return new Series(value); }
         public static implicit operator SeriesBase(List<DateTimeOffset> value) { return new Series(value); }
 
-        // Apply
+        // Apply methods
 
+        private string ChooseApplyMethodName(object lambda, string stringName, string scriptBlockName)
+        {
+            Debug.Assert(stringName.Replace("FuncString", "") == scriptBlockName.Replace("ScriptBlock", ""));
+
+            string methodName;
+
+            if (lambda is string)
+                methodName = stringName;
+            else if (lambda is ScriptBlock)
+                methodName = scriptBlockName;
+            else
+                throw new ArgumentException("Invalid script block");
+
+            return methodName;
+        }
 
         public SeriesBase Apply(object lambda, Type returnType = null)
         {
             var dataType = DataType;
             returnType = returnType ?? dataType;
 
-            string methodName;
-            if (lambda is string)
-                methodName = "ApplyFuncString";
-            else if (lambda is ScriptBlock)
-                methodName = "ApplyScriptBlock";
-            else
-                throw new ArgumentException("Invalid script block");
+            var methodName = ChooseApplyMethodName(lambda, "ApplyFuncString", "ApplyScriptBlock");
 
             var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
@@ -328,13 +337,7 @@ namespace Horker.Numerics.DataMaps
         {
             var dataType = DataType;
 
-            string methodName;
-            if (lambda is string)
-                methodName = "ApplyFillFuncString";
-            else if (lambda is ScriptBlock)
-                methodName = "ApplyFillScriptBlock";
-            else
-                throw new ArgumentException("Invalid script block");
+            var methodName = ChooseApplyMethodName(lambda, "ApplyFillFuncString", "ApplyFillScriptBlock");
 
             var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
@@ -346,17 +349,12 @@ namespace Horker.Numerics.DataMaps
         {
             var dataType = DataType;
 
-            string methodName;
-            if (lambda is string)
-                methodName = "ForEachFuncString";
-            else if (lambda is ScriptBlock)
-                methodName = "ForEachScriptBlock";
-            else
-                throw new ArgumentException("Invalid script block");
+            var methodName = ChooseApplyMethodName(lambda, "ForEachFuncString", "ForEachScriptBlock");
 
             var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
+
             gm.Invoke(null, new object[] { UnderlyingList, lambda });
         }
 
@@ -372,13 +370,7 @@ namespace Horker.Numerics.DataMaps
                     returnType = initialValue.GetType();
             }
 
-            string methodName;
-            if (lambda is string)
-                methodName = "ReduceFuncString";
-            else if (lambda is ScriptBlock)
-                methodName = "ReduceScriptBlock";
-            else
-                throw new ArgumentException("Invalid script block");
+            var methodName = ChooseApplyMethodName(lambda, "ReduceFuncString", "ReduceScriptBlock");
 
             var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
@@ -391,13 +383,7 @@ namespace Horker.Numerics.DataMaps
         {
             var dataType = DataType;
 
-            string methodName;
-            if (lambda is string)
-                methodName = "CountIfFuncString";
-            else if (lambda is ScriptBlock)
-                methodName = "CountIfScriptBlock";
-            else
-                throw new ArgumentException("Invalid script block");
+            var methodName = ChooseApplyMethodName(lambda, "CountIfFuncString", "CountIfScriptBlock");
 
             var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
@@ -410,13 +396,7 @@ namespace Horker.Numerics.DataMaps
         {
             var dataType = DataType;
 
-            string methodName;
-            if (lambda is string)
-                methodName = "RemoveIfFuncString";
-            else if (lambda is ScriptBlock)
-                methodName = "RemoveIfScriptBlock";
-            else
-                throw new ArgumentException("Invalid script block");
+            var methodName = ChooseApplyMethodName(lambda, "RemoveIfFuncString", "RemoveIfScriptBlock");
 
             var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
@@ -425,6 +405,98 @@ namespace Horker.Numerics.DataMaps
             var result = (IList)gm.Invoke(null, new object[] { UnderlyingList, lambda });
             return new Series(result);
         }
+
+        // Other operators
+
+        public SeriesBase RollingApply(object lambda)
+        {
+            var dataType = DataType;
+
+            var methodName = ChooseApplyMethodName(lambda, "RollingApplyFuncString", "RollingApplyScriptBlock");
+
+            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            Debug.Assert(m != null);
+            var gm = m.MakeGenericMethod(new Type[] { dataType });
+
+            var result = (IList)gm.Invoke(null, new object[] { UnderlyingList, lambda });
+            return new Series(result);
+        }
+
+        public void RollingApplyFill(object lambda)
+        {
+            var dataType = DataType;
+
+            var methodName = ChooseApplyMethodName(lambda, "RollingApplyFillFuncString", "RollingApplyFillScriptBlock");
+
+            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            Debug.Assert(m != null);
+            var gm = m.MakeGenericMethod(new Type[] { dataType });
+
+            gm.Invoke(null, new object[] { UnderlyingList, lambda });
+        }
+
+        // Comparison operators
+
+        public SeriesBase Eq(IList other)
+        {
+            return new Series((IList)UnderlyingList.Eq(other));
+        }
+
+        public SeriesBase Eq(object value)
+        {
+            return new Series((IList)UnderlyingList.Eq(value));
+        }
+
+        public SeriesBase Ne(IList other)
+        {
+            return new Series((IList)UnderlyingList.Ne(other));
+        }
+
+        public SeriesBase Ne(object value)
+        {
+            return new Series((IList)UnderlyingList.Ne(value));
+        }
+
+        public SeriesBase Lt(IList other)
+        {
+            return new Series((IList)UnderlyingList.Lt(other));
+        }
+
+        public SeriesBase Lt(object value)
+        {
+            return new Series((IList)UnderlyingList.Lt(value));
+        }
+
+        public SeriesBase Le(IList other)
+        {
+            return new Series((IList)UnderlyingList.Le(other));
+        }
+
+        public SeriesBase Le(object value)
+        {
+            return new Series((IList)UnderlyingList.Le(value));
+        }
+
+        public SeriesBase Gt(IList other)
+        {
+            return new Series((IList)UnderlyingList.Gt(other));
+        }
+
+        public SeriesBase Gt(object value)
+        {
+            return new Series((IList)UnderlyingList.Gt(value));
+        }
+
+        public SeriesBase Ge(IList other)
+        {
+            return new Series((IList)UnderlyingList.Ge(other));
+        }
+
+        public SeriesBase Ge(object value)
+        {
+            return new Series((IList)UnderlyingList.Ge(value));
+        }
+
 
         // Transformers
 
