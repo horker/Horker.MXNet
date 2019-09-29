@@ -246,27 +246,71 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
-        public static MetaNum Max(this IList<MetaNum> self, bool skipNaN = true)
+        public static MetaFloat Kurtosis(this IList<MetaNum> self, bool unbiased = true)
         {
-            MetaNum max = self[0];
+            var mean = (double)self.Mean();
 
-            foreach (var value in self)
+            double n = self.Count;
+
+            double s2 = 0;
+            double s4 = 0;
+
+            for (int i = 0; i < self.Count; i++)
             {
-                if (value > max)
-                    max = value;
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s4 += dev * dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m4 = s4 / n;
+
+            if (unbiased)
+            {
+                double v = s2 / (n - 1);
+
+                double a = (n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3));
+                double b = s4 / (v * v);
+                double c = ((n - 1) * (n - 1)) / ((n - 2) * (n - 3));
+
+                return (MetaFloat)(a * b - 3 * c);
+            }
+            else
+            {
+                return (MetaFloat)(m4 / (m2 * m2) - 3);
+            }
+        }
+
+        public static MetaNum Max(this IList<MetaNum> self)
+        {
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
+
+            MetaNum max = self[i];
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
             }
 
             return max;
         }
 
-        public static MetaNum Min(this IList<MetaNum> self, bool skipNaN = true)
+        public static MetaNum Min(this IList<MetaNum> self)
         {
-            MetaNum min = self[0];
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
 
-            foreach (var value in self)
+            MetaNum min = self[i];
+
+            for (++i;  i < self.Count; ++i)
             {
-                if (value < min)
-                    min = value;
+                if (self[i] < min)
+                    min = self[i];
             }
 
             return min;
@@ -275,17 +319,26 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static MetaFloat Mean(this IList<MetaNum> self, bool skipNaN = true)
         {
             MetaFloat mean = (MetaFloat)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 MetaFloat v = (MetaFloat)value;
-                if (skipNaN && MetaFloat.IsNaN(v))
-                    return MetaFloat.NaN;
+                if (MetaFloat.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return MetaFloat.NaN;
+                }
 
                 mean += v;
             }
 
-            return mean / self.Count;
+            return mean / actualCount;
         }
 
         public static MetaFloat Median(this IList<MetaNum> self, bool skipNaN = true)
@@ -295,10 +348,22 @@ namespace Horker.Numerics.DataMaps.Extensions
             var values = self.ToArray();
             Array.Sort(values);
 
-            if (values.Length % 2 == 0)
-                return ((MetaFloat)values[values.Length / 2 - 1] + (MetaFloat)values[values.Length / 2]) / 2;
+            var offset = 0;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                while (TypeTrait.IsNaN(values[offset]))
+                    ++offset;
+            }
+
+            var actualCount = self.Count - offset;
+            var half = offset + actualCount / 2;
+
+            if (actualCount % 2 == 0)
+                return ((MetaFloat)values[half - 1] + (MetaFloat)values[half]) / 2;
             else
-                return (MetaFloat)values[values.Length / 2];
+                return (MetaFloat)values[half];
         }
 
         public static MetaNum Mode(this IList<MetaNum> self, bool skipNaN = true)
@@ -316,16 +381,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                if (typeof(MetaNum) == typeof(double))
-                {
-                    while (double.IsNaN((double)values[i]))
-                        ++i;
-                }
-                else if (typeof(MetaNum) == typeof(float))
-                {
-                    while (float.IsNaN((float)values[i]))
-                        ++i;
-                }
+                while (TypeTrait.IsNaN(values[i]))
+                    ++i;
             }
 
             for (; i < values.Length; ++i) {
@@ -358,19 +415,59 @@ namespace Horker.Numerics.DataMaps.Extensions
             return StandardDeviation(self, unbiased, skipNaN);
         }
 
+        public static MetaFloat Skewness(this IList<MetaNum> self, bool unbiased = true)
+        {
+            double mean = (double)self.Mean();
+            double n = self.Count;
+
+            double s2 = 0;
+            double s3 = 0;
+
+            for (int i = 0; i < self.Count; ++i)
+            {
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s3 += dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m3 = s3 / n;
+
+            double g = m3 / (Math.Pow(m2, 3 / 2.0));
+
+            if (unbiased)
+            {
+                double a = Math.Sqrt(n * (n - 1));
+                double b = n - 2;
+                return (MetaFloat)((a / b) * g);
+            }
+
+            return (MetaFloat)g;
+        }
+
         public static MetaFloat Variance(this IList<MetaNum> self, bool unbiased = true, bool skipNaN = true)
         {
             MetaFloat mean = Mean(self, skipNaN);
-            if (skipNaN && MetaFloat.IsNaN(mean))
+            if (!skipNaN && MetaFloat.IsNaN(mean))
                 return MetaFloat.NaN;
 
             MetaFloat variance = (MetaFloat)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 MetaFloat v = (MetaFloat)value;
-                if (skipNaN && MetaFloat.IsNaN(v))
-                    return MetaFloat.NaN;
+                if (TypeTrait.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return MetaFloat.NaN;
+                }
 
                 MetaFloat x = v - mean;
                 variance += x * x;

@@ -245,27 +245,71 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
-        public static double Max(this IList<double> self, bool skipNaN = true)
+        public static double Kurtosis(this IList<double> self, bool unbiased = true)
         {
-            double max = self[0];
+            var mean = (double)self.Mean();
 
-            foreach (var value in self)
+            double n = self.Count;
+
+            double s2 = 0;
+            double s4 = 0;
+
+            for (int i = 0; i < self.Count; i++)
             {
-                if (value > max)
-                    max = value;
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s4 += dev * dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m4 = s4 / n;
+
+            if (unbiased)
+            {
+                double v = s2 / (n - 1);
+
+                double a = (n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3));
+                double b = s4 / (v * v);
+                double c = ((n - 1) * (n - 1)) / ((n - 2) * (n - 3));
+
+                return (double)(a * b - 3 * c);
+            }
+            else
+            {
+                return (double)(m4 / (m2 * m2) - 3);
+            }
+        }
+
+        public static double Max(this IList<double> self)
+        {
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
+
+            double max = self[i];
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
             }
 
             return max;
         }
 
-        public static double Min(this IList<double> self, bool skipNaN = true)
+        public static double Min(this IList<double> self)
         {
-            double min = self[0];
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
 
-            foreach (var value in self)
+            double min = self[i];
+
+            for (++i;  i < self.Count; ++i)
             {
-                if (value > min)
-                    min = value;
+                if (self[i] < min)
+                    min = self[i];
             }
 
             return min;
@@ -274,17 +318,26 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static double Mean(this IList<double> self, bool skipNaN = true)
         {
             double mean = (double)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (skipNaN && double.IsNaN(v))
-                    return double.NaN;
+                if (double.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return double.NaN;
+                }
 
                 mean += v;
             }
 
-            return mean / self.Count;
+            return mean / actualCount;
         }
 
         public static double Median(this IList<double> self, bool skipNaN = true)
@@ -294,10 +347,22 @@ namespace Horker.Numerics.DataMaps.Extensions
             var values = self.ToArray();
             Array.Sort(values);
 
-            if (values.Length % 2 == 0)
-                return ((double)values[values.Length / 2 - 1] + (double)values[values.Length / 2]) / 2;
+            var offset = 0;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                while (TypeTrait.IsNaN(values[offset]))
+                    ++offset;
+            }
+
+            var actualCount = self.Count - offset;
+            var half = offset + actualCount / 2;
+
+            if (actualCount % 2 == 0)
+                return ((double)values[half - 1] + (double)values[half]) / 2;
             else
-                return (double)values[values.Length / 2];
+                return (double)values[half];
         }
 
         public static double Mode(this IList<double> self, bool skipNaN = true)
@@ -315,16 +380,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                if (typeof(double) == typeof(double))
-                {
-                    while (double.IsNaN((double)values[i]))
-                        ++i;
-                }
-                else if (typeof(double) == typeof(float))
-                {
-                    while (float.IsNaN((float)values[i]))
-                        ++i;
-                }
+                while (TypeTrait.IsNaN(values[i]))
+                    ++i;
             }
 
             for (; i < values.Length; ++i) {
@@ -357,19 +414,59 @@ namespace Horker.Numerics.DataMaps.Extensions
             return StandardDeviation(self, unbiased, skipNaN);
         }
 
+        public static double Skewness(this IList<double> self, bool unbiased = true)
+        {
+            double mean = (double)self.Mean();
+            double n = self.Count;
+
+            double s2 = 0;
+            double s3 = 0;
+
+            for (int i = 0; i < self.Count; ++i)
+            {
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s3 += dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m3 = s3 / n;
+
+            double g = m3 / (Math.Pow(m2, 3 / 2.0));
+
+            if (unbiased)
+            {
+                double a = Math.Sqrt(n * (n - 1));
+                double b = n - 2;
+                return (double)((a / b) * g);
+            }
+
+            return (double)g;
+        }
+
         public static double Variance(this IList<double> self, bool unbiased = true, bool skipNaN = true)
         {
             double mean = Mean(self, skipNaN);
-            if (skipNaN && double.IsNaN(mean))
+            if (!skipNaN && double.IsNaN(mean))
                 return double.NaN;
 
             double variance = (double)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (skipNaN && double.IsNaN(v))
-                    return double.NaN;
+                if (TypeTrait.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return double.NaN;
+                }
 
                 double x = v - mean;
                 variance += x * x;
@@ -629,27 +726,71 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
-        public static float Max(this IList<float> self, bool skipNaN = true)
+        public static float Kurtosis(this IList<float> self, bool unbiased = true)
         {
-            float max = self[0];
+            var mean = (double)self.Mean();
 
-            foreach (var value in self)
+            double n = self.Count;
+
+            double s2 = 0;
+            double s4 = 0;
+
+            for (int i = 0; i < self.Count; i++)
             {
-                if (value > max)
-                    max = value;
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s4 += dev * dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m4 = s4 / n;
+
+            if (unbiased)
+            {
+                double v = s2 / (n - 1);
+
+                double a = (n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3));
+                double b = s4 / (v * v);
+                double c = ((n - 1) * (n - 1)) / ((n - 2) * (n - 3));
+
+                return (float)(a * b - 3 * c);
+            }
+            else
+            {
+                return (float)(m4 / (m2 * m2) - 3);
+            }
+        }
+
+        public static float Max(this IList<float> self)
+        {
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
+
+            float max = self[i];
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
             }
 
             return max;
         }
 
-        public static float Min(this IList<float> self, bool skipNaN = true)
+        public static float Min(this IList<float> self)
         {
-            float min = self[0];
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
 
-            foreach (var value in self)
+            float min = self[i];
+
+            for (++i;  i < self.Count; ++i)
             {
-                if (value > min)
-                    min = value;
+                if (self[i] < min)
+                    min = self[i];
             }
 
             return min;
@@ -658,17 +799,26 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static float Mean(this IList<float> self, bool skipNaN = true)
         {
             float mean = (float)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 float v = (float)value;
-                if (skipNaN && float.IsNaN(v))
-                    return float.NaN;
+                if (float.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return float.NaN;
+                }
 
                 mean += v;
             }
 
-            return mean / self.Count;
+            return mean / actualCount;
         }
 
         public static float Median(this IList<float> self, bool skipNaN = true)
@@ -678,10 +828,22 @@ namespace Horker.Numerics.DataMaps.Extensions
             var values = self.ToArray();
             Array.Sort(values);
 
-            if (values.Length % 2 == 0)
-                return ((float)values[values.Length / 2 - 1] + (float)values[values.Length / 2]) / 2;
+            var offset = 0;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                while (TypeTrait.IsNaN(values[offset]))
+                    ++offset;
+            }
+
+            var actualCount = self.Count - offset;
+            var half = offset + actualCount / 2;
+
+            if (actualCount % 2 == 0)
+                return ((float)values[half - 1] + (float)values[half]) / 2;
             else
-                return (float)values[values.Length / 2];
+                return (float)values[half];
         }
 
         public static float Mode(this IList<float> self, bool skipNaN = true)
@@ -699,16 +861,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                if (typeof(float) == typeof(double))
-                {
-                    while (double.IsNaN((double)values[i]))
-                        ++i;
-                }
-                else if (typeof(float) == typeof(float))
-                {
-                    while (float.IsNaN((float)values[i]))
-                        ++i;
-                }
+                while (TypeTrait.IsNaN(values[i]))
+                    ++i;
             }
 
             for (; i < values.Length; ++i) {
@@ -741,19 +895,59 @@ namespace Horker.Numerics.DataMaps.Extensions
             return StandardDeviation(self, unbiased, skipNaN);
         }
 
+        public static float Skewness(this IList<float> self, bool unbiased = true)
+        {
+            double mean = (double)self.Mean();
+            double n = self.Count;
+
+            double s2 = 0;
+            double s3 = 0;
+
+            for (int i = 0; i < self.Count; ++i)
+            {
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s3 += dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m3 = s3 / n;
+
+            double g = m3 / (Math.Pow(m2, 3 / 2.0));
+
+            if (unbiased)
+            {
+                double a = Math.Sqrt(n * (n - 1));
+                double b = n - 2;
+                return (float)((a / b) * g);
+            }
+
+            return (float)g;
+        }
+
         public static float Variance(this IList<float> self, bool unbiased = true, bool skipNaN = true)
         {
             float mean = Mean(self, skipNaN);
-            if (skipNaN && float.IsNaN(mean))
+            if (!skipNaN && float.IsNaN(mean))
                 return float.NaN;
 
             float variance = (float)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 float v = (float)value;
-                if (skipNaN && float.IsNaN(v))
-                    return float.NaN;
+                if (TypeTrait.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return float.NaN;
+                }
 
                 float x = v - mean;
                 variance += x * x;
@@ -1013,27 +1207,71 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
-        public static long Max(this IList<long> self, bool skipNaN = true)
+        public static double Kurtosis(this IList<long> self, bool unbiased = true)
         {
-            long max = self[0];
+            var mean = (double)self.Mean();
 
-            foreach (var value in self)
+            double n = self.Count;
+
+            double s2 = 0;
+            double s4 = 0;
+
+            for (int i = 0; i < self.Count; i++)
             {
-                if (value > max)
-                    max = value;
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s4 += dev * dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m4 = s4 / n;
+
+            if (unbiased)
+            {
+                double v = s2 / (n - 1);
+
+                double a = (n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3));
+                double b = s4 / (v * v);
+                double c = ((n - 1) * (n - 1)) / ((n - 2) * (n - 3));
+
+                return (double)(a * b - 3 * c);
+            }
+            else
+            {
+                return (double)(m4 / (m2 * m2) - 3);
+            }
+        }
+
+        public static long Max(this IList<long> self)
+        {
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
+
+            long max = self[i];
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
             }
 
             return max;
         }
 
-        public static long Min(this IList<long> self, bool skipNaN = true)
+        public static long Min(this IList<long> self)
         {
-            long min = self[0];
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
 
-            foreach (var value in self)
+            long min = self[i];
+
+            for (++i;  i < self.Count; ++i)
             {
-                if (value > min)
-                    min = value;
+                if (self[i] < min)
+                    min = self[i];
             }
 
             return min;
@@ -1042,17 +1280,26 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static double Mean(this IList<long> self, bool skipNaN = true)
         {
             double mean = (double)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (skipNaN && double.IsNaN(v))
-                    return double.NaN;
+                if (double.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return double.NaN;
+                }
 
                 mean += v;
             }
 
-            return mean / self.Count;
+            return mean / actualCount;
         }
 
         public static double Median(this IList<long> self, bool skipNaN = true)
@@ -1062,10 +1309,22 @@ namespace Horker.Numerics.DataMaps.Extensions
             var values = self.ToArray();
             Array.Sort(values);
 
-            if (values.Length % 2 == 0)
-                return ((double)values[values.Length / 2 - 1] + (double)values[values.Length / 2]) / 2;
+            var offset = 0;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                while (TypeTrait.IsNaN(values[offset]))
+                    ++offset;
+            }
+
+            var actualCount = self.Count - offset;
+            var half = offset + actualCount / 2;
+
+            if (actualCount % 2 == 0)
+                return ((double)values[half - 1] + (double)values[half]) / 2;
             else
-                return (double)values[values.Length / 2];
+                return (double)values[half];
         }
 
         public static long Mode(this IList<long> self, bool skipNaN = true)
@@ -1083,16 +1342,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                if (typeof(long) == typeof(double))
-                {
-                    while (double.IsNaN((double)values[i]))
-                        ++i;
-                }
-                else if (typeof(long) == typeof(float))
-                {
-                    while (float.IsNaN((float)values[i]))
-                        ++i;
-                }
+                while (TypeTrait.IsNaN(values[i]))
+                    ++i;
             }
 
             for (; i < values.Length; ++i) {
@@ -1125,19 +1376,59 @@ namespace Horker.Numerics.DataMaps.Extensions
             return StandardDeviation(self, unbiased, skipNaN);
         }
 
+        public static double Skewness(this IList<long> self, bool unbiased = true)
+        {
+            double mean = (double)self.Mean();
+            double n = self.Count;
+
+            double s2 = 0;
+            double s3 = 0;
+
+            for (int i = 0; i < self.Count; ++i)
+            {
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s3 += dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m3 = s3 / n;
+
+            double g = m3 / (Math.Pow(m2, 3 / 2.0));
+
+            if (unbiased)
+            {
+                double a = Math.Sqrt(n * (n - 1));
+                double b = n - 2;
+                return (double)((a / b) * g);
+            }
+
+            return (double)g;
+        }
+
         public static double Variance(this IList<long> self, bool unbiased = true, bool skipNaN = true)
         {
             double mean = Mean(self, skipNaN);
-            if (skipNaN && double.IsNaN(mean))
+            if (!skipNaN && double.IsNaN(mean))
                 return double.NaN;
 
             double variance = (double)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (skipNaN && double.IsNaN(v))
-                    return double.NaN;
+                if (TypeTrait.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return double.NaN;
+                }
 
                 double x = v - mean;
                 variance += x * x;
@@ -1397,27 +1688,71 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
-        public static int Max(this IList<int> self, bool skipNaN = true)
+        public static double Kurtosis(this IList<int> self, bool unbiased = true)
         {
-            int max = self[0];
+            var mean = (double)self.Mean();
 
-            foreach (var value in self)
+            double n = self.Count;
+
+            double s2 = 0;
+            double s4 = 0;
+
+            for (int i = 0; i < self.Count; i++)
             {
-                if (value > max)
-                    max = value;
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s4 += dev * dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m4 = s4 / n;
+
+            if (unbiased)
+            {
+                double v = s2 / (n - 1);
+
+                double a = (n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3));
+                double b = s4 / (v * v);
+                double c = ((n - 1) * (n - 1)) / ((n - 2) * (n - 3));
+
+                return (double)(a * b - 3 * c);
+            }
+            else
+            {
+                return (double)(m4 / (m2 * m2) - 3);
+            }
+        }
+
+        public static int Max(this IList<int> self)
+        {
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
+
+            int max = self[i];
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
             }
 
             return max;
         }
 
-        public static int Min(this IList<int> self, bool skipNaN = true)
+        public static int Min(this IList<int> self)
         {
-            int min = self[0];
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
 
-            foreach (var value in self)
+            int min = self[i];
+
+            for (++i;  i < self.Count; ++i)
             {
-                if (value > min)
-                    min = value;
+                if (self[i] < min)
+                    min = self[i];
             }
 
             return min;
@@ -1426,17 +1761,26 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static double Mean(this IList<int> self, bool skipNaN = true)
         {
             double mean = (double)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (skipNaN && double.IsNaN(v))
-                    return double.NaN;
+                if (double.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return double.NaN;
+                }
 
                 mean += v;
             }
 
-            return mean / self.Count;
+            return mean / actualCount;
         }
 
         public static double Median(this IList<int> self, bool skipNaN = true)
@@ -1446,10 +1790,22 @@ namespace Horker.Numerics.DataMaps.Extensions
             var values = self.ToArray();
             Array.Sort(values);
 
-            if (values.Length % 2 == 0)
-                return ((double)values[values.Length / 2 - 1] + (double)values[values.Length / 2]) / 2;
+            var offset = 0;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                while (TypeTrait.IsNaN(values[offset]))
+                    ++offset;
+            }
+
+            var actualCount = self.Count - offset;
+            var half = offset + actualCount / 2;
+
+            if (actualCount % 2 == 0)
+                return ((double)values[half - 1] + (double)values[half]) / 2;
             else
-                return (double)values[values.Length / 2];
+                return (double)values[half];
         }
 
         public static int Mode(this IList<int> self, bool skipNaN = true)
@@ -1467,16 +1823,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                if (typeof(int) == typeof(double))
-                {
-                    while (double.IsNaN((double)values[i]))
-                        ++i;
-                }
-                else if (typeof(int) == typeof(float))
-                {
-                    while (float.IsNaN((float)values[i]))
-                        ++i;
-                }
+                while (TypeTrait.IsNaN(values[i]))
+                    ++i;
             }
 
             for (; i < values.Length; ++i) {
@@ -1509,19 +1857,59 @@ namespace Horker.Numerics.DataMaps.Extensions
             return StandardDeviation(self, unbiased, skipNaN);
         }
 
+        public static double Skewness(this IList<int> self, bool unbiased = true)
+        {
+            double mean = (double)self.Mean();
+            double n = self.Count;
+
+            double s2 = 0;
+            double s3 = 0;
+
+            for (int i = 0; i < self.Count; ++i)
+            {
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s3 += dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m3 = s3 / n;
+
+            double g = m3 / (Math.Pow(m2, 3 / 2.0));
+
+            if (unbiased)
+            {
+                double a = Math.Sqrt(n * (n - 1));
+                double b = n - 2;
+                return (double)((a / b) * g);
+            }
+
+            return (double)g;
+        }
+
         public static double Variance(this IList<int> self, bool unbiased = true, bool skipNaN = true)
         {
             double mean = Mean(self, skipNaN);
-            if (skipNaN && double.IsNaN(mean))
+            if (!skipNaN && double.IsNaN(mean))
                 return double.NaN;
 
             double variance = (double)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (skipNaN && double.IsNaN(v))
-                    return double.NaN;
+                if (TypeTrait.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return double.NaN;
+                }
 
                 double x = v - mean;
                 variance += x * x;
@@ -1781,27 +2169,71 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
-        public static short Max(this IList<short> self, bool skipNaN = true)
+        public static double Kurtosis(this IList<short> self, bool unbiased = true)
         {
-            short max = self[0];
+            var mean = (double)self.Mean();
 
-            foreach (var value in self)
+            double n = self.Count;
+
+            double s2 = 0;
+            double s4 = 0;
+
+            for (int i = 0; i < self.Count; i++)
             {
-                if (value > max)
-                    max = value;
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s4 += dev * dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m4 = s4 / n;
+
+            if (unbiased)
+            {
+                double v = s2 / (n - 1);
+
+                double a = (n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3));
+                double b = s4 / (v * v);
+                double c = ((n - 1) * (n - 1)) / ((n - 2) * (n - 3));
+
+                return (double)(a * b - 3 * c);
+            }
+            else
+            {
+                return (double)(m4 / (m2 * m2) - 3);
+            }
+        }
+
+        public static short Max(this IList<short> self)
+        {
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
+
+            short max = self[i];
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
             }
 
             return max;
         }
 
-        public static short Min(this IList<short> self, bool skipNaN = true)
+        public static short Min(this IList<short> self)
         {
-            short min = self[0];
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
 
-            foreach (var value in self)
+            short min = self[i];
+
+            for (++i;  i < self.Count; ++i)
             {
-                if (value > min)
-                    min = value;
+                if (self[i] < min)
+                    min = self[i];
             }
 
             return min;
@@ -1810,17 +2242,26 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static double Mean(this IList<short> self, bool skipNaN = true)
         {
             double mean = (double)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (skipNaN && double.IsNaN(v))
-                    return double.NaN;
+                if (double.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return double.NaN;
+                }
 
                 mean += v;
             }
 
-            return mean / self.Count;
+            return mean / actualCount;
         }
 
         public static double Median(this IList<short> self, bool skipNaN = true)
@@ -1830,10 +2271,22 @@ namespace Horker.Numerics.DataMaps.Extensions
             var values = self.ToArray();
             Array.Sort(values);
 
-            if (values.Length % 2 == 0)
-                return ((double)values[values.Length / 2 - 1] + (double)values[values.Length / 2]) / 2;
+            var offset = 0;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                while (TypeTrait.IsNaN(values[offset]))
+                    ++offset;
+            }
+
+            var actualCount = self.Count - offset;
+            var half = offset + actualCount / 2;
+
+            if (actualCount % 2 == 0)
+                return ((double)values[half - 1] + (double)values[half]) / 2;
             else
-                return (double)values[values.Length / 2];
+                return (double)values[half];
         }
 
         public static short Mode(this IList<short> self, bool skipNaN = true)
@@ -1851,16 +2304,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                if (typeof(short) == typeof(double))
-                {
-                    while (double.IsNaN((double)values[i]))
-                        ++i;
-                }
-                else if (typeof(short) == typeof(float))
-                {
-                    while (float.IsNaN((float)values[i]))
-                        ++i;
-                }
+                while (TypeTrait.IsNaN(values[i]))
+                    ++i;
             }
 
             for (; i < values.Length; ++i) {
@@ -1893,19 +2338,59 @@ namespace Horker.Numerics.DataMaps.Extensions
             return StandardDeviation(self, unbiased, skipNaN);
         }
 
+        public static double Skewness(this IList<short> self, bool unbiased = true)
+        {
+            double mean = (double)self.Mean();
+            double n = self.Count;
+
+            double s2 = 0;
+            double s3 = 0;
+
+            for (int i = 0; i < self.Count; ++i)
+            {
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s3 += dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m3 = s3 / n;
+
+            double g = m3 / (Math.Pow(m2, 3 / 2.0));
+
+            if (unbiased)
+            {
+                double a = Math.Sqrt(n * (n - 1));
+                double b = n - 2;
+                return (double)((a / b) * g);
+            }
+
+            return (double)g;
+        }
+
         public static double Variance(this IList<short> self, bool unbiased = true, bool skipNaN = true)
         {
             double mean = Mean(self, skipNaN);
-            if (skipNaN && double.IsNaN(mean))
+            if (!skipNaN && double.IsNaN(mean))
                 return double.NaN;
 
             double variance = (double)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (skipNaN && double.IsNaN(v))
-                    return double.NaN;
+                if (TypeTrait.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return double.NaN;
+                }
 
                 double x = v - mean;
                 variance += x * x;
@@ -2165,27 +2650,71 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
-        public static byte Max(this IList<byte> self, bool skipNaN = true)
+        public static double Kurtosis(this IList<byte> self, bool unbiased = true)
         {
-            byte max = self[0];
+            var mean = (double)self.Mean();
 
-            foreach (var value in self)
+            double n = self.Count;
+
+            double s2 = 0;
+            double s4 = 0;
+
+            for (int i = 0; i < self.Count; i++)
             {
-                if (value > max)
-                    max = value;
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s4 += dev * dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m4 = s4 / n;
+
+            if (unbiased)
+            {
+                double v = s2 / (n - 1);
+
+                double a = (n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3));
+                double b = s4 / (v * v);
+                double c = ((n - 1) * (n - 1)) / ((n - 2) * (n - 3));
+
+                return (double)(a * b - 3 * c);
+            }
+            else
+            {
+                return (double)(m4 / (m2 * m2) - 3);
+            }
+        }
+
+        public static byte Max(this IList<byte> self)
+        {
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
+
+            byte max = self[i];
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
             }
 
             return max;
         }
 
-        public static byte Min(this IList<byte> self, bool skipNaN = true)
+        public static byte Min(this IList<byte> self)
         {
-            byte min = self[0];
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
 
-            foreach (var value in self)
+            byte min = self[i];
+
+            for (++i;  i < self.Count; ++i)
             {
-                if (value > min)
-                    min = value;
+                if (self[i] < min)
+                    min = self[i];
             }
 
             return min;
@@ -2194,17 +2723,26 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static double Mean(this IList<byte> self, bool skipNaN = true)
         {
             double mean = (double)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (skipNaN && double.IsNaN(v))
-                    return double.NaN;
+                if (double.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return double.NaN;
+                }
 
                 mean += v;
             }
 
-            return mean / self.Count;
+            return mean / actualCount;
         }
 
         public static double Median(this IList<byte> self, bool skipNaN = true)
@@ -2214,10 +2752,22 @@ namespace Horker.Numerics.DataMaps.Extensions
             var values = self.ToArray();
             Array.Sort(values);
 
-            if (values.Length % 2 == 0)
-                return ((double)values[values.Length / 2 - 1] + (double)values[values.Length / 2]) / 2;
+            var offset = 0;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                while (TypeTrait.IsNaN(values[offset]))
+                    ++offset;
+            }
+
+            var actualCount = self.Count - offset;
+            var half = offset + actualCount / 2;
+
+            if (actualCount % 2 == 0)
+                return ((double)values[half - 1] + (double)values[half]) / 2;
             else
-                return (double)values[values.Length / 2];
+                return (double)values[half];
         }
 
         public static byte Mode(this IList<byte> self, bool skipNaN = true)
@@ -2235,16 +2785,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                if (typeof(byte) == typeof(double))
-                {
-                    while (double.IsNaN((double)values[i]))
-                        ++i;
-                }
-                else if (typeof(byte) == typeof(float))
-                {
-                    while (float.IsNaN((float)values[i]))
-                        ++i;
-                }
+                while (TypeTrait.IsNaN(values[i]))
+                    ++i;
             }
 
             for (; i < values.Length; ++i) {
@@ -2277,19 +2819,59 @@ namespace Horker.Numerics.DataMaps.Extensions
             return StandardDeviation(self, unbiased, skipNaN);
         }
 
+        public static double Skewness(this IList<byte> self, bool unbiased = true)
+        {
+            double mean = (double)self.Mean();
+            double n = self.Count;
+
+            double s2 = 0;
+            double s3 = 0;
+
+            for (int i = 0; i < self.Count; ++i)
+            {
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s3 += dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m3 = s3 / n;
+
+            double g = m3 / (Math.Pow(m2, 3 / 2.0));
+
+            if (unbiased)
+            {
+                double a = Math.Sqrt(n * (n - 1));
+                double b = n - 2;
+                return (double)((a / b) * g);
+            }
+
+            return (double)g;
+        }
+
         public static double Variance(this IList<byte> self, bool unbiased = true, bool skipNaN = true)
         {
             double mean = Mean(self, skipNaN);
-            if (skipNaN && double.IsNaN(mean))
+            if (!skipNaN && double.IsNaN(mean))
                 return double.NaN;
 
             double variance = (double)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (skipNaN && double.IsNaN(v))
-                    return double.NaN;
+                if (TypeTrait.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return double.NaN;
+                }
 
                 double x = v - mean;
                 variance += x * x;
@@ -2549,27 +3131,71 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
-        public static sbyte Max(this IList<sbyte> self, bool skipNaN = true)
+        public static double Kurtosis(this IList<sbyte> self, bool unbiased = true)
         {
-            sbyte max = self[0];
+            var mean = (double)self.Mean();
 
-            foreach (var value in self)
+            double n = self.Count;
+
+            double s2 = 0;
+            double s4 = 0;
+
+            for (int i = 0; i < self.Count; i++)
             {
-                if (value > max)
-                    max = value;
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s4 += dev * dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m4 = s4 / n;
+
+            if (unbiased)
+            {
+                double v = s2 / (n - 1);
+
+                double a = (n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3));
+                double b = s4 / (v * v);
+                double c = ((n - 1) * (n - 1)) / ((n - 2) * (n - 3));
+
+                return (double)(a * b - 3 * c);
+            }
+            else
+            {
+                return (double)(m4 / (m2 * m2) - 3);
+            }
+        }
+
+        public static sbyte Max(this IList<sbyte> self)
+        {
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
+
+            sbyte max = self[i];
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
             }
 
             return max;
         }
 
-        public static sbyte Min(this IList<sbyte> self, bool skipNaN = true)
+        public static sbyte Min(this IList<sbyte> self)
         {
-            sbyte min = self[0];
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
 
-            foreach (var value in self)
+            sbyte min = self[i];
+
+            for (++i;  i < self.Count; ++i)
             {
-                if (value > min)
-                    min = value;
+                if (self[i] < min)
+                    min = self[i];
             }
 
             return min;
@@ -2578,17 +3204,26 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static double Mean(this IList<sbyte> self, bool skipNaN = true)
         {
             double mean = (double)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (skipNaN && double.IsNaN(v))
-                    return double.NaN;
+                if (double.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return double.NaN;
+                }
 
                 mean += v;
             }
 
-            return mean / self.Count;
+            return mean / actualCount;
         }
 
         public static double Median(this IList<sbyte> self, bool skipNaN = true)
@@ -2598,10 +3233,22 @@ namespace Horker.Numerics.DataMaps.Extensions
             var values = self.ToArray();
             Array.Sort(values);
 
-            if (values.Length % 2 == 0)
-                return ((double)values[values.Length / 2 - 1] + (double)values[values.Length / 2]) / 2;
+            var offset = 0;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                while (TypeTrait.IsNaN(values[offset]))
+                    ++offset;
+            }
+
+            var actualCount = self.Count - offset;
+            var half = offset + actualCount / 2;
+
+            if (actualCount % 2 == 0)
+                return ((double)values[half - 1] + (double)values[half]) / 2;
             else
-                return (double)values[values.Length / 2];
+                return (double)values[half];
         }
 
         public static sbyte Mode(this IList<sbyte> self, bool skipNaN = true)
@@ -2619,16 +3266,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                if (typeof(sbyte) == typeof(double))
-                {
-                    while (double.IsNaN((double)values[i]))
-                        ++i;
-                }
-                else if (typeof(sbyte) == typeof(float))
-                {
-                    while (float.IsNaN((float)values[i]))
-                        ++i;
-                }
+                while (TypeTrait.IsNaN(values[i]))
+                    ++i;
             }
 
             for (; i < values.Length; ++i) {
@@ -2661,19 +3300,59 @@ namespace Horker.Numerics.DataMaps.Extensions
             return StandardDeviation(self, unbiased, skipNaN);
         }
 
+        public static double Skewness(this IList<sbyte> self, bool unbiased = true)
+        {
+            double mean = (double)self.Mean();
+            double n = self.Count;
+
+            double s2 = 0;
+            double s3 = 0;
+
+            for (int i = 0; i < self.Count; ++i)
+            {
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s3 += dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m3 = s3 / n;
+
+            double g = m3 / (Math.Pow(m2, 3 / 2.0));
+
+            if (unbiased)
+            {
+                double a = Math.Sqrt(n * (n - 1));
+                double b = n - 2;
+                return (double)((a / b) * g);
+            }
+
+            return (double)g;
+        }
+
         public static double Variance(this IList<sbyte> self, bool unbiased = true, bool skipNaN = true)
         {
             double mean = Mean(self, skipNaN);
-            if (skipNaN && double.IsNaN(mean))
+            if (!skipNaN && double.IsNaN(mean))
                 return double.NaN;
 
             double variance = (double)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (skipNaN && double.IsNaN(v))
-                    return double.NaN;
+                if (TypeTrait.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return double.NaN;
+                }
 
                 double x = v - mean;
                 variance += x * x;
@@ -2933,27 +3612,71 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
-        public static decimal Max(this IList<decimal> self, bool skipNaN = true)
+        public static double Kurtosis(this IList<decimal> self, bool unbiased = true)
         {
-            decimal max = self[0];
+            var mean = (double)self.Mean();
 
-            foreach (var value in self)
+            double n = self.Count;
+
+            double s2 = 0;
+            double s4 = 0;
+
+            for (int i = 0; i < self.Count; i++)
             {
-                if (value > max)
-                    max = value;
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s4 += dev * dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m4 = s4 / n;
+
+            if (unbiased)
+            {
+                double v = s2 / (n - 1);
+
+                double a = (n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3));
+                double b = s4 / (v * v);
+                double c = ((n - 1) * (n - 1)) / ((n - 2) * (n - 3));
+
+                return (double)(a * b - 3 * c);
+            }
+            else
+            {
+                return (double)(m4 / (m2 * m2) - 3);
+            }
+        }
+
+        public static decimal Max(this IList<decimal> self)
+        {
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
+
+            decimal max = self[i];
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                    max = self[i];
             }
 
             return max;
         }
 
-        public static decimal Min(this IList<decimal> self, bool skipNaN = true)
+        public static decimal Min(this IList<decimal> self)
         {
-            decimal min = self[0];
+            var i = 0;
+            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+                ++i;
 
-            foreach (var value in self)
+            decimal min = self[i];
+
+            for (++i;  i < self.Count; ++i)
             {
-                if (value > min)
-                    min = value;
+                if (self[i] < min)
+                    min = self[i];
             }
 
             return min;
@@ -2962,17 +3685,26 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static double Mean(this IList<decimal> self, bool skipNaN = true)
         {
             double mean = (double)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (skipNaN && double.IsNaN(v))
-                    return double.NaN;
+                if (double.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return double.NaN;
+                }
 
                 mean += v;
             }
 
-            return mean / self.Count;
+            return mean / actualCount;
         }
 
         public static double Median(this IList<decimal> self, bool skipNaN = true)
@@ -2982,10 +3714,22 @@ namespace Horker.Numerics.DataMaps.Extensions
             var values = self.ToArray();
             Array.Sort(values);
 
-            if (values.Length % 2 == 0)
-                return ((double)values[values.Length / 2 - 1] + (double)values[values.Length / 2]) / 2;
+            var offset = 0;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                while (TypeTrait.IsNaN(values[offset]))
+                    ++offset;
+            }
+
+            var actualCount = self.Count - offset;
+            var half = offset + actualCount / 2;
+
+            if (actualCount % 2 == 0)
+                return ((double)values[half - 1] + (double)values[half]) / 2;
             else
-                return (double)values[values.Length / 2];
+                return (double)values[half];
         }
 
         public static decimal Mode(this IList<decimal> self, bool skipNaN = true)
@@ -3003,16 +3747,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                if (typeof(decimal) == typeof(double))
-                {
-                    while (double.IsNaN((double)values[i]))
-                        ++i;
-                }
-                else if (typeof(decimal) == typeof(float))
-                {
-                    while (float.IsNaN((float)values[i]))
-                        ++i;
-                }
+                while (TypeTrait.IsNaN(values[i]))
+                    ++i;
             }
 
             for (; i < values.Length; ++i) {
@@ -3045,19 +3781,59 @@ namespace Horker.Numerics.DataMaps.Extensions
             return StandardDeviation(self, unbiased, skipNaN);
         }
 
+        public static double Skewness(this IList<decimal> self, bool unbiased = true)
+        {
+            double mean = (double)self.Mean();
+            double n = self.Count;
+
+            double s2 = 0;
+            double s3 = 0;
+
+            for (int i = 0; i < self.Count; ++i)
+            {
+                double dev = (double)self[i] - mean;
+
+                s2 += dev * dev;
+                s3 += dev * dev * dev;
+            }
+
+            double m2 = s2 / n;
+            double m3 = s3 / n;
+
+            double g = m3 / (Math.Pow(m2, 3 / 2.0));
+
+            if (unbiased)
+            {
+                double a = Math.Sqrt(n * (n - 1));
+                double b = n - 2;
+                return (double)((a / b) * g);
+            }
+
+            return (double)g;
+        }
+
         public static double Variance(this IList<decimal> self, bool unbiased = true, bool skipNaN = true)
         {
             double mean = Mean(self, skipNaN);
-            if (skipNaN && double.IsNaN(mean))
+            if (!skipNaN && double.IsNaN(mean))
                 return double.NaN;
 
             double variance = (double)0.0;
+            int actualCount = self.Count;
 
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (skipNaN && double.IsNaN(v))
-                    return double.NaN;
+                if (TypeTrait.IsNaN(v))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                        return double.NaN;
+                }
 
                 double x = v - mean;
                 variance += x * x;

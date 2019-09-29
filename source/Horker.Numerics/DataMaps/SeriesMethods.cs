@@ -27,11 +27,13 @@ namespace Horker.Numerics.DataMaps
 			CountUnique,
 			Describe,
 			FillNaNFill,
+			Kurtosis,
 			Max,
 			Min,
 			Mean,
 			Median,
 			Mode,
+			Skewness,
 			StandardDeviation,
 			Std,
 			Variance,
@@ -137,18 +139,25 @@ namespace Horker.Numerics.DataMaps
             m.Invoke(null, new object[] { UnderlyingList, fillValue });
         }
 
-        public object Max(bool skipNaN = true)
+        public object Kurtosis(bool unbiased = true)
+        {
+			var m = GetMethodInfo(MethodIndex.Kurtosis);
+
+            return (object)m.Invoke(null, new object[] { UnderlyingList, unbiased });
+        }
+
+        public object Max()
         {
 			var m = GetMethodInfo(MethodIndex.Max);
 
-            return (object)m.Invoke(null, new object[] { UnderlyingList, skipNaN });
+            return (object)m.Invoke(null, new object[] { UnderlyingList });
         }
 
-        public object Min(bool skipNaN = true)
+        public object Min()
         {
 			var m = GetMethodInfo(MethodIndex.Min);
 
-            return (object)m.Invoke(null, new object[] { UnderlyingList, skipNaN });
+            return (object)m.Invoke(null, new object[] { UnderlyingList });
         }
 
         public object Mean(bool skipNaN = true)
@@ -170,6 +179,13 @@ namespace Horker.Numerics.DataMaps
 			var m = GetMethodInfo(MethodIndex.Mode);
 
             return (object)m.Invoke(null, new object[] { UnderlyingList, skipNaN });
+        }
+
+        public object Skewness(bool unbiased = true)
+        {
+			var m = GetMethodInfo(MethodIndex.Skewness);
+
+            return (object)m.Invoke(null, new object[] { UnderlyingList, unbiased });
         }
 
         public object StandardDeviation(bool unbiased = true, bool skipNaN = true)
