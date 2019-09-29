@@ -207,6 +207,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Median = (double)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
             summary.Q75 = (double)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
+            summary.Std = StandardDeviation(self);
 
             return summary;
         }
@@ -242,6 +243,153 @@ namespace Horker.Numerics.DataMaps.Extensions
                 if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
+        }
+
+        public static double Max(this IList<double> self, bool skipNaN = true)
+        {
+            double max = self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+            }
+
+            return max;
+        }
+
+        public static double Min(this IList<double> self, bool skipNaN = true)
+        {
+            double min = self[0];
+
+            foreach (var value in self)
+            {
+                if (value > min)
+                    min = value;
+            }
+
+            return min;
+        }
+
+        public static double Mean(this IList<double> self, bool skipNaN = true)
+        {
+            double mean = (double)0.0;
+
+            foreach (var value in self)
+            {
+                double v = (double)value;
+                if (skipNaN && double.IsNaN(v))
+                    return double.NaN;
+
+                mean += v;
+            }
+
+            return mean / self.Count;
+        }
+
+        public static double Median(this IList<double> self, bool skipNaN = true)
+        {
+            // TODO: Accord.NET uses partial sort for efficiency.
+
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            if (values.Length % 2 == 0)
+                return ((double)values[values.Length / 2 - 1] + (double)values[values.Length / 2]) / 2;
+            else
+                return (double)values[values.Length / 2];
+        }
+
+        public static double Mode(this IList<double> self, bool skipNaN = true)
+        {
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            double currentValue = values[0];
+            double bestValue = currentValue;
+            var currentCount = 1;
+            var bestCount = 1;
+
+            int i = 1;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                if (typeof(double) == typeof(double))
+                {
+                    while (double.IsNaN((double)values[i]))
+                        ++i;
+                }
+                else if (typeof(double) == typeof(float))
+                {
+                    while (float.IsNaN((float)values[i]))
+                        ++i;
+                }
+            }
+
+            for (; i < values.Length; ++i) {
+                if (currentValue == values[i])
+                    currentCount += 1;
+                else
+                {
+                    currentValue = values[i];
+                    currentCount = 1;
+                }
+
+                if (currentCount > bestCount)
+                {
+                    bestCount = currentCount;
+                    bestValue = currentValue;
+                }
+            }
+
+            return bestValue;
+        }
+
+        public static double StandardDeviation(this IList<double> self, bool unbiased = true, bool skipNaN = true)
+        {
+            var variance = Variance(self, unbiased, skipNaN);
+            return (double)Math.Sqrt((double)variance);
+        }
+
+        public static double Std(this IList<double> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return StandardDeviation(self, unbiased, skipNaN);
+        }
+
+        public static double Variance(this IList<double> self, bool unbiased = true, bool skipNaN = true)
+        {
+            double mean = Mean(self, skipNaN);
+            if (skipNaN && double.IsNaN(mean))
+                return double.NaN;
+
+            double variance = (double)0.0;
+
+            foreach (var value in self)
+            {
+                double v = (double)value;
+                if (skipNaN && double.IsNaN(v))
+                    return double.NaN;
+
+                double x = v - mean;
+                variance += x * x;
+            }
+
+            if (unbiased)
+            {
+                // Sample variance
+                return variance / self.Count;
+            }
+            else
+            {
+                // Population variance
+                return variance / self.Count;
+            }
+        }
+
+        public static double Var(this IList<double> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return Variance(self, unbiased, skipNaN);
         }
 
         public static List<float> Sort(this IList<float> self)
@@ -443,6 +591,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Median = (float)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
             summary.Q75 = (float)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
+            summary.Std = StandardDeviation(self);
 
             return summary;
         }
@@ -478,6 +627,153 @@ namespace Horker.Numerics.DataMaps.Extensions
                 if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
+        }
+
+        public static float Max(this IList<float> self, bool skipNaN = true)
+        {
+            float max = self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+            }
+
+            return max;
+        }
+
+        public static float Min(this IList<float> self, bool skipNaN = true)
+        {
+            float min = self[0];
+
+            foreach (var value in self)
+            {
+                if (value > min)
+                    min = value;
+            }
+
+            return min;
+        }
+
+        public static float Mean(this IList<float> self, bool skipNaN = true)
+        {
+            float mean = (float)0.0;
+
+            foreach (var value in self)
+            {
+                float v = (float)value;
+                if (skipNaN && float.IsNaN(v))
+                    return float.NaN;
+
+                mean += v;
+            }
+
+            return mean / self.Count;
+        }
+
+        public static float Median(this IList<float> self, bool skipNaN = true)
+        {
+            // TODO: Accord.NET uses partial sort for efficiency.
+
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            if (values.Length % 2 == 0)
+                return ((float)values[values.Length / 2 - 1] + (float)values[values.Length / 2]) / 2;
+            else
+                return (float)values[values.Length / 2];
+        }
+
+        public static float Mode(this IList<float> self, bool skipNaN = true)
+        {
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            float currentValue = values[0];
+            float bestValue = currentValue;
+            var currentCount = 1;
+            var bestCount = 1;
+
+            int i = 1;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                if (typeof(float) == typeof(double))
+                {
+                    while (double.IsNaN((double)values[i]))
+                        ++i;
+                }
+                else if (typeof(float) == typeof(float))
+                {
+                    while (float.IsNaN((float)values[i]))
+                        ++i;
+                }
+            }
+
+            for (; i < values.Length; ++i) {
+                if (currentValue == values[i])
+                    currentCount += 1;
+                else
+                {
+                    currentValue = values[i];
+                    currentCount = 1;
+                }
+
+                if (currentCount > bestCount)
+                {
+                    bestCount = currentCount;
+                    bestValue = currentValue;
+                }
+            }
+
+            return bestValue;
+        }
+
+        public static float StandardDeviation(this IList<float> self, bool unbiased = true, bool skipNaN = true)
+        {
+            var variance = Variance(self, unbiased, skipNaN);
+            return (float)Math.Sqrt((double)variance);
+        }
+
+        public static float Std(this IList<float> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return StandardDeviation(self, unbiased, skipNaN);
+        }
+
+        public static float Variance(this IList<float> self, bool unbiased = true, bool skipNaN = true)
+        {
+            float mean = Mean(self, skipNaN);
+            if (skipNaN && float.IsNaN(mean))
+                return float.NaN;
+
+            float variance = (float)0.0;
+
+            foreach (var value in self)
+            {
+                float v = (float)value;
+                if (skipNaN && float.IsNaN(v))
+                    return float.NaN;
+
+                float x = v - mean;
+                variance += x * x;
+            }
+
+            if (unbiased)
+            {
+                // Sample variance
+                return variance / self.Count;
+            }
+            else
+            {
+                // Population variance
+                return variance / self.Count;
+            }
+        }
+
+        public static float Var(this IList<float> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return Variance(self, unbiased, skipNaN);
         }
 
         public static List<long> Sort(this IList<long> self)
@@ -679,6 +975,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Median = (long)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
             summary.Q75 = (long)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
+            summary.Std = StandardDeviation(self);
 
             return summary;
         }
@@ -714,6 +1011,153 @@ namespace Horker.Numerics.DataMaps.Extensions
                 if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
+        }
+
+        public static long Max(this IList<long> self, bool skipNaN = true)
+        {
+            long max = self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+            }
+
+            return max;
+        }
+
+        public static long Min(this IList<long> self, bool skipNaN = true)
+        {
+            long min = self[0];
+
+            foreach (var value in self)
+            {
+                if (value > min)
+                    min = value;
+            }
+
+            return min;
+        }
+
+        public static double Mean(this IList<long> self, bool skipNaN = true)
+        {
+            double mean = (double)0.0;
+
+            foreach (var value in self)
+            {
+                double v = (double)value;
+                if (skipNaN && double.IsNaN(v))
+                    return double.NaN;
+
+                mean += v;
+            }
+
+            return mean / self.Count;
+        }
+
+        public static double Median(this IList<long> self, bool skipNaN = true)
+        {
+            // TODO: Accord.NET uses partial sort for efficiency.
+
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            if (values.Length % 2 == 0)
+                return ((double)values[values.Length / 2 - 1] + (double)values[values.Length / 2]) / 2;
+            else
+                return (double)values[values.Length / 2];
+        }
+
+        public static long Mode(this IList<long> self, bool skipNaN = true)
+        {
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            long currentValue = values[0];
+            long bestValue = currentValue;
+            var currentCount = 1;
+            var bestCount = 1;
+
+            int i = 1;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                if (typeof(long) == typeof(double))
+                {
+                    while (double.IsNaN((double)values[i]))
+                        ++i;
+                }
+                else if (typeof(long) == typeof(float))
+                {
+                    while (float.IsNaN((float)values[i]))
+                        ++i;
+                }
+            }
+
+            for (; i < values.Length; ++i) {
+                if (currentValue == values[i])
+                    currentCount += 1;
+                else
+                {
+                    currentValue = values[i];
+                    currentCount = 1;
+                }
+
+                if (currentCount > bestCount)
+                {
+                    bestCount = currentCount;
+                    bestValue = currentValue;
+                }
+            }
+
+            return bestValue;
+        }
+
+        public static double StandardDeviation(this IList<long> self, bool unbiased = true, bool skipNaN = true)
+        {
+            var variance = Variance(self, unbiased, skipNaN);
+            return (double)Math.Sqrt((double)variance);
+        }
+
+        public static double Std(this IList<long> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return StandardDeviation(self, unbiased, skipNaN);
+        }
+
+        public static double Variance(this IList<long> self, bool unbiased = true, bool skipNaN = true)
+        {
+            double mean = Mean(self, skipNaN);
+            if (skipNaN && double.IsNaN(mean))
+                return double.NaN;
+
+            double variance = (double)0.0;
+
+            foreach (var value in self)
+            {
+                double v = (double)value;
+                if (skipNaN && double.IsNaN(v))
+                    return double.NaN;
+
+                double x = v - mean;
+                variance += x * x;
+            }
+
+            if (unbiased)
+            {
+                // Sample variance
+                return variance / self.Count;
+            }
+            else
+            {
+                // Population variance
+                return variance / self.Count;
+            }
+        }
+
+        public static double Var(this IList<long> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return Variance(self, unbiased, skipNaN);
         }
 
         public static List<int> Sort(this IList<int> self)
@@ -915,6 +1359,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Median = (int)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
             summary.Q75 = (int)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
+            summary.Std = StandardDeviation(self);
 
             return summary;
         }
@@ -950,6 +1395,153 @@ namespace Horker.Numerics.DataMaps.Extensions
                 if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
+        }
+
+        public static int Max(this IList<int> self, bool skipNaN = true)
+        {
+            int max = self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+            }
+
+            return max;
+        }
+
+        public static int Min(this IList<int> self, bool skipNaN = true)
+        {
+            int min = self[0];
+
+            foreach (var value in self)
+            {
+                if (value > min)
+                    min = value;
+            }
+
+            return min;
+        }
+
+        public static double Mean(this IList<int> self, bool skipNaN = true)
+        {
+            double mean = (double)0.0;
+
+            foreach (var value in self)
+            {
+                double v = (double)value;
+                if (skipNaN && double.IsNaN(v))
+                    return double.NaN;
+
+                mean += v;
+            }
+
+            return mean / self.Count;
+        }
+
+        public static double Median(this IList<int> self, bool skipNaN = true)
+        {
+            // TODO: Accord.NET uses partial sort for efficiency.
+
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            if (values.Length % 2 == 0)
+                return ((double)values[values.Length / 2 - 1] + (double)values[values.Length / 2]) / 2;
+            else
+                return (double)values[values.Length / 2];
+        }
+
+        public static int Mode(this IList<int> self, bool skipNaN = true)
+        {
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            int currentValue = values[0];
+            int bestValue = currentValue;
+            var currentCount = 1;
+            var bestCount = 1;
+
+            int i = 1;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                if (typeof(int) == typeof(double))
+                {
+                    while (double.IsNaN((double)values[i]))
+                        ++i;
+                }
+                else if (typeof(int) == typeof(float))
+                {
+                    while (float.IsNaN((float)values[i]))
+                        ++i;
+                }
+            }
+
+            for (; i < values.Length; ++i) {
+                if (currentValue == values[i])
+                    currentCount += 1;
+                else
+                {
+                    currentValue = values[i];
+                    currentCount = 1;
+                }
+
+                if (currentCount > bestCount)
+                {
+                    bestCount = currentCount;
+                    bestValue = currentValue;
+                }
+            }
+
+            return bestValue;
+        }
+
+        public static double StandardDeviation(this IList<int> self, bool unbiased = true, bool skipNaN = true)
+        {
+            var variance = Variance(self, unbiased, skipNaN);
+            return (double)Math.Sqrt((double)variance);
+        }
+
+        public static double Std(this IList<int> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return StandardDeviation(self, unbiased, skipNaN);
+        }
+
+        public static double Variance(this IList<int> self, bool unbiased = true, bool skipNaN = true)
+        {
+            double mean = Mean(self, skipNaN);
+            if (skipNaN && double.IsNaN(mean))
+                return double.NaN;
+
+            double variance = (double)0.0;
+
+            foreach (var value in self)
+            {
+                double v = (double)value;
+                if (skipNaN && double.IsNaN(v))
+                    return double.NaN;
+
+                double x = v - mean;
+                variance += x * x;
+            }
+
+            if (unbiased)
+            {
+                // Sample variance
+                return variance / self.Count;
+            }
+            else
+            {
+                // Population variance
+                return variance / self.Count;
+            }
+        }
+
+        public static double Var(this IList<int> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return Variance(self, unbiased, skipNaN);
         }
 
         public static List<short> Sort(this IList<short> self)
@@ -1151,6 +1743,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Median = (short)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
             summary.Q75 = (short)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
+            summary.Std = StandardDeviation(self);
 
             return summary;
         }
@@ -1186,6 +1779,153 @@ namespace Horker.Numerics.DataMaps.Extensions
                 if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
+        }
+
+        public static short Max(this IList<short> self, bool skipNaN = true)
+        {
+            short max = self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+            }
+
+            return max;
+        }
+
+        public static short Min(this IList<short> self, bool skipNaN = true)
+        {
+            short min = self[0];
+
+            foreach (var value in self)
+            {
+                if (value > min)
+                    min = value;
+            }
+
+            return min;
+        }
+
+        public static double Mean(this IList<short> self, bool skipNaN = true)
+        {
+            double mean = (double)0.0;
+
+            foreach (var value in self)
+            {
+                double v = (double)value;
+                if (skipNaN && double.IsNaN(v))
+                    return double.NaN;
+
+                mean += v;
+            }
+
+            return mean / self.Count;
+        }
+
+        public static double Median(this IList<short> self, bool skipNaN = true)
+        {
+            // TODO: Accord.NET uses partial sort for efficiency.
+
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            if (values.Length % 2 == 0)
+                return ((double)values[values.Length / 2 - 1] + (double)values[values.Length / 2]) / 2;
+            else
+                return (double)values[values.Length / 2];
+        }
+
+        public static short Mode(this IList<short> self, bool skipNaN = true)
+        {
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            short currentValue = values[0];
+            short bestValue = currentValue;
+            var currentCount = 1;
+            var bestCount = 1;
+
+            int i = 1;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                if (typeof(short) == typeof(double))
+                {
+                    while (double.IsNaN((double)values[i]))
+                        ++i;
+                }
+                else if (typeof(short) == typeof(float))
+                {
+                    while (float.IsNaN((float)values[i]))
+                        ++i;
+                }
+            }
+
+            for (; i < values.Length; ++i) {
+                if (currentValue == values[i])
+                    currentCount += 1;
+                else
+                {
+                    currentValue = values[i];
+                    currentCount = 1;
+                }
+
+                if (currentCount > bestCount)
+                {
+                    bestCount = currentCount;
+                    bestValue = currentValue;
+                }
+            }
+
+            return bestValue;
+        }
+
+        public static double StandardDeviation(this IList<short> self, bool unbiased = true, bool skipNaN = true)
+        {
+            var variance = Variance(self, unbiased, skipNaN);
+            return (double)Math.Sqrt((double)variance);
+        }
+
+        public static double Std(this IList<short> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return StandardDeviation(self, unbiased, skipNaN);
+        }
+
+        public static double Variance(this IList<short> self, bool unbiased = true, bool skipNaN = true)
+        {
+            double mean = Mean(self, skipNaN);
+            if (skipNaN && double.IsNaN(mean))
+                return double.NaN;
+
+            double variance = (double)0.0;
+
+            foreach (var value in self)
+            {
+                double v = (double)value;
+                if (skipNaN && double.IsNaN(v))
+                    return double.NaN;
+
+                double x = v - mean;
+                variance += x * x;
+            }
+
+            if (unbiased)
+            {
+                // Sample variance
+                return variance / self.Count;
+            }
+            else
+            {
+                // Population variance
+                return variance / self.Count;
+            }
+        }
+
+        public static double Var(this IList<short> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return Variance(self, unbiased, skipNaN);
         }
 
         public static List<byte> Sort(this IList<byte> self)
@@ -1387,6 +2127,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Median = (byte)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
             summary.Q75 = (byte)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
+            summary.Std = StandardDeviation(self);
 
             return summary;
         }
@@ -1422,6 +2163,153 @@ namespace Horker.Numerics.DataMaps.Extensions
                 if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
+        }
+
+        public static byte Max(this IList<byte> self, bool skipNaN = true)
+        {
+            byte max = self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+            }
+
+            return max;
+        }
+
+        public static byte Min(this IList<byte> self, bool skipNaN = true)
+        {
+            byte min = self[0];
+
+            foreach (var value in self)
+            {
+                if (value > min)
+                    min = value;
+            }
+
+            return min;
+        }
+
+        public static double Mean(this IList<byte> self, bool skipNaN = true)
+        {
+            double mean = (double)0.0;
+
+            foreach (var value in self)
+            {
+                double v = (double)value;
+                if (skipNaN && double.IsNaN(v))
+                    return double.NaN;
+
+                mean += v;
+            }
+
+            return mean / self.Count;
+        }
+
+        public static double Median(this IList<byte> self, bool skipNaN = true)
+        {
+            // TODO: Accord.NET uses partial sort for efficiency.
+
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            if (values.Length % 2 == 0)
+                return ((double)values[values.Length / 2 - 1] + (double)values[values.Length / 2]) / 2;
+            else
+                return (double)values[values.Length / 2];
+        }
+
+        public static byte Mode(this IList<byte> self, bool skipNaN = true)
+        {
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            byte currentValue = values[0];
+            byte bestValue = currentValue;
+            var currentCount = 1;
+            var bestCount = 1;
+
+            int i = 1;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                if (typeof(byte) == typeof(double))
+                {
+                    while (double.IsNaN((double)values[i]))
+                        ++i;
+                }
+                else if (typeof(byte) == typeof(float))
+                {
+                    while (float.IsNaN((float)values[i]))
+                        ++i;
+                }
+            }
+
+            for (; i < values.Length; ++i) {
+                if (currentValue == values[i])
+                    currentCount += 1;
+                else
+                {
+                    currentValue = values[i];
+                    currentCount = 1;
+                }
+
+                if (currentCount > bestCount)
+                {
+                    bestCount = currentCount;
+                    bestValue = currentValue;
+                }
+            }
+
+            return bestValue;
+        }
+
+        public static double StandardDeviation(this IList<byte> self, bool unbiased = true, bool skipNaN = true)
+        {
+            var variance = Variance(self, unbiased, skipNaN);
+            return (double)Math.Sqrt((double)variance);
+        }
+
+        public static double Std(this IList<byte> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return StandardDeviation(self, unbiased, skipNaN);
+        }
+
+        public static double Variance(this IList<byte> self, bool unbiased = true, bool skipNaN = true)
+        {
+            double mean = Mean(self, skipNaN);
+            if (skipNaN && double.IsNaN(mean))
+                return double.NaN;
+
+            double variance = (double)0.0;
+
+            foreach (var value in self)
+            {
+                double v = (double)value;
+                if (skipNaN && double.IsNaN(v))
+                    return double.NaN;
+
+                double x = v - mean;
+                variance += x * x;
+            }
+
+            if (unbiased)
+            {
+                // Sample variance
+                return variance / self.Count;
+            }
+            else
+            {
+                // Population variance
+                return variance / self.Count;
+            }
+        }
+
+        public static double Var(this IList<byte> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return Variance(self, unbiased, skipNaN);
         }
 
         public static List<sbyte> Sort(this IList<sbyte> self)
@@ -1623,6 +2511,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Median = (sbyte)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
             summary.Q75 = (sbyte)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
+            summary.Std = StandardDeviation(self);
 
             return summary;
         }
@@ -1658,6 +2547,153 @@ namespace Horker.Numerics.DataMaps.Extensions
                 if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
+        }
+
+        public static sbyte Max(this IList<sbyte> self, bool skipNaN = true)
+        {
+            sbyte max = self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+            }
+
+            return max;
+        }
+
+        public static sbyte Min(this IList<sbyte> self, bool skipNaN = true)
+        {
+            sbyte min = self[0];
+
+            foreach (var value in self)
+            {
+                if (value > min)
+                    min = value;
+            }
+
+            return min;
+        }
+
+        public static double Mean(this IList<sbyte> self, bool skipNaN = true)
+        {
+            double mean = (double)0.0;
+
+            foreach (var value in self)
+            {
+                double v = (double)value;
+                if (skipNaN && double.IsNaN(v))
+                    return double.NaN;
+
+                mean += v;
+            }
+
+            return mean / self.Count;
+        }
+
+        public static double Median(this IList<sbyte> self, bool skipNaN = true)
+        {
+            // TODO: Accord.NET uses partial sort for efficiency.
+
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            if (values.Length % 2 == 0)
+                return ((double)values[values.Length / 2 - 1] + (double)values[values.Length / 2]) / 2;
+            else
+                return (double)values[values.Length / 2];
+        }
+
+        public static sbyte Mode(this IList<sbyte> self, bool skipNaN = true)
+        {
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            sbyte currentValue = values[0];
+            sbyte bestValue = currentValue;
+            var currentCount = 1;
+            var bestCount = 1;
+
+            int i = 1;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                if (typeof(sbyte) == typeof(double))
+                {
+                    while (double.IsNaN((double)values[i]))
+                        ++i;
+                }
+                else if (typeof(sbyte) == typeof(float))
+                {
+                    while (float.IsNaN((float)values[i]))
+                        ++i;
+                }
+            }
+
+            for (; i < values.Length; ++i) {
+                if (currentValue == values[i])
+                    currentCount += 1;
+                else
+                {
+                    currentValue = values[i];
+                    currentCount = 1;
+                }
+
+                if (currentCount > bestCount)
+                {
+                    bestCount = currentCount;
+                    bestValue = currentValue;
+                }
+            }
+
+            return bestValue;
+        }
+
+        public static double StandardDeviation(this IList<sbyte> self, bool unbiased = true, bool skipNaN = true)
+        {
+            var variance = Variance(self, unbiased, skipNaN);
+            return (double)Math.Sqrt((double)variance);
+        }
+
+        public static double Std(this IList<sbyte> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return StandardDeviation(self, unbiased, skipNaN);
+        }
+
+        public static double Variance(this IList<sbyte> self, bool unbiased = true, bool skipNaN = true)
+        {
+            double mean = Mean(self, skipNaN);
+            if (skipNaN && double.IsNaN(mean))
+                return double.NaN;
+
+            double variance = (double)0.0;
+
+            foreach (var value in self)
+            {
+                double v = (double)value;
+                if (skipNaN && double.IsNaN(v))
+                    return double.NaN;
+
+                double x = v - mean;
+                variance += x * x;
+            }
+
+            if (unbiased)
+            {
+                // Sample variance
+                return variance / self.Count;
+            }
+            else
+            {
+                // Population variance
+                return variance / self.Count;
+            }
+        }
+
+        public static double Var(this IList<sbyte> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return Variance(self, unbiased, skipNaN);
         }
 
         public static List<decimal> Sort(this IList<decimal> self)
@@ -1859,6 +2895,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Median = (decimal)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
             summary.Q75 = (decimal)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
+            summary.Std = StandardDeviation(self);
 
             return summary;
         }
@@ -1894,6 +2931,153 @@ namespace Horker.Numerics.DataMaps.Extensions
                 if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
+        }
+
+        public static decimal Max(this IList<decimal> self, bool skipNaN = true)
+        {
+            decimal max = self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+            }
+
+            return max;
+        }
+
+        public static decimal Min(this IList<decimal> self, bool skipNaN = true)
+        {
+            decimal min = self[0];
+
+            foreach (var value in self)
+            {
+                if (value > min)
+                    min = value;
+            }
+
+            return min;
+        }
+
+        public static double Mean(this IList<decimal> self, bool skipNaN = true)
+        {
+            double mean = (double)0.0;
+
+            foreach (var value in self)
+            {
+                double v = (double)value;
+                if (skipNaN && double.IsNaN(v))
+                    return double.NaN;
+
+                mean += v;
+            }
+
+            return mean / self.Count;
+        }
+
+        public static double Median(this IList<decimal> self, bool skipNaN = true)
+        {
+            // TODO: Accord.NET uses partial sort for efficiency.
+
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            if (values.Length % 2 == 0)
+                return ((double)values[values.Length / 2 - 1] + (double)values[values.Length / 2]) / 2;
+            else
+                return (double)values[values.Length / 2];
+        }
+
+        public static decimal Mode(this IList<decimal> self, bool skipNaN = true)
+        {
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            decimal currentValue = values[0];
+            decimal bestValue = currentValue;
+            var currentCount = 1;
+            var bestCount = 1;
+
+            int i = 1;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                if (typeof(decimal) == typeof(double))
+                {
+                    while (double.IsNaN((double)values[i]))
+                        ++i;
+                }
+                else if (typeof(decimal) == typeof(float))
+                {
+                    while (float.IsNaN((float)values[i]))
+                        ++i;
+                }
+            }
+
+            for (; i < values.Length; ++i) {
+                if (currentValue == values[i])
+                    currentCount += 1;
+                else
+                {
+                    currentValue = values[i];
+                    currentCount = 1;
+                }
+
+                if (currentCount > bestCount)
+                {
+                    bestCount = currentCount;
+                    bestValue = currentValue;
+                }
+            }
+
+            return bestValue;
+        }
+
+        public static double StandardDeviation(this IList<decimal> self, bool unbiased = true, bool skipNaN = true)
+        {
+            var variance = Variance(self, unbiased, skipNaN);
+            return (double)Math.Sqrt((double)variance);
+        }
+
+        public static double Std(this IList<decimal> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return StandardDeviation(self, unbiased, skipNaN);
+        }
+
+        public static double Variance(this IList<decimal> self, bool unbiased = true, bool skipNaN = true)
+        {
+            double mean = Mean(self, skipNaN);
+            if (skipNaN && double.IsNaN(mean))
+                return double.NaN;
+
+            double variance = (double)0.0;
+
+            foreach (var value in self)
+            {
+                double v = (double)value;
+                if (skipNaN && double.IsNaN(v))
+                    return double.NaN;
+
+                double x = v - mean;
+                variance += x * x;
+            }
+
+            if (unbiased)
+            {
+                // Sample variance
+                return variance / self.Count;
+            }
+            else
+            {
+                // Population variance
+                return variance / self.Count;
+            }
+        }
+
+        public static double Var(this IList<decimal> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return Variance(self, unbiased, skipNaN);
         }
 
         public static void SortFill(this IList<bool> self)

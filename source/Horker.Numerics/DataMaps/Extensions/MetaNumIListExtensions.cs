@@ -208,6 +208,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Median = (MetaNum)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
             summary.Q75 = (MetaNum)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
             summary.Max = sorted[count - 1];
+            summary.Std = StandardDeviation(self);
 
             return summary;
         }
@@ -243,6 +244,153 @@ namespace Horker.Numerics.DataMaps.Extensions
                 if (TypeTrait.IsNaN(self[i]))
                     self[i] = fillValue;
             }
+        }
+
+        public static MetaNum Max(this IList<MetaNum> self, bool skipNaN = true)
+        {
+            MetaNum max = self[0];
+
+            foreach (var value in self)
+            {
+                if (value > max)
+                    max = value;
+            }
+
+            return max;
+        }
+
+        public static MetaNum Min(this IList<MetaNum> self, bool skipNaN = true)
+        {
+            MetaNum min = self[0];
+
+            foreach (var value in self)
+            {
+                if (value < min)
+                    min = value;
+            }
+
+            return min;
+        }
+
+        public static MetaFloat Mean(this IList<MetaNum> self, bool skipNaN = true)
+        {
+            MetaFloat mean = (MetaFloat)0.0;
+
+            foreach (var value in self)
+            {
+                MetaFloat v = (MetaFloat)value;
+                if (skipNaN && MetaFloat.IsNaN(v))
+                    return MetaFloat.NaN;
+
+                mean += v;
+            }
+
+            return mean / self.Count;
+        }
+
+        public static MetaFloat Median(this IList<MetaNum> self, bool skipNaN = true)
+        {
+            // TODO: Accord.NET uses partial sort for efficiency.
+
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            if (values.Length % 2 == 0)
+                return ((MetaFloat)values[values.Length / 2 - 1] + (MetaFloat)values[values.Length / 2]) / 2;
+            else
+                return (MetaFloat)values[values.Length / 2];
+        }
+
+        public static MetaNum Mode(this IList<MetaNum> self, bool skipNaN = true)
+        {
+            var values = self.ToArray();
+            Array.Sort(values);
+
+            MetaNum currentValue = values[0];
+            MetaNum bestValue = currentValue;
+            var currentCount = 1;
+            var bestCount = 1;
+
+            int i = 1;
+
+            if (skipNaN)
+            {
+                // After sort, NaNs should be collected to the first location of the sequence.
+                if (typeof(MetaNum) == typeof(double))
+                {
+                    while (double.IsNaN((double)values[i]))
+                        ++i;
+                }
+                else if (typeof(MetaNum) == typeof(float))
+                {
+                    while (float.IsNaN((float)values[i]))
+                        ++i;
+                }
+            }
+
+            for (; i < values.Length; ++i) {
+                if (currentValue == values[i])
+                    currentCount += 1;
+                else
+                {
+                    currentValue = values[i];
+                    currentCount = 1;
+                }
+
+                if (currentCount > bestCount)
+                {
+                    bestCount = currentCount;
+                    bestValue = currentValue;
+                }
+            }
+
+            return bestValue;
+        }
+
+        public static MetaFloat StandardDeviation(this IList<MetaNum> self, bool unbiased = true, bool skipNaN = true)
+        {
+            var variance = Variance(self, unbiased, skipNaN);
+            return (MetaFloat)Math.Sqrt((double)variance);
+        }
+
+        public static MetaFloat Std(this IList<MetaNum> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return StandardDeviation(self, unbiased, skipNaN);
+        }
+
+        public static MetaFloat Variance(this IList<MetaNum> self, bool unbiased = true, bool skipNaN = true)
+        {
+            MetaFloat mean = Mean(self, skipNaN);
+            if (skipNaN && MetaFloat.IsNaN(mean))
+                return MetaFloat.NaN;
+
+            MetaFloat variance = (MetaFloat)0.0;
+
+            foreach (var value in self)
+            {
+                MetaFloat v = (MetaFloat)value;
+                if (skipNaN && MetaFloat.IsNaN(v))
+                    return MetaFloat.NaN;
+
+                MetaFloat x = v - mean;
+                variance += x * x;
+            }
+
+            if (unbiased)
+            {
+                // Sample variance
+                return variance / self.Count;
+            }
+            else
+            {
+                // Population variance
+                return variance / self.Count;
+            }
+        }
+
+        public static MetaFloat Var(this IList<MetaNum> self, bool unbiased = true, bool skipNaN = true)
+        {
+            return Variance(self, unbiased, skipNaN);
         }
 
         // CUT BELOW

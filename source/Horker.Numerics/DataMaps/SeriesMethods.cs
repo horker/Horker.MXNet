@@ -27,6 +27,15 @@ namespace Horker.Numerics.DataMaps
 			CountUnique,
 			Describe,
 			FillNaNFill,
+			Max,
+			Min,
+			Mean,
+			Median,
+			Mode,
+			StandardDeviation,
+			Std,
+			Variance,
+			Var,
 			SortFill,
         }
 
@@ -126,6 +135,69 @@ namespace Horker.Numerics.DataMaps
 			var m = GetMethodInfo(MethodIndex.FillNaNFill);
 
             m.Invoke(null, new object[] { UnderlyingList, fillValue });
+        }
+
+        public object Max(bool skipNaN = true)
+        {
+			var m = GetMethodInfo(MethodIndex.Max);
+
+            return (object)m.Invoke(null, new object[] { UnderlyingList, skipNaN });
+        }
+
+        public object Min(bool skipNaN = true)
+        {
+			var m = GetMethodInfo(MethodIndex.Min);
+
+            return (object)m.Invoke(null, new object[] { UnderlyingList, skipNaN });
+        }
+
+        public object Mean(bool skipNaN = true)
+        {
+			var m = GetMethodInfo(MethodIndex.Mean);
+
+            return (object)m.Invoke(null, new object[] { UnderlyingList, skipNaN });
+        }
+
+        public object Median(bool skipNaN = true)
+        {
+			var m = GetMethodInfo(MethodIndex.Median);
+
+            return (object)m.Invoke(null, new object[] { UnderlyingList, skipNaN });
+        }
+
+        public object Mode(bool skipNaN = true)
+        {
+			var m = GetMethodInfo(MethodIndex.Mode);
+
+            return (object)m.Invoke(null, new object[] { UnderlyingList, skipNaN });
+        }
+
+        public object StandardDeviation(bool unbiased = true, bool skipNaN = true)
+        {
+			var m = GetMethodInfo(MethodIndex.StandardDeviation);
+
+            return (object)m.Invoke(null, new object[] { UnderlyingList, unbiased, skipNaN });
+        }
+
+        public object Std(bool unbiased = true, bool skipNaN = true)
+        {
+			var m = GetMethodInfo(MethodIndex.Std);
+
+            return (object)m.Invoke(null, new object[] { UnderlyingList, unbiased, skipNaN });
+        }
+
+        public object Variance(bool unbiased = true, bool skipNaN = true)
+        {
+			var m = GetMethodInfo(MethodIndex.Variance);
+
+            return (object)m.Invoke(null, new object[] { UnderlyingList, unbiased, skipNaN });
+        }
+
+        public object Var(bool unbiased = true, bool skipNaN = true)
+        {
+			var m = GetMethodInfo(MethodIndex.Var);
+
+            return (object)m.Invoke(null, new object[] { UnderlyingList, unbiased, skipNaN });
         }
 
         public void SortFill()

@@ -2,11 +2,11 @@
 {
     public class MetaNum
     {
-        double Value;
+        private double _value;
 
         public MetaNum(double value)
         {
-            Value = value;
+            _value = value;
         }
 
         public static MetaNum operator +(MetaNum self) { return (MetaNum)0; }
@@ -44,24 +44,82 @@
 
         public static explicit operator MetaNum(double value)
         {
-            return new MetaNum(value);
+            return new MetaNum(0);
         }
 
         public static explicit operator double(MetaNum value)
         {
-            return value.Value;
+            return 0;
         }
     }
 
-    public class MetaFloat : MetaNum
+    public class MetaFloat
     {
-        public MetaFloat(int value)
-            : base(value)
-        { }
+        public static MetaFloat NaN = new MetaFloat(0);
+
+        public static bool IsNaN(MetaFloat value)
+        {
+            return true;
+        }
+
+        private double _value;
+
+        public MetaFloat(double value)
+        {
+            _value = value;
+        }
+
+        public static MetaFloat operator +(MetaFloat self) { return (MetaFloat)0; }
+        public static MetaFloat operator -(MetaFloat self) { return (MetaFloat)0; }
+
+        public static MetaFloat operator +(MetaFloat lhs, MetaFloat rhs) { return (MetaFloat)0; }
+        public static MetaFloat operator -(MetaFloat lhs, MetaFloat rhs) { return (MetaFloat)0; }
+        public static MetaFloat operator *(MetaFloat lhs, MetaFloat rhs) { return (MetaFloat)0; }
+        public static MetaFloat operator /(MetaFloat lhs, MetaFloat rhs) { return (MetaFloat)0; }
+
+        public static MetaFloat operator +(MetaFloat lhs, double rhs) { return (MetaFloat)0; }
+        public static MetaFloat operator -(MetaFloat lhs, double rhs) { return (MetaFloat)0; }
+        public static MetaFloat operator *(MetaFloat lhs, double rhs) { return (MetaFloat)0; }
+        public static MetaFloat operator /(MetaFloat lhs, double rhs) { return (MetaFloat)0; }
+
+        public static MetaFloat operator +(double lhs, MetaFloat rhs) { return (MetaFloat)0; }
+        public static MetaFloat operator -(double lhs, MetaFloat rhs) { return (MetaFloat)0; }
+        public static MetaFloat operator *(double lhs, MetaFloat rhs) { return (MetaFloat)0; }
+        public static MetaFloat operator /(double lhs, MetaFloat rhs) { return (MetaFloat)0; }
+
+        public static bool operator <(MetaFloat lhs, MetaFloat rhs) { return false; }
+        public static bool operator <=(MetaFloat lhs, MetaFloat rhs) { return false; }
+        public static bool operator >(MetaFloat lhs, MetaFloat rhs) { return false; }
+        public static bool operator >=(MetaFloat lhs, MetaFloat rhs) { return false; }
+
+        public static bool operator <(MetaFloat lhs, double rhs) { return false; }
+        public static bool operator <=(MetaFloat lhs, double rhs) { return false; }
+        public static bool operator >(MetaFloat lhs, double rhs) { return false; }
+        public static bool operator >=(MetaFloat lhs, double rhs) { return false; }
+
+        public static bool operator <(double lhs, MetaFloat rhs) { return false; }
+        public static bool operator <=(double lhs, MetaFloat rhs) { return false; }
+        public static bool operator >(double lhs, MetaFloat rhs) { return false; }
+        public static bool operator >=(double lhs, MetaFloat rhs) { return false; }
+
+        public static explicit operator MetaFloat(double value)
+        {
+            return new MetaFloat(0);
+        }
 
         public static explicit operator double(MetaFloat value)
         {
             return 0;
+        }
+
+        public static explicit operator MetaFloat(MetaNum value)
+        {
+            return new MetaFloat(0);
+        }
+
+        public static explicit operator MetaNum(MetaFloat value)
+        {
+            return new MetaNum(0);
         }
     }
 }

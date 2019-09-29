@@ -16,5 +16,6 @@ namespace Horker.Numerics.DataMaps
         public object Median { get; set; }
         public object Q75 { get; set; }
         public object Max { get; set; }
+        public object Std { get; set; }
     }
 }

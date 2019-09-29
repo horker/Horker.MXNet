@@ -108,6 +108,10 @@
                         <Label>Max</Label>
                         <Alignment>Right</Alignment>
                     </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Std</Label>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
@@ -146,6 +150,10 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Max</PropertyName>
+                                <FormatString>0.###</FormatString>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Std</PropertyName>
                                 <FormatString>0.###</FormatString>
                             </TableColumnItem>
                         </TableColumnItems>
