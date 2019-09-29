@@ -84,7 +84,9 @@ namespace Horker.MXNet.Core
 
             var data = array.ToArray<T>();
 
-            var (displayWidth, hasFraction) = GetDisplayWidth(data);
+            var w = GetDisplayWidth(data);
+            var displayWidth = w.Item1;
+            var hasFraction = w.Item2;
 
             if (ndims == 1)
             {
