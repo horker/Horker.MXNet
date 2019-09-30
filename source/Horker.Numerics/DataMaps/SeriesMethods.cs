@@ -36,6 +36,7 @@ namespace Horker.Numerics.DataMaps
 			Mean,
 			Median,
 			Mode,
+			Quantile,
 			Skewness,
 			StandardDeviation,
 			Std,
@@ -191,11 +192,11 @@ namespace Horker.Numerics.DataMaps
             return (object)m.Invoke(null, new object[] { UnderlyingList, skipNaN });
         }
 
-        public object Median(bool skipNaN = true)
+        public object Median(bool skipNaN = true, bool isSorted = false)
         {
 			var m = GetMethodInfo(MethodIndex.Median);
 
-            return (object)m.Invoke(null, new object[] { UnderlyingList, skipNaN });
+            return (object)m.Invoke(null, new object[] { UnderlyingList, skipNaN, isSorted });
         }
 
         public object Mode(bool skipNaN = true)
@@ -203,6 +204,13 @@ namespace Horker.Numerics.DataMaps
 			var m = GetMethodInfo(MethodIndex.Mode);
 
             return (object)m.Invoke(null, new object[] { UnderlyingList, skipNaN });
+        }
+
+        public object Quantile(bool skipNaN = true, bool isSorted = false)
+        {
+			var m = GetMethodInfo(MethodIndex.Quantile);
+
+            return (object)m.Invoke(null, new object[] { UnderlyingList, skipNaN, isSorted });
         }
 
         public object Skewness(bool unbiased = true)

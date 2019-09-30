@@ -10,7 +10,7 @@ namespace Horker.Numerics.DataMaps.Extensions
     public static partial class MetaNumIListExtensions
     {
         // CUT ABOVE
-        public static List<MetaNum> Sort(this IList<MetaNum> self)
+        public static List<MetaNum> GetSortedCopy(this IList<MetaNum> self)
         {
             var result = new List<MetaNum>(self);
             result.Sort();
@@ -251,30 +251,69 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static Summary Describe(this IList<MetaNum> self)
         {
-            var count = self.Count;
-            var sorted = self.ToArray();
-            Array.Sort(sorted);
-
-            var even = count % 2 == 0;
-            var q = count % 4 == 0;
-
-            MetaNum sum = (MetaNum)0;
-            foreach (var e in sorted)
-                sum += (MetaNum)e;
+            var sorted = self.RemoveNaN();
+            sorted.SortFill();
 
             var summary = new Summary();
-            summary.Count = count;
-            summary.NaN = CountNaN(self);
-            summary.Unique = CountUnique(self);
-            summary.Mean = (MetaNum)(sum / count);
-            summary.Min = sorted[0];
-            summary.Q25 = (MetaNum)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
-            summary.Median = (MetaNum)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q75 = (MetaNum)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
-            summary.Max = sorted[count - 1];
+            summary.Count = self.Count;
+            summary.NaN = self.CountNaN();
+            summary.Unique = self.CountUnique();
+            summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
+            summary.Min = sorted[0];
+            summary.Q25 = sorted.Quantile(.25, false, true);
+            summary.Median = sorted.Quantile(.5, false, true);
+            summary.Q75 = sorted.Quantile(.75, false, true);
+            summary.Max = sorted[sorted.Count - 1];
 
             return summary;
+        }
+
+        public static MetaFloat Quantile(this IList<MetaNum> self, double p, bool skipNaN = true, bool isSorted = false)
+        {
+            // TODO use partial sort
+
+            IList<MetaNum> sorted;
+            if (skipNaN)
+            {
+                sorted = self.RemoveNaN();
+                sorted.SortFill();
+            }
+            else
+            {
+                if (isSorted)
+                {
+                    sorted = self;
+                }
+                else
+                {
+                    var a = self.ToArray();
+                    Array.Sort(a);
+                    sorted = a;
+                }
+            }
+
+            double lowThreshold = 1.0 / (sorted.Count + 1);
+            double highThreshold = sorted.Count / (double)(sorted.Count + 1);
+
+            if (p < lowThreshold)
+                return (MetaFloat)sorted[0];
+
+            if (p >= highThreshold)
+                return (MetaFloat)sorted[sorted.Count - 1];
+
+            double h = (sorted.Count + 1) * p;
+            double hc = Math.Floor(h);
+
+            int i = (int)hc;
+            if (i > 0)
+                i--;
+
+            int i2 = i + 1;
+            if (i2 == sorted.Count)
+                i2--;
+
+            return (MetaFloat)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
         public static IList<MetaNum> RemoveNaN(this IList<MetaNum> self)
@@ -405,29 +444,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             return mean / actualCount;
         }
 
-        public static MetaFloat Median(this IList<MetaNum> self, bool skipNaN = true)
+        public static MetaFloat Median(this IList<MetaNum> self, bool skipNaN = true, bool isSorted = false)
         {
-            // TODO: Accord.NET uses partial sort for efficiency.
-
-            var values = self.ToArray();
-            Array.Sort(values);
-
-            var offset = 0;
-
-            if (skipNaN)
-            {
-                // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[offset]))
-                    ++offset;
-            }
-
-            var actualCount = self.Count - offset;
-            var half = offset + actualCount / 2;
-
-            if (actualCount % 2 == 0)
-                return ((MetaFloat)values[half - 1] + (MetaFloat)values[half]) / 2;
-            else
-                return (MetaFloat)values[half];
+            return Quantile(self, .5, skipNaN, isSorted);
         }
 
         public static MetaNum Mode(this IList<MetaNum> self, bool skipNaN = true)

@@ -8,7 +8,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 	public static partial class GenericIListExtensions
 	{
 
-        public static List<double> Sort(this IList<double> self)
+        public static List<double> GetSortedCopy(this IList<double> self)
         {
             var result = new List<double>(self);
             result.Sort();
@@ -60,11 +60,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
-        }
-
-        public static double Cor(this IList<double> self, IList<double> other, bool skipNaN = true)
-        {
-            return Correlation(self, other, skipNaN);
         }
 
         public static double Covariance(this IList<double> self, IList<double> other, bool unbiased = true, bool skipNaN = true)
@@ -254,30 +249,69 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static Summary Describe(this IList<double> self)
         {
-            var count = self.Count;
-            var sorted = self.ToArray();
-            Array.Sort(sorted);
-
-            var even = count % 2 == 0;
-            var q = count % 4 == 0;
-
-            double sum = (double)0;
-            foreach (var e in sorted)
-                sum += (double)e;
+            var sorted = self.RemoveNaN();
+            sorted.SortFill();
 
             var summary = new Summary();
-            summary.Count = count;
-            summary.NaN = CountNaN(self);
-            summary.Unique = CountUnique(self);
-            summary.Mean = (double)(sum / count);
-            summary.Min = sorted[0];
-            summary.Q25 = (double)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
-            summary.Median = (double)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q75 = (double)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
-            summary.Max = sorted[count - 1];
+            summary.Count = self.Count;
+            summary.NaN = self.CountNaN();
+            summary.Unique = self.CountUnique();
+            summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
+            summary.Min = sorted[0];
+            summary.Q25 = sorted.Quantile(.25, false, true);
+            summary.Median = sorted.Quantile(.5, false, true);
+            summary.Q75 = sorted.Quantile(.75, false, true);
+            summary.Max = sorted[sorted.Count - 1];
 
             return summary;
+        }
+
+        public static double Quantile(this IList<double> self, double p, bool skipNaN = true, bool isSorted = false)
+        {
+            // TODO use partial sort
+
+            IList<double> sorted;
+            if (skipNaN)
+            {
+                sorted = self.RemoveNaN();
+                sorted.SortFill();
+            }
+            else
+            {
+                if (isSorted)
+                {
+                    sorted = self;
+                }
+                else
+                {
+                    var a = self.ToArray();
+                    Array.Sort(a);
+                    sorted = a;
+                }
+            }
+
+            double lowThreshold = 1.0 / (sorted.Count + 1);
+            double highThreshold = sorted.Count / (double)(sorted.Count + 1);
+
+            if (p < lowThreshold)
+                return (double)sorted[0];
+
+            if (p >= highThreshold)
+                return (double)sorted[sorted.Count - 1];
+
+            double h = (sorted.Count + 1) * p;
+            double hc = Math.Floor(h);
+
+            int i = (int)hc;
+            if (i > 0)
+                i--;
+
+            int i2 = i + 1;
+            if (i2 == sorted.Count)
+                i2--;
+
+            return (double)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
         public static IList<double> RemoveNaN(this IList<double> self)
@@ -408,29 +442,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             return mean / actualCount;
         }
 
-        public static double Median(this IList<double> self, bool skipNaN = true)
+        public static double Median(this IList<double> self, bool skipNaN = true, bool isSorted = false)
         {
-            // TODO: Accord.NET uses partial sort for efficiency.
-
-            var values = self.ToArray();
-            Array.Sort(values);
-
-            var offset = 0;
-
-            if (skipNaN)
-            {
-                // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[offset]))
-                    ++offset;
-            }
-
-            var actualCount = self.Count - offset;
-            var half = offset + actualCount / 2;
-
-            if (actualCount % 2 == 0)
-                return ((double)values[half - 1] + (double)values[half]) / 2;
-            else
-                return (double)values[half];
+            return Quantile(self, .5, skipNaN, isSorted);
         }
 
         public static double Mode(this IList<double> self, bool skipNaN = true)
@@ -555,7 +569,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
-        public static List<float> Sort(this IList<float> self)
+        public static List<float> GetSortedCopy(this IList<float> self)
         {
             var result = new List<float>(self);
             result.Sort();
@@ -796,30 +810,69 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static Summary Describe(this IList<float> self)
         {
-            var count = self.Count;
-            var sorted = self.ToArray();
-            Array.Sort(sorted);
-
-            var even = count % 2 == 0;
-            var q = count % 4 == 0;
-
-            float sum = (float)0;
-            foreach (var e in sorted)
-                sum += (float)e;
+            var sorted = self.RemoveNaN();
+            sorted.SortFill();
 
             var summary = new Summary();
-            summary.Count = count;
-            summary.NaN = CountNaN(self);
-            summary.Unique = CountUnique(self);
-            summary.Mean = (float)(sum / count);
-            summary.Min = sorted[0];
-            summary.Q25 = (float)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
-            summary.Median = (float)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q75 = (float)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
-            summary.Max = sorted[count - 1];
+            summary.Count = self.Count;
+            summary.NaN = self.CountNaN();
+            summary.Unique = self.CountUnique();
+            summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
+            summary.Min = sorted[0];
+            summary.Q25 = sorted.Quantile(.25, false, true);
+            summary.Median = sorted.Quantile(.5, false, true);
+            summary.Q75 = sorted.Quantile(.75, false, true);
+            summary.Max = sorted[sorted.Count - 1];
 
             return summary;
+        }
+
+        public static float Quantile(this IList<float> self, double p, bool skipNaN = true, bool isSorted = false)
+        {
+            // TODO use partial sort
+
+            IList<float> sorted;
+            if (skipNaN)
+            {
+                sorted = self.RemoveNaN();
+                sorted.SortFill();
+            }
+            else
+            {
+                if (isSorted)
+                {
+                    sorted = self;
+                }
+                else
+                {
+                    var a = self.ToArray();
+                    Array.Sort(a);
+                    sorted = a;
+                }
+            }
+
+            double lowThreshold = 1.0 / (sorted.Count + 1);
+            double highThreshold = sorted.Count / (double)(sorted.Count + 1);
+
+            if (p < lowThreshold)
+                return (float)sorted[0];
+
+            if (p >= highThreshold)
+                return (float)sorted[sorted.Count - 1];
+
+            double h = (sorted.Count + 1) * p;
+            double hc = Math.Floor(h);
+
+            int i = (int)hc;
+            if (i > 0)
+                i--;
+
+            int i2 = i + 1;
+            if (i2 == sorted.Count)
+                i2--;
+
+            return (float)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
         public static IList<float> RemoveNaN(this IList<float> self)
@@ -950,29 +1003,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             return mean / actualCount;
         }
 
-        public static float Median(this IList<float> self, bool skipNaN = true)
+        public static float Median(this IList<float> self, bool skipNaN = true, bool isSorted = false)
         {
-            // TODO: Accord.NET uses partial sort for efficiency.
-
-            var values = self.ToArray();
-            Array.Sort(values);
-
-            var offset = 0;
-
-            if (skipNaN)
-            {
-                // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[offset]))
-                    ++offset;
-            }
-
-            var actualCount = self.Count - offset;
-            var half = offset + actualCount / 2;
-
-            if (actualCount % 2 == 0)
-                return ((float)values[half - 1] + (float)values[half]) / 2;
-            else
-                return (float)values[half];
+            return Quantile(self, .5, skipNaN, isSorted);
         }
 
         public static float Mode(this IList<float> self, bool skipNaN = true)
@@ -1097,7 +1130,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
-        public static List<long> Sort(this IList<long> self)
+        public static List<long> GetSortedCopy(this IList<long> self)
         {
             var result = new List<long>(self);
             result.Sort();
@@ -1338,30 +1371,69 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static Summary Describe(this IList<long> self)
         {
-            var count = self.Count;
-            var sorted = self.ToArray();
-            Array.Sort(sorted);
-
-            var even = count % 2 == 0;
-            var q = count % 4 == 0;
-
-            long sum = (long)0;
-            foreach (var e in sorted)
-                sum += (long)e;
+            var sorted = self.RemoveNaN();
+            sorted.SortFill();
 
             var summary = new Summary();
-            summary.Count = count;
-            summary.NaN = CountNaN(self);
-            summary.Unique = CountUnique(self);
-            summary.Mean = (long)(sum / count);
-            summary.Min = sorted[0];
-            summary.Q25 = (long)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
-            summary.Median = (long)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q75 = (long)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
-            summary.Max = sorted[count - 1];
+            summary.Count = self.Count;
+            summary.NaN = self.CountNaN();
+            summary.Unique = self.CountUnique();
+            summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
+            summary.Min = sorted[0];
+            summary.Q25 = sorted.Quantile(.25, false, true);
+            summary.Median = sorted.Quantile(.5, false, true);
+            summary.Q75 = sorted.Quantile(.75, false, true);
+            summary.Max = sorted[sorted.Count - 1];
 
             return summary;
+        }
+
+        public static double Quantile(this IList<long> self, double p, bool skipNaN = true, bool isSorted = false)
+        {
+            // TODO use partial sort
+
+            IList<long> sorted;
+            if (skipNaN)
+            {
+                sorted = self.RemoveNaN();
+                sorted.SortFill();
+            }
+            else
+            {
+                if (isSorted)
+                {
+                    sorted = self;
+                }
+                else
+                {
+                    var a = self.ToArray();
+                    Array.Sort(a);
+                    sorted = a;
+                }
+            }
+
+            double lowThreshold = 1.0 / (sorted.Count + 1);
+            double highThreshold = sorted.Count / (double)(sorted.Count + 1);
+
+            if (p < lowThreshold)
+                return (double)sorted[0];
+
+            if (p >= highThreshold)
+                return (double)sorted[sorted.Count - 1];
+
+            double h = (sorted.Count + 1) * p;
+            double hc = Math.Floor(h);
+
+            int i = (int)hc;
+            if (i > 0)
+                i--;
+
+            int i2 = i + 1;
+            if (i2 == sorted.Count)
+                i2--;
+
+            return (double)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
         public static IList<long> RemoveNaN(this IList<long> self)
@@ -1492,29 +1564,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             return mean / actualCount;
         }
 
-        public static double Median(this IList<long> self, bool skipNaN = true)
+        public static double Median(this IList<long> self, bool skipNaN = true, bool isSorted = false)
         {
-            // TODO: Accord.NET uses partial sort for efficiency.
-
-            var values = self.ToArray();
-            Array.Sort(values);
-
-            var offset = 0;
-
-            if (skipNaN)
-            {
-                // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[offset]))
-                    ++offset;
-            }
-
-            var actualCount = self.Count - offset;
-            var half = offset + actualCount / 2;
-
-            if (actualCount % 2 == 0)
-                return ((double)values[half - 1] + (double)values[half]) / 2;
-            else
-                return (double)values[half];
+            return Quantile(self, .5, skipNaN, isSorted);
         }
 
         public static long Mode(this IList<long> self, bool skipNaN = true)
@@ -1639,7 +1691,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
-        public static List<int> Sort(this IList<int> self)
+        public static List<int> GetSortedCopy(this IList<int> self)
         {
             var result = new List<int>(self);
             result.Sort();
@@ -1880,30 +1932,69 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static Summary Describe(this IList<int> self)
         {
-            var count = self.Count;
-            var sorted = self.ToArray();
-            Array.Sort(sorted);
-
-            var even = count % 2 == 0;
-            var q = count % 4 == 0;
-
-            int sum = (int)0;
-            foreach (var e in sorted)
-                sum += (int)e;
+            var sorted = self.RemoveNaN();
+            sorted.SortFill();
 
             var summary = new Summary();
-            summary.Count = count;
-            summary.NaN = CountNaN(self);
-            summary.Unique = CountUnique(self);
-            summary.Mean = (int)(sum / count);
-            summary.Min = sorted[0];
-            summary.Q25 = (int)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
-            summary.Median = (int)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q75 = (int)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
-            summary.Max = sorted[count - 1];
+            summary.Count = self.Count;
+            summary.NaN = self.CountNaN();
+            summary.Unique = self.CountUnique();
+            summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
+            summary.Min = sorted[0];
+            summary.Q25 = sorted.Quantile(.25, false, true);
+            summary.Median = sorted.Quantile(.5, false, true);
+            summary.Q75 = sorted.Quantile(.75, false, true);
+            summary.Max = sorted[sorted.Count - 1];
 
             return summary;
+        }
+
+        public static double Quantile(this IList<int> self, double p, bool skipNaN = true, bool isSorted = false)
+        {
+            // TODO use partial sort
+
+            IList<int> sorted;
+            if (skipNaN)
+            {
+                sorted = self.RemoveNaN();
+                sorted.SortFill();
+            }
+            else
+            {
+                if (isSorted)
+                {
+                    sorted = self;
+                }
+                else
+                {
+                    var a = self.ToArray();
+                    Array.Sort(a);
+                    sorted = a;
+                }
+            }
+
+            double lowThreshold = 1.0 / (sorted.Count + 1);
+            double highThreshold = sorted.Count / (double)(sorted.Count + 1);
+
+            if (p < lowThreshold)
+                return (double)sorted[0];
+
+            if (p >= highThreshold)
+                return (double)sorted[sorted.Count - 1];
+
+            double h = (sorted.Count + 1) * p;
+            double hc = Math.Floor(h);
+
+            int i = (int)hc;
+            if (i > 0)
+                i--;
+
+            int i2 = i + 1;
+            if (i2 == sorted.Count)
+                i2--;
+
+            return (double)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
         public static IList<int> RemoveNaN(this IList<int> self)
@@ -2034,29 +2125,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             return mean / actualCount;
         }
 
-        public static double Median(this IList<int> self, bool skipNaN = true)
+        public static double Median(this IList<int> self, bool skipNaN = true, bool isSorted = false)
         {
-            // TODO: Accord.NET uses partial sort for efficiency.
-
-            var values = self.ToArray();
-            Array.Sort(values);
-
-            var offset = 0;
-
-            if (skipNaN)
-            {
-                // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[offset]))
-                    ++offset;
-            }
-
-            var actualCount = self.Count - offset;
-            var half = offset + actualCount / 2;
-
-            if (actualCount % 2 == 0)
-                return ((double)values[half - 1] + (double)values[half]) / 2;
-            else
-                return (double)values[half];
+            return Quantile(self, .5, skipNaN, isSorted);
         }
 
         public static int Mode(this IList<int> self, bool skipNaN = true)
@@ -2181,7 +2252,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
-        public static List<short> Sort(this IList<short> self)
+        public static List<short> GetSortedCopy(this IList<short> self)
         {
             var result = new List<short>(self);
             result.Sort();
@@ -2422,30 +2493,69 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static Summary Describe(this IList<short> self)
         {
-            var count = self.Count;
-            var sorted = self.ToArray();
-            Array.Sort(sorted);
-
-            var even = count % 2 == 0;
-            var q = count % 4 == 0;
-
-            short sum = (short)0;
-            foreach (var e in sorted)
-                sum += (short)e;
+            var sorted = self.RemoveNaN();
+            sorted.SortFill();
 
             var summary = new Summary();
-            summary.Count = count;
-            summary.NaN = CountNaN(self);
-            summary.Unique = CountUnique(self);
-            summary.Mean = (short)(sum / count);
-            summary.Min = sorted[0];
-            summary.Q25 = (short)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
-            summary.Median = (short)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q75 = (short)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
-            summary.Max = sorted[count - 1];
+            summary.Count = self.Count;
+            summary.NaN = self.CountNaN();
+            summary.Unique = self.CountUnique();
+            summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
+            summary.Min = sorted[0];
+            summary.Q25 = sorted.Quantile(.25, false, true);
+            summary.Median = sorted.Quantile(.5, false, true);
+            summary.Q75 = sorted.Quantile(.75, false, true);
+            summary.Max = sorted[sorted.Count - 1];
 
             return summary;
+        }
+
+        public static double Quantile(this IList<short> self, double p, bool skipNaN = true, bool isSorted = false)
+        {
+            // TODO use partial sort
+
+            IList<short> sorted;
+            if (skipNaN)
+            {
+                sorted = self.RemoveNaN();
+                sorted.SortFill();
+            }
+            else
+            {
+                if (isSorted)
+                {
+                    sorted = self;
+                }
+                else
+                {
+                    var a = self.ToArray();
+                    Array.Sort(a);
+                    sorted = a;
+                }
+            }
+
+            double lowThreshold = 1.0 / (sorted.Count + 1);
+            double highThreshold = sorted.Count / (double)(sorted.Count + 1);
+
+            if (p < lowThreshold)
+                return (double)sorted[0];
+
+            if (p >= highThreshold)
+                return (double)sorted[sorted.Count - 1];
+
+            double h = (sorted.Count + 1) * p;
+            double hc = Math.Floor(h);
+
+            int i = (int)hc;
+            if (i > 0)
+                i--;
+
+            int i2 = i + 1;
+            if (i2 == sorted.Count)
+                i2--;
+
+            return (double)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
         public static IList<short> RemoveNaN(this IList<short> self)
@@ -2576,29 +2686,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             return mean / actualCount;
         }
 
-        public static double Median(this IList<short> self, bool skipNaN = true)
+        public static double Median(this IList<short> self, bool skipNaN = true, bool isSorted = false)
         {
-            // TODO: Accord.NET uses partial sort for efficiency.
-
-            var values = self.ToArray();
-            Array.Sort(values);
-
-            var offset = 0;
-
-            if (skipNaN)
-            {
-                // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[offset]))
-                    ++offset;
-            }
-
-            var actualCount = self.Count - offset;
-            var half = offset + actualCount / 2;
-
-            if (actualCount % 2 == 0)
-                return ((double)values[half - 1] + (double)values[half]) / 2;
-            else
-                return (double)values[half];
+            return Quantile(self, .5, skipNaN, isSorted);
         }
 
         public static short Mode(this IList<short> self, bool skipNaN = true)
@@ -2723,7 +2813,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
-        public static List<byte> Sort(this IList<byte> self)
+        public static List<byte> GetSortedCopy(this IList<byte> self)
         {
             var result = new List<byte>(self);
             result.Sort();
@@ -2964,30 +3054,69 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static Summary Describe(this IList<byte> self)
         {
-            var count = self.Count;
-            var sorted = self.ToArray();
-            Array.Sort(sorted);
-
-            var even = count % 2 == 0;
-            var q = count % 4 == 0;
-
-            byte sum = (byte)0;
-            foreach (var e in sorted)
-                sum += (byte)e;
+            var sorted = self.RemoveNaN();
+            sorted.SortFill();
 
             var summary = new Summary();
-            summary.Count = count;
-            summary.NaN = CountNaN(self);
-            summary.Unique = CountUnique(self);
-            summary.Mean = (byte)(sum / count);
-            summary.Min = sorted[0];
-            summary.Q25 = (byte)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
-            summary.Median = (byte)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q75 = (byte)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
-            summary.Max = sorted[count - 1];
+            summary.Count = self.Count;
+            summary.NaN = self.CountNaN();
+            summary.Unique = self.CountUnique();
+            summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
+            summary.Min = sorted[0];
+            summary.Q25 = sorted.Quantile(.25, false, true);
+            summary.Median = sorted.Quantile(.5, false, true);
+            summary.Q75 = sorted.Quantile(.75, false, true);
+            summary.Max = sorted[sorted.Count - 1];
 
             return summary;
+        }
+
+        public static double Quantile(this IList<byte> self, double p, bool skipNaN = true, bool isSorted = false)
+        {
+            // TODO use partial sort
+
+            IList<byte> sorted;
+            if (skipNaN)
+            {
+                sorted = self.RemoveNaN();
+                sorted.SortFill();
+            }
+            else
+            {
+                if (isSorted)
+                {
+                    sorted = self;
+                }
+                else
+                {
+                    var a = self.ToArray();
+                    Array.Sort(a);
+                    sorted = a;
+                }
+            }
+
+            double lowThreshold = 1.0 / (sorted.Count + 1);
+            double highThreshold = sorted.Count / (double)(sorted.Count + 1);
+
+            if (p < lowThreshold)
+                return (double)sorted[0];
+
+            if (p >= highThreshold)
+                return (double)sorted[sorted.Count - 1];
+
+            double h = (sorted.Count + 1) * p;
+            double hc = Math.Floor(h);
+
+            int i = (int)hc;
+            if (i > 0)
+                i--;
+
+            int i2 = i + 1;
+            if (i2 == sorted.Count)
+                i2--;
+
+            return (double)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
         public static IList<byte> RemoveNaN(this IList<byte> self)
@@ -3118,29 +3247,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             return mean / actualCount;
         }
 
-        public static double Median(this IList<byte> self, bool skipNaN = true)
+        public static double Median(this IList<byte> self, bool skipNaN = true, bool isSorted = false)
         {
-            // TODO: Accord.NET uses partial sort for efficiency.
-
-            var values = self.ToArray();
-            Array.Sort(values);
-
-            var offset = 0;
-
-            if (skipNaN)
-            {
-                // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[offset]))
-                    ++offset;
-            }
-
-            var actualCount = self.Count - offset;
-            var half = offset + actualCount / 2;
-
-            if (actualCount % 2 == 0)
-                return ((double)values[half - 1] + (double)values[half]) / 2;
-            else
-                return (double)values[half];
+            return Quantile(self, .5, skipNaN, isSorted);
         }
 
         public static byte Mode(this IList<byte> self, bool skipNaN = true)
@@ -3265,7 +3374,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
-        public static List<sbyte> Sort(this IList<sbyte> self)
+        public static List<sbyte> GetSortedCopy(this IList<sbyte> self)
         {
             var result = new List<sbyte>(self);
             result.Sort();
@@ -3506,30 +3615,69 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static Summary Describe(this IList<sbyte> self)
         {
-            var count = self.Count;
-            var sorted = self.ToArray();
-            Array.Sort(sorted);
-
-            var even = count % 2 == 0;
-            var q = count % 4 == 0;
-
-            sbyte sum = (sbyte)0;
-            foreach (var e in sorted)
-                sum += (sbyte)e;
+            var sorted = self.RemoveNaN();
+            sorted.SortFill();
 
             var summary = new Summary();
-            summary.Count = count;
-            summary.NaN = CountNaN(self);
-            summary.Unique = CountUnique(self);
-            summary.Mean = (sbyte)(sum / count);
-            summary.Min = sorted[0];
-            summary.Q25 = (sbyte)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
-            summary.Median = (sbyte)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q75 = (sbyte)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
-            summary.Max = sorted[count - 1];
+            summary.Count = self.Count;
+            summary.NaN = self.CountNaN();
+            summary.Unique = self.CountUnique();
+            summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
+            summary.Min = sorted[0];
+            summary.Q25 = sorted.Quantile(.25, false, true);
+            summary.Median = sorted.Quantile(.5, false, true);
+            summary.Q75 = sorted.Quantile(.75, false, true);
+            summary.Max = sorted[sorted.Count - 1];
 
             return summary;
+        }
+
+        public static double Quantile(this IList<sbyte> self, double p, bool skipNaN = true, bool isSorted = false)
+        {
+            // TODO use partial sort
+
+            IList<sbyte> sorted;
+            if (skipNaN)
+            {
+                sorted = self.RemoveNaN();
+                sorted.SortFill();
+            }
+            else
+            {
+                if (isSorted)
+                {
+                    sorted = self;
+                }
+                else
+                {
+                    var a = self.ToArray();
+                    Array.Sort(a);
+                    sorted = a;
+                }
+            }
+
+            double lowThreshold = 1.0 / (sorted.Count + 1);
+            double highThreshold = sorted.Count / (double)(sorted.Count + 1);
+
+            if (p < lowThreshold)
+                return (double)sorted[0];
+
+            if (p >= highThreshold)
+                return (double)sorted[sorted.Count - 1];
+
+            double h = (sorted.Count + 1) * p;
+            double hc = Math.Floor(h);
+
+            int i = (int)hc;
+            if (i > 0)
+                i--;
+
+            int i2 = i + 1;
+            if (i2 == sorted.Count)
+                i2--;
+
+            return (double)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
         public static IList<sbyte> RemoveNaN(this IList<sbyte> self)
@@ -3660,29 +3808,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             return mean / actualCount;
         }
 
-        public static double Median(this IList<sbyte> self, bool skipNaN = true)
+        public static double Median(this IList<sbyte> self, bool skipNaN = true, bool isSorted = false)
         {
-            // TODO: Accord.NET uses partial sort for efficiency.
-
-            var values = self.ToArray();
-            Array.Sort(values);
-
-            var offset = 0;
-
-            if (skipNaN)
-            {
-                // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[offset]))
-                    ++offset;
-            }
-
-            var actualCount = self.Count - offset;
-            var half = offset + actualCount / 2;
-
-            if (actualCount % 2 == 0)
-                return ((double)values[half - 1] + (double)values[half]) / 2;
-            else
-                return (double)values[half];
+            return Quantile(self, .5, skipNaN, isSorted);
         }
 
         public static sbyte Mode(this IList<sbyte> self, bool skipNaN = true)
@@ -3807,7 +3935,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
-        public static List<decimal> Sort(this IList<decimal> self)
+        public static List<decimal> GetSortedCopy(this IList<decimal> self)
         {
             var result = new List<decimal>(self);
             result.Sort();
@@ -4048,30 +4176,69 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static Summary Describe(this IList<decimal> self)
         {
-            var count = self.Count;
-            var sorted = self.ToArray();
-            Array.Sort(sorted);
-
-            var even = count % 2 == 0;
-            var q = count % 4 == 0;
-
-            decimal sum = (decimal)0;
-            foreach (var e in sorted)
-                sum += (decimal)e;
+            var sorted = self.RemoveNaN();
+            sorted.SortFill();
 
             var summary = new Summary();
-            summary.Count = count;
-            summary.NaN = CountNaN(self);
-            summary.Unique = CountUnique(self);
-            summary.Mean = (decimal)(sum / count);
-            summary.Min = sorted[0];
-            summary.Q25 = (decimal)(q ? sorted[count / 4] : (sorted[count / 4] + sorted[count / 4 + 1]) / 2);
-            summary.Median = (decimal)(even ? sorted[count / 2] : (sorted[count / 2] + sorted[count / 2 + 1]) / 2);
-            summary.Q75 = (decimal)(q ? sorted[count / 4 * 3] : (sorted[count / 4 * 3] + sorted[count / 4 * 3 + 1]) / 2);
-            summary.Max = sorted[count - 1];
+            summary.Count = self.Count;
+            summary.NaN = self.CountNaN();
+            summary.Unique = self.CountUnique();
+            summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
+            summary.Min = sorted[0];
+            summary.Q25 = sorted.Quantile(.25, false, true);
+            summary.Median = sorted.Quantile(.5, false, true);
+            summary.Q75 = sorted.Quantile(.75, false, true);
+            summary.Max = sorted[sorted.Count - 1];
 
             return summary;
+        }
+
+        public static double Quantile(this IList<decimal> self, double p, bool skipNaN = true, bool isSorted = false)
+        {
+            // TODO use partial sort
+
+            IList<decimal> sorted;
+            if (skipNaN)
+            {
+                sorted = self.RemoveNaN();
+                sorted.SortFill();
+            }
+            else
+            {
+                if (isSorted)
+                {
+                    sorted = self;
+                }
+                else
+                {
+                    var a = self.ToArray();
+                    Array.Sort(a);
+                    sorted = a;
+                }
+            }
+
+            double lowThreshold = 1.0 / (sorted.Count + 1);
+            double highThreshold = sorted.Count / (double)(sorted.Count + 1);
+
+            if (p < lowThreshold)
+                return (double)sorted[0];
+
+            if (p >= highThreshold)
+                return (double)sorted[sorted.Count - 1];
+
+            double h = (sorted.Count + 1) * p;
+            double hc = Math.Floor(h);
+
+            int i = (int)hc;
+            if (i > 0)
+                i--;
+
+            int i2 = i + 1;
+            if (i2 == sorted.Count)
+                i2--;
+
+            return (double)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
         public static IList<decimal> RemoveNaN(this IList<decimal> self)
@@ -4202,29 +4369,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             return mean / actualCount;
         }
 
-        public static double Median(this IList<decimal> self, bool skipNaN = true)
+        public static double Median(this IList<decimal> self, bool skipNaN = true, bool isSorted = false)
         {
-            // TODO: Accord.NET uses partial sort for efficiency.
-
-            var values = self.ToArray();
-            Array.Sort(values);
-
-            var offset = 0;
-
-            if (skipNaN)
-            {
-                // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[offset]))
-                    ++offset;
-            }
-
-            var actualCount = self.Count - offset;
-            var half = offset + actualCount / 2;
-
-            if (actualCount % 2 == 0)
-                return ((double)values[half - 1] + (double)values[half]) / 2;
-            else
-                return (double)values[half];
+            return Quantile(self, .5, skipNaN, isSorted);
         }
 
         public static decimal Mode(this IList<decimal> self, bool skipNaN = true)

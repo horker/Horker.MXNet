@@ -106,6 +106,18 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
+        public void TestQuantile()
+        {
+            var s = new double[] { 1, 2, 3, 4, 5, 4, 3, 2, 2, 1 };
+
+            var q = s.Quantile(.314);
+
+            var expected = Accord.Statistics.Measures.Quantile(s, .314);
+
+            Assert.Equal(expected, q);
+        }
+
+        [Fact]
         public void TestSkipNaN()
         {
             var s = new double[] { double.NaN, 1, 2, double.NaN, 3, 4, 5, double.NaN };

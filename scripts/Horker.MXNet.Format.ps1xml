@@ -89,6 +89,10 @@
                         <Alignment>Right</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
+                        <Label>Std</Label>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
                         <Label>Min</Label>
                         <Alignment>Right</Alignment>
                     </TableColumnHeader>
@@ -106,10 +110,6 @@
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Max</Label>
-                        <Alignment>Right</Alignment>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>Std</Label>
                         <Alignment>Right</Alignment>
                     </TableColumnHeader>
                 </TableHeaders>
@@ -133,6 +133,10 @@
                                 <FormatString>0.###</FormatString>
                             </TableColumnItem>
                             <TableColumnItem>
+                                <PropertyName>Std</PropertyName>
+                                <FormatString>0.###</FormatString>
+                            </TableColumnItem>
+                            <TableColumnItem>
                                 <PropertyName>Min</PropertyName>
                                 <FormatString>0.###</FormatString>
                             </TableColumnItem>
@@ -150,10 +154,6 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Max</PropertyName>
-                                <FormatString>0.###</FormatString>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Std</PropertyName>
                                 <FormatString>0.###</FormatString>
                             </TableColumnItem>
                         </TableColumnItems>
