@@ -18,6 +18,9 @@ var methodNames = new []
 
 var nonSeriesMethods = new[]
 {
+	Tuple.Create("Correlation", "object", "SeriesBase other, bool skipNaN = true", ", other.UnderlyingList, skipNaN"),
+	Tuple.Create("Cor", "object", "SeriesBase other, bool skipNaN = true", ", other.UnderlyingList, skipNaN"),
+	Tuple.Create("Covariance", "object", "SeriesBase other", ", other.UnderlyingList"),
 	Tuple.Create("CumulativeMaxFill", "void", "", ""),
 	Tuple.Create("CumulativeMinFill", "void", "", ""),
 	Tuple.Create("CumulativeProductFill", "void", "", ""),

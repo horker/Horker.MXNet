@@ -19,6 +19,9 @@ namespace Horker.Numerics.DataMaps
 			FillNaN,
 			GetUnique,
 			RemoveNaN,
+			Correlation,
+			Cor,
+			Covariance,
 			CumulativeMaxFill,
 			CumulativeMinFill,
 			CumulativeProductFill,
@@ -81,6 +84,27 @@ namespace Horker.Numerics.DataMaps
         {
 			var m = GetMethodInfo(MethodIndex.RemoveNaN);
             return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
+        }
+
+        public object Correlation(SeriesBase other, bool skipNaN = true)
+        {
+			var m = GetMethodInfo(MethodIndex.Correlation);
+
+            return (object)m.Invoke(null, new object[] { UnderlyingList, other.UnderlyingList, skipNaN });
+        }
+
+        public object Cor(SeriesBase other, bool skipNaN = true)
+        {
+			var m = GetMethodInfo(MethodIndex.Cor);
+
+            return (object)m.Invoke(null, new object[] { UnderlyingList, other.UnderlyingList, skipNaN });
+        }
+
+        public object Covariance(SeriesBase other)
+        {
+			var m = GetMethodInfo(MethodIndex.Covariance);
+
+            return (object)m.Invoke(null, new object[] { UnderlyingList, other.UnderlyingList });
         }
 
         public void CumulativeMaxFill()

@@ -38,6 +38,74 @@ namespace Horker.Numerics.DataMaps.Extensions
             m.Invoke(self, new object[0]);
         }
 
+        public static double Correlation(this IList<double> self, IList<double> other, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return double.NaN;
+
+            if (skipNaN)
+            {
+                var s1 = new List<double>(self.Count);
+                var s2 = new List<double>(self.Count);
+
+                for (var i = 0; i < self.Count; ++i)
+                {
+                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                        continue;
+
+                    s1.Add(self[i]);
+                    s2.Add(other[i]);
+                }
+                return Covariance(s1, s2) / s1.StandardDeviation() / s2.StandardDeviation();
+            }
+
+            return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
+        }
+
+        public static double Cor(this IList<double> self, IList<double> other, bool skipNaN = true)
+        {
+            return Correlation(self, other, skipNaN);
+        }
+
+        public static double Covariance(this IList<double> self, IList<double> other, bool unbiased = true, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return double.NaN;
+
+            var mean0 = self.Mean(skipNaN);
+            var mean1 = other.Mean(skipNaN);
+
+            if (double.IsNaN(mean0) || double.IsNaN(mean1))
+                return double.NaN;
+
+            int actualCount = self.Count;
+
+            double c = (double)0.0;
+            for (int i = 0; i < self.Count; ++i)
+            {
+                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                    {
+                        return double.NaN;
+                    }
+                }
+                var a = (double)self[i] - mean0;
+                var b = (double)other[i] - mean1;
+                c += a * b;
+            }
+
+            if (unbiased)
+                return c / (actualCount - 1);
+            else
+                return c / actualCount;
+        }
+
         public static List<double> CumulativeMax(this IList<double> self)
         {
             var result = new List<double>(self.Count);
@@ -441,14 +509,16 @@ namespace Horker.Numerics.DataMaps.Extensions
                 double b = n - 2;
                 return (double)((a / b) * g);
             }
-
-            return (double)g;
+            else
+            {
+                return (double)g;
+            }
         }
 
         public static double Variance(this IList<double> self, bool unbiased = true, bool skipNaN = true)
         {
             double mean = Mean(self, skipNaN);
-            if (!skipNaN && double.IsNaN(mean))
+            if (double.IsNaN(mean))
                 return double.NaN;
 
             double variance = (double)0.0;
@@ -465,7 +535,9 @@ namespace Horker.Numerics.DataMaps.Extensions
                         continue;
                     }
                     else
+                    {
                         return double.NaN;
+                    }
                 }
 
                 double x = v - mean;
@@ -473,15 +545,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             if (unbiased)
-            {
-                // Sample variance
-                return variance / self.Count;
-            }
+                return variance / (actualCount - 1);
             else
-            {
-                // Population variance
-                return variance / self.Count;
-            }
+                return variance / actualCount;
         }
 
         public static double Var(this IList<double> self, bool unbiased = true, bool skipNaN = true)
@@ -517,6 +583,69 @@ namespace Horker.Numerics.DataMaps.Extensions
                 throw new InvalidOperationException("This object does not support inplace Sort() operation");
 
             m.Invoke(self, new object[0]);
+        }
+
+        public static float Correlation(this IList<float> self, IList<float> other, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return float.NaN;
+
+            if (skipNaN)
+            {
+                var s1 = new List<float>(self.Count);
+                var s2 = new List<float>(self.Count);
+
+                for (var i = 0; i < self.Count; ++i)
+                {
+                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                        continue;
+
+                    s1.Add(self[i]);
+                    s2.Add(other[i]);
+                }
+                return Covariance(s1, s2) / s1.StandardDeviation() / s2.StandardDeviation();
+            }
+
+            return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
+        }
+
+        public static float Covariance(this IList<float> self, IList<float> other, bool unbiased = true, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return float.NaN;
+
+            var mean0 = self.Mean(skipNaN);
+            var mean1 = other.Mean(skipNaN);
+
+            if (float.IsNaN(mean0) || float.IsNaN(mean1))
+                return float.NaN;
+
+            int actualCount = self.Count;
+
+            float c = (float)0.0;
+            for (int i = 0; i < self.Count; ++i)
+            {
+                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                    {
+                        return float.NaN;
+                    }
+                }
+                var a = (float)self[i] - mean0;
+                var b = (float)other[i] - mean1;
+                c += a * b;
+            }
+
+            if (unbiased)
+                return c / (actualCount - 1);
+            else
+                return c / actualCount;
         }
 
         public static List<float> CumulativeMax(this IList<float> self)
@@ -922,14 +1051,16 @@ namespace Horker.Numerics.DataMaps.Extensions
                 double b = n - 2;
                 return (float)((a / b) * g);
             }
-
-            return (float)g;
+            else
+            {
+                return (float)g;
+            }
         }
 
         public static float Variance(this IList<float> self, bool unbiased = true, bool skipNaN = true)
         {
             float mean = Mean(self, skipNaN);
-            if (!skipNaN && float.IsNaN(mean))
+            if (float.IsNaN(mean))
                 return float.NaN;
 
             float variance = (float)0.0;
@@ -946,7 +1077,9 @@ namespace Horker.Numerics.DataMaps.Extensions
                         continue;
                     }
                     else
+                    {
                         return float.NaN;
+                    }
                 }
 
                 float x = v - mean;
@@ -954,15 +1087,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             if (unbiased)
-            {
-                // Sample variance
-                return variance / self.Count;
-            }
+                return variance / (actualCount - 1);
             else
-            {
-                // Population variance
-                return variance / self.Count;
-            }
+                return variance / actualCount;
         }
 
         public static float Var(this IList<float> self, bool unbiased = true, bool skipNaN = true)
@@ -998,6 +1125,69 @@ namespace Horker.Numerics.DataMaps.Extensions
                 throw new InvalidOperationException("This object does not support inplace Sort() operation");
 
             m.Invoke(self, new object[0]);
+        }
+
+        public static double Correlation(this IList<long> self, IList<long> other, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return double.NaN;
+
+            if (skipNaN)
+            {
+                var s1 = new List<long>(self.Count);
+                var s2 = new List<long>(self.Count);
+
+                for (var i = 0; i < self.Count; ++i)
+                {
+                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                        continue;
+
+                    s1.Add(self[i]);
+                    s2.Add(other[i]);
+                }
+                return Covariance(s1, s2) / s1.StandardDeviation() / s2.StandardDeviation();
+            }
+
+            return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
+        }
+
+        public static double Covariance(this IList<long> self, IList<long> other, bool unbiased = true, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return double.NaN;
+
+            var mean0 = self.Mean(skipNaN);
+            var mean1 = other.Mean(skipNaN);
+
+            if (double.IsNaN(mean0) || double.IsNaN(mean1))
+                return double.NaN;
+
+            int actualCount = self.Count;
+
+            double c = (double)0.0;
+            for (int i = 0; i < self.Count; ++i)
+            {
+                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                    {
+                        return double.NaN;
+                    }
+                }
+                var a = (double)self[i] - mean0;
+                var b = (double)other[i] - mean1;
+                c += a * b;
+            }
+
+            if (unbiased)
+                return c / (actualCount - 1);
+            else
+                return c / actualCount;
         }
 
         public static List<long> CumulativeMax(this IList<long> self)
@@ -1403,14 +1593,16 @@ namespace Horker.Numerics.DataMaps.Extensions
                 double b = n - 2;
                 return (double)((a / b) * g);
             }
-
-            return (double)g;
+            else
+            {
+                return (double)g;
+            }
         }
 
         public static double Variance(this IList<long> self, bool unbiased = true, bool skipNaN = true)
         {
             double mean = Mean(self, skipNaN);
-            if (!skipNaN && double.IsNaN(mean))
+            if (double.IsNaN(mean))
                 return double.NaN;
 
             double variance = (double)0.0;
@@ -1427,7 +1619,9 @@ namespace Horker.Numerics.DataMaps.Extensions
                         continue;
                     }
                     else
+                    {
                         return double.NaN;
+                    }
                 }
 
                 double x = v - mean;
@@ -1435,15 +1629,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             if (unbiased)
-            {
-                // Sample variance
-                return variance / self.Count;
-            }
+                return variance / (actualCount - 1);
             else
-            {
-                // Population variance
-                return variance / self.Count;
-            }
+                return variance / actualCount;
         }
 
         public static double Var(this IList<long> self, bool unbiased = true, bool skipNaN = true)
@@ -1479,6 +1667,69 @@ namespace Horker.Numerics.DataMaps.Extensions
                 throw new InvalidOperationException("This object does not support inplace Sort() operation");
 
             m.Invoke(self, new object[0]);
+        }
+
+        public static double Correlation(this IList<int> self, IList<int> other, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return double.NaN;
+
+            if (skipNaN)
+            {
+                var s1 = new List<int>(self.Count);
+                var s2 = new List<int>(self.Count);
+
+                for (var i = 0; i < self.Count; ++i)
+                {
+                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                        continue;
+
+                    s1.Add(self[i]);
+                    s2.Add(other[i]);
+                }
+                return Covariance(s1, s2) / s1.StandardDeviation() / s2.StandardDeviation();
+            }
+
+            return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
+        }
+
+        public static double Covariance(this IList<int> self, IList<int> other, bool unbiased = true, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return double.NaN;
+
+            var mean0 = self.Mean(skipNaN);
+            var mean1 = other.Mean(skipNaN);
+
+            if (double.IsNaN(mean0) || double.IsNaN(mean1))
+                return double.NaN;
+
+            int actualCount = self.Count;
+
+            double c = (double)0.0;
+            for (int i = 0; i < self.Count; ++i)
+            {
+                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                    {
+                        return double.NaN;
+                    }
+                }
+                var a = (double)self[i] - mean0;
+                var b = (double)other[i] - mean1;
+                c += a * b;
+            }
+
+            if (unbiased)
+                return c / (actualCount - 1);
+            else
+                return c / actualCount;
         }
 
         public static List<int> CumulativeMax(this IList<int> self)
@@ -1884,14 +2135,16 @@ namespace Horker.Numerics.DataMaps.Extensions
                 double b = n - 2;
                 return (double)((a / b) * g);
             }
-
-            return (double)g;
+            else
+            {
+                return (double)g;
+            }
         }
 
         public static double Variance(this IList<int> self, bool unbiased = true, bool skipNaN = true)
         {
             double mean = Mean(self, skipNaN);
-            if (!skipNaN && double.IsNaN(mean))
+            if (double.IsNaN(mean))
                 return double.NaN;
 
             double variance = (double)0.0;
@@ -1908,7 +2161,9 @@ namespace Horker.Numerics.DataMaps.Extensions
                         continue;
                     }
                     else
+                    {
                         return double.NaN;
+                    }
                 }
 
                 double x = v - mean;
@@ -1916,15 +2171,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             if (unbiased)
-            {
-                // Sample variance
-                return variance / self.Count;
-            }
+                return variance / (actualCount - 1);
             else
-            {
-                // Population variance
-                return variance / self.Count;
-            }
+                return variance / actualCount;
         }
 
         public static double Var(this IList<int> self, bool unbiased = true, bool skipNaN = true)
@@ -1960,6 +2209,69 @@ namespace Horker.Numerics.DataMaps.Extensions
                 throw new InvalidOperationException("This object does not support inplace Sort() operation");
 
             m.Invoke(self, new object[0]);
+        }
+
+        public static double Correlation(this IList<short> self, IList<short> other, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return double.NaN;
+
+            if (skipNaN)
+            {
+                var s1 = new List<short>(self.Count);
+                var s2 = new List<short>(self.Count);
+
+                for (var i = 0; i < self.Count; ++i)
+                {
+                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                        continue;
+
+                    s1.Add(self[i]);
+                    s2.Add(other[i]);
+                }
+                return Covariance(s1, s2) / s1.StandardDeviation() / s2.StandardDeviation();
+            }
+
+            return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
+        }
+
+        public static double Covariance(this IList<short> self, IList<short> other, bool unbiased = true, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return double.NaN;
+
+            var mean0 = self.Mean(skipNaN);
+            var mean1 = other.Mean(skipNaN);
+
+            if (double.IsNaN(mean0) || double.IsNaN(mean1))
+                return double.NaN;
+
+            int actualCount = self.Count;
+
+            double c = (double)0.0;
+            for (int i = 0; i < self.Count; ++i)
+            {
+                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                    {
+                        return double.NaN;
+                    }
+                }
+                var a = (double)self[i] - mean0;
+                var b = (double)other[i] - mean1;
+                c += a * b;
+            }
+
+            if (unbiased)
+                return c / (actualCount - 1);
+            else
+                return c / actualCount;
         }
 
         public static List<short> CumulativeMax(this IList<short> self)
@@ -2365,14 +2677,16 @@ namespace Horker.Numerics.DataMaps.Extensions
                 double b = n - 2;
                 return (double)((a / b) * g);
             }
-
-            return (double)g;
+            else
+            {
+                return (double)g;
+            }
         }
 
         public static double Variance(this IList<short> self, bool unbiased = true, bool skipNaN = true)
         {
             double mean = Mean(self, skipNaN);
-            if (!skipNaN && double.IsNaN(mean))
+            if (double.IsNaN(mean))
                 return double.NaN;
 
             double variance = (double)0.0;
@@ -2389,7 +2703,9 @@ namespace Horker.Numerics.DataMaps.Extensions
                         continue;
                     }
                     else
+                    {
                         return double.NaN;
+                    }
                 }
 
                 double x = v - mean;
@@ -2397,15 +2713,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             if (unbiased)
-            {
-                // Sample variance
-                return variance / self.Count;
-            }
+                return variance / (actualCount - 1);
             else
-            {
-                // Population variance
-                return variance / self.Count;
-            }
+                return variance / actualCount;
         }
 
         public static double Var(this IList<short> self, bool unbiased = true, bool skipNaN = true)
@@ -2441,6 +2751,69 @@ namespace Horker.Numerics.DataMaps.Extensions
                 throw new InvalidOperationException("This object does not support inplace Sort() operation");
 
             m.Invoke(self, new object[0]);
+        }
+
+        public static double Correlation(this IList<byte> self, IList<byte> other, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return double.NaN;
+
+            if (skipNaN)
+            {
+                var s1 = new List<byte>(self.Count);
+                var s2 = new List<byte>(self.Count);
+
+                for (var i = 0; i < self.Count; ++i)
+                {
+                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                        continue;
+
+                    s1.Add(self[i]);
+                    s2.Add(other[i]);
+                }
+                return Covariance(s1, s2) / s1.StandardDeviation() / s2.StandardDeviation();
+            }
+
+            return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
+        }
+
+        public static double Covariance(this IList<byte> self, IList<byte> other, bool unbiased = true, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return double.NaN;
+
+            var mean0 = self.Mean(skipNaN);
+            var mean1 = other.Mean(skipNaN);
+
+            if (double.IsNaN(mean0) || double.IsNaN(mean1))
+                return double.NaN;
+
+            int actualCount = self.Count;
+
+            double c = (double)0.0;
+            for (int i = 0; i < self.Count; ++i)
+            {
+                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                    {
+                        return double.NaN;
+                    }
+                }
+                var a = (double)self[i] - mean0;
+                var b = (double)other[i] - mean1;
+                c += a * b;
+            }
+
+            if (unbiased)
+                return c / (actualCount - 1);
+            else
+                return c / actualCount;
         }
 
         public static List<byte> CumulativeMax(this IList<byte> self)
@@ -2846,14 +3219,16 @@ namespace Horker.Numerics.DataMaps.Extensions
                 double b = n - 2;
                 return (double)((a / b) * g);
             }
-
-            return (double)g;
+            else
+            {
+                return (double)g;
+            }
         }
 
         public static double Variance(this IList<byte> self, bool unbiased = true, bool skipNaN = true)
         {
             double mean = Mean(self, skipNaN);
-            if (!skipNaN && double.IsNaN(mean))
+            if (double.IsNaN(mean))
                 return double.NaN;
 
             double variance = (double)0.0;
@@ -2870,7 +3245,9 @@ namespace Horker.Numerics.DataMaps.Extensions
                         continue;
                     }
                     else
+                    {
                         return double.NaN;
+                    }
                 }
 
                 double x = v - mean;
@@ -2878,15 +3255,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             if (unbiased)
-            {
-                // Sample variance
-                return variance / self.Count;
-            }
+                return variance / (actualCount - 1);
             else
-            {
-                // Population variance
-                return variance / self.Count;
-            }
+                return variance / actualCount;
         }
 
         public static double Var(this IList<byte> self, bool unbiased = true, bool skipNaN = true)
@@ -2922,6 +3293,69 @@ namespace Horker.Numerics.DataMaps.Extensions
                 throw new InvalidOperationException("This object does not support inplace Sort() operation");
 
             m.Invoke(self, new object[0]);
+        }
+
+        public static double Correlation(this IList<sbyte> self, IList<sbyte> other, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return double.NaN;
+
+            if (skipNaN)
+            {
+                var s1 = new List<sbyte>(self.Count);
+                var s2 = new List<sbyte>(self.Count);
+
+                for (var i = 0; i < self.Count; ++i)
+                {
+                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                        continue;
+
+                    s1.Add(self[i]);
+                    s2.Add(other[i]);
+                }
+                return Covariance(s1, s2) / s1.StandardDeviation() / s2.StandardDeviation();
+            }
+
+            return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
+        }
+
+        public static double Covariance(this IList<sbyte> self, IList<sbyte> other, bool unbiased = true, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return double.NaN;
+
+            var mean0 = self.Mean(skipNaN);
+            var mean1 = other.Mean(skipNaN);
+
+            if (double.IsNaN(mean0) || double.IsNaN(mean1))
+                return double.NaN;
+
+            int actualCount = self.Count;
+
+            double c = (double)0.0;
+            for (int i = 0; i < self.Count; ++i)
+            {
+                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                    {
+                        return double.NaN;
+                    }
+                }
+                var a = (double)self[i] - mean0;
+                var b = (double)other[i] - mean1;
+                c += a * b;
+            }
+
+            if (unbiased)
+                return c / (actualCount - 1);
+            else
+                return c / actualCount;
         }
 
         public static List<sbyte> CumulativeMax(this IList<sbyte> self)
@@ -3327,14 +3761,16 @@ namespace Horker.Numerics.DataMaps.Extensions
                 double b = n - 2;
                 return (double)((a / b) * g);
             }
-
-            return (double)g;
+            else
+            {
+                return (double)g;
+            }
         }
 
         public static double Variance(this IList<sbyte> self, bool unbiased = true, bool skipNaN = true)
         {
             double mean = Mean(self, skipNaN);
-            if (!skipNaN && double.IsNaN(mean))
+            if (double.IsNaN(mean))
                 return double.NaN;
 
             double variance = (double)0.0;
@@ -3351,7 +3787,9 @@ namespace Horker.Numerics.DataMaps.Extensions
                         continue;
                     }
                     else
+                    {
                         return double.NaN;
+                    }
                 }
 
                 double x = v - mean;
@@ -3359,15 +3797,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             if (unbiased)
-            {
-                // Sample variance
-                return variance / self.Count;
-            }
+                return variance / (actualCount - 1);
             else
-            {
-                // Population variance
-                return variance / self.Count;
-            }
+                return variance / actualCount;
         }
 
         public static double Var(this IList<sbyte> self, bool unbiased = true, bool skipNaN = true)
@@ -3403,6 +3835,69 @@ namespace Horker.Numerics.DataMaps.Extensions
                 throw new InvalidOperationException("This object does not support inplace Sort() operation");
 
             m.Invoke(self, new object[0]);
+        }
+
+        public static double Correlation(this IList<decimal> self, IList<decimal> other, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return double.NaN;
+
+            if (skipNaN)
+            {
+                var s1 = new List<decimal>(self.Count);
+                var s2 = new List<decimal>(self.Count);
+
+                for (var i = 0; i < self.Count; ++i)
+                {
+                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                        continue;
+
+                    s1.Add(self[i]);
+                    s2.Add(other[i]);
+                }
+                return Covariance(s1, s2) / s1.StandardDeviation() / s2.StandardDeviation();
+            }
+
+            return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
+        }
+
+        public static double Covariance(this IList<decimal> self, IList<decimal> other, bool unbiased = true, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return double.NaN;
+
+            var mean0 = self.Mean(skipNaN);
+            var mean1 = other.Mean(skipNaN);
+
+            if (double.IsNaN(mean0) || double.IsNaN(mean1))
+                return double.NaN;
+
+            int actualCount = self.Count;
+
+            double c = (double)0.0;
+            for (int i = 0; i < self.Count; ++i)
+            {
+                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                    {
+                        return double.NaN;
+                    }
+                }
+                var a = (double)self[i] - mean0;
+                var b = (double)other[i] - mean1;
+                c += a * b;
+            }
+
+            if (unbiased)
+                return c / (actualCount - 1);
+            else
+                return c / actualCount;
         }
 
         public static List<decimal> CumulativeMax(this IList<decimal> self)
@@ -3808,14 +4303,16 @@ namespace Horker.Numerics.DataMaps.Extensions
                 double b = n - 2;
                 return (double)((a / b) * g);
             }
-
-            return (double)g;
+            else
+            {
+                return (double)g;
+            }
         }
 
         public static double Variance(this IList<decimal> self, bool unbiased = true, bool skipNaN = true)
         {
             double mean = Mean(self, skipNaN);
-            if (!skipNaN && double.IsNaN(mean))
+            if (double.IsNaN(mean))
                 return double.NaN;
 
             double variance = (double)0.0;
@@ -3832,7 +4329,9 @@ namespace Horker.Numerics.DataMaps.Extensions
                         continue;
                     }
                     else
+                    {
                         return double.NaN;
+                    }
                 }
 
                 double x = v - mean;
@@ -3840,15 +4339,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             if (unbiased)
-            {
-                // Sample variance
-                return variance / self.Count;
-            }
+                return variance / (actualCount - 1);
             else
-            {
-                // Population variance
-                return variance / self.Count;
-            }
+                return variance / actualCount;
         }
 
         public static double Var(this IList<decimal> self, bool unbiased = true, bool skipNaN = true)

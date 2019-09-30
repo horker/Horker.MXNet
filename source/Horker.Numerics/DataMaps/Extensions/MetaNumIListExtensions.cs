@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,6 +38,69 @@ namespace Horker.Numerics.DataMaps.Extensions
                 throw new InvalidOperationException("This object does not support inplace Sort() operation");
 
             m.Invoke(self, new object[0]);
+        }
+
+        public static MetaFloat Correlation(this IList<MetaNum> self, IList<MetaNum> other, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return MetaFloat.NaN;
+
+            if (skipNaN)
+            {
+                var s1 = new List<MetaNum>(self.Count);
+                var s2 = new List<MetaNum>(self.Count);
+
+                for (var i = 0; i < self.Count; ++i)
+                {
+                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                        continue;
+
+                    s1.Add(self[i]);
+                    s2.Add(other[i]);
+                }
+                return Covariance(s1, s2) / s1.StandardDeviation() / s2.StandardDeviation();
+            }
+
+            return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
+        }
+
+        public static MetaFloat Covariance(this IList<MetaNum> self, IList<MetaNum> other, bool unbiased = true, bool skipNaN = true)
+        {
+            if (self.Count != other.Count)
+                return MetaFloat.NaN;
+
+            var mean0 = self.Mean(skipNaN);
+            var mean1 = other.Mean(skipNaN);
+
+            if (MetaFloat.IsNaN(mean0) || MetaFloat.IsNaN(mean1))
+                return MetaFloat.NaN;
+
+            int actualCount = self.Count;
+
+            MetaFloat c = (MetaFloat)0.0;
+            for (int i = 0; i < self.Count; ++i)
+            {
+                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                {
+                    if (skipNaN)
+                    {
+                        --actualCount;
+                        continue;
+                    }
+                    else
+                    {
+                        return MetaFloat.NaN;
+                    }
+                }
+                var a = (MetaFloat)self[i] - mean0;
+                var b = (MetaFloat)other[i] - mean1;
+                c += a * b;
+            }
+
+            if (unbiased)
+                return c / (actualCount - 1);
+            else
+                return c / actualCount;
         }
 
         public static List<MetaNum> CumulativeMax(this IList<MetaNum> self)
@@ -442,14 +506,16 @@ namespace Horker.Numerics.DataMaps.Extensions
                 double b = n - 2;
                 return (MetaFloat)((a / b) * g);
             }
-
-            return (MetaFloat)g;
+            else
+            {
+                return (MetaFloat)g;
+            }
         }
 
         public static MetaFloat Variance(this IList<MetaNum> self, bool unbiased = true, bool skipNaN = true)
         {
             MetaFloat mean = Mean(self, skipNaN);
-            if (!skipNaN && MetaFloat.IsNaN(mean))
+            if (MetaFloat.IsNaN(mean))
                 return MetaFloat.NaN;
 
             MetaFloat variance = (MetaFloat)0.0;
@@ -466,7 +532,9 @@ namespace Horker.Numerics.DataMaps.Extensions
                         continue;
                     }
                     else
+                    {
                         return MetaFloat.NaN;
+                    }
                 }
 
                 MetaFloat x = v - mean;
@@ -474,15 +542,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             if (unbiased)
-            {
-                // Sample variance
-                return variance / self.Count;
-            }
+                return variance / (actualCount - 1);
             else
-            {
-                // Population variance
-                return variance / self.Count;
-            }
+                return variance / actualCount;
         }
 
         public static MetaFloat Var(this IList<MetaNum> self, bool unbiased = true, bool skipNaN = true)

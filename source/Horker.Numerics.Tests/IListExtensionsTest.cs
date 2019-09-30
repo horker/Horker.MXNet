@@ -84,5 +84,59 @@ namespace Horker.Numerics.Tests
             var t2 = s.Le(3.0);
             Assert.Equal(new bool[] { true, true, true, false, false }, t2);
         }
+
+        [Fact]
+        public void TestCorrelation()
+        {
+            var s1 = new double[] { 1, 2, 3, 4, 5 };
+            var s2 = new double[] { 1, 4, 5, 4, 5 };
+
+            var cor = s1.Correlation(s2);
+
+            var s = new double[,] {
+                { 1, 1 },
+                { 2, 4 },
+                { 3, 5 },
+                { 4, 4 },
+                { 5, 5 }
+            };
+            var expected = Accord.Statistics.Measures.Correlation(s);
+
+            Assert.Equal(expected[0,1], cor, 10);
+        }
+
+        [Fact]
+        public void TestSkipNaN()
+        {
+            var s = new double[] { double.NaN, 1, 2, double.NaN, 3, 4, 5, double.NaN };
+
+            var mean = s.Mean();
+
+            var expectedMean = Accord.Statistics.Measures.Mean(new double[] { 1, 2, 3, 4, 5 });
+
+            Assert.Equal(expectedMean, mean);
+
+            var variance = s.Variance();
+
+            var expectedVar = Accord.Statistics.Measures.Variance(new double[] { 1, 2, 3, 4, 5 });
+
+            Assert.Equal(expectedVar, variance);
+
+            var s1 = new double[] { 1, 2, double.NaN, 3, 4,        999, 5,        999 };
+            var s2 = new double[] { 1, 4,         99, 5, 4, double.NaN, 5, double.NaN };
+
+            var cor = s1.Correlation(s2);
+
+            var ss = new double[,] {
+                { 1, 1 },
+                { 2, 4 },
+                { 3, 5 },
+                { 4, 4 },
+                { 5, 5 }
+            };
+            var expectedCor = Accord.Statistics.Measures.Correlation(ss);
+
+            Assert.Equal(expectedCor[0,1], cor, 10);
+        }
     }
-}
+} 
