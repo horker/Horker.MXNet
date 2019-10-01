@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management.Automation;
 using System.Text;
 using System.Threading.Tasks;
 using Horker.Numerics.Transformers;
@@ -495,6 +496,44 @@ namespace Horker.Numerics.DataMaps
             if (type == typeof(DateTimeOffset)) return To2DArray<DateTimeOffset>();
 
             return To2DArray<object>();
+        }
+
+        public IEnumerable<PSObject> ToPSObject(int maxCount = int.MaxValue, int skip = 0)
+        {
+            int count = RowCount;
+
+            var columnNames = ColumnNames;
+
+            for (var i = skip; i < skip + maxCount; ++i)
+            {
+                var hasElement = false;
+                var pso = new PSObject();
+
+                foreach (var column in Columns)
+                {
+                    if (i > column.Data.Count - 1)
+                        continue;
+
+                    pso.Properties.Add(new PSNoteProperty(column.Name, column.Data[i]));
+                    hasElement = true;
+                }
+
+                if (!hasElement)
+                    break;
+
+                yield return pso;
+            }
+        }
+
+        public IEnumerable<PSObject> Head(int maxCount = 10)
+        {
+            return ToPSObject(maxCount);
+        }
+
+        public IEnumerable<PSObject> Tail(int count = 10)
+        {
+            var total = Columns.Select(x => x.Data.Count).Max();
+            return ToPSObject(count, total - count);
         }
 
         // Transformers
