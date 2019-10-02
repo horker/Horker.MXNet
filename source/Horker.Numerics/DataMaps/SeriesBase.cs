@@ -230,17 +230,15 @@ namespace Horker.Numerics.DataMaps
 
         // Arithmetic operators
 
-            /*
         public static SeriesBase operator +(SeriesBase lhs, SeriesBase rhs) { return lhs.ElementAdd(rhs);  }
         public static SeriesBase operator -(SeriesBase lhs, SeriesBase rhs) { return lhs.ElementSubtract(rhs);  }
         public static SeriesBase operator *(SeriesBase lhs, SeriesBase rhs) { return lhs.ElementMultiply(rhs);  }
         public static SeriesBase operator /(SeriesBase lhs, SeriesBase rhs) { return lhs.ElementDivide(rhs);  }
 
-        public static SeriesBase operator +(SeriesBase lhs, object rhs) { return lhs.ElementAddScalar(rhs);  }
-        public static SeriesBase operator -(SeriesBase lhs, object rhs) { return lhs.ElementSubtractScalar(rhs);  }
-        public static SeriesBase operator *(SeriesBase lhs, object rhs) { return lhs.ElementMultiplyScalar(rhs);  }
-        public static SeriesBase operator /(SeriesBase lhs, object rhs) { return lhs.ElementDivideScalar(rhs);  }
-*/
+        public static SeriesBase operator +(SeriesBase lhs, object rhs) { return lhs.ElementAdd(rhs);  }
+        public static SeriesBase operator -(SeriesBase lhs, object rhs) { return lhs.ElementSubtract(rhs);  }
+        public static SeriesBase operator *(SeriesBase lhs, object rhs) { return lhs.ElementMultiply(rhs);  }
+        public static SeriesBase operator /(SeriesBase lhs, object rhs) { return lhs.ElementDivide(rhs);  }
 
         // Implicit conversion operators
 

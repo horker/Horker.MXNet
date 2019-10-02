@@ -35,6 +35,54 @@ namespace Horker.Numerics.DataMaps
             return new Series((IList)result);
         }
 
+        public SeriesBase ElementAdd(SeriesBase other)
+        {
+			var result = GenericIListExtensions.ElementAdd((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+            return new Series((IList)result);
+        }
+
+        public SeriesBase ElementAdd(object other)
+        {
+			var result = GenericIListExtensions.ElementAdd((dynamic)UnderlyingList, (dynamic)other);
+            return new Series((IList)result);
+        }
+
+        public SeriesBase ElementSubtract(SeriesBase other)
+        {
+			var result = GenericIListExtensions.ElementSubtract((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+            return new Series((IList)result);
+        }
+
+        public SeriesBase ElementSubtract(object other)
+        {
+			var result = GenericIListExtensions.ElementSubtract((dynamic)UnderlyingList, (dynamic)other);
+            return new Series((IList)result);
+        }
+
+        public SeriesBase ElementMultiply(SeriesBase other)
+        {
+			var result = GenericIListExtensions.ElementMultiply((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+            return new Series((IList)result);
+        }
+
+        public SeriesBase ElementMultiply(object other)
+        {
+			var result = GenericIListExtensions.ElementMultiply((dynamic)UnderlyingList, (dynamic)other);
+            return new Series((IList)result);
+        }
+
+        public SeriesBase ElementDivide(SeriesBase other)
+        {
+			var result = GenericIListExtensions.ElementDivide((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+            return new Series((IList)result);
+        }
+
+        public SeriesBase ElementDivide(object other)
+        {
+			var result = GenericIListExtensions.ElementDivide((dynamic)UnderlyingList, (dynamic)other);
+            return new Series((IList)result);
+        }
+
         public SeriesBase FillNaN(object fillValue)
         {
 			var result = GenericIListExtensions.FillNaN((dynamic)UnderlyingList, (dynamic)fillValue);
@@ -106,6 +154,46 @@ namespace Horker.Numerics.DataMaps
         public Summary Describe()
         {
 			return (Summary)GenericIListExtensions.Describe((dynamic)UnderlyingList);
+        }
+
+        public void ElementAddFill(SeriesBase other)
+        {
+			GenericIListExtensions.ElementAddFill((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+        }
+
+        public void ElementAddFill(object other)
+        {
+			GenericIListExtensions.ElementAddFill((dynamic)UnderlyingList, (dynamic)other);
+        }
+
+        public void ElementSubtractFill(SeriesBase other)
+        {
+			GenericIListExtensions.ElementSubtractFill((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+        }
+
+        public void ElementSubtractFill(object other)
+        {
+			GenericIListExtensions.ElementSubtractFill((dynamic)UnderlyingList, (dynamic)other);
+        }
+
+        public void ElementMultiplyFill(SeriesBase other)
+        {
+			GenericIListExtensions.ElementMultiplyFill((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+        }
+
+        public void ElementMultiplyFill(object other)
+        {
+			GenericIListExtensions.ElementMultiplyFill((dynamic)UnderlyingList, (dynamic)other);
+        }
+
+        public void ElementDivideFill(SeriesBase other)
+        {
+			GenericIListExtensions.ElementDivideFill((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+        }
+
+        public void ElementDivideFill(object other)
+        {
+			GenericIListExtensions.ElementDivideFill((dynamic)UnderlyingList, (dynamic)other);
         }
 
         public void FillNaNFill(object fillValue)
