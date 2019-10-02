@@ -23,10 +23,10 @@ var structTypes = new[] {
 };
 
 var operators = new[] {
-	Tuple.Create("ElementwiseAdd", "(MetaNum)(self[i] + other[i])", "(MetaNum)(self[i] + value)"),
-	Tuple.Create("ElementwiseSubtract", "(MetaNum)(self[i] - other[i])", "(MetaNum)(self[i] - value)"),
-	Tuple.Create("ElementwiseMultiply", "(MetaNum)(self[i] * other[i])", "(MetaNum)(self[i] * value)"),
-	Tuple.Create("ElementwiseDivide", "(MetaNum)(self[i] / other[i])", "(MetaNum)(self[i] / value)")
+	Tuple.Create("ElementAdd", "(MetaNum)(self[i] + other[i])", "(MetaNum)(self[i] + value)"),
+	Tuple.Create("ElementSubtract", "(MetaNum)(self[i] - other[i])", "(MetaNum)(self[i] - value)"),
+	Tuple.Create("ElementMultiply", "(MetaNum)(self[i] * other[i])", "(MetaNum)(self[i] * value)"),
+	Tuple.Create("ElementDivide", "(MetaNum)(self[i] / other[i])", "(MetaNum)(self[i] / value)")
 };
 
 var doc = GetDocument("MetaNumIListExtensions.cs");
@@ -89,7 +89,7 @@ foreach (var t in numericTypes)
 {
     foreach (var op in operators)
 	{
-		text = doc.Replace("ElementwiseAdd", op.Item1);
+		text = doc.Replace("ElementAdd", op.Item1);
 		text = text.Replace("self[i] + other[i]", op.Item2);
 		text = text.Replace("self[i] + value", op.Item3);
         text = text.Replace("MetaNum", t);

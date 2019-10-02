@@ -11,16 +11,17 @@ var methodNames = new []
 	Tuple.Create("CumulativeMin", "", ""),
 	Tuple.Create("CumulativeProduct", "", ""),
 	Tuple.Create("CumulativeSum", "", ""),
-	Tuple.Create("FillNaN", "object fillValue", ", fillValue"),
+	Tuple.Create("FillNaN", "object fillValue", ", (dynamic)fillValue"),
 	Tuple.Create("GetUnique", "", ""),
 	Tuple.Create("RemoveNaN", "", ""),
 };
 
 var nonSeriesMethods = new[]
 {
-	Tuple.Create("Correlation", "object", "SeriesBase other, bool skipNaN = true", ", other.UnderlyingList, skipNaN"),
-	Tuple.Create("Cor", "object", "SeriesBase other, bool skipNaN = true", ", other.UnderlyingList, skipNaN"),
-	Tuple.Create("Covariance", "object", "SeriesBase other", ", other.UnderlyingList"),
+	Tuple.Create("Correlation", "object", "SeriesBase other, bool skipNaN = true", ", (dynamic)other.UnderlyingList, skipNaN"),
+	Tuple.Create("Cor", "object", "SeriesBase other, bool skipNaN = true", ", (dynamic)other.UnderlyingList, skipNaN"),
+	Tuple.Create("Covariance", "object", "SeriesBase other, bool unbiased = true, bool skipNaN = true", ", (dynamic)other.UnderlyingList, unbiased, skipNaN"),
+	Tuple.Create("Cov", "object", "SeriesBase other, bool unbiased = true, bool skipNaN = true", ", (dynamic)other.UnderlyingList, unbiased, skipNaN"),
 	Tuple.Create("CumulativeMaxFill", "void", "", ""),
 	Tuple.Create("CumulativeMinFill", "void", "", ""),
 	Tuple.Create("CumulativeProductFill", "void", "", ""),
@@ -28,14 +29,14 @@ var nonSeriesMethods = new[]
 	Tuple.Create("CountNaN", "int", "", ""),
 	Tuple.Create("CountUnique", "int", "", ""),
 	Tuple.Create("Describe", "Summary", "", ""),
-	Tuple.Create("FillNaNFill", "void", "object fillValue", ", fillValue"),
+	Tuple.Create("FillNaNFill", "void", "object fillValue", ", (dynamic)fillValue"),
 	Tuple.Create("Kurtosis", "object","bool unbiased = true", ", unbiased"),
     Tuple.Create("Max", "object", "", ""),
     Tuple.Create("Min", "object", "", ""),
     Tuple.Create("Mean", "object", "bool skipNaN = true", ", skipNaN"),
     Tuple.Create("Median", "object", "bool skipNaN = true, bool isSorted = false", ", skipNaN, isSorted"),
     Tuple.Create("Mode", "object", "bool skipNaN = true", ", skipNaN"),
-    Tuple.Create("Quantile", "object", "bool skipNaN = true, bool isSorted = false", ", skipNaN, isSorted"),
+    Tuple.Create("Quantile", "object", "double p, bool skipNaN = true, bool isSorted = false", ", p, skipNaN, isSorted"),
 	Tuple.Create("Skewness", "object","bool unbiased = true", ", unbiased"),
     Tuple.Create("StandardDeviation", "object", "bool unbiased = true, bool skipNaN = true", ", unbiased, skipNaN"),
     Tuple.Create("Std", "object", "bool unbiased = true, bool skipNaN = true", ", unbiased, skipNaN"),
@@ -51,34 +52,19 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Horker.Numerics.DataMaps.Extensions;
 
 namespace Horker.Numerics.DataMaps
 {
     public partial class SeriesBase : IList
     {
-        enum MethodIndex
-        {
-<#   
-foreach (var t in methodNames) {
-#>
-			<#= t.Item1 #>,
-<#
-}
-foreach (var t in nonSeriesMethods) {
-#>
-			<#= t.Item1 #>,
-<#
-}
-#>
-        }
-
 <#   
 foreach (var t in methodNames) {
 #>
         public SeriesBase <#= t.Item1  #>(<#= t.Item2 #>)
         {
-			var m = GetMethodInfo(MethodIndex.<#= t.Item1 #>);
-            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList<#= t.Item3 #> }));
+			var result = GenericIListExtensions.<#= t.Item1 #>((dynamic)UnderlyingList<#= t.Item3 #>);
+            return new Series((IList)result);
         }
 
 <#
@@ -87,12 +73,10 @@ foreach (var t in nonSeriesMethods) {
 #>
         public <#= t.Item2 #> <#= t.Item1 #>(<#= t.Item3 #>)
         {
-			var m = GetMethodInfo(MethodIndex.<#= t.Item1 #>);
-
 <# if (t.Item2 == "void") { #>
-            m.Invoke(null, new object[] { UnderlyingList<#= t.Item4 #> });
+			GenericIListExtensions.<#= t.Item1 #>((dynamic)UnderlyingList<#= t.Item4 #>);
 <# } else { #>
-            return (<#= t.Item2 #>)m.Invoke(null, new object[] { UnderlyingList<#= t.Item4 #> });
+			return (<#= t.Item2 #>)GenericIListExtensions.<#= t.Item1 #>((dynamic)UnderlyingList<#= t.Item4 #>);
 <# } #>
         }
 

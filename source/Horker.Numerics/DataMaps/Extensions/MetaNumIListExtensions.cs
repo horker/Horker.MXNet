@@ -64,6 +64,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
         }
 
+        public static MetaFloat Cor(this IList<MetaNum> self, IList<MetaNum> other, bool skipNaN = true)
+        {
+            return Correlation(self, other, skipNaN);
+        }
+
         public static MetaFloat Covariance(this IList<MetaNum> self, IList<MetaNum> other, bool unbiased = true, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -101,6 +106,11 @@ namespace Horker.Numerics.DataMaps.Extensions
                 return c / (actualCount - 1);
             else
                 return c / actualCount;
+        }
+
+        public static MetaFloat Cov(this IList<MetaNum> self, IList<MetaNum> other, bool unbiased = true, bool skipNaN = true)
+        {
+            return Covariance(self, other, unbiased, skipNaN);
         }
 
         public static List<MetaNum> CumulativeMax(this IList<MetaNum> self)

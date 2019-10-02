@@ -41,7 +41,7 @@ namespace Horker.Numerics.Tests
 
             var t3 = new Series(new string[] { "a", "b", "c" });
 
-            Assert.Throws<InvalidOperationException>(() => {
+            Assert.Throws<Microsoft.CSharp.RuntimeBinder.RuntimeBinderException>(() => {
                 t3.CumulativeSum();
             });
         }

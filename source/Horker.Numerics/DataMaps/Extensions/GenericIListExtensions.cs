@@ -62,6 +62,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
         }
 
+        public static double Cor(this IList<double> self, IList<double> other, bool skipNaN = true)
+        {
+            return Correlation(self, other, skipNaN);
+        }
+
         public static double Covariance(this IList<double> self, IList<double> other, bool unbiased = true, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -99,6 +104,11 @@ namespace Horker.Numerics.DataMaps.Extensions
                 return c / (actualCount - 1);
             else
                 return c / actualCount;
+        }
+
+        public static double Cov(this IList<double> self, IList<double> other, bool unbiased = true, bool skipNaN = true)
+        {
+            return Covariance(self, other, unbiased, skipNaN);
         }
 
         public static List<double> CumulativeMax(this IList<double> self)
@@ -623,6 +633,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
         }
 
+        public static float Cor(this IList<float> self, IList<float> other, bool skipNaN = true)
+        {
+            return Correlation(self, other, skipNaN);
+        }
+
         public static float Covariance(this IList<float> self, IList<float> other, bool unbiased = true, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -660,6 +675,11 @@ namespace Horker.Numerics.DataMaps.Extensions
                 return c / (actualCount - 1);
             else
                 return c / actualCount;
+        }
+
+        public static float Cov(this IList<float> self, IList<float> other, bool unbiased = true, bool skipNaN = true)
+        {
+            return Covariance(self, other, unbiased, skipNaN);
         }
 
         public static List<float> CumulativeMax(this IList<float> self)
@@ -1184,6 +1204,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
         }
 
+        public static double Cor(this IList<long> self, IList<long> other, bool skipNaN = true)
+        {
+            return Correlation(self, other, skipNaN);
+        }
+
         public static double Covariance(this IList<long> self, IList<long> other, bool unbiased = true, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -1221,6 +1246,11 @@ namespace Horker.Numerics.DataMaps.Extensions
                 return c / (actualCount - 1);
             else
                 return c / actualCount;
+        }
+
+        public static double Cov(this IList<long> self, IList<long> other, bool unbiased = true, bool skipNaN = true)
+        {
+            return Covariance(self, other, unbiased, skipNaN);
         }
 
         public static List<long> CumulativeMax(this IList<long> self)
@@ -1745,6 +1775,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
         }
 
+        public static double Cor(this IList<int> self, IList<int> other, bool skipNaN = true)
+        {
+            return Correlation(self, other, skipNaN);
+        }
+
         public static double Covariance(this IList<int> self, IList<int> other, bool unbiased = true, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -1782,6 +1817,11 @@ namespace Horker.Numerics.DataMaps.Extensions
                 return c / (actualCount - 1);
             else
                 return c / actualCount;
+        }
+
+        public static double Cov(this IList<int> self, IList<int> other, bool unbiased = true, bool skipNaN = true)
+        {
+            return Covariance(self, other, unbiased, skipNaN);
         }
 
         public static List<int> CumulativeMax(this IList<int> self)
@@ -2306,6 +2346,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
         }
 
+        public static double Cor(this IList<short> self, IList<short> other, bool skipNaN = true)
+        {
+            return Correlation(self, other, skipNaN);
+        }
+
         public static double Covariance(this IList<short> self, IList<short> other, bool unbiased = true, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -2343,6 +2388,11 @@ namespace Horker.Numerics.DataMaps.Extensions
                 return c / (actualCount - 1);
             else
                 return c / actualCount;
+        }
+
+        public static double Cov(this IList<short> self, IList<short> other, bool unbiased = true, bool skipNaN = true)
+        {
+            return Covariance(self, other, unbiased, skipNaN);
         }
 
         public static List<short> CumulativeMax(this IList<short> self)
@@ -2867,6 +2917,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
         }
 
+        public static double Cor(this IList<byte> self, IList<byte> other, bool skipNaN = true)
+        {
+            return Correlation(self, other, skipNaN);
+        }
+
         public static double Covariance(this IList<byte> self, IList<byte> other, bool unbiased = true, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -2904,6 +2959,11 @@ namespace Horker.Numerics.DataMaps.Extensions
                 return c / (actualCount - 1);
             else
                 return c / actualCount;
+        }
+
+        public static double Cov(this IList<byte> self, IList<byte> other, bool unbiased = true, bool skipNaN = true)
+        {
+            return Covariance(self, other, unbiased, skipNaN);
         }
 
         public static List<byte> CumulativeMax(this IList<byte> self)
@@ -3428,6 +3488,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
         }
 
+        public static double Cor(this IList<sbyte> self, IList<sbyte> other, bool skipNaN = true)
+        {
+            return Correlation(self, other, skipNaN);
+        }
+
         public static double Covariance(this IList<sbyte> self, IList<sbyte> other, bool unbiased = true, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -3465,6 +3530,11 @@ namespace Horker.Numerics.DataMaps.Extensions
                 return c / (actualCount - 1);
             else
                 return c / actualCount;
+        }
+
+        public static double Cov(this IList<sbyte> self, IList<sbyte> other, bool unbiased = true, bool skipNaN = true)
+        {
+            return Covariance(self, other, unbiased, skipNaN);
         }
 
         public static List<sbyte> CumulativeMax(this IList<sbyte> self)
@@ -3989,6 +4059,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Covariance(self, other) / self.StandardDeviation() / other.StandardDeviation();
         }
 
+        public static double Cor(this IList<decimal> self, IList<decimal> other, bool skipNaN = true)
+        {
+            return Correlation(self, other, skipNaN);
+        }
+
         public static double Covariance(this IList<decimal> self, IList<decimal> other, bool unbiased = true, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -4026,6 +4101,11 @@ namespace Horker.Numerics.DataMaps.Extensions
                 return c / (actualCount - 1);
             else
                 return c / actualCount;
+        }
+
+        public static double Cov(this IList<decimal> self, IList<decimal> other, bool unbiased = true, bool skipNaN = true)
+        {
+            return Covariance(self, other, unbiased, skipNaN);
         }
 
         public static List<decimal> CumulativeMax(this IList<decimal> self)
@@ -4959,7 +5039,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 	public static partial class GenericIListExtensions
 	{
 
-        public static IList<double> ElementwiseAdd(this IList<double> self, IList<double> other)
+        public static IList<double> ElementAdd(this IList<double> self, IList<double> other)
         {
             var result = new List<double>(Math.Max(self.Count, other.Count));
 
@@ -4977,7 +5057,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<double> ElementwiseAddScalar(this IList<double> self, double value)
+        public static IList<double> ElementAdd(this IList<double> self, double value)
         {
             var result = new List<double>(self.Count);
 
@@ -4987,20 +5067,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseAddFill(this IList<double> self, IList<double> other)
+        public static void ElementAddFill(this IList<double> self, IList<double> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (double)(self[i] + other[i]);
         }
 
-        public static void ElementwiseAddScalarFill(this IList<double> self, double value)
+        public static void ElementAddFill(this IList<double> self, double value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (double)(self[i] + value);
         }
 
-        public static IList<double> ElementwiseSubtract(this IList<double> self, IList<double> other)
+        public static IList<double> ElementSubtract(this IList<double> self, IList<double> other)
         {
             var result = new List<double>(Math.Max(self.Count, other.Count));
 
@@ -5018,7 +5098,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<double> ElementwiseSubtractScalar(this IList<double> self, double value)
+        public static IList<double> ElementSubtract(this IList<double> self, double value)
         {
             var result = new List<double>(self.Count);
 
@@ -5028,20 +5108,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseSubtractFill(this IList<double> self, IList<double> other)
+        public static void ElementSubtractFill(this IList<double> self, IList<double> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (double)(self[i] - other[i]);
         }
 
-        public static void ElementwiseSubtractScalarFill(this IList<double> self, double value)
+        public static void ElementSubtractFill(this IList<double> self, double value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (double)(self[i] - value);
         }
 
-        public static IList<double> ElementwiseMultiply(this IList<double> self, IList<double> other)
+        public static IList<double> ElementMultiply(this IList<double> self, IList<double> other)
         {
             var result = new List<double>(Math.Max(self.Count, other.Count));
 
@@ -5059,7 +5139,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<double> ElementwiseMultiplyScalar(this IList<double> self, double value)
+        public static IList<double> ElementMultiply(this IList<double> self, double value)
         {
             var result = new List<double>(self.Count);
 
@@ -5069,20 +5149,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseMultiplyFill(this IList<double> self, IList<double> other)
+        public static void ElementMultiplyFill(this IList<double> self, IList<double> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (double)(self[i] * other[i]);
         }
 
-        public static void ElementwiseMultiplyScalarFill(this IList<double> self, double value)
+        public static void ElementMultiplyFill(this IList<double> self, double value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (double)(self[i] * value);
         }
 
-        public static IList<double> ElementwiseDivide(this IList<double> self, IList<double> other)
+        public static IList<double> ElementDivide(this IList<double> self, IList<double> other)
         {
             var result = new List<double>(Math.Max(self.Count, other.Count));
 
@@ -5100,7 +5180,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<double> ElementwiseDivideScalar(this IList<double> self, double value)
+        public static IList<double> ElementDivide(this IList<double> self, double value)
         {
             var result = new List<double>(self.Count);
 
@@ -5110,20 +5190,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseDivideFill(this IList<double> self, IList<double> other)
+        public static void ElementDivideFill(this IList<double> self, IList<double> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (double)(self[i] / other[i]);
         }
 
-        public static void ElementwiseDivideScalarFill(this IList<double> self, double value)
+        public static void ElementDivideFill(this IList<double> self, double value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (double)(self[i] / value);
         }
 
-        public static IList<float> ElementwiseAdd(this IList<float> self, IList<float> other)
+        public static IList<float> ElementAdd(this IList<float> self, IList<float> other)
         {
             var result = new List<float>(Math.Max(self.Count, other.Count));
 
@@ -5141,7 +5221,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<float> ElementwiseAddScalar(this IList<float> self, float value)
+        public static IList<float> ElementAdd(this IList<float> self, float value)
         {
             var result = new List<float>(self.Count);
 
@@ -5151,20 +5231,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseAddFill(this IList<float> self, IList<float> other)
+        public static void ElementAddFill(this IList<float> self, IList<float> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (float)(self[i] + other[i]);
         }
 
-        public static void ElementwiseAddScalarFill(this IList<float> self, float value)
+        public static void ElementAddFill(this IList<float> self, float value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (float)(self[i] + value);
         }
 
-        public static IList<float> ElementwiseSubtract(this IList<float> self, IList<float> other)
+        public static IList<float> ElementSubtract(this IList<float> self, IList<float> other)
         {
             var result = new List<float>(Math.Max(self.Count, other.Count));
 
@@ -5182,7 +5262,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<float> ElementwiseSubtractScalar(this IList<float> self, float value)
+        public static IList<float> ElementSubtract(this IList<float> self, float value)
         {
             var result = new List<float>(self.Count);
 
@@ -5192,20 +5272,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseSubtractFill(this IList<float> self, IList<float> other)
+        public static void ElementSubtractFill(this IList<float> self, IList<float> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (float)(self[i] - other[i]);
         }
 
-        public static void ElementwiseSubtractScalarFill(this IList<float> self, float value)
+        public static void ElementSubtractFill(this IList<float> self, float value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (float)(self[i] - value);
         }
 
-        public static IList<float> ElementwiseMultiply(this IList<float> self, IList<float> other)
+        public static IList<float> ElementMultiply(this IList<float> self, IList<float> other)
         {
             var result = new List<float>(Math.Max(self.Count, other.Count));
 
@@ -5223,7 +5303,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<float> ElementwiseMultiplyScalar(this IList<float> self, float value)
+        public static IList<float> ElementMultiply(this IList<float> self, float value)
         {
             var result = new List<float>(self.Count);
 
@@ -5233,20 +5313,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseMultiplyFill(this IList<float> self, IList<float> other)
+        public static void ElementMultiplyFill(this IList<float> self, IList<float> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (float)(self[i] * other[i]);
         }
 
-        public static void ElementwiseMultiplyScalarFill(this IList<float> self, float value)
+        public static void ElementMultiplyFill(this IList<float> self, float value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (float)(self[i] * value);
         }
 
-        public static IList<float> ElementwiseDivide(this IList<float> self, IList<float> other)
+        public static IList<float> ElementDivide(this IList<float> self, IList<float> other)
         {
             var result = new List<float>(Math.Max(self.Count, other.Count));
 
@@ -5264,7 +5344,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<float> ElementwiseDivideScalar(this IList<float> self, float value)
+        public static IList<float> ElementDivide(this IList<float> self, float value)
         {
             var result = new List<float>(self.Count);
 
@@ -5274,20 +5354,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseDivideFill(this IList<float> self, IList<float> other)
+        public static void ElementDivideFill(this IList<float> self, IList<float> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (float)(self[i] / other[i]);
         }
 
-        public static void ElementwiseDivideScalarFill(this IList<float> self, float value)
+        public static void ElementDivideFill(this IList<float> self, float value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (float)(self[i] / value);
         }
 
-        public static IList<long> ElementwiseAdd(this IList<long> self, IList<long> other)
+        public static IList<long> ElementAdd(this IList<long> self, IList<long> other)
         {
             var result = new List<long>(Math.Max(self.Count, other.Count));
 
@@ -5305,7 +5385,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<long> ElementwiseAddScalar(this IList<long> self, long value)
+        public static IList<long> ElementAdd(this IList<long> self, long value)
         {
             var result = new List<long>(self.Count);
 
@@ -5315,20 +5395,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseAddFill(this IList<long> self, IList<long> other)
+        public static void ElementAddFill(this IList<long> self, IList<long> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (long)(self[i] + other[i]);
         }
 
-        public static void ElementwiseAddScalarFill(this IList<long> self, long value)
+        public static void ElementAddFill(this IList<long> self, long value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (long)(self[i] + value);
         }
 
-        public static IList<long> ElementwiseSubtract(this IList<long> self, IList<long> other)
+        public static IList<long> ElementSubtract(this IList<long> self, IList<long> other)
         {
             var result = new List<long>(Math.Max(self.Count, other.Count));
 
@@ -5346,7 +5426,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<long> ElementwiseSubtractScalar(this IList<long> self, long value)
+        public static IList<long> ElementSubtract(this IList<long> self, long value)
         {
             var result = new List<long>(self.Count);
 
@@ -5356,20 +5436,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseSubtractFill(this IList<long> self, IList<long> other)
+        public static void ElementSubtractFill(this IList<long> self, IList<long> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (long)(self[i] - other[i]);
         }
 
-        public static void ElementwiseSubtractScalarFill(this IList<long> self, long value)
+        public static void ElementSubtractFill(this IList<long> self, long value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (long)(self[i] - value);
         }
 
-        public static IList<long> ElementwiseMultiply(this IList<long> self, IList<long> other)
+        public static IList<long> ElementMultiply(this IList<long> self, IList<long> other)
         {
             var result = new List<long>(Math.Max(self.Count, other.Count));
 
@@ -5387,7 +5467,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<long> ElementwiseMultiplyScalar(this IList<long> self, long value)
+        public static IList<long> ElementMultiply(this IList<long> self, long value)
         {
             var result = new List<long>(self.Count);
 
@@ -5397,20 +5477,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseMultiplyFill(this IList<long> self, IList<long> other)
+        public static void ElementMultiplyFill(this IList<long> self, IList<long> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (long)(self[i] * other[i]);
         }
 
-        public static void ElementwiseMultiplyScalarFill(this IList<long> self, long value)
+        public static void ElementMultiplyFill(this IList<long> self, long value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (long)(self[i] * value);
         }
 
-        public static IList<long> ElementwiseDivide(this IList<long> self, IList<long> other)
+        public static IList<long> ElementDivide(this IList<long> self, IList<long> other)
         {
             var result = new List<long>(Math.Max(self.Count, other.Count));
 
@@ -5428,7 +5508,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<long> ElementwiseDivideScalar(this IList<long> self, long value)
+        public static IList<long> ElementDivide(this IList<long> self, long value)
         {
             var result = new List<long>(self.Count);
 
@@ -5438,20 +5518,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseDivideFill(this IList<long> self, IList<long> other)
+        public static void ElementDivideFill(this IList<long> self, IList<long> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (long)(self[i] / other[i]);
         }
 
-        public static void ElementwiseDivideScalarFill(this IList<long> self, long value)
+        public static void ElementDivideFill(this IList<long> self, long value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (long)(self[i] / value);
         }
 
-        public static IList<int> ElementwiseAdd(this IList<int> self, IList<int> other)
+        public static IList<int> ElementAdd(this IList<int> self, IList<int> other)
         {
             var result = new List<int>(Math.Max(self.Count, other.Count));
 
@@ -5469,7 +5549,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<int> ElementwiseAddScalar(this IList<int> self, int value)
+        public static IList<int> ElementAdd(this IList<int> self, int value)
         {
             var result = new List<int>(self.Count);
 
@@ -5479,20 +5559,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseAddFill(this IList<int> self, IList<int> other)
+        public static void ElementAddFill(this IList<int> self, IList<int> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (int)(self[i] + other[i]);
         }
 
-        public static void ElementwiseAddScalarFill(this IList<int> self, int value)
+        public static void ElementAddFill(this IList<int> self, int value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (int)(self[i] + value);
         }
 
-        public static IList<int> ElementwiseSubtract(this IList<int> self, IList<int> other)
+        public static IList<int> ElementSubtract(this IList<int> self, IList<int> other)
         {
             var result = new List<int>(Math.Max(self.Count, other.Count));
 
@@ -5510,7 +5590,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<int> ElementwiseSubtractScalar(this IList<int> self, int value)
+        public static IList<int> ElementSubtract(this IList<int> self, int value)
         {
             var result = new List<int>(self.Count);
 
@@ -5520,20 +5600,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseSubtractFill(this IList<int> self, IList<int> other)
+        public static void ElementSubtractFill(this IList<int> self, IList<int> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (int)(self[i] - other[i]);
         }
 
-        public static void ElementwiseSubtractScalarFill(this IList<int> self, int value)
+        public static void ElementSubtractFill(this IList<int> self, int value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (int)(self[i] - value);
         }
 
-        public static IList<int> ElementwiseMultiply(this IList<int> self, IList<int> other)
+        public static IList<int> ElementMultiply(this IList<int> self, IList<int> other)
         {
             var result = new List<int>(Math.Max(self.Count, other.Count));
 
@@ -5551,7 +5631,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<int> ElementwiseMultiplyScalar(this IList<int> self, int value)
+        public static IList<int> ElementMultiply(this IList<int> self, int value)
         {
             var result = new List<int>(self.Count);
 
@@ -5561,20 +5641,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseMultiplyFill(this IList<int> self, IList<int> other)
+        public static void ElementMultiplyFill(this IList<int> self, IList<int> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (int)(self[i] * other[i]);
         }
 
-        public static void ElementwiseMultiplyScalarFill(this IList<int> self, int value)
+        public static void ElementMultiplyFill(this IList<int> self, int value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (int)(self[i] * value);
         }
 
-        public static IList<int> ElementwiseDivide(this IList<int> self, IList<int> other)
+        public static IList<int> ElementDivide(this IList<int> self, IList<int> other)
         {
             var result = new List<int>(Math.Max(self.Count, other.Count));
 
@@ -5592,7 +5672,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<int> ElementwiseDivideScalar(this IList<int> self, int value)
+        public static IList<int> ElementDivide(this IList<int> self, int value)
         {
             var result = new List<int>(self.Count);
 
@@ -5602,20 +5682,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseDivideFill(this IList<int> self, IList<int> other)
+        public static void ElementDivideFill(this IList<int> self, IList<int> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (int)(self[i] / other[i]);
         }
 
-        public static void ElementwiseDivideScalarFill(this IList<int> self, int value)
+        public static void ElementDivideFill(this IList<int> self, int value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (int)(self[i] / value);
         }
 
-        public static IList<short> ElementwiseAdd(this IList<short> self, IList<short> other)
+        public static IList<short> ElementAdd(this IList<short> self, IList<short> other)
         {
             var result = new List<short>(Math.Max(self.Count, other.Count));
 
@@ -5633,7 +5713,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<short> ElementwiseAddScalar(this IList<short> self, short value)
+        public static IList<short> ElementAdd(this IList<short> self, short value)
         {
             var result = new List<short>(self.Count);
 
@@ -5643,20 +5723,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseAddFill(this IList<short> self, IList<short> other)
+        public static void ElementAddFill(this IList<short> self, IList<short> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (short)(self[i] + other[i]);
         }
 
-        public static void ElementwiseAddScalarFill(this IList<short> self, short value)
+        public static void ElementAddFill(this IList<short> self, short value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (short)(self[i] + value);
         }
 
-        public static IList<short> ElementwiseSubtract(this IList<short> self, IList<short> other)
+        public static IList<short> ElementSubtract(this IList<short> self, IList<short> other)
         {
             var result = new List<short>(Math.Max(self.Count, other.Count));
 
@@ -5674,7 +5754,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<short> ElementwiseSubtractScalar(this IList<short> self, short value)
+        public static IList<short> ElementSubtract(this IList<short> self, short value)
         {
             var result = new List<short>(self.Count);
 
@@ -5684,20 +5764,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseSubtractFill(this IList<short> self, IList<short> other)
+        public static void ElementSubtractFill(this IList<short> self, IList<short> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (short)(self[i] - other[i]);
         }
 
-        public static void ElementwiseSubtractScalarFill(this IList<short> self, short value)
+        public static void ElementSubtractFill(this IList<short> self, short value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (short)(self[i] - value);
         }
 
-        public static IList<short> ElementwiseMultiply(this IList<short> self, IList<short> other)
+        public static IList<short> ElementMultiply(this IList<short> self, IList<short> other)
         {
             var result = new List<short>(Math.Max(self.Count, other.Count));
 
@@ -5715,7 +5795,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<short> ElementwiseMultiplyScalar(this IList<short> self, short value)
+        public static IList<short> ElementMultiply(this IList<short> self, short value)
         {
             var result = new List<short>(self.Count);
 
@@ -5725,20 +5805,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseMultiplyFill(this IList<short> self, IList<short> other)
+        public static void ElementMultiplyFill(this IList<short> self, IList<short> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (short)(self[i] * other[i]);
         }
 
-        public static void ElementwiseMultiplyScalarFill(this IList<short> self, short value)
+        public static void ElementMultiplyFill(this IList<short> self, short value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (short)(self[i] * value);
         }
 
-        public static IList<short> ElementwiseDivide(this IList<short> self, IList<short> other)
+        public static IList<short> ElementDivide(this IList<short> self, IList<short> other)
         {
             var result = new List<short>(Math.Max(self.Count, other.Count));
 
@@ -5756,7 +5836,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<short> ElementwiseDivideScalar(this IList<short> self, short value)
+        public static IList<short> ElementDivide(this IList<short> self, short value)
         {
             var result = new List<short>(self.Count);
 
@@ -5766,20 +5846,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseDivideFill(this IList<short> self, IList<short> other)
+        public static void ElementDivideFill(this IList<short> self, IList<short> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (short)(self[i] / other[i]);
         }
 
-        public static void ElementwiseDivideScalarFill(this IList<short> self, short value)
+        public static void ElementDivideFill(this IList<short> self, short value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (short)(self[i] / value);
         }
 
-        public static IList<byte> ElementwiseAdd(this IList<byte> self, IList<byte> other)
+        public static IList<byte> ElementAdd(this IList<byte> self, IList<byte> other)
         {
             var result = new List<byte>(Math.Max(self.Count, other.Count));
 
@@ -5797,7 +5877,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<byte> ElementwiseAddScalar(this IList<byte> self, byte value)
+        public static IList<byte> ElementAdd(this IList<byte> self, byte value)
         {
             var result = new List<byte>(self.Count);
 
@@ -5807,20 +5887,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseAddFill(this IList<byte> self, IList<byte> other)
+        public static void ElementAddFill(this IList<byte> self, IList<byte> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (byte)(self[i] + other[i]);
         }
 
-        public static void ElementwiseAddScalarFill(this IList<byte> self, byte value)
+        public static void ElementAddFill(this IList<byte> self, byte value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (byte)(self[i] + value);
         }
 
-        public static IList<byte> ElementwiseSubtract(this IList<byte> self, IList<byte> other)
+        public static IList<byte> ElementSubtract(this IList<byte> self, IList<byte> other)
         {
             var result = new List<byte>(Math.Max(self.Count, other.Count));
 
@@ -5838,7 +5918,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<byte> ElementwiseSubtractScalar(this IList<byte> self, byte value)
+        public static IList<byte> ElementSubtract(this IList<byte> self, byte value)
         {
             var result = new List<byte>(self.Count);
 
@@ -5848,20 +5928,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseSubtractFill(this IList<byte> self, IList<byte> other)
+        public static void ElementSubtractFill(this IList<byte> self, IList<byte> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (byte)(self[i] - other[i]);
         }
 
-        public static void ElementwiseSubtractScalarFill(this IList<byte> self, byte value)
+        public static void ElementSubtractFill(this IList<byte> self, byte value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (byte)(self[i] - value);
         }
 
-        public static IList<byte> ElementwiseMultiply(this IList<byte> self, IList<byte> other)
+        public static IList<byte> ElementMultiply(this IList<byte> self, IList<byte> other)
         {
             var result = new List<byte>(Math.Max(self.Count, other.Count));
 
@@ -5879,7 +5959,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<byte> ElementwiseMultiplyScalar(this IList<byte> self, byte value)
+        public static IList<byte> ElementMultiply(this IList<byte> self, byte value)
         {
             var result = new List<byte>(self.Count);
 
@@ -5889,20 +5969,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseMultiplyFill(this IList<byte> self, IList<byte> other)
+        public static void ElementMultiplyFill(this IList<byte> self, IList<byte> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (byte)(self[i] * other[i]);
         }
 
-        public static void ElementwiseMultiplyScalarFill(this IList<byte> self, byte value)
+        public static void ElementMultiplyFill(this IList<byte> self, byte value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (byte)(self[i] * value);
         }
 
-        public static IList<byte> ElementwiseDivide(this IList<byte> self, IList<byte> other)
+        public static IList<byte> ElementDivide(this IList<byte> self, IList<byte> other)
         {
             var result = new List<byte>(Math.Max(self.Count, other.Count));
 
@@ -5920,7 +6000,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<byte> ElementwiseDivideScalar(this IList<byte> self, byte value)
+        public static IList<byte> ElementDivide(this IList<byte> self, byte value)
         {
             var result = new List<byte>(self.Count);
 
@@ -5930,20 +6010,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseDivideFill(this IList<byte> self, IList<byte> other)
+        public static void ElementDivideFill(this IList<byte> self, IList<byte> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (byte)(self[i] / other[i]);
         }
 
-        public static void ElementwiseDivideScalarFill(this IList<byte> self, byte value)
+        public static void ElementDivideFill(this IList<byte> self, byte value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (byte)(self[i] / value);
         }
 
-        public static IList<sbyte> ElementwiseAdd(this IList<sbyte> self, IList<sbyte> other)
+        public static IList<sbyte> ElementAdd(this IList<sbyte> self, IList<sbyte> other)
         {
             var result = new List<sbyte>(Math.Max(self.Count, other.Count));
 
@@ -5961,7 +6041,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<sbyte> ElementwiseAddScalar(this IList<sbyte> self, sbyte value)
+        public static IList<sbyte> ElementAdd(this IList<sbyte> self, sbyte value)
         {
             var result = new List<sbyte>(self.Count);
 
@@ -5971,20 +6051,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseAddFill(this IList<sbyte> self, IList<sbyte> other)
+        public static void ElementAddFill(this IList<sbyte> self, IList<sbyte> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (sbyte)(self[i] + other[i]);
         }
 
-        public static void ElementwiseAddScalarFill(this IList<sbyte> self, sbyte value)
+        public static void ElementAddFill(this IList<sbyte> self, sbyte value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (sbyte)(self[i] + value);
         }
 
-        public static IList<sbyte> ElementwiseSubtract(this IList<sbyte> self, IList<sbyte> other)
+        public static IList<sbyte> ElementSubtract(this IList<sbyte> self, IList<sbyte> other)
         {
             var result = new List<sbyte>(Math.Max(self.Count, other.Count));
 
@@ -6002,7 +6082,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<sbyte> ElementwiseSubtractScalar(this IList<sbyte> self, sbyte value)
+        public static IList<sbyte> ElementSubtract(this IList<sbyte> self, sbyte value)
         {
             var result = new List<sbyte>(self.Count);
 
@@ -6012,20 +6092,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseSubtractFill(this IList<sbyte> self, IList<sbyte> other)
+        public static void ElementSubtractFill(this IList<sbyte> self, IList<sbyte> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (sbyte)(self[i] - other[i]);
         }
 
-        public static void ElementwiseSubtractScalarFill(this IList<sbyte> self, sbyte value)
+        public static void ElementSubtractFill(this IList<sbyte> self, sbyte value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (sbyte)(self[i] - value);
         }
 
-        public static IList<sbyte> ElementwiseMultiply(this IList<sbyte> self, IList<sbyte> other)
+        public static IList<sbyte> ElementMultiply(this IList<sbyte> self, IList<sbyte> other)
         {
             var result = new List<sbyte>(Math.Max(self.Count, other.Count));
 
@@ -6043,7 +6123,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<sbyte> ElementwiseMultiplyScalar(this IList<sbyte> self, sbyte value)
+        public static IList<sbyte> ElementMultiply(this IList<sbyte> self, sbyte value)
         {
             var result = new List<sbyte>(self.Count);
 
@@ -6053,20 +6133,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseMultiplyFill(this IList<sbyte> self, IList<sbyte> other)
+        public static void ElementMultiplyFill(this IList<sbyte> self, IList<sbyte> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (sbyte)(self[i] * other[i]);
         }
 
-        public static void ElementwiseMultiplyScalarFill(this IList<sbyte> self, sbyte value)
+        public static void ElementMultiplyFill(this IList<sbyte> self, sbyte value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (sbyte)(self[i] * value);
         }
 
-        public static IList<sbyte> ElementwiseDivide(this IList<sbyte> self, IList<sbyte> other)
+        public static IList<sbyte> ElementDivide(this IList<sbyte> self, IList<sbyte> other)
         {
             var result = new List<sbyte>(Math.Max(self.Count, other.Count));
 
@@ -6084,7 +6164,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<sbyte> ElementwiseDivideScalar(this IList<sbyte> self, sbyte value)
+        public static IList<sbyte> ElementDivide(this IList<sbyte> self, sbyte value)
         {
             var result = new List<sbyte>(self.Count);
 
@@ -6094,20 +6174,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseDivideFill(this IList<sbyte> self, IList<sbyte> other)
+        public static void ElementDivideFill(this IList<sbyte> self, IList<sbyte> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (sbyte)(self[i] / other[i]);
         }
 
-        public static void ElementwiseDivideScalarFill(this IList<sbyte> self, sbyte value)
+        public static void ElementDivideFill(this IList<sbyte> self, sbyte value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (sbyte)(self[i] / value);
         }
 
-        public static IList<decimal> ElementwiseAdd(this IList<decimal> self, IList<decimal> other)
+        public static IList<decimal> ElementAdd(this IList<decimal> self, IList<decimal> other)
         {
             var result = new List<decimal>(Math.Max(self.Count, other.Count));
 
@@ -6125,7 +6205,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<decimal> ElementwiseAddScalar(this IList<decimal> self, decimal value)
+        public static IList<decimal> ElementAdd(this IList<decimal> self, decimal value)
         {
             var result = new List<decimal>(self.Count);
 
@@ -6135,20 +6215,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseAddFill(this IList<decimal> self, IList<decimal> other)
+        public static void ElementAddFill(this IList<decimal> self, IList<decimal> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (decimal)(self[i] + other[i]);
         }
 
-        public static void ElementwiseAddScalarFill(this IList<decimal> self, decimal value)
+        public static void ElementAddFill(this IList<decimal> self, decimal value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (decimal)(self[i] + value);
         }
 
-        public static IList<decimal> ElementwiseSubtract(this IList<decimal> self, IList<decimal> other)
+        public static IList<decimal> ElementSubtract(this IList<decimal> self, IList<decimal> other)
         {
             var result = new List<decimal>(Math.Max(self.Count, other.Count));
 
@@ -6166,7 +6246,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<decimal> ElementwiseSubtractScalar(this IList<decimal> self, decimal value)
+        public static IList<decimal> ElementSubtract(this IList<decimal> self, decimal value)
         {
             var result = new List<decimal>(self.Count);
 
@@ -6176,20 +6256,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseSubtractFill(this IList<decimal> self, IList<decimal> other)
+        public static void ElementSubtractFill(this IList<decimal> self, IList<decimal> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (decimal)(self[i] - other[i]);
         }
 
-        public static void ElementwiseSubtractScalarFill(this IList<decimal> self, decimal value)
+        public static void ElementSubtractFill(this IList<decimal> self, decimal value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (decimal)(self[i] - value);
         }
 
-        public static IList<decimal> ElementwiseMultiply(this IList<decimal> self, IList<decimal> other)
+        public static IList<decimal> ElementMultiply(this IList<decimal> self, IList<decimal> other)
         {
             var result = new List<decimal>(Math.Max(self.Count, other.Count));
 
@@ -6207,7 +6287,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<decimal> ElementwiseMultiplyScalar(this IList<decimal> self, decimal value)
+        public static IList<decimal> ElementMultiply(this IList<decimal> self, decimal value)
         {
             var result = new List<decimal>(self.Count);
 
@@ -6217,20 +6297,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseMultiplyFill(this IList<decimal> self, IList<decimal> other)
+        public static void ElementMultiplyFill(this IList<decimal> self, IList<decimal> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (decimal)(self[i] * other[i]);
         }
 
-        public static void ElementwiseMultiplyScalarFill(this IList<decimal> self, decimal value)
+        public static void ElementMultiplyFill(this IList<decimal> self, decimal value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (decimal)(self[i] * value);
         }
 
-        public static IList<decimal> ElementwiseDivide(this IList<decimal> self, IList<decimal> other)
+        public static IList<decimal> ElementDivide(this IList<decimal> self, IList<decimal> other)
         {
             var result = new List<decimal>(Math.Max(self.Count, other.Count));
 
@@ -6248,7 +6328,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<decimal> ElementwiseDivideScalar(this IList<decimal> self, decimal value)
+        public static IList<decimal> ElementDivide(this IList<decimal> self, decimal value)
         {
             var result = new List<decimal>(self.Count);
 
@@ -6258,14 +6338,14 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseDivideFill(this IList<decimal> self, IList<decimal> other)
+        public static void ElementDivideFill(this IList<decimal> self, IList<decimal> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = (decimal)(self[i] / other[i]);
         }
 
-        public static void ElementwiseDivideScalarFill(this IList<decimal> self, decimal value)
+        public static void ElementDivideFill(this IList<decimal> self, decimal value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (decimal)(self[i] / value);

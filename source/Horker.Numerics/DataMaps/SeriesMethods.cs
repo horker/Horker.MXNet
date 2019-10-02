@@ -5,254 +5,177 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Horker.Numerics.DataMaps.Extensions;
 
 namespace Horker.Numerics.DataMaps
 {
     public partial class SeriesBase : IList
     {
-        enum MethodIndex
-        {
-			CumulativeMax,
-			CumulativeMin,
-			CumulativeProduct,
-			CumulativeSum,
-			FillNaN,
-			GetUnique,
-			RemoveNaN,
-			Correlation,
-			Cor,
-			Covariance,
-			CumulativeMaxFill,
-			CumulativeMinFill,
-			CumulativeProductFill,
-			CumulativeSumFill,
-			CountNaN,
-			CountUnique,
-			Describe,
-			FillNaNFill,
-			Kurtosis,
-			Max,
-			Min,
-			Mean,
-			Median,
-			Mode,
-			Quantile,
-			Skewness,
-			StandardDeviation,
-			Std,
-			Variance,
-			Var,
-			SortFill,
-        }
-
         public SeriesBase CumulativeMax()
         {
-			var m = GetMethodInfo(MethodIndex.CumulativeMax);
-            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
+			var result = GenericIListExtensions.CumulativeMax((dynamic)UnderlyingList);
+            return new Series((IList)result);
         }
 
         public SeriesBase CumulativeMin()
         {
-			var m = GetMethodInfo(MethodIndex.CumulativeMin);
-            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
+			var result = GenericIListExtensions.CumulativeMin((dynamic)UnderlyingList);
+            return new Series((IList)result);
         }
 
         public SeriesBase CumulativeProduct()
         {
-			var m = GetMethodInfo(MethodIndex.CumulativeProduct);
-            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
+			var result = GenericIListExtensions.CumulativeProduct((dynamic)UnderlyingList);
+            return new Series((IList)result);
         }
 
         public SeriesBase CumulativeSum()
         {
-			var m = GetMethodInfo(MethodIndex.CumulativeSum);
-            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
+			var result = GenericIListExtensions.CumulativeSum((dynamic)UnderlyingList);
+            return new Series((IList)result);
         }
 
         public SeriesBase FillNaN(object fillValue)
         {
-			var m = GetMethodInfo(MethodIndex.FillNaN);
-            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList, fillValue }));
+			var result = GenericIListExtensions.FillNaN((dynamic)UnderlyingList, (dynamic)fillValue);
+            return new Series((IList)result);
         }
 
         public SeriesBase GetUnique()
         {
-			var m = GetMethodInfo(MethodIndex.GetUnique);
-            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
+			var result = GenericIListExtensions.GetUnique((dynamic)UnderlyingList);
+            return new Series((IList)result);
         }
 
         public SeriesBase RemoveNaN()
         {
-			var m = GetMethodInfo(MethodIndex.RemoveNaN);
-            return new Series((IList)m.Invoke(null, new object[] { UnderlyingList }));
+			var result = GenericIListExtensions.RemoveNaN((dynamic)UnderlyingList);
+            return new Series((IList)result);
         }
 
         public object Correlation(SeriesBase other, bool skipNaN = true)
         {
-			var m = GetMethodInfo(MethodIndex.Correlation);
-
-            return (object)m.Invoke(null, new object[] { UnderlyingList, other.UnderlyingList, skipNaN });
+			return (object)GenericIListExtensions.Correlation((dynamic)UnderlyingList, (dynamic)other.UnderlyingList, skipNaN);
         }
 
         public object Cor(SeriesBase other, bool skipNaN = true)
         {
-			var m = GetMethodInfo(MethodIndex.Cor);
-
-            return (object)m.Invoke(null, new object[] { UnderlyingList, other.UnderlyingList, skipNaN });
+			return (object)GenericIListExtensions.Cor((dynamic)UnderlyingList, (dynamic)other.UnderlyingList, skipNaN);
         }
 
-        public object Covariance(SeriesBase other)
+        public object Covariance(SeriesBase other, bool unbiased = true, bool skipNaN = true)
         {
-			var m = GetMethodInfo(MethodIndex.Covariance);
+			return (object)GenericIListExtensions.Covariance((dynamic)UnderlyingList, (dynamic)other.UnderlyingList, unbiased, skipNaN);
+        }
 
-            return (object)m.Invoke(null, new object[] { UnderlyingList, other.UnderlyingList });
+        public object Cov(SeriesBase other, bool unbiased = true, bool skipNaN = true)
+        {
+			return (object)GenericIListExtensions.Cov((dynamic)UnderlyingList, (dynamic)other.UnderlyingList, unbiased, skipNaN);
         }
 
         public void CumulativeMaxFill()
         {
-			var m = GetMethodInfo(MethodIndex.CumulativeMaxFill);
-
-            m.Invoke(null, new object[] { UnderlyingList });
+			GenericIListExtensions.CumulativeMaxFill((dynamic)UnderlyingList);
         }
 
         public void CumulativeMinFill()
         {
-			var m = GetMethodInfo(MethodIndex.CumulativeMinFill);
-
-            m.Invoke(null, new object[] { UnderlyingList });
+			GenericIListExtensions.CumulativeMinFill((dynamic)UnderlyingList);
         }
 
         public void CumulativeProductFill()
         {
-			var m = GetMethodInfo(MethodIndex.CumulativeProductFill);
-
-            m.Invoke(null, new object[] { UnderlyingList });
+			GenericIListExtensions.CumulativeProductFill((dynamic)UnderlyingList);
         }
 
         public void CumulativeSumFill()
         {
-			var m = GetMethodInfo(MethodIndex.CumulativeSumFill);
-
-            m.Invoke(null, new object[] { UnderlyingList });
+			GenericIListExtensions.CumulativeSumFill((dynamic)UnderlyingList);
         }
 
         public int CountNaN()
         {
-			var m = GetMethodInfo(MethodIndex.CountNaN);
-
-            return (int)m.Invoke(null, new object[] { UnderlyingList });
+			return (int)GenericIListExtensions.CountNaN((dynamic)UnderlyingList);
         }
 
         public int CountUnique()
         {
-			var m = GetMethodInfo(MethodIndex.CountUnique);
-
-            return (int)m.Invoke(null, new object[] { UnderlyingList });
+			return (int)GenericIListExtensions.CountUnique((dynamic)UnderlyingList);
         }
 
         public Summary Describe()
         {
-			var m = GetMethodInfo(MethodIndex.Describe);
-
-            return (Summary)m.Invoke(null, new object[] { UnderlyingList });
+			return (Summary)GenericIListExtensions.Describe((dynamic)UnderlyingList);
         }
 
         public void FillNaNFill(object fillValue)
         {
-			var m = GetMethodInfo(MethodIndex.FillNaNFill);
-
-            m.Invoke(null, new object[] { UnderlyingList, fillValue });
+			GenericIListExtensions.FillNaNFill((dynamic)UnderlyingList, (dynamic)fillValue);
         }
 
         public object Kurtosis(bool unbiased = true)
         {
-			var m = GetMethodInfo(MethodIndex.Kurtosis);
-
-            return (object)m.Invoke(null, new object[] { UnderlyingList, unbiased });
+			return (object)GenericIListExtensions.Kurtosis((dynamic)UnderlyingList, unbiased);
         }
 
         public object Max()
         {
-			var m = GetMethodInfo(MethodIndex.Max);
-
-            return (object)m.Invoke(null, new object[] { UnderlyingList });
+			return (object)GenericIListExtensions.Max((dynamic)UnderlyingList);
         }
 
         public object Min()
         {
-			var m = GetMethodInfo(MethodIndex.Min);
-
-            return (object)m.Invoke(null, new object[] { UnderlyingList });
+			return (object)GenericIListExtensions.Min((dynamic)UnderlyingList);
         }
 
         public object Mean(bool skipNaN = true)
         {
-			var m = GetMethodInfo(MethodIndex.Mean);
-
-            return (object)m.Invoke(null, new object[] { UnderlyingList, skipNaN });
+			return (object)GenericIListExtensions.Mean((dynamic)UnderlyingList, skipNaN);
         }
 
         public object Median(bool skipNaN = true, bool isSorted = false)
         {
-			var m = GetMethodInfo(MethodIndex.Median);
-
-            return (object)m.Invoke(null, new object[] { UnderlyingList, skipNaN, isSorted });
+			return (object)GenericIListExtensions.Median((dynamic)UnderlyingList, skipNaN, isSorted);
         }
 
         public object Mode(bool skipNaN = true)
         {
-			var m = GetMethodInfo(MethodIndex.Mode);
-
-            return (object)m.Invoke(null, new object[] { UnderlyingList, skipNaN });
+			return (object)GenericIListExtensions.Mode((dynamic)UnderlyingList, skipNaN);
         }
 
-        public object Quantile(bool skipNaN = true, bool isSorted = false)
+        public object Quantile(double p, bool skipNaN = true, bool isSorted = false)
         {
-			var m = GetMethodInfo(MethodIndex.Quantile);
-
-            return (object)m.Invoke(null, new object[] { UnderlyingList, skipNaN, isSorted });
+			return (object)GenericIListExtensions.Quantile((dynamic)UnderlyingList, p, skipNaN, isSorted);
         }
 
         public object Skewness(bool unbiased = true)
         {
-			var m = GetMethodInfo(MethodIndex.Skewness);
-
-            return (object)m.Invoke(null, new object[] { UnderlyingList, unbiased });
+			return (object)GenericIListExtensions.Skewness((dynamic)UnderlyingList, unbiased);
         }
 
         public object StandardDeviation(bool unbiased = true, bool skipNaN = true)
         {
-			var m = GetMethodInfo(MethodIndex.StandardDeviation);
-
-            return (object)m.Invoke(null, new object[] { UnderlyingList, unbiased, skipNaN });
+			return (object)GenericIListExtensions.StandardDeviation((dynamic)UnderlyingList, unbiased, skipNaN);
         }
 
         public object Std(bool unbiased = true, bool skipNaN = true)
         {
-			var m = GetMethodInfo(MethodIndex.Std);
-
-            return (object)m.Invoke(null, new object[] { UnderlyingList, unbiased, skipNaN });
+			return (object)GenericIListExtensions.Std((dynamic)UnderlyingList, unbiased, skipNaN);
         }
 
         public object Variance(bool unbiased = true, bool skipNaN = true)
         {
-			var m = GetMethodInfo(MethodIndex.Variance);
-
-            return (object)m.Invoke(null, new object[] { UnderlyingList, unbiased, skipNaN });
+			return (object)GenericIListExtensions.Variance((dynamic)UnderlyingList, unbiased, skipNaN);
         }
 
         public object Var(bool unbiased = true, bool skipNaN = true)
         {
-			var m = GetMethodInfo(MethodIndex.Var);
-
-            return (object)m.Invoke(null, new object[] { UnderlyingList, unbiased, skipNaN });
+			return (object)GenericIListExtensions.Var((dynamic)UnderlyingList, unbiased, skipNaN);
         }
 
         public void SortFill()
         {
-			var m = GetMethodInfo(MethodIndex.SortFill);
-
-            m.Invoke(null, new object[] { UnderlyingList });
+			GenericIListExtensions.SortFill((dynamic)UnderlyingList);
         }
 
 	}

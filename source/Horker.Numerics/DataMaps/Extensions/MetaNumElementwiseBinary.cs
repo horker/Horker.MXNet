@@ -9,7 +9,7 @@ namespace Horker.Numerics.DataMaps.Extensions
     public partial class GenericIListExtensions
     {
         // CUT ABOVE
-        public static IList<MetaNum> ElementwiseAdd(this IList<MetaNum> self, IList<MetaNum> other)
+        public static IList<MetaNum> ElementAdd(this IList<MetaNum> self, IList<MetaNum> other)
         {
             var result = new List<MetaNum>(Math.Max(self.Count, other.Count));
 
@@ -27,7 +27,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<MetaNum> ElementwiseAddScalar(this IList<MetaNum> self, MetaNum value)
+        public static IList<MetaNum> ElementAdd(this IList<MetaNum> self, MetaNum value)
         {
             var result = new List<MetaNum>(self.Count);
 
@@ -37,14 +37,14 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ElementwiseAddFill(this IList<MetaNum> self, IList<MetaNum> other)
+        public static void ElementAddFill(this IList<MetaNum> self, IList<MetaNum> other)
         {
             var i = 0;
             for (; i < Math.Min(self.Count, other.Count); ++i)
                 self[i] = self[i] + other[i];
         }
 
-        public static void ElementwiseAddScalarFill(this IList<MetaNum> self, MetaNum value)
+        public static void ElementAddFill(this IList<MetaNum> self, MetaNum value)
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = self[i] + value;
