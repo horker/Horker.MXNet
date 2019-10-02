@@ -4955,4 +4955,1320 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
     }
+
+	public static partial class GenericIListExtensions
+	{
+
+        public static IList<double> ElementwiseAdd(this IList<double> self, IList<double> other)
+        {
+            var result = new List<double>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((double)(self[i] + other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<double> ElementwiseAddScalar(this IList<double> self, double value)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)(self[i] + value));
+
+            return result;
+        }
+
+        public static void ElementwiseAddFill(this IList<double> self, IList<double> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (double)(self[i] + other[i]);
+        }
+
+        public static void ElementwiseAddScalarFill(this IList<double> self, double value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)(self[i] + value);
+        }
+
+        public static IList<double> ElementwiseSubtract(this IList<double> self, IList<double> other)
+        {
+            var result = new List<double>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((double)(self[i] - other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<double> ElementwiseSubtractScalar(this IList<double> self, double value)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)(self[i] - value));
+
+            return result;
+        }
+
+        public static void ElementwiseSubtractFill(this IList<double> self, IList<double> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (double)(self[i] - other[i]);
+        }
+
+        public static void ElementwiseSubtractScalarFill(this IList<double> self, double value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)(self[i] - value);
+        }
+
+        public static IList<double> ElementwiseMultiply(this IList<double> self, IList<double> other)
+        {
+            var result = new List<double>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((double)(self[i] * other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<double> ElementwiseMultiplyScalar(this IList<double> self, double value)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)(self[i] * value));
+
+            return result;
+        }
+
+        public static void ElementwiseMultiplyFill(this IList<double> self, IList<double> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (double)(self[i] * other[i]);
+        }
+
+        public static void ElementwiseMultiplyScalarFill(this IList<double> self, double value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)(self[i] * value);
+        }
+
+        public static IList<double> ElementwiseDivide(this IList<double> self, IList<double> other)
+        {
+            var result = new List<double>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((double)(self[i] / other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<double> ElementwiseDivideScalar(this IList<double> self, double value)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)(self[i] / value));
+
+            return result;
+        }
+
+        public static void ElementwiseDivideFill(this IList<double> self, IList<double> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (double)(self[i] / other[i]);
+        }
+
+        public static void ElementwiseDivideScalarFill(this IList<double> self, double value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)(self[i] / value);
+        }
+
+        public static IList<float> ElementwiseAdd(this IList<float> self, IList<float> other)
+        {
+            var result = new List<float>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((float)(self[i] + other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<float> ElementwiseAddScalar(this IList<float> self, float value)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)(self[i] + value));
+
+            return result;
+        }
+
+        public static void ElementwiseAddFill(this IList<float> self, IList<float> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (float)(self[i] + other[i]);
+        }
+
+        public static void ElementwiseAddScalarFill(this IList<float> self, float value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)(self[i] + value);
+        }
+
+        public static IList<float> ElementwiseSubtract(this IList<float> self, IList<float> other)
+        {
+            var result = new List<float>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((float)(self[i] - other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<float> ElementwiseSubtractScalar(this IList<float> self, float value)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)(self[i] - value));
+
+            return result;
+        }
+
+        public static void ElementwiseSubtractFill(this IList<float> self, IList<float> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (float)(self[i] - other[i]);
+        }
+
+        public static void ElementwiseSubtractScalarFill(this IList<float> self, float value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)(self[i] - value);
+        }
+
+        public static IList<float> ElementwiseMultiply(this IList<float> self, IList<float> other)
+        {
+            var result = new List<float>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((float)(self[i] * other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<float> ElementwiseMultiplyScalar(this IList<float> self, float value)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)(self[i] * value));
+
+            return result;
+        }
+
+        public static void ElementwiseMultiplyFill(this IList<float> self, IList<float> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (float)(self[i] * other[i]);
+        }
+
+        public static void ElementwiseMultiplyScalarFill(this IList<float> self, float value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)(self[i] * value);
+        }
+
+        public static IList<float> ElementwiseDivide(this IList<float> self, IList<float> other)
+        {
+            var result = new List<float>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((float)(self[i] / other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<float> ElementwiseDivideScalar(this IList<float> self, float value)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)(self[i] / value));
+
+            return result;
+        }
+
+        public static void ElementwiseDivideFill(this IList<float> self, IList<float> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (float)(self[i] / other[i]);
+        }
+
+        public static void ElementwiseDivideScalarFill(this IList<float> self, float value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)(self[i] / value);
+        }
+
+        public static IList<long> ElementwiseAdd(this IList<long> self, IList<long> other)
+        {
+            var result = new List<long>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((long)(self[i] + other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<long> ElementwiseAddScalar(this IList<long> self, long value)
+        {
+            var result = new List<long>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((long)(self[i] + value));
+
+            return result;
+        }
+
+        public static void ElementwiseAddFill(this IList<long> self, IList<long> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (long)(self[i] + other[i]);
+        }
+
+        public static void ElementwiseAddScalarFill(this IList<long> self, long value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)(self[i] + value);
+        }
+
+        public static IList<long> ElementwiseSubtract(this IList<long> self, IList<long> other)
+        {
+            var result = new List<long>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((long)(self[i] - other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<long> ElementwiseSubtractScalar(this IList<long> self, long value)
+        {
+            var result = new List<long>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((long)(self[i] - value));
+
+            return result;
+        }
+
+        public static void ElementwiseSubtractFill(this IList<long> self, IList<long> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (long)(self[i] - other[i]);
+        }
+
+        public static void ElementwiseSubtractScalarFill(this IList<long> self, long value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)(self[i] - value);
+        }
+
+        public static IList<long> ElementwiseMultiply(this IList<long> self, IList<long> other)
+        {
+            var result = new List<long>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((long)(self[i] * other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<long> ElementwiseMultiplyScalar(this IList<long> self, long value)
+        {
+            var result = new List<long>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((long)(self[i] * value));
+
+            return result;
+        }
+
+        public static void ElementwiseMultiplyFill(this IList<long> self, IList<long> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (long)(self[i] * other[i]);
+        }
+
+        public static void ElementwiseMultiplyScalarFill(this IList<long> self, long value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)(self[i] * value);
+        }
+
+        public static IList<long> ElementwiseDivide(this IList<long> self, IList<long> other)
+        {
+            var result = new List<long>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((long)(self[i] / other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<long> ElementwiseDivideScalar(this IList<long> self, long value)
+        {
+            var result = new List<long>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((long)(self[i] / value));
+
+            return result;
+        }
+
+        public static void ElementwiseDivideFill(this IList<long> self, IList<long> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (long)(self[i] / other[i]);
+        }
+
+        public static void ElementwiseDivideScalarFill(this IList<long> self, long value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)(self[i] / value);
+        }
+
+        public static IList<int> ElementwiseAdd(this IList<int> self, IList<int> other)
+        {
+            var result = new List<int>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((int)(self[i] + other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<int> ElementwiseAddScalar(this IList<int> self, int value)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((int)(self[i] + value));
+
+            return result;
+        }
+
+        public static void ElementwiseAddFill(this IList<int> self, IList<int> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (int)(self[i] + other[i]);
+        }
+
+        public static void ElementwiseAddScalarFill(this IList<int> self, int value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)(self[i] + value);
+        }
+
+        public static IList<int> ElementwiseSubtract(this IList<int> self, IList<int> other)
+        {
+            var result = new List<int>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((int)(self[i] - other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<int> ElementwiseSubtractScalar(this IList<int> self, int value)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((int)(self[i] - value));
+
+            return result;
+        }
+
+        public static void ElementwiseSubtractFill(this IList<int> self, IList<int> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (int)(self[i] - other[i]);
+        }
+
+        public static void ElementwiseSubtractScalarFill(this IList<int> self, int value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)(self[i] - value);
+        }
+
+        public static IList<int> ElementwiseMultiply(this IList<int> self, IList<int> other)
+        {
+            var result = new List<int>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((int)(self[i] * other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<int> ElementwiseMultiplyScalar(this IList<int> self, int value)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((int)(self[i] * value));
+
+            return result;
+        }
+
+        public static void ElementwiseMultiplyFill(this IList<int> self, IList<int> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (int)(self[i] * other[i]);
+        }
+
+        public static void ElementwiseMultiplyScalarFill(this IList<int> self, int value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)(self[i] * value);
+        }
+
+        public static IList<int> ElementwiseDivide(this IList<int> self, IList<int> other)
+        {
+            var result = new List<int>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((int)(self[i] / other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<int> ElementwiseDivideScalar(this IList<int> self, int value)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((int)(self[i] / value));
+
+            return result;
+        }
+
+        public static void ElementwiseDivideFill(this IList<int> self, IList<int> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (int)(self[i] / other[i]);
+        }
+
+        public static void ElementwiseDivideScalarFill(this IList<int> self, int value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)(self[i] / value);
+        }
+
+        public static IList<short> ElementwiseAdd(this IList<short> self, IList<short> other)
+        {
+            var result = new List<short>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((short)(self[i] + other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<short> ElementwiseAddScalar(this IList<short> self, short value)
+        {
+            var result = new List<short>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((short)(self[i] + value));
+
+            return result;
+        }
+
+        public static void ElementwiseAddFill(this IList<short> self, IList<short> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (short)(self[i] + other[i]);
+        }
+
+        public static void ElementwiseAddScalarFill(this IList<short> self, short value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)(self[i] + value);
+        }
+
+        public static IList<short> ElementwiseSubtract(this IList<short> self, IList<short> other)
+        {
+            var result = new List<short>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((short)(self[i] - other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<short> ElementwiseSubtractScalar(this IList<short> self, short value)
+        {
+            var result = new List<short>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((short)(self[i] - value));
+
+            return result;
+        }
+
+        public static void ElementwiseSubtractFill(this IList<short> self, IList<short> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (short)(self[i] - other[i]);
+        }
+
+        public static void ElementwiseSubtractScalarFill(this IList<short> self, short value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)(self[i] - value);
+        }
+
+        public static IList<short> ElementwiseMultiply(this IList<short> self, IList<short> other)
+        {
+            var result = new List<short>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((short)(self[i] * other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<short> ElementwiseMultiplyScalar(this IList<short> self, short value)
+        {
+            var result = new List<short>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((short)(self[i] * value));
+
+            return result;
+        }
+
+        public static void ElementwiseMultiplyFill(this IList<short> self, IList<short> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (short)(self[i] * other[i]);
+        }
+
+        public static void ElementwiseMultiplyScalarFill(this IList<short> self, short value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)(self[i] * value);
+        }
+
+        public static IList<short> ElementwiseDivide(this IList<short> self, IList<short> other)
+        {
+            var result = new List<short>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((short)(self[i] / other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<short> ElementwiseDivideScalar(this IList<short> self, short value)
+        {
+            var result = new List<short>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((short)(self[i] / value));
+
+            return result;
+        }
+
+        public static void ElementwiseDivideFill(this IList<short> self, IList<short> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (short)(self[i] / other[i]);
+        }
+
+        public static void ElementwiseDivideScalarFill(this IList<short> self, short value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)(self[i] / value);
+        }
+
+        public static IList<byte> ElementwiseAdd(this IList<byte> self, IList<byte> other)
+        {
+            var result = new List<byte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((byte)(self[i] + other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<byte> ElementwiseAddScalar(this IList<byte> self, byte value)
+        {
+            var result = new List<byte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((byte)(self[i] + value));
+
+            return result;
+        }
+
+        public static void ElementwiseAddFill(this IList<byte> self, IList<byte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (byte)(self[i] + other[i]);
+        }
+
+        public static void ElementwiseAddScalarFill(this IList<byte> self, byte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)(self[i] + value);
+        }
+
+        public static IList<byte> ElementwiseSubtract(this IList<byte> self, IList<byte> other)
+        {
+            var result = new List<byte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((byte)(self[i] - other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<byte> ElementwiseSubtractScalar(this IList<byte> self, byte value)
+        {
+            var result = new List<byte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((byte)(self[i] - value));
+
+            return result;
+        }
+
+        public static void ElementwiseSubtractFill(this IList<byte> self, IList<byte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (byte)(self[i] - other[i]);
+        }
+
+        public static void ElementwiseSubtractScalarFill(this IList<byte> self, byte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)(self[i] - value);
+        }
+
+        public static IList<byte> ElementwiseMultiply(this IList<byte> self, IList<byte> other)
+        {
+            var result = new List<byte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((byte)(self[i] * other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<byte> ElementwiseMultiplyScalar(this IList<byte> self, byte value)
+        {
+            var result = new List<byte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((byte)(self[i] * value));
+
+            return result;
+        }
+
+        public static void ElementwiseMultiplyFill(this IList<byte> self, IList<byte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (byte)(self[i] * other[i]);
+        }
+
+        public static void ElementwiseMultiplyScalarFill(this IList<byte> self, byte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)(self[i] * value);
+        }
+
+        public static IList<byte> ElementwiseDivide(this IList<byte> self, IList<byte> other)
+        {
+            var result = new List<byte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((byte)(self[i] / other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<byte> ElementwiseDivideScalar(this IList<byte> self, byte value)
+        {
+            var result = new List<byte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((byte)(self[i] / value));
+
+            return result;
+        }
+
+        public static void ElementwiseDivideFill(this IList<byte> self, IList<byte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (byte)(self[i] / other[i]);
+        }
+
+        public static void ElementwiseDivideScalarFill(this IList<byte> self, byte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)(self[i] / value);
+        }
+
+        public static IList<sbyte> ElementwiseAdd(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var result = new List<sbyte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((sbyte)(self[i] + other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<sbyte> ElementwiseAddScalar(this IList<sbyte> self, sbyte value)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((sbyte)(self[i] + value));
+
+            return result;
+        }
+
+        public static void ElementwiseAddFill(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (sbyte)(self[i] + other[i]);
+        }
+
+        public static void ElementwiseAddScalarFill(this IList<sbyte> self, sbyte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)(self[i] + value);
+        }
+
+        public static IList<sbyte> ElementwiseSubtract(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var result = new List<sbyte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((sbyte)(self[i] - other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<sbyte> ElementwiseSubtractScalar(this IList<sbyte> self, sbyte value)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((sbyte)(self[i] - value));
+
+            return result;
+        }
+
+        public static void ElementwiseSubtractFill(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (sbyte)(self[i] - other[i]);
+        }
+
+        public static void ElementwiseSubtractScalarFill(this IList<sbyte> self, sbyte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)(self[i] - value);
+        }
+
+        public static IList<sbyte> ElementwiseMultiply(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var result = new List<sbyte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((sbyte)(self[i] * other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<sbyte> ElementwiseMultiplyScalar(this IList<sbyte> self, sbyte value)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((sbyte)(self[i] * value));
+
+            return result;
+        }
+
+        public static void ElementwiseMultiplyFill(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (sbyte)(self[i] * other[i]);
+        }
+
+        public static void ElementwiseMultiplyScalarFill(this IList<sbyte> self, sbyte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)(self[i] * value);
+        }
+
+        public static IList<sbyte> ElementwiseDivide(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var result = new List<sbyte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((sbyte)(self[i] / other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<sbyte> ElementwiseDivideScalar(this IList<sbyte> self, sbyte value)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((sbyte)(self[i] / value));
+
+            return result;
+        }
+
+        public static void ElementwiseDivideFill(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (sbyte)(self[i] / other[i]);
+        }
+
+        public static void ElementwiseDivideScalarFill(this IList<sbyte> self, sbyte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)(self[i] / value);
+        }
+
+        public static IList<decimal> ElementwiseAdd(this IList<decimal> self, IList<decimal> other)
+        {
+            var result = new List<decimal>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((decimal)(self[i] + other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<decimal> ElementwiseAddScalar(this IList<decimal> self, decimal value)
+        {
+            var result = new List<decimal>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((decimal)(self[i] + value));
+
+            return result;
+        }
+
+        public static void ElementwiseAddFill(this IList<decimal> self, IList<decimal> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (decimal)(self[i] + other[i]);
+        }
+
+        public static void ElementwiseAddScalarFill(this IList<decimal> self, decimal value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)(self[i] + value);
+        }
+
+        public static IList<decimal> ElementwiseSubtract(this IList<decimal> self, IList<decimal> other)
+        {
+            var result = new List<decimal>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((decimal)(self[i] - other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<decimal> ElementwiseSubtractScalar(this IList<decimal> self, decimal value)
+        {
+            var result = new List<decimal>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((decimal)(self[i] - value));
+
+            return result;
+        }
+
+        public static void ElementwiseSubtractFill(this IList<decimal> self, IList<decimal> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (decimal)(self[i] - other[i]);
+        }
+
+        public static void ElementwiseSubtractScalarFill(this IList<decimal> self, decimal value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)(self[i] - value);
+        }
+
+        public static IList<decimal> ElementwiseMultiply(this IList<decimal> self, IList<decimal> other)
+        {
+            var result = new List<decimal>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((decimal)(self[i] * other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<decimal> ElementwiseMultiplyScalar(this IList<decimal> self, decimal value)
+        {
+            var result = new List<decimal>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((decimal)(self[i] * value));
+
+            return result;
+        }
+
+        public static void ElementwiseMultiplyFill(this IList<decimal> self, IList<decimal> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (decimal)(self[i] * other[i]);
+        }
+
+        public static void ElementwiseMultiplyScalarFill(this IList<decimal> self, decimal value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)(self[i] * value);
+        }
+
+        public static IList<decimal> ElementwiseDivide(this IList<decimal> self, IList<decimal> other)
+        {
+            var result = new List<decimal>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((decimal)(self[i] / other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<decimal> ElementwiseDivideScalar(this IList<decimal> self, decimal value)
+        {
+            var result = new List<decimal>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((decimal)(self[i] / value));
+
+            return result;
+        }
+
+        public static void ElementwiseDivideFill(this IList<decimal> self, IList<decimal> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (decimal)(self[i] / other[i]);
+        }
+
+        public static void ElementwiseDivideScalarFill(this IList<decimal> self, decimal value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)(self[i] / value);
+        }
+    }
 }

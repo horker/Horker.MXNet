@@ -22,6 +22,13 @@ var structTypes = new[] {
 	"string",
 };
 
+var operators = new[] {
+	Tuple.Create("ElementwiseAdd", "(MetaNum)(self[i] + other[i])", "(MetaNum)(self[i] + value)"),
+	Tuple.Create("ElementwiseSubtract", "(MetaNum)(self[i] - other[i])", "(MetaNum)(self[i] - value)"),
+	Tuple.Create("ElementwiseMultiply", "(MetaNum)(self[i] * other[i])", "(MetaNum)(self[i] * value)"),
+	Tuple.Create("ElementwiseDivide", "(MetaNum)(self[i] / other[i])", "(MetaNum)(self[i] / value)")
+};
+
 var doc = GetDocument("MetaNumIListExtensions.cs");
 TextInfo textInfo = Thread.CurrentThread.CurrentCulture.TextInfo;
 #>
@@ -35,6 +42,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 	public static partial class GenericIListExtensions
 	{
 <#
+string text;
 foreach (var t in numericTypes)
 {
 	string capitalized = textInfo.ToTitleCase(t);
@@ -43,7 +51,7 @@ foreach (var t in numericTypes)
 	else
 		capitalized = textInfo.ToTitleCase(t);
 
-	var text = doc.Replace("MetaNum", t);
+	text = doc.Replace("MetaNum", t);
 	text = text.Replace("MetaFloat", t == "float" ? "float" : "double");
 #>
 <#= text #>
@@ -55,7 +63,7 @@ doc = GetDocument("MetaStructIListExtensions.cs");
 foreach (var t in structTypes)
 {
 	string capitalized = textInfo.ToTitleCase(t);
-	var text = doc.Replace("MetaStruct", t);
+	text = doc.Replace("MetaStruct", t);
 #>
 <#= text #>
 <#
@@ -66,11 +74,32 @@ foreach (var t in structTypes)
 	public static partial class IListExtensions
 	{
 <#
-var text2 = doc.Replace("IList<MetaStruct>", "IList");
-text2 = text2.Replace("List<MetaStruct>", "List<object>");
-text2 = text2.Replace("MetaStruct", "object");
+text = doc.Replace("IList<MetaStruct>", "IList");
+text = text.Replace("List<MetaStruct>", "List<object>");
+text = text.Replace("MetaStruct", "object");
 #>
-<#= text2 #>
+<#= text #>
+    }
+
+	public static partial class GenericIListExtensions
+	{
+<#
+doc = GetDocument("MetaNumElementwiseBinary.cs");
+foreach (var t in numericTypes)
+{
+    foreach (var op in operators)
+	{
+		text = doc.Replace("ElementwiseAdd", op.Item1);
+		text = text.Replace("self[i] + other[i]", op.Item2);
+		text = text.Replace("self[i] + value", op.Item3);
+        text = text.Replace("MetaNum", t);
+		text = text.Replace("MetaFloat", t == "float" ? "float" : "double");
+#>
+<#= text #>
+<#
+	}
+}
+#>
     }
 }
 <#+
