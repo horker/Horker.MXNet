@@ -22,7 +22,30 @@ var structTypes = new[] {
 	"string",
 };
 
-var operators = new[] {
+var unaryOperators = new[] {
+	Tuple.Create("Abs", "MetaNum", "", "(MetaNum)Math.Abs((double)self[i])"),
+	Tuple.Create("Acos", "MetaNum", "", "(MetaNum)Math.Acos((double)self[i])"),
+	Tuple.Create("Asin", "MetaNum", "", "(MetaNum)Math.Asin((double)self[i])"),
+	Tuple.Create("Atan", "MetaNum", "", "(MetaNum)Math.Atan((double)self[i])"),
+	Tuple.Create("Atan2", "MetaNum", ", double x", "(MetaNum)Math.Atan2((double)self[i], x)"),
+	Tuple.Create("Ceiling", "MetaFloat", "", "(MetaFloat)Math.Ceiling((double)self[i])"),
+	Tuple.Create("Cos", "MetaFloat", "", "(MetaFloat)Math.Cos((double)self[i])"),
+	Tuple.Create("Exp", "MetaFloat", "", "(MetaFloat)Math.Exp((double)self[i])"),
+	Tuple.Create("Floor", "MetaFloat", "", "(MetaFloat)Math.Floor((double)self[i])"),
+	Tuple.Create("Log", "MetaFloat", "", "(MetaFloat)Math.Log((double)self[i])"),
+	Tuple.Create("Log10", "MetaFloat", "", "(MetaFloat)Math.Log10((double)self[i])"),
+	Tuple.Create("Negate", "MetaNum", "", "(MetaNum)-self[i]"),
+	Tuple.Create("Pow", "MetaFloat", ", double exp", "(MetaFloat)Math.Pow((double)self[i], exp)"),
+	Tuple.Create("Sign", "MetaFloat", "", "(MetaFloat)Math.Sign((double)self[i])"),
+	Tuple.Create("Sin", "MetaFloat", "", "(MetaFloat)Math.Sin((double)self[i])"),
+	Tuple.Create("Sinh", "MetaFloat", "", "(MetaFloat)Math.Sinh((double)self[i])"),
+	Tuple.Create("Sqrt", "MetaFloat", "", "(MetaFloat)Math.Sqrt((double)self[i])"),
+	Tuple.Create("Tan", "MetaFloat", "", "(MetaFloat)Math.Tan((double)self[i])"),
+	Tuple.Create("Tanh", "MetaFloat", "", "(MetaFloat)Math.Tanh((double)self[i])"),
+	Tuple.Create("Truncate", "MetaFloat", "", "(MetaFloat)Math.Truncate((double)self[i])"),
+};
+
+var binaryOperators = new[] {
 	Tuple.Create("ElementAdd", "(MetaNum)(self[i] + other[i])", "(MetaNum)(self[i] + value)"),
 	Tuple.Create("ElementSubtract", "(MetaNum)(self[i] - other[i])", "(MetaNum)(self[i] - value)"),
 	Tuple.Create("ElementMultiply", "(MetaNum)(self[i] * other[i])", "(MetaNum)(self[i] * value)"),
@@ -84,10 +107,28 @@ text = text.Replace("MetaStruct", "object");
 	public static partial class GenericIListExtensions
 	{
 <#
+doc = GetDocument("MetaNumElementwiseUnary.cs");
+foreach (var t in numericTypes)
+{
+    foreach (var op in unaryOperators)
+	{
+		var arguments = "(this IList<MetaNum> self" + op.Item3 + ")";
+		text = doc.Replace("Negate(this IList<MetaNum> self)", op.Item1 + arguments);
+		text = text.Replace("NegateFill(this IList<MetaNum> self)", op.Item1 + "Fill" + arguments);
+		text = text.Replace("ReturnType", op.Item2);
+		text = text.Replace("-self[i]", op.Item4);
+        text = text.Replace("MetaNum", t);
+		text = text.Replace("MetaFloat", t == "float" ? "float" : "double");
+#>
+<#= text #>
+<#
+	}
+}
+
 doc = GetDocument("MetaNumElementwiseBinary.cs");
 foreach (var t in numericTypes)
 {
-    foreach (var op in operators)
+    foreach (var op in binaryOperators)
 	{
 		text = doc.Replace("ElementAdd", op.Item1);
 		text = text.Replace("self[i] + other[i]", op.Item2);

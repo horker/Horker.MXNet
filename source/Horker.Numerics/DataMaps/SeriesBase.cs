@@ -230,6 +230,8 @@ namespace Horker.Numerics.DataMaps
 
         // Arithmetic operators
 
+        public static SeriesBase operator -(SeriesBase self) { return self.Negate(); }
+
         public static SeriesBase operator +(SeriesBase lhs, SeriesBase rhs) { return lhs.ElementAdd(rhs);  }
         public static SeriesBase operator -(SeriesBase lhs, SeriesBase rhs) { return lhs.ElementSubtract(rhs);  }
         public static SeriesBase operator *(SeriesBase lhs, SeriesBase rhs) { return lhs.ElementMultiply(rhs);  }

@@ -5,12 +5,32 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 <#   
-var methodNames = new []
+var methodNames = new[]
 {
-	Tuple.Create("CumulativeMax", "", ""),
-	Tuple.Create("CumulativeMin", "", ""),
-	Tuple.Create("CumulativeProduct", "", ""),
-	Tuple.Create("CumulativeSum", "", ""),
+	// Elementwise unary operations and functions
+
+	Tuple.Create("Abs", "", ""),
+	Tuple.Create("Acos", "", ""),
+	Tuple.Create("Asin", "", ""),
+	Tuple.Create("Atan", "", ""),
+	Tuple.Create("Atan2", "double x", ", x"),
+	Tuple.Create("Ceiling", "", ""),
+	Tuple.Create("Cos", "", ""),
+	Tuple.Create("Exp", "", ""),
+	Tuple.Create("Log", "", ""),
+	Tuple.Create("Log10", "", ""),
+	Tuple.Create("Negate", "", ""),
+	Tuple.Create("Pow", "double exp", ", exp"),
+	Tuple.Create("Sign", "", ""),
+	Tuple.Create("Sin", "", ""),
+	Tuple.Create("Sinh", "", ""),
+	Tuple.Create("Sqrt", "", ""),
+	Tuple.Create("Tan", "", ""),
+	Tuple.Create("Tanh", "", ""),
+	Tuple.Create("Truncate", "", ""),
+	
+	// Elementwise binary operations
+
 	Tuple.Create("ElementAdd", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
 	Tuple.Create("ElementAdd", "object other", ", (dynamic)other"),
 	Tuple.Create("ElementSubtract", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
@@ -19,6 +39,13 @@ var methodNames = new []
 	Tuple.Create("ElementMultiply", "object other", ", (dynamic)other"),
 	Tuple.Create("ElementDivide", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
 	Tuple.Create("ElementDivide", "object other", ", (dynamic)other"),
+
+	// Other operations
+
+	Tuple.Create("CumulativeMax", "", ""),
+	Tuple.Create("CumulativeMin", "", ""),
+	Tuple.Create("CumulativeProduct", "", ""),
+	Tuple.Create("CumulativeSum", "", ""),
 	Tuple.Create("FillNaN", "object fillValue", ", (dynamic)fillValue"),
 	Tuple.Create("GetUnique", "", ""),
 	Tuple.Create("RemoveNaN", "", ""),
@@ -26,6 +53,41 @@ var methodNames = new []
 
 var nonSeriesMethods = new[]
 {
+	// Elementwise unary operations and functions
+
+	Tuple.Create("AbsFill", "void", "", ""),
+	Tuple.Create("AcosFill", "void", "", ""),
+	Tuple.Create("AsinFill", "void", "", ""),
+	Tuple.Create("AtanFill", "void", "", ""),
+	Tuple.Create("Atan2Fill", "void", "double x", ", x"),
+	Tuple.Create("CeilingFill", "void", "", ""),
+	Tuple.Create("CosFill", "void", "", ""),
+	Tuple.Create("ExpFill", "void", "", ""),
+	Tuple.Create("LogFill", "void", "", ""),
+	Tuple.Create("Log10Fill", "void", "", ""),
+	Tuple.Create("NegateFill", "void", "", ""),
+	Tuple.Create("PowFill", "void", "double exp", ", exp"),
+	Tuple.Create("SignFill", "void", "", ""),
+	Tuple.Create("SinFill", "void", "", ""),
+	Tuple.Create("SinhFill", "void", "", ""),
+	Tuple.Create("SqrtFill", "void", "", ""),
+	Tuple.Create("TanFill", "void", "", ""),
+	Tuple.Create("TanhFill", "void", "", ""),
+	Tuple.Create("TruncateFill", "void", "", ""),
+
+	// Elementwise binary operations
+
+	Tuple.Create("ElementAddFill", "void", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
+	Tuple.Create("ElementAddFill", "void", "object other", ", (dynamic)other"),
+	Tuple.Create("ElementSubtractFill", "void", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
+	Tuple.Create("ElementSubtractFill", "void", "object other", ", (dynamic)other"),
+	Tuple.Create("ElementMultiplyFill", "void", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
+	Tuple.Create("ElementMultiplyFill", "void", "object other", ", (dynamic)other"),
+	Tuple.Create("ElementDivideFill", "void", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
+	Tuple.Create("ElementDivideFill", "void", "object other", ", (dynamic)other"),
+
+	// Other operations
+
 	Tuple.Create("Correlation", "object", "SeriesBase other, bool skipNaN = true", ", (dynamic)other.UnderlyingList, skipNaN"),
 	Tuple.Create("Cor", "object", "SeriesBase other, bool skipNaN = true", ", (dynamic)other.UnderlyingList, skipNaN"),
 	Tuple.Create("Covariance", "object", "SeriesBase other, bool unbiased = true, bool skipNaN = true", ", (dynamic)other.UnderlyingList, unbiased, skipNaN"),
@@ -37,14 +99,6 @@ var nonSeriesMethods = new[]
 	Tuple.Create("CountNaN", "int", "", ""),
 	Tuple.Create("CountUnique", "int", "", ""),
 	Tuple.Create("Describe", "Summary", "", ""),
-	Tuple.Create("ElementAddFill", "void", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
-	Tuple.Create("ElementAddFill", "void", "object other", ", (dynamic)other"),
-	Tuple.Create("ElementSubtractFill", "void", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
-	Tuple.Create("ElementSubtractFill", "void", "object other", ", (dynamic)other"),
-	Tuple.Create("ElementMultiplyFill", "void", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
-	Tuple.Create("ElementMultiplyFill", "void", "object other", ", (dynamic)other"),
-	Tuple.Create("ElementDivideFill", "void", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
-	Tuple.Create("ElementDivideFill", "void", "object other", ", (dynamic)other"),
 	Tuple.Create("FillNaNFill", "void", "object fillValue", ", (dynamic)fillValue"),
 	Tuple.Create("Kurtosis", "object","bool unbiased = true", ", unbiased"),
     Tuple.Create("Max", "object", "", ""),

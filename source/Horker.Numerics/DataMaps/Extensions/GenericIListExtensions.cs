@@ -5039,6 +5039,2566 @@ namespace Horker.Numerics.DataMaps.Extensions
 	public static partial class GenericIListExtensions
 	{
 
+        public static IList<double> Abs(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Abs((double)self[i]));
+
+            return result;
+        }
+
+        public static void AbsFill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Abs((double)self[i]));
+        }
+
+        public static IList<double> Acos(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Acos((double)self[i]));
+
+            return result;
+        }
+
+        public static void AcosFill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Acos((double)self[i]));
+        }
+
+        public static IList<double> Asin(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Asin((double)self[i]));
+
+            return result;
+        }
+
+        public static void AsinFill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Asin((double)self[i]));
+        }
+
+        public static IList<double> Atan(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Atan((double)self[i]));
+
+            return result;
+        }
+
+        public static void AtanFill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Atan((double)self[i]));
+        }
+
+        public static IList<double> Atan2(this IList<double> self, double x)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Atan2((double)self[i], x));
+
+            return result;
+        }
+
+        public static void Atan2Fill(this IList<double> self, double x)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Atan2((double)self[i], x));
+        }
+
+        public static IList<double> Ceiling(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Ceiling((double)self[i]));
+
+            return result;
+        }
+
+        public static void CeilingFill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Ceiling((double)self[i]));
+        }
+
+        public static IList<double> Cos(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Cos((double)self[i]));
+
+            return result;
+        }
+
+        public static void CosFill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Cos((double)self[i]));
+        }
+
+        public static IList<double> Exp(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Exp((double)self[i]));
+
+            return result;
+        }
+
+        public static void ExpFill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Exp((double)self[i]));
+        }
+
+        public static IList<double> Floor(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Floor((double)self[i]));
+
+            return result;
+        }
+
+        public static void FloorFill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Floor((double)self[i]));
+        }
+
+        public static IList<double> Log(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Log((double)self[i]));
+
+            return result;
+        }
+
+        public static void LogFill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Log((double)self[i]));
+        }
+
+        public static IList<double> Log10(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Log10((double)self[i]));
+
+            return result;
+        }
+
+        public static void Log10Fill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Log10((double)self[i]));
+        }
+
+        public static IList<double> Negate(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)-self[i]);
+
+            return result;
+        }
+
+        public static void NegateFill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)-self[i]);
+        }
+
+        public static IList<double> Pow(this IList<double> self, double exp)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Pow((double)self[i], exp));
+
+            return result;
+        }
+
+        public static void PowFill(this IList<double> self, double exp)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Pow((double)self[i], exp));
+        }
+
+        public static IList<double> Sign(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sign((double)self[i]));
+
+            return result;
+        }
+
+        public static void SignFill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Sign((double)self[i]));
+        }
+
+        public static IList<double> Sin(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sin((double)self[i]));
+
+            return result;
+        }
+
+        public static void SinFill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Sin((double)self[i]));
+        }
+
+        public static IList<double> Sinh(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sinh((double)self[i]));
+
+            return result;
+        }
+
+        public static void SinhFill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Sinh((double)self[i]));
+        }
+
+        public static IList<double> Sqrt(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sqrt((double)self[i]));
+
+            return result;
+        }
+
+        public static void SqrtFill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Sqrt((double)self[i]));
+        }
+
+        public static IList<double> Tan(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Tan((double)self[i]));
+
+            return result;
+        }
+
+        public static void TanFill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Tan((double)self[i]));
+        }
+
+        public static IList<double> Tanh(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Tanh((double)self[i]));
+
+            return result;
+        }
+
+        public static void TanhFill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Tanh((double)self[i]));
+        }
+
+        public static IList<double> Truncate(this IList<double> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Truncate((double)self[i]));
+
+            return result;
+        }
+
+        public static void TruncateFill(this IList<double> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Truncate((double)self[i]));
+        }
+
+        public static IList<float> Abs(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Abs((double)self[i]));
+
+            return result;
+        }
+
+        public static void AbsFill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Abs((double)self[i]));
+        }
+
+        public static IList<float> Acos(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Acos((double)self[i]));
+
+            return result;
+        }
+
+        public static void AcosFill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Acos((double)self[i]));
+        }
+
+        public static IList<float> Asin(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Asin((double)self[i]));
+
+            return result;
+        }
+
+        public static void AsinFill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Asin((double)self[i]));
+        }
+
+        public static IList<float> Atan(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Atan((double)self[i]));
+
+            return result;
+        }
+
+        public static void AtanFill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Atan((double)self[i]));
+        }
+
+        public static IList<float> Atan2(this IList<float> self, double x)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Atan2((double)self[i], x));
+
+            return result;
+        }
+
+        public static void Atan2Fill(this IList<float> self, double x)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Atan2((double)self[i], x));
+        }
+
+        public static IList<float> Ceiling(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Ceiling((double)self[i]));
+
+            return result;
+        }
+
+        public static void CeilingFill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Ceiling((double)self[i]));
+        }
+
+        public static IList<float> Cos(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Cos((double)self[i]));
+
+            return result;
+        }
+
+        public static void CosFill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Cos((double)self[i]));
+        }
+
+        public static IList<float> Exp(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Exp((double)self[i]));
+
+            return result;
+        }
+
+        public static void ExpFill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Exp((double)self[i]));
+        }
+
+        public static IList<float> Floor(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Floor((double)self[i]));
+
+            return result;
+        }
+
+        public static void FloorFill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Floor((double)self[i]));
+        }
+
+        public static IList<float> Log(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Log((double)self[i]));
+
+            return result;
+        }
+
+        public static void LogFill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Log((double)self[i]));
+        }
+
+        public static IList<float> Log10(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Log10((double)self[i]));
+
+            return result;
+        }
+
+        public static void Log10Fill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Log10((double)self[i]));
+        }
+
+        public static IList<float> Negate(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)-self[i]);
+
+            return result;
+        }
+
+        public static void NegateFill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)-self[i]);
+        }
+
+        public static IList<float> Pow(this IList<float> self, double exp)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Pow((double)self[i], exp));
+
+            return result;
+        }
+
+        public static void PowFill(this IList<float> self, double exp)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Pow((double)self[i], exp));
+        }
+
+        public static IList<float> Sign(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Sign((double)self[i]));
+
+            return result;
+        }
+
+        public static void SignFill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Sign((double)self[i]));
+        }
+
+        public static IList<float> Sin(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Sin((double)self[i]));
+
+            return result;
+        }
+
+        public static void SinFill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Sin((double)self[i]));
+        }
+
+        public static IList<float> Sinh(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Sinh((double)self[i]));
+
+            return result;
+        }
+
+        public static void SinhFill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Sinh((double)self[i]));
+        }
+
+        public static IList<float> Sqrt(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Sqrt((double)self[i]));
+
+            return result;
+        }
+
+        public static void SqrtFill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Sqrt((double)self[i]));
+        }
+
+        public static IList<float> Tan(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Tan((double)self[i]));
+
+            return result;
+        }
+
+        public static void TanFill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Tan((double)self[i]));
+        }
+
+        public static IList<float> Tanh(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Tanh((double)self[i]));
+
+            return result;
+        }
+
+        public static void TanhFill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Tanh((double)self[i]));
+        }
+
+        public static IList<float> Truncate(this IList<float> self)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Truncate((double)self[i]));
+
+            return result;
+        }
+
+        public static void TruncateFill(this IList<float> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Truncate((double)self[i]));
+        }
+
+        public static IList<long> Abs(this IList<long> self)
+        {
+            var result = new List<long>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((long)Math.Abs((double)self[i]));
+
+            return result;
+        }
+
+        public static void AbsFill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((long)Math.Abs((double)self[i]));
+        }
+
+        public static IList<long> Acos(this IList<long> self)
+        {
+            var result = new List<long>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((long)Math.Acos((double)self[i]));
+
+            return result;
+        }
+
+        public static void AcosFill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((long)Math.Acos((double)self[i]));
+        }
+
+        public static IList<long> Asin(this IList<long> self)
+        {
+            var result = new List<long>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((long)Math.Asin((double)self[i]));
+
+            return result;
+        }
+
+        public static void AsinFill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((long)Math.Asin((double)self[i]));
+        }
+
+        public static IList<long> Atan(this IList<long> self)
+        {
+            var result = new List<long>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((long)Math.Atan((double)self[i]));
+
+            return result;
+        }
+
+        public static void AtanFill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((long)Math.Atan((double)self[i]));
+        }
+
+        public static IList<long> Atan2(this IList<long> self, double x)
+        {
+            var result = new List<long>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((long)Math.Atan2((double)self[i], x));
+
+            return result;
+        }
+
+        public static void Atan2Fill(this IList<long> self, double x)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((long)Math.Atan2((double)self[i], x));
+        }
+
+        public static IList<double> Ceiling(this IList<long> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Ceiling((double)self[i]));
+
+            return result;
+        }
+
+        public static void CeilingFill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((double)Math.Ceiling((double)self[i]));
+        }
+
+        public static IList<double> Cos(this IList<long> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Cos((double)self[i]));
+
+            return result;
+        }
+
+        public static void CosFill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((double)Math.Cos((double)self[i]));
+        }
+
+        public static IList<double> Exp(this IList<long> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Exp((double)self[i]));
+
+            return result;
+        }
+
+        public static void ExpFill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((double)Math.Exp((double)self[i]));
+        }
+
+        public static IList<double> Floor(this IList<long> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Floor((double)self[i]));
+
+            return result;
+        }
+
+        public static void FloorFill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((double)Math.Floor((double)self[i]));
+        }
+
+        public static IList<double> Log(this IList<long> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Log((double)self[i]));
+
+            return result;
+        }
+
+        public static void LogFill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((double)Math.Log((double)self[i]));
+        }
+
+        public static IList<double> Log10(this IList<long> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Log10((double)self[i]));
+
+            return result;
+        }
+
+        public static void Log10Fill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((double)Math.Log10((double)self[i]));
+        }
+
+        public static IList<long> Negate(this IList<long> self)
+        {
+            var result = new List<long>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((long)-self[i]);
+
+            return result;
+        }
+
+        public static void NegateFill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((long)-self[i]);
+        }
+
+        public static IList<double> Pow(this IList<long> self, double exp)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Pow((double)self[i], exp));
+
+            return result;
+        }
+
+        public static void PowFill(this IList<long> self, double exp)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((double)Math.Pow((double)self[i], exp));
+        }
+
+        public static IList<double> Sign(this IList<long> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sign((double)self[i]));
+
+            return result;
+        }
+
+        public static void SignFill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((double)Math.Sign((double)self[i]));
+        }
+
+        public static IList<double> Sin(this IList<long> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sin((double)self[i]));
+
+            return result;
+        }
+
+        public static void SinFill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((double)Math.Sin((double)self[i]));
+        }
+
+        public static IList<double> Sinh(this IList<long> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sinh((double)self[i]));
+
+            return result;
+        }
+
+        public static void SinhFill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((double)Math.Sinh((double)self[i]));
+        }
+
+        public static IList<double> Sqrt(this IList<long> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sqrt((double)self[i]));
+
+            return result;
+        }
+
+        public static void SqrtFill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((double)Math.Sqrt((double)self[i]));
+        }
+
+        public static IList<double> Tan(this IList<long> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Tan((double)self[i]));
+
+            return result;
+        }
+
+        public static void TanFill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((double)Math.Tan((double)self[i]));
+        }
+
+        public static IList<double> Tanh(this IList<long> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Tanh((double)self[i]));
+
+            return result;
+        }
+
+        public static void TanhFill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((double)Math.Tanh((double)self[i]));
+        }
+
+        public static IList<double> Truncate(this IList<long> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Truncate((double)self[i]));
+
+            return result;
+        }
+
+        public static void TruncateFill(this IList<long> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((double)Math.Truncate((double)self[i]));
+        }
+
+        public static IList<int> Abs(this IList<int> self)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((int)Math.Abs((double)self[i]));
+
+            return result;
+        }
+
+        public static void AbsFill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((int)Math.Abs((double)self[i]));
+        }
+
+        public static IList<int> Acos(this IList<int> self)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((int)Math.Acos((double)self[i]));
+
+            return result;
+        }
+
+        public static void AcosFill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((int)Math.Acos((double)self[i]));
+        }
+
+        public static IList<int> Asin(this IList<int> self)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((int)Math.Asin((double)self[i]));
+
+            return result;
+        }
+
+        public static void AsinFill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((int)Math.Asin((double)self[i]));
+        }
+
+        public static IList<int> Atan(this IList<int> self)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((int)Math.Atan((double)self[i]));
+
+            return result;
+        }
+
+        public static void AtanFill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((int)Math.Atan((double)self[i]));
+        }
+
+        public static IList<int> Atan2(this IList<int> self, double x)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((int)Math.Atan2((double)self[i], x));
+
+            return result;
+        }
+
+        public static void Atan2Fill(this IList<int> self, double x)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((int)Math.Atan2((double)self[i], x));
+        }
+
+        public static IList<double> Ceiling(this IList<int> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Ceiling((double)self[i]));
+
+            return result;
+        }
+
+        public static void CeilingFill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((double)Math.Ceiling((double)self[i]));
+        }
+
+        public static IList<double> Cos(this IList<int> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Cos((double)self[i]));
+
+            return result;
+        }
+
+        public static void CosFill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((double)Math.Cos((double)self[i]));
+        }
+
+        public static IList<double> Exp(this IList<int> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Exp((double)self[i]));
+
+            return result;
+        }
+
+        public static void ExpFill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((double)Math.Exp((double)self[i]));
+        }
+
+        public static IList<double> Floor(this IList<int> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Floor((double)self[i]));
+
+            return result;
+        }
+
+        public static void FloorFill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((double)Math.Floor((double)self[i]));
+        }
+
+        public static IList<double> Log(this IList<int> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Log((double)self[i]));
+
+            return result;
+        }
+
+        public static void LogFill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((double)Math.Log((double)self[i]));
+        }
+
+        public static IList<double> Log10(this IList<int> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Log10((double)self[i]));
+
+            return result;
+        }
+
+        public static void Log10Fill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((double)Math.Log10((double)self[i]));
+        }
+
+        public static IList<int> Negate(this IList<int> self)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((int)-self[i]);
+
+            return result;
+        }
+
+        public static void NegateFill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((int)-self[i]);
+        }
+
+        public static IList<double> Pow(this IList<int> self, double exp)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Pow((double)self[i], exp));
+
+            return result;
+        }
+
+        public static void PowFill(this IList<int> self, double exp)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((double)Math.Pow((double)self[i], exp));
+        }
+
+        public static IList<double> Sign(this IList<int> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sign((double)self[i]));
+
+            return result;
+        }
+
+        public static void SignFill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((double)Math.Sign((double)self[i]));
+        }
+
+        public static IList<double> Sin(this IList<int> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sin((double)self[i]));
+
+            return result;
+        }
+
+        public static void SinFill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((double)Math.Sin((double)self[i]));
+        }
+
+        public static IList<double> Sinh(this IList<int> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sinh((double)self[i]));
+
+            return result;
+        }
+
+        public static void SinhFill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((double)Math.Sinh((double)self[i]));
+        }
+
+        public static IList<double> Sqrt(this IList<int> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sqrt((double)self[i]));
+
+            return result;
+        }
+
+        public static void SqrtFill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((double)Math.Sqrt((double)self[i]));
+        }
+
+        public static IList<double> Tan(this IList<int> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Tan((double)self[i]));
+
+            return result;
+        }
+
+        public static void TanFill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((double)Math.Tan((double)self[i]));
+        }
+
+        public static IList<double> Tanh(this IList<int> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Tanh((double)self[i]));
+
+            return result;
+        }
+
+        public static void TanhFill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((double)Math.Tanh((double)self[i]));
+        }
+
+        public static IList<double> Truncate(this IList<int> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Truncate((double)self[i]));
+
+            return result;
+        }
+
+        public static void TruncateFill(this IList<int> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((double)Math.Truncate((double)self[i]));
+        }
+
+        public static IList<short> Abs(this IList<short> self)
+        {
+            var result = new List<short>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((short)Math.Abs((double)self[i]));
+
+            return result;
+        }
+
+        public static void AbsFill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((short)Math.Abs((double)self[i]));
+        }
+
+        public static IList<short> Acos(this IList<short> self)
+        {
+            var result = new List<short>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((short)Math.Acos((double)self[i]));
+
+            return result;
+        }
+
+        public static void AcosFill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((short)Math.Acos((double)self[i]));
+        }
+
+        public static IList<short> Asin(this IList<short> self)
+        {
+            var result = new List<short>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((short)Math.Asin((double)self[i]));
+
+            return result;
+        }
+
+        public static void AsinFill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((short)Math.Asin((double)self[i]));
+        }
+
+        public static IList<short> Atan(this IList<short> self)
+        {
+            var result = new List<short>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((short)Math.Atan((double)self[i]));
+
+            return result;
+        }
+
+        public static void AtanFill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((short)Math.Atan((double)self[i]));
+        }
+
+        public static IList<short> Atan2(this IList<short> self, double x)
+        {
+            var result = new List<short>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((short)Math.Atan2((double)self[i], x));
+
+            return result;
+        }
+
+        public static void Atan2Fill(this IList<short> self, double x)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((short)Math.Atan2((double)self[i], x));
+        }
+
+        public static IList<double> Ceiling(this IList<short> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Ceiling((double)self[i]));
+
+            return result;
+        }
+
+        public static void CeilingFill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((double)Math.Ceiling((double)self[i]));
+        }
+
+        public static IList<double> Cos(this IList<short> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Cos((double)self[i]));
+
+            return result;
+        }
+
+        public static void CosFill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((double)Math.Cos((double)self[i]));
+        }
+
+        public static IList<double> Exp(this IList<short> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Exp((double)self[i]));
+
+            return result;
+        }
+
+        public static void ExpFill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((double)Math.Exp((double)self[i]));
+        }
+
+        public static IList<double> Floor(this IList<short> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Floor((double)self[i]));
+
+            return result;
+        }
+
+        public static void FloorFill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((double)Math.Floor((double)self[i]));
+        }
+
+        public static IList<double> Log(this IList<short> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Log((double)self[i]));
+
+            return result;
+        }
+
+        public static void LogFill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((double)Math.Log((double)self[i]));
+        }
+
+        public static IList<double> Log10(this IList<short> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Log10((double)self[i]));
+
+            return result;
+        }
+
+        public static void Log10Fill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((double)Math.Log10((double)self[i]));
+        }
+
+        public static IList<short> Negate(this IList<short> self)
+        {
+            var result = new List<short>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((short)-self[i]);
+
+            return result;
+        }
+
+        public static void NegateFill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((short)-self[i]);
+        }
+
+        public static IList<double> Pow(this IList<short> self, double exp)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Pow((double)self[i], exp));
+
+            return result;
+        }
+
+        public static void PowFill(this IList<short> self, double exp)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((double)Math.Pow((double)self[i], exp));
+        }
+
+        public static IList<double> Sign(this IList<short> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sign((double)self[i]));
+
+            return result;
+        }
+
+        public static void SignFill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((double)Math.Sign((double)self[i]));
+        }
+
+        public static IList<double> Sin(this IList<short> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sin((double)self[i]));
+
+            return result;
+        }
+
+        public static void SinFill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((double)Math.Sin((double)self[i]));
+        }
+
+        public static IList<double> Sinh(this IList<short> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sinh((double)self[i]));
+
+            return result;
+        }
+
+        public static void SinhFill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((double)Math.Sinh((double)self[i]));
+        }
+
+        public static IList<double> Sqrt(this IList<short> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sqrt((double)self[i]));
+
+            return result;
+        }
+
+        public static void SqrtFill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((double)Math.Sqrt((double)self[i]));
+        }
+
+        public static IList<double> Tan(this IList<short> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Tan((double)self[i]));
+
+            return result;
+        }
+
+        public static void TanFill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((double)Math.Tan((double)self[i]));
+        }
+
+        public static IList<double> Tanh(this IList<short> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Tanh((double)self[i]));
+
+            return result;
+        }
+
+        public static void TanhFill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((double)Math.Tanh((double)self[i]));
+        }
+
+        public static IList<double> Truncate(this IList<short> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Truncate((double)self[i]));
+
+            return result;
+        }
+
+        public static void TruncateFill(this IList<short> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((double)Math.Truncate((double)self[i]));
+        }
+
+        public static IList<byte> Abs(this IList<byte> self)
+        {
+            var result = new List<byte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((byte)Math.Abs((double)self[i]));
+
+            return result;
+        }
+
+        public static void AbsFill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((byte)Math.Abs((double)self[i]));
+        }
+
+        public static IList<byte> Acos(this IList<byte> self)
+        {
+            var result = new List<byte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((byte)Math.Acos((double)self[i]));
+
+            return result;
+        }
+
+        public static void AcosFill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((byte)Math.Acos((double)self[i]));
+        }
+
+        public static IList<byte> Asin(this IList<byte> self)
+        {
+            var result = new List<byte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((byte)Math.Asin((double)self[i]));
+
+            return result;
+        }
+
+        public static void AsinFill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((byte)Math.Asin((double)self[i]));
+        }
+
+        public static IList<byte> Atan(this IList<byte> self)
+        {
+            var result = new List<byte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((byte)Math.Atan((double)self[i]));
+
+            return result;
+        }
+
+        public static void AtanFill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((byte)Math.Atan((double)self[i]));
+        }
+
+        public static IList<byte> Atan2(this IList<byte> self, double x)
+        {
+            var result = new List<byte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((byte)Math.Atan2((double)self[i], x));
+
+            return result;
+        }
+
+        public static void Atan2Fill(this IList<byte> self, double x)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((byte)Math.Atan2((double)self[i], x));
+        }
+
+        public static IList<double> Ceiling(this IList<byte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Ceiling((double)self[i]));
+
+            return result;
+        }
+
+        public static void CeilingFill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((double)Math.Ceiling((double)self[i]));
+        }
+
+        public static IList<double> Cos(this IList<byte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Cos((double)self[i]));
+
+            return result;
+        }
+
+        public static void CosFill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((double)Math.Cos((double)self[i]));
+        }
+
+        public static IList<double> Exp(this IList<byte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Exp((double)self[i]));
+
+            return result;
+        }
+
+        public static void ExpFill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((double)Math.Exp((double)self[i]));
+        }
+
+        public static IList<double> Floor(this IList<byte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Floor((double)self[i]));
+
+            return result;
+        }
+
+        public static void FloorFill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((double)Math.Floor((double)self[i]));
+        }
+
+        public static IList<double> Log(this IList<byte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Log((double)self[i]));
+
+            return result;
+        }
+
+        public static void LogFill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((double)Math.Log((double)self[i]));
+        }
+
+        public static IList<double> Log10(this IList<byte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Log10((double)self[i]));
+
+            return result;
+        }
+
+        public static void Log10Fill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((double)Math.Log10((double)self[i]));
+        }
+
+        public static IList<byte> Negate(this IList<byte> self)
+        {
+            var result = new List<byte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((byte)-self[i]);
+
+            return result;
+        }
+
+        public static void NegateFill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((byte)-self[i]);
+        }
+
+        public static IList<double> Pow(this IList<byte> self, double exp)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Pow((double)self[i], exp));
+
+            return result;
+        }
+
+        public static void PowFill(this IList<byte> self, double exp)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((double)Math.Pow((double)self[i], exp));
+        }
+
+        public static IList<double> Sign(this IList<byte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sign((double)self[i]));
+
+            return result;
+        }
+
+        public static void SignFill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((double)Math.Sign((double)self[i]));
+        }
+
+        public static IList<double> Sin(this IList<byte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sin((double)self[i]));
+
+            return result;
+        }
+
+        public static void SinFill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((double)Math.Sin((double)self[i]));
+        }
+
+        public static IList<double> Sinh(this IList<byte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sinh((double)self[i]));
+
+            return result;
+        }
+
+        public static void SinhFill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((double)Math.Sinh((double)self[i]));
+        }
+
+        public static IList<double> Sqrt(this IList<byte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sqrt((double)self[i]));
+
+            return result;
+        }
+
+        public static void SqrtFill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((double)Math.Sqrt((double)self[i]));
+        }
+
+        public static IList<double> Tan(this IList<byte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Tan((double)self[i]));
+
+            return result;
+        }
+
+        public static void TanFill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((double)Math.Tan((double)self[i]));
+        }
+
+        public static IList<double> Tanh(this IList<byte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Tanh((double)self[i]));
+
+            return result;
+        }
+
+        public static void TanhFill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((double)Math.Tanh((double)self[i]));
+        }
+
+        public static IList<double> Truncate(this IList<byte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Truncate((double)self[i]));
+
+            return result;
+        }
+
+        public static void TruncateFill(this IList<byte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((double)Math.Truncate((double)self[i]));
+        }
+
+        public static IList<sbyte> Abs(this IList<sbyte> self)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((sbyte)Math.Abs((double)self[i]));
+
+            return result;
+        }
+
+        public static void AbsFill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((sbyte)Math.Abs((double)self[i]));
+        }
+
+        public static IList<sbyte> Acos(this IList<sbyte> self)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((sbyte)Math.Acos((double)self[i]));
+
+            return result;
+        }
+
+        public static void AcosFill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((sbyte)Math.Acos((double)self[i]));
+        }
+
+        public static IList<sbyte> Asin(this IList<sbyte> self)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((sbyte)Math.Asin((double)self[i]));
+
+            return result;
+        }
+
+        public static void AsinFill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((sbyte)Math.Asin((double)self[i]));
+        }
+
+        public static IList<sbyte> Atan(this IList<sbyte> self)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((sbyte)Math.Atan((double)self[i]));
+
+            return result;
+        }
+
+        public static void AtanFill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((sbyte)Math.Atan((double)self[i]));
+        }
+
+        public static IList<sbyte> Atan2(this IList<sbyte> self, double x)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((sbyte)Math.Atan2((double)self[i], x));
+
+            return result;
+        }
+
+        public static void Atan2Fill(this IList<sbyte> self, double x)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((sbyte)Math.Atan2((double)self[i], x));
+        }
+
+        public static IList<double> Ceiling(this IList<sbyte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Ceiling((double)self[i]));
+
+            return result;
+        }
+
+        public static void CeilingFill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((double)Math.Ceiling((double)self[i]));
+        }
+
+        public static IList<double> Cos(this IList<sbyte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Cos((double)self[i]));
+
+            return result;
+        }
+
+        public static void CosFill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((double)Math.Cos((double)self[i]));
+        }
+
+        public static IList<double> Exp(this IList<sbyte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Exp((double)self[i]));
+
+            return result;
+        }
+
+        public static void ExpFill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((double)Math.Exp((double)self[i]));
+        }
+
+        public static IList<double> Floor(this IList<sbyte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Floor((double)self[i]));
+
+            return result;
+        }
+
+        public static void FloorFill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((double)Math.Floor((double)self[i]));
+        }
+
+        public static IList<double> Log(this IList<sbyte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Log((double)self[i]));
+
+            return result;
+        }
+
+        public static void LogFill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((double)Math.Log((double)self[i]));
+        }
+
+        public static IList<double> Log10(this IList<sbyte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Log10((double)self[i]));
+
+            return result;
+        }
+
+        public static void Log10Fill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((double)Math.Log10((double)self[i]));
+        }
+
+        public static IList<sbyte> Negate(this IList<sbyte> self)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((sbyte)-self[i]);
+
+            return result;
+        }
+
+        public static void NegateFill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((sbyte)-self[i]);
+        }
+
+        public static IList<double> Pow(this IList<sbyte> self, double exp)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Pow((double)self[i], exp));
+
+            return result;
+        }
+
+        public static void PowFill(this IList<sbyte> self, double exp)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((double)Math.Pow((double)self[i], exp));
+        }
+
+        public static IList<double> Sign(this IList<sbyte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sign((double)self[i]));
+
+            return result;
+        }
+
+        public static void SignFill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((double)Math.Sign((double)self[i]));
+        }
+
+        public static IList<double> Sin(this IList<sbyte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sin((double)self[i]));
+
+            return result;
+        }
+
+        public static void SinFill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((double)Math.Sin((double)self[i]));
+        }
+
+        public static IList<double> Sinh(this IList<sbyte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sinh((double)self[i]));
+
+            return result;
+        }
+
+        public static void SinhFill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((double)Math.Sinh((double)self[i]));
+        }
+
+        public static IList<double> Sqrt(this IList<sbyte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sqrt((double)self[i]));
+
+            return result;
+        }
+
+        public static void SqrtFill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((double)Math.Sqrt((double)self[i]));
+        }
+
+        public static IList<double> Tan(this IList<sbyte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Tan((double)self[i]));
+
+            return result;
+        }
+
+        public static void TanFill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((double)Math.Tan((double)self[i]));
+        }
+
+        public static IList<double> Tanh(this IList<sbyte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Tanh((double)self[i]));
+
+            return result;
+        }
+
+        public static void TanhFill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((double)Math.Tanh((double)self[i]));
+        }
+
+        public static IList<double> Truncate(this IList<sbyte> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Truncate((double)self[i]));
+
+            return result;
+        }
+
+        public static void TruncateFill(this IList<sbyte> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((double)Math.Truncate((double)self[i]));
+        }
+
+        public static IList<decimal> Abs(this IList<decimal> self)
+        {
+            var result = new List<decimal>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((decimal)Math.Abs((double)self[i]));
+
+            return result;
+        }
+
+        public static void AbsFill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((decimal)Math.Abs((double)self[i]));
+        }
+
+        public static IList<decimal> Acos(this IList<decimal> self)
+        {
+            var result = new List<decimal>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((decimal)Math.Acos((double)self[i]));
+
+            return result;
+        }
+
+        public static void AcosFill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((decimal)Math.Acos((double)self[i]));
+        }
+
+        public static IList<decimal> Asin(this IList<decimal> self)
+        {
+            var result = new List<decimal>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((decimal)Math.Asin((double)self[i]));
+
+            return result;
+        }
+
+        public static void AsinFill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((decimal)Math.Asin((double)self[i]));
+        }
+
+        public static IList<decimal> Atan(this IList<decimal> self)
+        {
+            var result = new List<decimal>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((decimal)Math.Atan((double)self[i]));
+
+            return result;
+        }
+
+        public static void AtanFill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((decimal)Math.Atan((double)self[i]));
+        }
+
+        public static IList<decimal> Atan2(this IList<decimal> self, double x)
+        {
+            var result = new List<decimal>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((decimal)Math.Atan2((double)self[i], x));
+
+            return result;
+        }
+
+        public static void Atan2Fill(this IList<decimal> self, double x)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((decimal)Math.Atan2((double)self[i], x));
+        }
+
+        public static IList<double> Ceiling(this IList<decimal> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Ceiling((double)self[i]));
+
+            return result;
+        }
+
+        public static void CeilingFill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((double)Math.Ceiling((double)self[i]));
+        }
+
+        public static IList<double> Cos(this IList<decimal> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Cos((double)self[i]));
+
+            return result;
+        }
+
+        public static void CosFill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((double)Math.Cos((double)self[i]));
+        }
+
+        public static IList<double> Exp(this IList<decimal> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Exp((double)self[i]));
+
+            return result;
+        }
+
+        public static void ExpFill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((double)Math.Exp((double)self[i]));
+        }
+
+        public static IList<double> Floor(this IList<decimal> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Floor((double)self[i]));
+
+            return result;
+        }
+
+        public static void FloorFill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((double)Math.Floor((double)self[i]));
+        }
+
+        public static IList<double> Log(this IList<decimal> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Log((double)self[i]));
+
+            return result;
+        }
+
+        public static void LogFill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((double)Math.Log((double)self[i]));
+        }
+
+        public static IList<double> Log10(this IList<decimal> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Log10((double)self[i]));
+
+            return result;
+        }
+
+        public static void Log10Fill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((double)Math.Log10((double)self[i]));
+        }
+
+        public static IList<decimal> Negate(this IList<decimal> self)
+        {
+            var result = new List<decimal>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((decimal)-self[i]);
+
+            return result;
+        }
+
+        public static void NegateFill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((decimal)-self[i]);
+        }
+
+        public static IList<double> Pow(this IList<decimal> self, double exp)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Pow((double)self[i], exp));
+
+            return result;
+        }
+
+        public static void PowFill(this IList<decimal> self, double exp)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((double)Math.Pow((double)self[i], exp));
+        }
+
+        public static IList<double> Sign(this IList<decimal> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sign((double)self[i]));
+
+            return result;
+        }
+
+        public static void SignFill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((double)Math.Sign((double)self[i]));
+        }
+
+        public static IList<double> Sin(this IList<decimal> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sin((double)self[i]));
+
+            return result;
+        }
+
+        public static void SinFill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((double)Math.Sin((double)self[i]));
+        }
+
+        public static IList<double> Sinh(this IList<decimal> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sinh((double)self[i]));
+
+            return result;
+        }
+
+        public static void SinhFill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((double)Math.Sinh((double)self[i]));
+        }
+
+        public static IList<double> Sqrt(this IList<decimal> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Sqrt((double)self[i]));
+
+            return result;
+        }
+
+        public static void SqrtFill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((double)Math.Sqrt((double)self[i]));
+        }
+
+        public static IList<double> Tan(this IList<decimal> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Tan((double)self[i]));
+
+            return result;
+        }
+
+        public static void TanFill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((double)Math.Tan((double)self[i]));
+        }
+
+        public static IList<double> Tanh(this IList<decimal> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Tanh((double)self[i]));
+
+            return result;
+        }
+
+        public static void TanhFill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((double)Math.Tanh((double)self[i]));
+        }
+
+        public static IList<double> Truncate(this IList<decimal> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Truncate((double)self[i]));
+
+            return result;
+        }
+
+        public static void TruncateFill(this IList<decimal> self)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((double)Math.Truncate((double)self[i]));
+        }
+
         public static IList<double> ElementAdd(this IList<double> self, IList<double> other)
         {
             var result = new List<double>(Math.Max(self.Count, other.Count));
