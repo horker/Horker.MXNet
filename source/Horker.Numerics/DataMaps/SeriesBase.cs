@@ -363,8 +363,6 @@ namespace Horker.Numerics.DataMaps
             return new Series(result);
         }
 
-        // Other operators
-
         public SeriesBase RollingApply(object lambda)
         {
             var dataType = DataType;
