@@ -286,7 +286,7 @@ namespace Horker.Numerics.DataMaps
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType, returnType });
 
-            var result = (IList)gm.Invoke(null, new object[] { UnderlyingList, lambda });
+            var result = (IList)gm.Invoke(null, new object[] { UnderlyingList, lambda, null, this });
             return new Series(result);
         }
 
@@ -299,7 +299,7 @@ namespace Horker.Numerics.DataMaps
             var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
-            gm.Invoke(null, new object[] { UnderlyingList, lambda });
+            gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
         }
 
         public void ForEach(object lambda)
@@ -312,7 +312,7 @@ namespace Horker.Numerics.DataMaps
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
 
-            gm.Invoke(null, new object[] { UnderlyingList, lambda });
+            gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
         }
 
         public object Reduce(object lambda, object initialValue, Type returnType = null)
@@ -333,7 +333,7 @@ namespace Horker.Numerics.DataMaps
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType, returnType });
 
-            return gm.Invoke(null, new object[] { UnderlyingList, lambda, initialValue });
+            return gm.Invoke(null, new object[] { UnderlyingList, lambda, initialValue, null, null });
         }
 
         public int CountIf(object lambda)
@@ -346,7 +346,7 @@ namespace Horker.Numerics.DataMaps
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
 
-            return (int)gm.Invoke(null, new object[] { UnderlyingList, lambda });
+            return (int)gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
         }
 
         public SeriesBase RemoveIf(object lambda)
@@ -359,7 +359,7 @@ namespace Horker.Numerics.DataMaps
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
 
-            var result = (IList)gm.Invoke(null, new object[] { UnderlyingList, lambda });
+            var result = (IList)gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
             return new Series(result);
         }
 
@@ -375,7 +375,7 @@ namespace Horker.Numerics.DataMaps
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
 
-            var result = (IList)gm.Invoke(null, new object[] { UnderlyingList, lambda });
+            var result = (IList)gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
             return new Series(result);
         }
 
@@ -389,7 +389,7 @@ namespace Horker.Numerics.DataMaps
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
 
-            gm.Invoke(null, new object[] { UnderlyingList, lambda });
+            gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
         }
 
         public bool All(object lambda)
@@ -402,7 +402,7 @@ namespace Horker.Numerics.DataMaps
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
 
-            var result = (bool)gm.Invoke(null, new object[] { UnderlyingList, lambda });
+            var result = (bool)gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
             return result;
         }
 
@@ -416,7 +416,7 @@ namespace Horker.Numerics.DataMaps
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
 
-            var result = (bool)gm.Invoke(null, new object[] { UnderlyingList, lambda });
+            var result = (bool)gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
             return result;
         }
 

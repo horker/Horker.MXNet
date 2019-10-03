@@ -284,9 +284,10 @@ namespace Horker.Numerics.DataMaps.Extensions
             return false;
         }
 
-        private static object InvokeFuncString(string funcString, Type[] funcTypes, string funcName, Type[] methodGenericTypes, bool hasReturnValue, object[] arguments)
+        private static object InvokeFuncString(string funcString, Type[] funcTypes, string funcName, Type[] methodGenericTypes,
+            bool hasReturnValue, object[] arguments, DataMap dataMap, SeriesBase series)
         {
-            var func = FunctionCompiler.Compile(funcString, funcTypes, hasReturnValue);
+            var func = FunctionCompiler.Compile(funcString, funcTypes, hasReturnValue, dataMap, series);
             arguments[1] = func;
 
             var m = typeof(IListExtensions).GetMethod(funcName, BindingFlags.Public | BindingFlags.Static);
@@ -297,87 +298,87 @@ namespace Horker.Numerics.DataMaps.Extensions
             return gm.Invoke(null, arguments);
         }
 
-        public static IList<U> ApplyFuncString<T, U>(this IList<T> self, string funcString)
+        public static IList<U> ApplyFuncString<T, U>(this IList<T> self, string funcString, DataMap dataMap = null, SeriesBase series = null)
         {
             return (IList<U>)InvokeFuncString(funcString,
                 new Type[] { typeof(T), typeof(int), typeof(U) },
                 "Apply", new Type[] { typeof(T), typeof(U) }, true,
-                new object[] { self, null });
+                new object[] { self, null }, dataMap, series);
         }
 
-        public static void ApplyFillFuncString<T>(this IList<T> self, string funcString)
+        public static void ApplyFillFuncString<T>(this IList<T> self, string funcString, DataMap dataMap = null, SeriesBase series = null)
         {
             InvokeFuncString(funcString,
                 new Type[] { typeof(T), typeof(int), typeof(T) },
                 "ApplyFill", new Type[] { typeof(T) }, true,
-                new object[] { self, null });
+                new object[] { self, null }, dataMap, series);
         }
 
-        public static void ForEachFuncString<T>(this IList<T> self, string funcString)
+        public static void ForEachFuncString<T>(this IList<T> self, string funcString, DataMap dataMap = null, SeriesBase series = null)
         {
             InvokeFuncString(funcString,
                 new Type[] { typeof(T), typeof(int) },
                 "ForEach", new Type[] { typeof(T) }, true,
-                new object[] { self, null });
+                new object[] { self, null }, dataMap, series);
         }
 
-        public static U ReduceFuncString<T, U>(this IList<T> self, string funcString, U initialValue)
+        public static U ReduceFuncString<T, U>(this IList<T> self, string funcString, U initialValue, DataMap dataMap = null, SeriesBase series = null)
         {
             return (U)InvokeFuncString(funcString,
                 new Type[] { typeof(T), typeof(int), typeof(U), typeof(U) },
                 "Reduce", new Type[] { typeof(T), typeof(U) }, true,
-                new object[] { self, null, initialValue });
+                new object[] { self, null, initialValue }, dataMap, series);
         }
 
-        public static int CountIfFuncString<T>(this IList<T> self, string funcString)
+        public static int CountIfFuncString<T>(this IList<T> self, string funcString, DataMap dataMap = null, SeriesBase series = null)
         {
             return (int)InvokeFuncString(funcString,
                 new Type[] { typeof(T), typeof(int), typeof(bool) },
                 "CountIf", new Type[] { typeof(T) }, true,
-                new object[] { self, null });
+                new object[] { self, null }, dataMap, series);
         }
 
-        public static IList<T> RemoveIfFuncString<T>(this IList<T> self, string funcString)
+        public static IList<T> RemoveIfFuncString<T>(this IList<T> self, string funcString, DataMap dataMap = null, SeriesBase series = null)
         {
             return (IList<T>)InvokeFuncString(funcString,
                 new Type[] { typeof(T), typeof(int), typeof(bool) },
                 "RemoveIf", new Type[] { typeof(T) }, true,
-                new object[] { self, null });
+                new object[] { self, null }, dataMap, series);
         }
 
-        public static IList<U> RollingApplyFuncString<T, U>(this IList<T> self, string funcString, int window)
+        public static IList<U> RollingApplyFuncString<T, U>(this IList<T> self, string funcString, int window, DataMap dataMap = null, SeriesBase series = null)
         {
             return (IList<U>)InvokeFuncString(funcString,
                 new Type[] { typeof(T[]), typeof(int), typeof(U) },
                 "RollingApply", new Type[] { typeof(T), typeof(U) }, true,
-                new object[] { self, null, window });
+                new object[] { self, null, window }, dataMap, series);
         }
 
-        public static void RollingApplyFillFuncString<T>(this IList<T> self, string funcString, int window)
+        public static void RollingApplyFillFuncString<T>(this IList<T> self, string funcString, int window, DataMap dataMap = null, SeriesBase series = null)
         {
             InvokeFuncString(funcString,
                 new Type[] { typeof(T[]), typeof(int) },
                 "RollingApply", new Type[] { typeof(T) }, true,
-                new object[] { self, null, window });
+                new object[] { self, null, window }, dataMap, series);
         }
 
-        public static bool AllFuncString<T>(this IList<T> self, string funcString)
+        public static bool AllFuncString<T>(this IList<T> self, string funcString, DataMap dataMap = null, SeriesBase series = null)
         {
             return (bool)InvokeFuncString(funcString,
                 new Type[] { typeof(T), typeof(int), typeof(bool) },
                 "All", new Type[] { typeof(T) }, true,
-                new object[] { self, null });
+                new object[] { self, null }, dataMap, series);
         }
 
-        public static bool AnyFuncString<T>(this IList<T> self, string funcString)
+        public static bool AnyFuncString<T>(this IList<T> self, string funcString, DataMap dataMap, SeriesBase series = null)
         {
             return (bool)InvokeFuncString(funcString,
                 new Type[] { typeof(T), typeof(int), typeof(bool) },
                 "Any", new Type[] { typeof(T) }, true,
-                new object[] { self, null });
+                new object[] { self, null }, dataMap, series);
         }
 
-        public static IList<U> ApplyScriptBlock<T, U>(this IList<T> self, ScriptBlock scriptBlock)
+        public static IList<U> ApplyScriptBlock<T, U>(this IList<T> self, ScriptBlock scriptBlock, DataMap dataMap, SeriesBase series = null)
         {
             var result = new List<U>(self.Count);
 
@@ -398,7 +399,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void ApplyFillScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock)
+        public static void ApplyFillScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock, DataMap dataMap, SeriesBase series = null)
         {
             var parameters = new List<PSVariable>();
             parameters.Add(new PSVariable("value"));
@@ -415,7 +416,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
-        public static void ForEachScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock)
+        public static void ForEachScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock, DataMap dataMap, SeriesBase series = null)
         {
             var parameters = new List<PSVariable>();
             parameters.Add(new PSVariable("value"));
@@ -430,7 +431,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
-        public static object ReduceScriptBlock<T, U>(this IList<T> self, ScriptBlock scriptBlock, object initialValue)
+        public static object ReduceScriptBlock<T, U>(this IList<T> self, ScriptBlock scriptBlock, object initialValue,
+            DataMap dataMap, SeriesBase series = null)
         {
             var parameters = new List<PSVariable>();
             parameters.Add(new PSVariable("value"));
@@ -450,7 +452,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return (result as PSObject).BaseObject;
         }
 
-        public static object CountIfScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock)
+        public static object CountIfScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock, DataMap dataMap, SeriesBase series = null)
         {
             var parameters = new List<PSVariable>();
             parameters.Add(new PSVariable("value"));
@@ -469,7 +471,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return count;
         }
 
-        public static IList<T> RemoveIfScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock)
+        public static IList<T> RemoveIfScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock, DataMap dataMap, SeriesBase series = null)
         {
             var parameters = new List<PSVariable>();
             parameters.Add(new PSVariable("value"));
@@ -488,7 +490,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<U> RollingApplyScriptBlock<T, U>(this IList<T> self, ScriptBlock scriptBlock, int window)
+        public static IList<U> RollingApplyScriptBlock<T, U>(this IList<T> self, ScriptBlock scriptBlock, int window, DataMap dataMap, SeriesBase series = null)
         {
             var parameters = new List<PSVariable>();
             parameters.Add(new PSVariable("values"));
@@ -525,7 +527,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static void RollingApplyFill<T>(this IList<T> self, ScriptBlock scriptBlock, int window)
+        public static void RollingApplyFill<T>(this IList<T> self, ScriptBlock scriptBlock, int window, DataMap dataMap, SeriesBase series = null)
         {
             var parameters = new List<PSVariable>();
             parameters.Add(new PSVariable("values"));
@@ -559,7 +561,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
-        public static bool AllScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock)
+        public static bool AllScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock, DataMap dataMap, SeriesBase series = null)
         {
             var parameters = new List<PSVariable>();
             parameters.Add(new PSVariable("value"));
@@ -577,7 +579,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return true;
         }
 
-        public static bool AnyScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock)
+        public static bool AnyScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock, DataMap dataMap, SeriesBase series = null)
         {
             var parameters = new List<PSVariable>();
             parameters.Add(new PSVariable("value"));

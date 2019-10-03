@@ -60,5 +60,14 @@ namespace Horker.Numerics.Tests
 
             Assert.Equal(new double[] { 1, 999, 2, 999}, t1.AsArray<double>());
         }
+
+        [Fact]
+        public void TestApply()
+        {
+            var t1 = new Series(new double[] { 1, 2, 3, 4 });
+            var t2 = t1.Apply("(x, i) => (double)seq[seq.Count - 1 - i]");
+
+            Assert.Equal(new double[] { 4, 3, 2, 1 }, t2);
+        }
     }
 }
