@@ -10,57 +10,58 @@ namespace Horker.Numerics.DataMaps
     public class FilteredListView : IList
     {
         private IList _underlying;
-        private List<int> _index;
-
-        public List<int> IndexList => _index;
+        private List<int> _link;
 
         public FilteredListView(IList underlying, IList<bool> filter)
         {
             if (underlying.Count != filter.Count)
-                throw new ArgumentException("underlying and filter should have the same length");
+                throw new ArgumentException("Underlying and filter should have the same length");
 
             _underlying = underlying;
 
-            _index = new List<int>();
+            _link = new List<int>();
 
             for (var i = 0; i < underlying.Count; ++i)
             {
                 if (filter[i])
-                    _index.Add(i);
+                    _link.Add(i);
             }
         }
 
         public object this[int index]
         {
-            get => _underlying[_index[index]];
-            set => _underlying[_index[index]] = value;
+            get => _underlying[_link[index]];
+            set => _underlying[_link[index]] = value;
         }
 
         public bool IsReadOnly => _underlying.IsReadOnly;
 
-        public bool IsFixedSize => true;
+        public bool IsFixedSize => _underlying.IsFixedSize;
 
-        public int Count => _index.Count;
+        public int Count => _link.Count;
 
         public object SyncRoot => _underlying.SyncRoot;
 
-        public bool IsSynchronized => _underlying.IsSynchronized;
+        public bool IsSynchronized => false;
 
         public int Add(object value)
         {
-            throw new InvalidOperationException("This object is fixed size");
+            throw new InvalidOperationException("This list doens not support the Add() operation");
         }
 
         public void Clear()
         {
-            throw new InvalidOperationException("This object is fixed size");
+            for (var i = _link.Count - 1; i >= 0; --i)
+                _underlying.RemoveAt(_link[i]);
+
+            _link.Clear();
         }
 
         public bool Contains(object value)
         {
-            for (var i = 0; i < _index.Count; ++i)
+            for (var i = 0; i < _link.Count; ++i)
             {
-                if (_underlying[_index[i]] == value)
+                if (_underlying[_link[i]] == value)
                     return true;
             }
             return false;
@@ -78,9 +79,9 @@ namespace Horker.Numerics.DataMaps
 
         public int IndexOf(object value)
         {
-            for (var i = 0; i < _index.Count; ++i)
+            for (var i = 0; i < _link.Count; ++i)
             {
-                if (_underlying[_index[i]] == value)
+                if (_underlying[_link[i]] == value)
                     return i;
             }
             return -1;
@@ -88,17 +89,23 @@ namespace Horker.Numerics.DataMaps
 
         public void Insert(int index, object value)
         {
-            throw new InvalidOperationException("This object is fixed size");
+            throw new InvalidOperationException("This list does not support Insert() operation");
         }
 
         public void Remove(object value)
         {
-            throw new InvalidOperationException("This object is fixed size");
+            var i = IndexOf(value);
+            if (i != -1)
+                RemoveAt(i);
         }
 
         public void RemoveAt(int index)
         {
-            throw new InvalidOperationException("This object is fixed size");
+            _underlying.RemoveAt(_link[index]);
+            _link.RemoveAt(index);
+
+            for (; index < _link.Count; ++index)
+                --_link[index];
         }
     }
 
