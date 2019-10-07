@@ -52,8 +52,8 @@ var binaryOperators = new[] {
 	Tuple.Create("ElementDivide", "(MetaNum)(self[i] / other[i])", "(MetaNum)(self[i] / value)")
 };
 
-var doc = GetDocument("MetaNumIListExtensions.cs");
 TextInfo textInfo = Thread.CurrentThread.CurrentCulture.TextInfo;
+string text;
 #>
 using System;
 using System.Collections;
@@ -65,7 +65,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 	public static partial class GenericIListExtensions
 	{
 <#
-string text;
+var doc = GetDocument("MetaNumIListExtensions.cs");
 foreach (var t in numericTypes)
 {
 	string capitalized = textInfo.ToTitleCase(t);
@@ -81,31 +81,6 @@ foreach (var t in numericTypes)
 <#
 }
 #>
-<#
-doc = GetDocument("MetaStructIListExtensions.cs");
-foreach (var t in structTypes)
-{
-	string capitalized = textInfo.ToTitleCase(t);
-	text = doc.Replace("MetaStruct", t);
-#>
-<#= text #>
-<#
-}
-#>
-    }
-
-	public static partial class IListExtensions
-	{
-<#
-text = doc.Replace("IList<MetaStruct>", "IList");
-text = text.Replace("List<MetaStruct>", "List<object>");
-text = text.Replace("MetaStruct", "object");
-#>
-<#= text #>
-    }
-
-	public static partial class GenericIListExtensions
-	{
 <#
 doc = GetDocument("MetaNumElementwiseUnary.cs");
 foreach (var t in numericTypes)

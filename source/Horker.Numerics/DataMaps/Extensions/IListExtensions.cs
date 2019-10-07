@@ -109,18 +109,29 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             if (firstType != null)
             {
-                var m = typeof(GenericIListExtensions).GetMethod("AsArray").MakeGenericMethod(new Type[] { firstType });
                 try
                 {
-                    return (IList)m.Invoke(null, new object[] { self });
+                    if (self is Array)
+                    {
+                        var m = typeof(GenericIListExtensions).GetMethod("AsArray").MakeGenericMethod(new Type[] { firstType });
+                        return (IList)m.Invoke(null, new object[] { self });
+                    }
+                    else
+                    {
+                        var m = typeof(GenericIListExtensions).GetMethod("AsList").MakeGenericMethod(new Type[] { firstType });
+                        return (IList)m.Invoke(null, new object[] { self });
+                    }
                 }
                 catch (InvalidCastException)
                 {
-                    return self;
+                    // fall through
                 }
             }
 
-            return self;
+            var result = new List<object>(self.Count);
+            foreach (var value in self)
+                result.Add(value);
+            return result;
         }
 
         public static IList Convert(this IList self, Type[] possibleTypes = null, bool raiseError = false)
@@ -721,9 +732,63 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         // Other operations
 
+        public static int CountNaN<T>(this IList<T> self)
+        {
+            int count = 0;
+            foreach (var value in self)
+            {
+                if (TypeTrait.IsNaN(value))
+                    ++count;
+            }
+
+            return count;
+        }
+
         public static int CountUnique<T>(this IList<T> self)
         {
-            return Unique(self).Count;
+            return self.Unique().Count;
+        }
+
+        public static Summary Describe<T>(this IList<T> self)
+        {
+            var summary = new Summary();
+            summary.Count = self.Count;
+            summary.NaN = CountNaN(self);
+            summary.Unique = CountUnique(self);
+            return summary;
+        }
+
+        public static IList<T> RemoveNaN<T>(this IList<T> self)
+        {
+            var result = new List<T>(self.Count);
+            foreach (var value in self)
+                if (!TypeTrait.IsNaN(value))
+                    result.Add(value);
+
+            return result;
+        }
+
+        public static IList<T> FillNaN<T>(this IList<T> self, T fillValue)
+        {
+            var result = new List<T>(self.Count);
+            foreach (var value in self)
+            {
+                if (TypeTrait.IsNaN(value))
+                    result.Add(value);
+                else
+                    result.Add(fillValue);
+            }
+
+            return result;
+        }
+
+        public static void FillNaNFill<T>(this IList<T> self, T fillValue)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (TypeTrait.IsNaN(self[i]))
+                    self[i] = fillValue;
+            }
         }
 
         public static List<T> GetSortedCopy<T>(this IList<T> self)
@@ -756,11 +821,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
-        public static IList<T> Unique<T>(this IList<T> self)
-        {
-            return new HashSet<T>(self).ToList();
-        }
-
         public static void SortFill<T>(this IList<T> self)
         {
             if (self is Array a)
@@ -779,5 +839,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+        public static IList<T> Unique<T>(this IList<T> self)
+        {
+            return new HashSet<T>(self).ToList();
+        }
     }
 }

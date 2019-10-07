@@ -150,5 +150,15 @@ namespace Horker.Numerics.Tests
 
             Assert.Equal(expectedCor[0,1], cor, 10);
         }
+
+        [Fact]
+        public void TestUnique()
+        {
+            var s = new int[] { 1, 2, 3, 1, 2 };
+
+            var s1 = s.Unique();
+
+            Assert.Equal(new int[] { 1, 2, 3 }, s1);
+        }
     }
 } 
