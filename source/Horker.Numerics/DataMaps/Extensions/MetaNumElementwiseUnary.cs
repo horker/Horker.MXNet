@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Horker.Numerics.DataMaps.Extensions
+namespace Horker.Numerics.DataMaps.Extensions.Internal
 {
     using ReturnType = MetaNum;
 
-    public partial class GenericIListExtensions
+    public static partial class MetaNumIListExtensions
     {
         // CUT ABOVE
         public static IList<ReturnType> Negate(this IList<MetaNum> self)

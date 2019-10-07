@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Horker.Numerics.DataMaps.Extensions
+namespace Horker.Numerics.DataMaps.Extensions.Internal
 {
-    public partial class GenericIListExtensions
+    public static partial class MetaNumIListExtensions
     {
         // CUT ABOVE
         public static IList<MetaNum> ElementAdd(this IList<MetaNum> self, IList<MetaNum> other)

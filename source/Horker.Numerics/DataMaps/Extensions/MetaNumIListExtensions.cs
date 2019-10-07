@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Horker.Numerics.DataMaps.Extensions
+namespace Horker.Numerics.DataMaps.Extensions.Internal
 {
     public static partial class MetaNumIListExtensions
     {
