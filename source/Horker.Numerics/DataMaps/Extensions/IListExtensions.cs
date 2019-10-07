@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace Horker.Numerics.DataMaps.Extensions
 {
-    public static partial class IListExtensions
+    public static partial class GenericIListExtensions
     {
         public static Type GetDataType(this IList value)
         {
@@ -109,7 +109,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             if (firstType != null)
             {
-                var m = typeof(IListExtensions).GetMethod("AsArray").MakeGenericMethod(new Type[] { firstType });
+                var m = typeof(GenericIListExtensions).GetMethod("AsArray").MakeGenericMethod(new Type[] { firstType });
                 try
                 {
                     return (IList)m.Invoke(null, new object[] { self });
@@ -290,7 +290,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var func = FunctionCompiler.Compile(funcString, funcTypes, hasReturnValue, dataMap, series);
             arguments[1] = func;
 
-            var m = typeof(IListExtensions).GetMethod(funcName, BindingFlags.Public | BindingFlags.Static);
+            var m = typeof(GenericIListExtensions).GetMethod(funcName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
 
             var gm = m.MakeGenericMethod(methodGenericTypes);
@@ -721,6 +721,18 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         // Other operations
 
+        public static int CountUnique<T>(this IList<T> self)
+        {
+            return Unique(self).Count;
+        }
+
+        public static List<T> GetSortedCopy<T>(this IList<T> self)
+        {
+            var result = new List<T>(self);
+            result.Sort();
+            return result;
+        }
+
         public static IList<T> Map<T>(this IList<T> self, IDictionary map)
         {
             var result = new List<T>();
@@ -741,6 +753,29 @@ namespace Horker.Numerics.DataMaps.Extensions
             {
                 if (map.Contains(self[i]))
                     self[i] = (T)map[self[i]];
+            }
+        }
+
+        public static IList<T> Unique<T>(this IList<T> self)
+        {
+            return new HashSet<T>(self).ToList();
+        }
+
+        public static void SortFill<T>(this IList<T> self)
+        {
+            if (self is Array a)
+            {
+                Array.Sort(a);
+                return;
+            }
+
+            try
+            {
+                ((dynamic)self).Sort();
+            }
+            catch (Exception)
+            {
+                throw new InvalidOperationException("This object does not support inplace Sort() operation");
             }
         }
 

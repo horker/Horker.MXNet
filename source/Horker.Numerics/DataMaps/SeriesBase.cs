@@ -33,7 +33,7 @@ namespace Horker.Numerics.DataMaps
 
         public Type DataType
         {
-            get => IListExtensions.GetDataType(UnderlyingList);
+            get => GenericIListExtensions.GetDataType(UnderlyingList);
         }
 
         // IList implementation
@@ -110,7 +110,7 @@ namespace Horker.Numerics.DataMaps
 
         public T[] ToArray<T>()
         {
-            return IListExtensions.ToArray<T>(UnderlyingList);
+            return GenericIListExtensions.ToArray<T>(UnderlyingList);
         }
 
         public Array ToArray(Type type = null)
@@ -135,7 +135,7 @@ namespace Horker.Numerics.DataMaps
 
         public IList<T> ToList<T>()
         {
-            return IListExtensions.ToList<T>(UnderlyingList);
+            return GenericIListExtensions.ToList<T>(UnderlyingList);
         }
 
         public object ToList(Type type = null)
@@ -160,7 +160,7 @@ namespace Horker.Numerics.DataMaps
 
         public T[] AsArray<T>()
         {
-            return IListExtensions.AsArray<T>(UnderlyingList);
+            return GenericIListExtensions.AsArray<T>(UnderlyingList);
         }
 
         public Array AsArray(Type type = null)
@@ -185,7 +185,7 @@ namespace Horker.Numerics.DataMaps
 
         public IList<T> AsList<T>()
         {
-            return IListExtensions.AsList<T>(UnderlyingList);
+            return GenericIListExtensions.AsList<T>(UnderlyingList);
         }
 
         public object AsList(Type type = null)
@@ -210,17 +210,17 @@ namespace Horker.Numerics.DataMaps
 
         public List<T> Convert<T>()
         {
-            return IListExtensions.Convert<T>(UnderlyingList);
+            return GenericIListExtensions.Convert<T>(UnderlyingList);
         }
 
         public IList Convert(Type type)
         {
-            return IListExtensions.Convert(UnderlyingList, type);
+            return GenericIListExtensions.Convert(UnderlyingList, type);
         }
 
         public IList Convert(Type[] possibleTypes = null, bool raiseError = false)
         {
-            return IListExtensions.Convert(UnderlyingList, possibleTypes, raiseError);
+            return GenericIListExtensions.Convert(UnderlyingList, possibleTypes, raiseError);
         }
 
         public SortedListIndexSeries ToSortedListIndexSeries()
@@ -282,7 +282,7 @@ namespace Horker.Numerics.DataMaps
 
             var methodName = ChooseApplyMethodName(lambda, "ApplyFuncString", "ApplyScriptBlock");
 
-            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType, returnType });
 
@@ -296,7 +296,7 @@ namespace Horker.Numerics.DataMaps
 
             var methodName = ChooseApplyMethodName(lambda, "ApplyFillFuncString", "ApplyFillScriptBlock");
 
-            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
             gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
@@ -308,7 +308,7 @@ namespace Horker.Numerics.DataMaps
 
             var methodName = ChooseApplyMethodName(lambda, "ForEachFuncString", "ForEachScriptBlock");
 
-            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
 
@@ -329,7 +329,7 @@ namespace Horker.Numerics.DataMaps
 
             var methodName = ChooseApplyMethodName(lambda, "ReduceFuncString", "ReduceScriptBlock");
 
-            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType, returnType });
 
@@ -342,7 +342,7 @@ namespace Horker.Numerics.DataMaps
 
             var methodName = ChooseApplyMethodName(lambda, "CountIfFuncString", "CountIfScriptBlock");
 
-            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
 
@@ -355,7 +355,7 @@ namespace Horker.Numerics.DataMaps
 
             var methodName = ChooseApplyMethodName(lambda, "RemoveIfFuncString", "RemoveIfScriptBlock");
 
-            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
 
@@ -369,7 +369,7 @@ namespace Horker.Numerics.DataMaps
 
             var methodName = ChooseApplyMethodName(lambda, "RollingApplyFuncString", "RollingApplyScriptBlock");
 
-            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
 
@@ -383,7 +383,7 @@ namespace Horker.Numerics.DataMaps
 
             var methodName = ChooseApplyMethodName(lambda, "RollingApplyFillFuncString", "RollingApplyFillScriptBlock");
 
-            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
 
@@ -396,7 +396,7 @@ namespace Horker.Numerics.DataMaps
 
             var methodName = ChooseApplyMethodName(lambda, "AllFuncString", "AllScriptBlock");
 
-            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
 
@@ -410,7 +410,7 @@ namespace Horker.Numerics.DataMaps
 
             var methodName = ChooseApplyMethodName(lambda, "AnyFuncString", "AnyScriptBlock");
 
-            var m = typeof(IListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
 

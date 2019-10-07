@@ -73,6 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataMaps\Class1.cs" />
     <Compile Include="DataMaps\FilteredListView.cs" />
     <Compile Include="DataMaps\Extensions\MetaNumElementwiseUnary.cs" />
     <Compile Include="DataMaps\Extensions\MetaNumElementwiseBinary.cs" />

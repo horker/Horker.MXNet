@@ -10,36 +10,6 @@ namespace Horker.Numerics.DataMaps.Extensions
     public static partial class MetaNumIListExtensions
     {
         // CUT ABOVE
-        public static List<MetaNum> GetSortedCopy(this IList<MetaNum> self)
-        {
-            var result = new List<MetaNum>(self);
-            result.Sort();
-            return result;
-        }
-
-        public static void SortFill(this IList<MetaNum> self)
-        {
-            if (self is Array a)
-            {
-                Array.Sort(a);
-                return;
-            }
-
-            var t = self.GetType();
-            if (t.Name.StartsWith("List`"))
-            {
-                var l = self as List<MetaNum>;
-                l.Sort();
-                return;
-            }
-
-            var m = t.GetMethod("Sort", new Type[0]);
-            if (m == null)
-                throw new InvalidOperationException("This object does not support inplace Sort() operation");
-
-            m.Invoke(self, new object[0]);
-        }
-
         public static MetaFloat Correlation(this IList<MetaNum> self, IList<MetaNum> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -243,20 +213,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             return count;
-        }
-
-        public static IList<MetaNum> GetUnique(this IList<MetaNum> self)
-        {
-            var unique = new HashSet<MetaNum>();
-            foreach (var value in self)
-                unique.Add(value);
-
-            return unique.ToList();
-        }
-
-        public static int CountUnique(this IList<MetaNum> self)
-        {
-            return GetUnique(self).Count;
         }
 
         public static Summary Describe(this IList<MetaNum> self)

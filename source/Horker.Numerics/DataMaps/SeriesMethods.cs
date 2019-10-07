@@ -197,21 +197,27 @@ namespace Horker.Numerics.DataMaps
             return new Series((IList)result);
         }
 
+        public SeriesBase GetSortedCopy()
+        {
+			var result = GenericIListExtensions.GetSortedCopy((dynamic)UnderlyingList);
+            return new Series((IList)result);
+        }
+
         public SeriesBase FillNaN(object fillValue)
         {
 			var result = GenericIListExtensions.FillNaN((dynamic)UnderlyingList, (dynamic)fillValue);
             return new Series((IList)result);
         }
 
-        public SeriesBase GetUnique()
-        {
-			var result = GenericIListExtensions.GetUnique((dynamic)UnderlyingList);
-            return new Series((IList)result);
-        }
-
         public SeriesBase RemoveNaN()
         {
 			var result = GenericIListExtensions.RemoveNaN((dynamic)UnderlyingList);
+            return new Series((IList)result);
+        }
+
+        public SeriesBase Unique()
+        {
+			var result = GenericIListExtensions.Unique((dynamic)UnderlyingList);
             return new Series((IList)result);
         }
 

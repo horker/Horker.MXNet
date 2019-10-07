@@ -8,36 +8,6 @@ namespace Horker.Numerics.DataMaps.Extensions
 	public static partial class GenericIListExtensions
 	{
 
-        public static List<double> GetSortedCopy(this IList<double> self)
-        {
-            var result = new List<double>(self);
-            result.Sort();
-            return result;
-        }
-
-        public static void SortFill(this IList<double> self)
-        {
-            if (self is Array a)
-            {
-                Array.Sort(a);
-                return;
-            }
-
-            var t = self.GetType();
-            if (t.Name.StartsWith("List`"))
-            {
-                var l = self as List<double>;
-                l.Sort();
-                return;
-            }
-
-            var m = t.GetMethod("Sort", new Type[0]);
-            if (m == null)
-                throw new InvalidOperationException("This object does not support inplace Sort() operation");
-
-            m.Invoke(self, new object[0]);
-        }
-
         public static double Correlation(this IList<double> self, IList<double> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -241,20 +211,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             return count;
-        }
-
-        public static IList<double> GetUnique(this IList<double> self)
-        {
-            var unique = new HashSet<double>();
-            foreach (var value in self)
-                unique.Add(value);
-
-            return unique.ToList();
-        }
-
-        public static int CountUnique(this IList<double> self)
-        {
-            return GetUnique(self).Count;
         }
 
         public static Summary Describe(this IList<double> self)
@@ -579,36 +535,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
-        public static List<float> GetSortedCopy(this IList<float> self)
-        {
-            var result = new List<float>(self);
-            result.Sort();
-            return result;
-        }
-
-        public static void SortFill(this IList<float> self)
-        {
-            if (self is Array a)
-            {
-                Array.Sort(a);
-                return;
-            }
-
-            var t = self.GetType();
-            if (t.Name.StartsWith("List`"))
-            {
-                var l = self as List<float>;
-                l.Sort();
-                return;
-            }
-
-            var m = t.GetMethod("Sort", new Type[0]);
-            if (m == null)
-                throw new InvalidOperationException("This object does not support inplace Sort() operation");
-
-            m.Invoke(self, new object[0]);
-        }
-
         public static float Correlation(this IList<float> self, IList<float> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -812,20 +738,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             return count;
-        }
-
-        public static IList<float> GetUnique(this IList<float> self)
-        {
-            var unique = new HashSet<float>();
-            foreach (var value in self)
-                unique.Add(value);
-
-            return unique.ToList();
-        }
-
-        public static int CountUnique(this IList<float> self)
-        {
-            return GetUnique(self).Count;
         }
 
         public static Summary Describe(this IList<float> self)
@@ -1150,36 +1062,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
-        public static List<long> GetSortedCopy(this IList<long> self)
-        {
-            var result = new List<long>(self);
-            result.Sort();
-            return result;
-        }
-
-        public static void SortFill(this IList<long> self)
-        {
-            if (self is Array a)
-            {
-                Array.Sort(a);
-                return;
-            }
-
-            var t = self.GetType();
-            if (t.Name.StartsWith("List`"))
-            {
-                var l = self as List<long>;
-                l.Sort();
-                return;
-            }
-
-            var m = t.GetMethod("Sort", new Type[0]);
-            if (m == null)
-                throw new InvalidOperationException("This object does not support inplace Sort() operation");
-
-            m.Invoke(self, new object[0]);
-        }
-
         public static double Correlation(this IList<long> self, IList<long> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -1383,20 +1265,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             return count;
-        }
-
-        public static IList<long> GetUnique(this IList<long> self)
-        {
-            var unique = new HashSet<long>();
-            foreach (var value in self)
-                unique.Add(value);
-
-            return unique.ToList();
-        }
-
-        public static int CountUnique(this IList<long> self)
-        {
-            return GetUnique(self).Count;
         }
 
         public static Summary Describe(this IList<long> self)
@@ -1721,36 +1589,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
-        public static List<int> GetSortedCopy(this IList<int> self)
-        {
-            var result = new List<int>(self);
-            result.Sort();
-            return result;
-        }
-
-        public static void SortFill(this IList<int> self)
-        {
-            if (self is Array a)
-            {
-                Array.Sort(a);
-                return;
-            }
-
-            var t = self.GetType();
-            if (t.Name.StartsWith("List`"))
-            {
-                var l = self as List<int>;
-                l.Sort();
-                return;
-            }
-
-            var m = t.GetMethod("Sort", new Type[0]);
-            if (m == null)
-                throw new InvalidOperationException("This object does not support inplace Sort() operation");
-
-            m.Invoke(self, new object[0]);
-        }
-
         public static double Correlation(this IList<int> self, IList<int> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -1954,20 +1792,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             return count;
-        }
-
-        public static IList<int> GetUnique(this IList<int> self)
-        {
-            var unique = new HashSet<int>();
-            foreach (var value in self)
-                unique.Add(value);
-
-            return unique.ToList();
-        }
-
-        public static int CountUnique(this IList<int> self)
-        {
-            return GetUnique(self).Count;
         }
 
         public static Summary Describe(this IList<int> self)
@@ -2292,36 +2116,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
-        public static List<short> GetSortedCopy(this IList<short> self)
-        {
-            var result = new List<short>(self);
-            result.Sort();
-            return result;
-        }
-
-        public static void SortFill(this IList<short> self)
-        {
-            if (self is Array a)
-            {
-                Array.Sort(a);
-                return;
-            }
-
-            var t = self.GetType();
-            if (t.Name.StartsWith("List`"))
-            {
-                var l = self as List<short>;
-                l.Sort();
-                return;
-            }
-
-            var m = t.GetMethod("Sort", new Type[0]);
-            if (m == null)
-                throw new InvalidOperationException("This object does not support inplace Sort() operation");
-
-            m.Invoke(self, new object[0]);
-        }
-
         public static double Correlation(this IList<short> self, IList<short> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -2525,20 +2319,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             return count;
-        }
-
-        public static IList<short> GetUnique(this IList<short> self)
-        {
-            var unique = new HashSet<short>();
-            foreach (var value in self)
-                unique.Add(value);
-
-            return unique.ToList();
-        }
-
-        public static int CountUnique(this IList<short> self)
-        {
-            return GetUnique(self).Count;
         }
 
         public static Summary Describe(this IList<short> self)
@@ -2863,36 +2643,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
-        public static List<byte> GetSortedCopy(this IList<byte> self)
-        {
-            var result = new List<byte>(self);
-            result.Sort();
-            return result;
-        }
-
-        public static void SortFill(this IList<byte> self)
-        {
-            if (self is Array a)
-            {
-                Array.Sort(a);
-                return;
-            }
-
-            var t = self.GetType();
-            if (t.Name.StartsWith("List`"))
-            {
-                var l = self as List<byte>;
-                l.Sort();
-                return;
-            }
-
-            var m = t.GetMethod("Sort", new Type[0]);
-            if (m == null)
-                throw new InvalidOperationException("This object does not support inplace Sort() operation");
-
-            m.Invoke(self, new object[0]);
-        }
-
         public static double Correlation(this IList<byte> self, IList<byte> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -3096,20 +2846,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             return count;
-        }
-
-        public static IList<byte> GetUnique(this IList<byte> self)
-        {
-            var unique = new HashSet<byte>();
-            foreach (var value in self)
-                unique.Add(value);
-
-            return unique.ToList();
-        }
-
-        public static int CountUnique(this IList<byte> self)
-        {
-            return GetUnique(self).Count;
         }
 
         public static Summary Describe(this IList<byte> self)
@@ -3434,36 +3170,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
-        public static List<sbyte> GetSortedCopy(this IList<sbyte> self)
-        {
-            var result = new List<sbyte>(self);
-            result.Sort();
-            return result;
-        }
-
-        public static void SortFill(this IList<sbyte> self)
-        {
-            if (self is Array a)
-            {
-                Array.Sort(a);
-                return;
-            }
-
-            var t = self.GetType();
-            if (t.Name.StartsWith("List`"))
-            {
-                var l = self as List<sbyte>;
-                l.Sort();
-                return;
-            }
-
-            var m = t.GetMethod("Sort", new Type[0]);
-            if (m == null)
-                throw new InvalidOperationException("This object does not support inplace Sort() operation");
-
-            m.Invoke(self, new object[0]);
-        }
-
         public static double Correlation(this IList<sbyte> self, IList<sbyte> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -3667,20 +3373,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             return count;
-        }
-
-        public static IList<sbyte> GetUnique(this IList<sbyte> self)
-        {
-            var unique = new HashSet<sbyte>();
-            foreach (var value in self)
-                unique.Add(value);
-
-            return unique.ToList();
-        }
-
-        public static int CountUnique(this IList<sbyte> self)
-        {
-            return GetUnique(self).Count;
         }
 
         public static Summary Describe(this IList<sbyte> self)
@@ -4005,36 +3697,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
-        public static List<decimal> GetSortedCopy(this IList<decimal> self)
-        {
-            var result = new List<decimal>(self);
-            result.Sort();
-            return result;
-        }
-
-        public static void SortFill(this IList<decimal> self)
-        {
-            if (self is Array a)
-            {
-                Array.Sort(a);
-                return;
-            }
-
-            var t = self.GetType();
-            if (t.Name.StartsWith("List`"))
-            {
-                var l = self as List<decimal>;
-                l.Sort();
-                return;
-            }
-
-            var m = t.GetMethod("Sort", new Type[0]);
-            if (m == null)
-                throw new InvalidOperationException("This object does not support inplace Sort() operation");
-
-            m.Invoke(self, new object[0]);
-        }
-
         public static double Correlation(this IList<decimal> self, IList<decimal> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -4238,20 +3900,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             return count;
-        }
-
-        public static IList<decimal> GetUnique(this IList<decimal> self)
-        {
-            var unique = new HashSet<decimal>();
-            foreach (var value in self)
-                unique.Add(value);
-
-            return unique.ToList();
-        }
-
-        public static int CountUnique(this IList<decimal> self)
-        {
-            return GetUnique(self).Count;
         }
 
         public static Summary Describe(this IList<decimal> self)

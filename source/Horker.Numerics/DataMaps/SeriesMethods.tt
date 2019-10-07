@@ -7,7 +7,7 @@
 <#   
 var methodNames = new[]
 {
-	// Elementwise unary operations and functions
+	// Elementwise operations and functions
 
 	Tuple.Create("Abs", "", ""),
 	Tuple.Create("Acos", "", ""),
@@ -46,9 +46,10 @@ var methodNames = new[]
 	Tuple.Create("CumulativeMin", "", ""),
 	Tuple.Create("CumulativeProduct", "", ""),
 	Tuple.Create("CumulativeSum", "", ""),
+	Tuple.Create("GetSortedCopy", "", ""),
 	Tuple.Create("FillNaN", "object fillValue", ", (dynamic)fillValue"),
-	Tuple.Create("GetUnique", "", ""),
 	Tuple.Create("RemoveNaN", "", ""),
+	Tuple.Create("Unique", "", ""),
 };
 
 var nonSeriesMethods = new[]
