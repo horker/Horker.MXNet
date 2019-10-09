@@ -16,7 +16,7 @@ namespace Horker.Numerics.Tests
             var values = new int[] { 1, 2, 3, 4, 5, 6 };
             var filter = new bool[] { true, false, true, false, true, false };
 
-            var l = new FilteredListView(values, filter);
+            var l = new FilteredListView<int>(values, filter);
 
             Assert.Equal(3, l.Count);
             Assert.Equal(1, l[0]);
@@ -30,7 +30,7 @@ namespace Horker.Numerics.Tests
             var values = new int[] { 1, 2, 3, 4, 5, 6 };
             var filter = new bool[] { true, false, true, false, true, false };
 
-            var l = new FilteredListView(values, filter);
+            var l = new FilteredListView<int>(values, filter);
 
             var items = new List<int>();
 

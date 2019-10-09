@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FilteredListViewTest.cs" />
+    <Compile Include="GroupByTest.cs" />
     <Compile Include="TransformerTest.cs" />
     <Compile Include="SeriesTest.cs" />
     <Compile Include="IListExtensionsTest.cs" />

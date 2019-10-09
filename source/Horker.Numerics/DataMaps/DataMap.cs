@@ -60,7 +60,7 @@ namespace Horker.Numerics.DataMaps
         {
             get
             {
-                var count = 0;
+                var count = int.MaxValue;
                 foreach (var column in _columns)
                     count = Math.Min(column.Data.Count, count);
 

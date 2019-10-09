@@ -290,6 +290,11 @@ namespace Horker.Numerics.DataMaps
             return new Series(result);
         }
 
+        public SeriesBase Apply<T, U>(Func<T, int, U> func)
+        {
+            return new Series(((IList<T>)UnderlyingList).Apply(func));
+        }
+
         public void ApplyFill(object lambda)
         {
             var dataType = DataType;
@@ -300,6 +305,11 @@ namespace Horker.Numerics.DataMaps
             Debug.Assert(m != null);
             var gm = m.MakeGenericMethod(new Type[] { dataType });
             gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
+        }
+
+        public void ApplyFill<T>(Func<T, int, T> func)
+        {
+            ((IList<T>)UnderlyingList).ApplyFill(func);
         }
 
         public void ForEach(object lambda)
@@ -313,6 +323,11 @@ namespace Horker.Numerics.DataMaps
             var gm = m.MakeGenericMethod(new Type[] { dataType });
 
             gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
+        }
+
+        public void ForEach<T>(Action<T, int> func)
+        {
+            ((IList<T>)UnderlyingList).ForEach(func);
         }
 
         public object Reduce(object lambda, object initialValue, Type returnType = null)
@@ -336,6 +351,11 @@ namespace Horker.Numerics.DataMaps
             return gm.Invoke(null, new object[] { UnderlyingList, lambda, initialValue, null, null });
         }
 
+        public U Reduce<T, U>(Func<T, int, U, U> func, U initialValue)
+        {
+            return ((IList<T>)UnderlyingList).Reduce(func, initialValue);
+        }
+
         public int CountIf(object lambda)
         {
             var dataType = DataType;
@@ -347,6 +367,11 @@ namespace Horker.Numerics.DataMaps
             var gm = m.MakeGenericMethod(new Type[] { dataType });
 
             return (int)gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
+        }
+
+        public int CountIf<T>(Func<T, int, bool> func)
+        {
+            return ((IList<T>)UnderlyingList).CountIf(func);
         }
 
         public SeriesBase RemoveIf(object lambda)
@@ -363,6 +388,11 @@ namespace Horker.Numerics.DataMaps
             return new Series(result);
         }
 
+        public SeriesBase RemoveIf<T>(Func<T, int, bool> func)
+        {
+            return new Series(((IList<T>)UnderlyingList).RemoveIf(func));
+        }
+
         public SeriesBase RollingApply(object lambda)
         {
             var dataType = DataType;
@@ -377,6 +407,11 @@ namespace Horker.Numerics.DataMaps
             return new Series(result);
         }
 
+        public SeriesBase RollingApply<T, U>(Func<T[], int, U> func, int window)
+        {
+            return new Series(((IList<T>)UnderlyingList).RollingApply(func, window));
+        }
+
         public void RollingApplyFill(object lambda)
         {
             var dataType = DataType;
@@ -388,6 +423,11 @@ namespace Horker.Numerics.DataMaps
             var gm = m.MakeGenericMethod(new Type[] { dataType });
 
             gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
+        }
+
+        public void RollingApplyFill<T, U>(Func<T[], int, U> func, int window)
+        {
+            ((IList<T>)UnderlyingList).RollingApply(func, window);
         }
 
         public bool All(object lambda)
@@ -404,6 +444,11 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
+        public bool All<T>(Func<T, int, bool> func)
+        {
+            return ((IList<T>)UnderlyingList).All(func);
+        }
+
         public bool Any(object lambda)
         {
             var dataType = DataType;
@@ -418,71 +463,76 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
+        public bool Any<T>(Func<T, int, bool> func)
+        {
+            return ((IList<T>)UnderlyingList).Any(func);
+        }
+
         // Comparison operators
 
         public SeriesBase Eq(IList other)
         {
-            return new Series((IList)UnderlyingList.Eq(other));
+            return new Series(UnderlyingList.Eq(other));
         }
 
         public SeriesBase Eq(object value)
         {
-            return new Series((IList)UnderlyingList.Eq(value));
+            return new Series(UnderlyingList.Eq(value));
         }
 
         public SeriesBase Ne(IList other)
         {
-            return new Series((IList)UnderlyingList.Ne(other));
+            return new Series(UnderlyingList.Ne(other));
         }
 
         public SeriesBase Ne(object value)
         {
-            return new Series((IList)UnderlyingList.Ne(value));
+            return new Series(UnderlyingList.Ne(value));
         }
 
         public SeriesBase Lt(IList other)
         {
-            return new Series((IList)UnderlyingList.Lt(other));
+            return new Series(UnderlyingList.Lt(other));
         }
 
         public SeriesBase Lt(object value)
         {
-            return new Series((IList)UnderlyingList.Lt(value));
+            return new Series(UnderlyingList.Lt(value));
         }
 
         public SeriesBase Le(IList other)
         {
-            return new Series((IList)UnderlyingList.Le(other));
+            return new Series(UnderlyingList.Le(other));
         }
 
         public SeriesBase Le(object value)
         {
-            return new Series((IList)UnderlyingList.Le(value));
+            return new Series(UnderlyingList.Le(value));
         }
 
         public SeriesBase Gt(IList other)
         {
-            return new Series((IList)UnderlyingList.Gt(other));
+            return new Series(UnderlyingList.Gt(other));
         }
 
         public SeriesBase Gt(object value)
         {
-            return new Series((IList)UnderlyingList.Gt(value));
+            return new Series(UnderlyingList.Gt(value));
         }
 
         public SeriesBase Ge(IList other)
         {
-            return new Series((IList)UnderlyingList.Ge(other));
+            return new Series(UnderlyingList.Ge(other));
         }
 
         public SeriesBase Ge(object value)
         {
-            return new Series((IList)UnderlyingList.Ge(value));
+            return new Series(UnderlyingList.Ge(value));
         }
 
         public SeriesBase Between(object left, object right, bool inclusive = true)
         {
-            return new Series((IList)UnderlyingList.Between(left, right, inclusive));
+            return new Series(UnderlyingList.Between(left, right, inclusive));
         }
 
         // Transformers

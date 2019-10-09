@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace Horker.Numerics.DataMaps
 {
-    public class FilteredListView : IList
+    public class FilteredListView<T> : IList<T>, IList
     {
-        private IList _underlying;
+        private IList<T> _underlying;
         private List<int> _link;
 
-        public FilteredListView(IList underlying, IList<bool> filter)
+        public FilteredListView(IList<T> underlying, IList<bool> filter)
         {
-            if (underlying.Count != filter.Count)
-                throw new ArgumentException("Underlying and filter should have the same length");
+            if (underlying.Count > filter.Count)
+                throw new ArgumentException("Underlying list should be longer than filter");
 
             _underlying = underlying;
 
@@ -28,25 +28,31 @@ namespace Horker.Numerics.DataMaps
             }
         }
 
-        public object this[int index]
+        public T this[int index]
         {
             get => _underlying[_link[index]];
             set => _underlying[_link[index]] = value;
         }
+        object IList.this[int index] { get => this[index]; set => this[index] = (T)value; }
 
         public bool IsReadOnly => _underlying.IsReadOnly;
 
-        public bool IsFixedSize => _underlying.IsFixedSize;
-
         public int Count => _link.Count;
-
-        public object SyncRoot => _underlying.SyncRoot;
 
         public bool IsSynchronized => false;
 
+        public bool IsFixedSize => false;
+
+        public object SyncRoot => null;
+
+        public void Add(T item)
+        {
+            throw new InvalidOperationException("This list does not support Insert() operation");
+        }
+
         public int Add(object value)
         {
-            throw new InvalidOperationException("This list doens not support the Add() operation");
+            throw new InvalidOperationException("This list does not support Insert() operation");
         }
 
         public void Clear()
@@ -57,14 +63,19 @@ namespace Horker.Numerics.DataMaps
             _link.Clear();
         }
 
-        public bool Contains(object value)
+        public bool Contains(T value)
         {
             for (var i = 0; i < _link.Count; ++i)
             {
-                if (_underlying[_link[i]] == value)
+                if (_underlying[_link[i]].Equals(value))
                     return true;
             }
             return false;
+        }
+
+        public bool Contains(object value)
+        {
+            return Contains((T)value);
         }
 
         public void CopyTo(Array array, int index)
@@ -72,19 +83,34 @@ namespace Horker.Numerics.DataMaps
             throw new NotImplementedException();
         }
 
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerator GetEnumerator()
         {
-            return new FilteredListViewEnumerator(this);
+            return new FilteredListViewEnumerator<T>(this);
+        }
+
+        public int IndexOf(T item)
+        {
+            for (var i = 0; i < _link.Count; ++i)
+            {
+                if (_underlying[_link[i]].Equals(item))
+                    return i;
+            }
+            return -1;
         }
 
         public int IndexOf(object value)
         {
-            for (var i = 0; i < _link.Count; ++i)
-            {
-                if (_underlying[_link[i]] == value)
-                    return i;
-            }
-            return -1;
+            return IndexOf((T)value);
+        }
+
+        public void Insert(int index, T item)
+        {
+            throw new InvalidOperationException("This list does not support Insert() operation");
         }
 
         public void Insert(int index, object value)
@@ -92,11 +118,21 @@ namespace Horker.Numerics.DataMaps
             throw new InvalidOperationException("This list does not support Insert() operation");
         }
 
+        public bool Remove(T item)
+        {
+            var i = IndexOf(item);
+            if (i != -1)
+            {
+                RemoveAt(i);
+                return true;
+            }
+
+            return false;
+        }
+
         public void Remove(object value)
         {
-            var i = IndexOf(value);
-            if (i != -1)
-                RemoveAt(i);
+            Remove((T)value);
         }
 
         public void RemoveAt(int index)
@@ -107,14 +143,19 @@ namespace Horker.Numerics.DataMaps
             for (; index < _link.Count; ++index)
                 --_link[index];
         }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
     }
 
-    public class FilteredListViewEnumerator : IEnumerator
+    public class FilteredListViewEnumerator<T> : IEnumerator
     {
-        private FilteredListView _list;
+        private FilteredListView<T> _list;
         private int _index;
 
-        public FilteredListViewEnumerator(FilteredListView list)
+        public FilteredListViewEnumerator(FilteredListView<T> list)
         {
             _list = list;
             _index = -1;

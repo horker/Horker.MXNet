@@ -10,23 +10,32 @@ namespace Horker.Numerics.DataMaps.Extensions
 {
     public static partial class GenericIListExtensions
     {
+        // Types and type conversions
+
         public static Type GetDataType(this IList value)
         {
-            // Types and type conversions
-
-            if (value is Array)
-                return value.GetType().GetElementType();
-
-            if (value is SeriesBase s)
+            while (value is SeriesBase s)
                 value = s.UnderlyingList;
 
-            // TODO: check if it implements IList<>.
-            var ga = value.GetType().GetGenericArguments();
+            var t = value.GetType();
 
-            if (ga == null || ga.Length == 0)
+            var e = t.GetElementType();
+            if (e != null)
+                return e;
+
+            if (!t.IsGenericType)
                 return typeof(object);
 
-            return ga[0];
+            if (t.GetGenericTypeDefinition() == typeof(List<>))
+                return t.GetGenericArguments()[0];
+
+            foreach (var itf in t.GetTypeInfo().ImplementedInterfaces)
+            {
+                if (itf.IsGenericType && itf.GetGenericTypeDefinition() == typeof(IList<>))
+                    return itf.GetGenericArguments()[0];
+            }
+
+            return typeof(object);
         }
 
         public static T[] ToArray<T>(this IList value)
@@ -163,7 +172,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         // Apply and friends
 
-        public static IList<U> Apply<T, U>(this IList<T> self, Func<T, int, U> func)
+        public static List<U> Apply<T, U>(this IList<T> self, Func<T, int, U> func)
         {
             List<U> result = result = new List<U>(self.Count);
             int i = 0;
@@ -209,7 +218,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return count;
         }
 
-        public static IList<T> RemoveIf<T>(this IList<T> self, Func<T, int, bool> func)
+        public static List<T> RemoveIf<T>(this IList<T> self, Func<T, int, bool> func)
         {
             var result = new List<T>();
             for (int i = 0; i < self.Count; ++i)
@@ -220,7 +229,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<U> RollingApply<T, U>(this IList<T> self, Func<T[], int, U> func, int window)
+        public static List<U> RollingApply<T, U>(this IList<T> self, Func<T[], int, U> func, int window)
         {
             var result = new List<U>();
             T[] slice;
@@ -309,9 +318,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             return gm.Invoke(null, arguments);
         }
 
-        public static IList<U> ApplyFuncString<T, U>(this IList<T> self, string funcString, DataMap dataMap = null, SeriesBase series = null)
+        public static List<U> ApplyFuncString<T, U>(this IList<T> self, string funcString, DataMap dataMap = null, SeriesBase series = null)
         {
-            return (IList<U>)InvokeFuncString(funcString,
+            return (List<U>)InvokeFuncString(funcString,
                 new Type[] { typeof(T), typeof(int), typeof(U) },
                 "Apply", new Type[] { typeof(T), typeof(U) }, true,
                 new object[] { self, null }, dataMap, series);
@@ -349,17 +358,17 @@ namespace Horker.Numerics.DataMaps.Extensions
                 new object[] { self, null }, dataMap, series);
         }
 
-        public static IList<T> RemoveIfFuncString<T>(this IList<T> self, string funcString, DataMap dataMap = null, SeriesBase series = null)
+        public static List<T> RemoveIfFuncString<T>(this IList<T> self, string funcString, DataMap dataMap = null, SeriesBase series = null)
         {
-            return (IList<T>)InvokeFuncString(funcString,
+            return (List<T>)InvokeFuncString(funcString,
                 new Type[] { typeof(T), typeof(int), typeof(bool) },
                 "RemoveIf", new Type[] { typeof(T) }, true,
                 new object[] { self, null }, dataMap, series);
         }
 
-        public static IList<U> RollingApplyFuncString<T, U>(this IList<T> self, string funcString, int window, DataMap dataMap = null, SeriesBase series = null)
+        public static List<U> RollingApplyFuncString<T, U>(this IList<T> self, string funcString, int window, DataMap dataMap = null, SeriesBase series = null)
         {
-            return (IList<U>)InvokeFuncString(funcString,
+            return (List<U>)InvokeFuncString(funcString,
                 new Type[] { typeof(T[]), typeof(int), typeof(U) },
                 "RollingApply", new Type[] { typeof(T), typeof(U) }, true,
                 new object[] { self, null, window }, dataMap, series);
@@ -389,7 +398,7 @@ namespace Horker.Numerics.DataMaps.Extensions
                 new object[] { self, null }, dataMap, series);
         }
 
-        public static IList<U> ApplyScriptBlock<T, U>(this IList<T> self, ScriptBlock scriptBlock, DataMap dataMap, SeriesBase series = null)
+        public static List<U> ApplyScriptBlock<T, U>(this IList<T> self, ScriptBlock scriptBlock, DataMap dataMap, SeriesBase series = null)
         {
             var result = new List<U>(self.Count);
 
@@ -482,7 +491,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return count;
         }
 
-        public static IList<T> RemoveIfScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock, DataMap dataMap, SeriesBase series = null)
+        public static List<T> RemoveIfScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock, DataMap dataMap, SeriesBase series = null)
         {
             var parameters = new List<PSVariable>();
             parameters.Add(new PSVariable("value"));
@@ -501,7 +510,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<U> RollingApplyScriptBlock<T, U>(this IList<T> self, ScriptBlock scriptBlock, int window, DataMap dataMap, SeriesBase series = null)
+        public static List<U> RollingApplyScriptBlock<T, U>(this IList<T> self, ScriptBlock scriptBlock, int window, DataMap dataMap, SeriesBase series = null)
         {
             var parameters = new List<PSVariable>();
             parameters.Add(new PSVariable("values"));
@@ -610,7 +619,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         // Comparison operators
 
-        private static IList<bool> CompareIList(this IList self, IList other, Func<int, bool> cond)
+        private static List<bool> CompareIList(this IList self, IList other, Func<int, bool> cond)
         {
             var result = new List<bool>(self.Count);
             var comparer = Comparer.Default;
@@ -629,7 +638,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        private static IList<bool> CompareScalar(this IList self, object value, Func<int, bool> cond)
+        private static List<bool> CompareScalar(this IList self, object value, Func<int, bool> cond)
         {
             var result = new List<bool>(self.Count);
             var comparer = Comparer.Default;
@@ -643,67 +652,67 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<bool> Eq(this IList self, IList other)
+        public static List<bool> Eq(this IList self, IList other)
         {
             return CompareIList(self, other, x => x == 0);
         }
 
-        public static IList<bool> Eq(this IList self, object value)
+        public static List<bool> Eq(this IList self, object value)
         {
             return CompareScalar(self, value, x => x == 0);
         }
 
-        public static IList<bool> Ne(this IList self, IList other)
+        public static List<bool> Ne(this IList self, IList other)
         {
             return CompareIList(self, other, x => x != 0);
         }
 
-        public static IList<bool> Ne(this IList self, object value)
+        public static List<bool> Ne(this IList self, object value)
         {
             return CompareScalar(self, value, x => x != 0);
         }
 
-        public static IList<bool> Lt(this IList self, IList other)
+        public static List<bool> Lt(this IList self, IList other)
         {
             return CompareIList(self, other, x => x < 0);
         }
 
-        public static IList<bool> Lt(this IList self, object value)
+        public static List<bool> Lt(this IList self, object value)
         {
             return CompareScalar(self, value, x => x < 0);
         }
 
-        public static IList<bool> Le(this IList self, IList other)
+        public static List<bool> Le(this IList self, IList other)
         {
             return CompareIList(self, other, x => x <= 0);
         }
 
-        public static IList<bool> Le(this IList self, object value)
+        public static List<bool> Le(this IList self, object value)
         {
             return CompareScalar(self, value, x => x <= 0);
         }
 
-        public static IList<bool> Gt(this IList self, IList other)
+        public static List<bool> Gt(this IList self, IList other)
         {
             return CompareIList(self, other, x => x > 0);
         }
 
-        public static IList<bool> Gt(this IList self, object value)
+        public static List<bool> Gt(this IList self, object value)
         {
             return CompareScalar(self, value, x => x > 0);
         }
 
-        public static IList<bool> Ge(this IList self, IList other)
+        public static List<bool> Ge(this IList self, IList other)
         {
             return CompareIList(self, other, x => x >= 0);
         }
 
-        public static IList<bool> Ge(this IList self, object value)
+        public static List<bool> Ge(this IList self, object value)
         {
             return CompareScalar(self, value, x => x >= 0);
         }
 
-        public static IList<bool> Between(this IList self, object left, object right, bool inclusive = true)
+        public static List<bool> Between(this IList self, object left, object right, bool inclusive = true)
         {
             var result = new List<bool>(self.Count);
             var comparer = Comparer.Default;
@@ -758,7 +767,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return summary;
         }
 
-        public static IList<T> RemoveNaN<T>(this IList<T> self)
+        public static List<T> RemoveNaN<T>(this IList<T> self)
         {
             var result = new List<T>(self.Count);
             foreach (var value in self)
@@ -768,7 +777,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<T> FillNaN<T>(this IList<T> self, T fillValue)
+        public static List<T> FillNaN<T>(this IList<T> self, T fillValue)
         {
             var result = new List<T>(self.Count);
             foreach (var value in self)
@@ -798,7 +807,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<T> Map<T>(this IList<T> self, IDictionary map)
+        public static List<T> Map<T>(this IList<T> self, IDictionary map)
         {
             var result = new List<T>();
             foreach (var value in self)
@@ -839,7 +848,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
-        public static IList<T> Unique<T>(this IList<T> self)
+        public static List<T> Unique<T>(this IList<T> self)
         {
             return new HashSet<T>(self).ToList();
         }
