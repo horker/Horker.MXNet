@@ -11,7 +11,7 @@ namespace Horker.Numerics.Tests
     public class IListExtensionsTest
     {
         [Fact]
-        public void TestGetDataTpe()
+        public void TestGetDataType()
         {
             var t1 = GenericIListExtensions.GetDataType(new int[0]);
             Assert.Equal(typeof(int), t1);
@@ -21,56 +21,6 @@ namespace Horker.Numerics.Tests
 
             var t3 = GenericIListExtensions.GetDataType(new ArrayList());
             Assert.Equal(typeof(object), t3);
-        }
-
-        [Fact]
-        public void TestApply()
-        {
-            var s = new int[] { 1, 2, 3 };
-
-            var t1 = s.ApplyFuncString<int, int>("(x, i) => x * i + 1");
-            Assert.Equal(new int[] { 1, 3, 7 }, t1);
-        }
-
-        [Fact]
-        public void TestApplyFill()
-        {
-            var s = new int[] { 1, 2, 3 };
-
-            s.ApplyFillFuncString("(x, i) => x * i + 1");
-            Assert.Equal(new int[] { 1, 3, 7 }, s);
-        }
-
-        public static int Sum = 0;
-
-        [Fact]
-        public void TestReduce()
-        {
-            var s = new int[] { 1, 2, 3 };
-
-            var sum = s.ReduceFuncString("(x, i, sum) => sum + x", 0);
-            Assert.Equal(6, sum);
-        }
-
-        [Fact]
-        public void TestCountIf()
-        {
-            var s = new int[] { 1, 2, 3 };
-
-            var count = s.CountIfFuncString("(x, i) => x >= 2");
-            Assert.Equal(2, count);
-        }
-
-        [Fact]
-        public void TestRollingApply()
-        {
-            var s = new double[] { 1, 2, 3, 4, 5 };
-
-            var t1 = s.RollingApplyFuncString<double, double>("(values, i) => values[values.Length - 1] ", 3);
-            Assert.Equal(new double[] { 1, 2, 3, 4, 5 }, t1);
-
-            var t2 = s.RollingApplyFuncString<double, double>("(values, i) => values.Average()", 3);
-            Assert.Equal(new double[] { 1, 1.5, 2, 3, 4 }, t2);
         }
 
         [Fact]

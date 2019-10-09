@@ -127,7 +127,7 @@ task Build {
 #  Copy-Item $HELP_INTERM $MODULE_PATH
 #}
 
-task Test Build, ImportDebug, {
+task Test {
   Invoke-Pester "$PSScriptRoot\tests"
 }
 

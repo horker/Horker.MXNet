@@ -27,7 +27,7 @@ using Horker.Numerics.DataMaps.Extensions;
 namespace {0} {{
     public static class {1}
     {{
-        public static Func<{2}> f(DataMap dataMap, SeriesBase seq)
+        public static Func<{2}> f(DataMap dataMap, SeriesBase series)
         {{
             return new Func<{3}>({4});
         }}
@@ -44,7 +44,7 @@ using Horker.Numerics.DataMaps.Extensions;
 namespace {0} {{
     public static class {1}
     {{
-        public static Action<{2}> f(DataMap dataMap, SeriesBase seq)
+        public static Action<{2}> f(DataMap dataMap, SeriesBase series)
         {{
             return new Action<{3}>({4});
         }}

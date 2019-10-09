@@ -257,37 +257,34 @@ namespace Horker.Numerics.DataMaps
         public static implicit operator SeriesBase(List<DateTime> value) { return new Series(value); }
         public static implicit operator SeriesBase(List<DateTimeOffset> value) { return new Series(value); }
 
-        // Apply methods
+        // Apply and friends
 
-        private string ChooseApplyMethodName(object lambda, string stringName, string scriptBlockName)
+        private object InvokeFuncString(string funcString, Type[] funcTypes, string methodName, Type[] methodGenericTypes,
+            bool hasReturnValue, object[] arguments)
         {
-            Debug.Assert(stringName.Replace("FuncString", "") == scriptBlockName.Replace("ScriptBlock", ""));
+            var func = FunctionCompiler.Compile(funcString, funcTypes, hasReturnValue, null, this);
+            arguments[1] = func;
 
-            string methodName;
-
-            if (lambda is string)
-                methodName = stringName;
-            else if (lambda is ScriptBlock)
-                methodName = scriptBlockName;
-            else
-                throw new ArgumentException("Invalid script block");
-
-            return methodName;
-        }
-
-        public SeriesBase Apply(object lambda, Type returnType = null)
-        {
-            var dataType = DataType;
-            returnType = returnType ?? dataType;
-
-            var methodName = ChooseApplyMethodName(lambda, "ApplyFuncString", "ApplyScriptBlock");
-
+            // TODO: Use a cache.
             var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
             Debug.Assert(m != null);
-            var gm = m.MakeGenericMethod(new Type[] { dataType, returnType });
 
-            var result = (IList)gm.Invoke(null, new object[] { UnderlyingList, lambda, null, this });
-            return new Series(result);
+            var gm = m.MakeGenericMethod(methodGenericTypes);
+
+            return gm.Invoke(null, arguments);
+        }
+
+        private object InvokeScriptBlock(ScriptBlock scriptBlock, string methodName, Type[] methodGenericTypes, object[] arguments)
+        {
+            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            Debug.Assert(m != null);
+
+            var gm = m.MakeGenericMethod(methodGenericTypes);
+
+            arguments[0] = UnderlyingList;
+            arguments[1] = scriptBlock;
+
+            return gm.Invoke(null, arguments);
         }
 
         public SeriesBase Apply<T, U>(Func<T, int, U> func)
@@ -295,16 +292,23 @@ namespace Horker.Numerics.DataMaps
             return new Series(((IList<T>)UnderlyingList).Apply(func));
         }
 
-        public void ApplyFill(object lambda)
+        public SeriesBase Apply(string funcString, Type returnType = null)
         {
             var dataType = DataType;
+            returnType = returnType ?? dataType;
+            return new Series((IList)InvokeFuncString(funcString,
+                new Type[] { dataType, typeof(int), returnType },
+                "Apply", new Type[] { dataType, returnType }, true,
+                new object[] { UnderlyingList, null }));
+        }
 
-            var methodName = ChooseApplyMethodName(lambda, "ApplyFillFuncString", "ApplyFillScriptBlock");
-
-            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
-            Debug.Assert(m != null);
-            var gm = m.MakeGenericMethod(new Type[] { dataType });
-            gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
+        public SeriesBase Apply(ScriptBlock scriptBlock, Type returnType = null)
+        {
+            var dataType = DataType;
+            returnType = returnType ?? dataType;
+            return new Series((IList)InvokeScriptBlock(scriptBlock,
+                "ApplyScriptBlock", new Type[] { dataType, returnType },
+                new object[2]));
         }
 
         public void ApplyFill<T>(Func<T, int, T> func)
@@ -312,17 +316,21 @@ namespace Horker.Numerics.DataMaps
             ((IList<T>)UnderlyingList).ApplyFill(func);
         }
 
-        public void ForEach(object lambda)
+        public void ApplyFill(string funcString)
         {
             var dataType = DataType;
+            InvokeFuncString(funcString,
+                new Type[] { dataType, typeof(int), dataType },
+                "ApplyFill", new Type[] { dataType }, true,
+                new object[] { UnderlyingList, null });
+        }
 
-            var methodName = ChooseApplyMethodName(lambda, "ForEachFuncString", "ForEachScriptBlock");
-
-            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
-            Debug.Assert(m != null);
-            var gm = m.MakeGenericMethod(new Type[] { dataType });
-
-            gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
+        public void ApplyFill(ScriptBlock scriptBlock)
+        {
+            var dataType = DataType;
+            InvokeScriptBlock(scriptBlock,
+                "ApplyFillScriptBlock", new Type[] { dataType },
+                new object[2]);
         }
 
         public void ForEach<T>(Action<T, int> func)
@@ -330,25 +338,18 @@ namespace Horker.Numerics.DataMaps
             ((IList<T>)UnderlyingList).ForEach(func);
         }
 
-        public object Reduce(object lambda, object initialValue, Type returnType = null)
+        public void ForEach(string funcString)
         {
             var dataType = DataType;
+            InvokeFuncString(funcString,
+                new Type[] { dataType, typeof(int) },
+                "ForEach", new Type[] { dataType }, true,
+                new object[] { UnderlyingList, null });
+        }
 
-            if (returnType == null)
-            {
-                if (initialValue is PSObject pso)
-                    returnType = pso.BaseObject.GetType();
-                else
-                    returnType = initialValue.GetType();
-            }
-
-            var methodName = ChooseApplyMethodName(lambda, "ReduceFuncString", "ReduceScriptBlock");
-
-            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
-            Debug.Assert(m != null);
-            var gm = m.MakeGenericMethod(new Type[] { dataType, returnType });
-
-            return gm.Invoke(null, new object[] { UnderlyingList, lambda, initialValue, null, null });
+        public void ForEach(ScriptBlock scriptBlock)
+        {
+            GenericIListExtensions.ForEachScriptBlock((dynamic)UnderlyingList, scriptBlock);
         }
 
         public U Reduce<T, U>(Func<T, int, U, U> func, U initialValue)
@@ -356,17 +357,21 @@ namespace Horker.Numerics.DataMaps
             return ((IList<T>)UnderlyingList).Reduce(func, initialValue);
         }
 
-        public int CountIf(object lambda)
+        public object Reduce(string funcString, object initialValue, Type returnType = null)
         {
             var dataType = DataType;
+            returnType = returnType ?? dataType;
+            return InvokeFuncString(funcString,
+                new Type[] { dataType, typeof(int), returnType, returnType },
+                "Reduce", new Type[] { dataType, returnType }, true,
+                new object[] { UnderlyingList, null, initialValue });
+        }
 
-            var methodName = ChooseApplyMethodName(lambda, "CountIfFuncString", "CountIfScriptBlock");
-
-            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
-            Debug.Assert(m != null);
-            var gm = m.MakeGenericMethod(new Type[] { dataType });
-
-            return (int)gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
+        public object Reduce(ScriptBlock scriptBlock, object initialValue, Type returnType = null)
+        {
+            return InvokeScriptBlock(scriptBlock,
+                "ReduceScriptBlock", new Type[] { DataType },
+                new object[3] { null, null, initialValue });
         }
 
         public int CountIf<T>(Func<T, int, bool> func)
@@ -374,18 +379,18 @@ namespace Horker.Numerics.DataMaps
             return ((IList<T>)UnderlyingList).CountIf(func);
         }
 
-        public SeriesBase RemoveIf(object lambda)
+        public int CountIf(string funcString)
         {
             var dataType = DataType;
+            return (int)InvokeFuncString(funcString,
+                new Type[] { dataType, typeof(int), typeof(bool) },
+                "CountIf", new Type[] { dataType }, true,
+                new object[] { UnderlyingList, null });
+        }
 
-            var methodName = ChooseApplyMethodName(lambda, "RemoveIfFuncString", "RemoveIfScriptBlock");
-
-            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
-            Debug.Assert(m != null);
-            var gm = m.MakeGenericMethod(new Type[] { dataType });
-
-            var result = (IList)gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
-            return new Series(result);
+        public int CountIf(ScriptBlock scriptpBlock)
+        {
+            return GenericIListExtensions.CountIfScriptBlock((dynamic)UnderlyingList, scriptpBlock);
         }
 
         public SeriesBase RemoveIf<T>(Func<T, int, bool> func)
@@ -393,18 +398,18 @@ namespace Horker.Numerics.DataMaps
             return new Series(((IList<T>)UnderlyingList).RemoveIf(func));
         }
 
-        public SeriesBase RollingApply(object lambda)
+        public SeriesBase RemoveIf(string funcString)
         {
             var dataType = DataType;
+            return new Series((IList)InvokeFuncString(funcString,
+                new Type[] { dataType, typeof(int), typeof(bool) },
+                "RemoveIf", new Type[] { dataType }, true,
+                new object[] { UnderlyingList, null }));
+        }
 
-            var methodName = ChooseApplyMethodName(lambda, "RollingApplyFuncString", "RollingApplyScriptBlock");
-
-            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
-            Debug.Assert(m != null);
-            var gm = m.MakeGenericMethod(new Type[] { dataType });
-
-            var result = (IList)gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
-            return new Series(result);
+        public SeriesBase RemoveIf(ScriptBlock scriptBlock)
+        {
+            return new Series((IList)GenericIListExtensions.RemoveIfScriptBlock((dynamic)UnderlyingList, scriptBlock));
         }
 
         public SeriesBase RollingApply<T, U>(Func<T[], int, U> func, int window)
@@ -412,17 +417,21 @@ namespace Horker.Numerics.DataMaps
             return new Series(((IList<T>)UnderlyingList).RollingApply(func, window));
         }
 
-        public void RollingApplyFill(object lambda)
+        public SeriesBase RollingApply(string funcString, int window, Type returnType = null)
         {
             var dataType = DataType;
+            returnType = returnType ?? dataType;
+            return new Series((IList)InvokeFuncString(funcString,
+                new Type[] { dataType.MakeArrayType(), typeof(int), returnType },
+                "RollingApply", new Type[] { dataType, returnType }, true,
+                new object[] { UnderlyingList, null, window }));
+        }
 
-            var methodName = ChooseApplyMethodName(lambda, "RollingApplyFillFuncString", "RollingApplyFillScriptBlock");
-
-            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
-            Debug.Assert(m != null);
-            var gm = m.MakeGenericMethod(new Type[] { dataType });
-
-            gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
+        public SeriesBase RollingApply(ScriptBlock scriptBlock, int window)
+        {
+            return new Series((IList)InvokeScriptBlock(scriptBlock,
+                "RollingApplyScriptBlock", new Type[] { DataType },
+                new object[3] { null, null, window }));
         }
 
         public void RollingApplyFill<T, U>(Func<T[], int, U> func, int window)
@@ -430,18 +439,18 @@ namespace Horker.Numerics.DataMaps
             ((IList<T>)UnderlyingList).RollingApply(func, window);
         }
 
-        public bool All(object lambda)
+        public void RollingApplyFill(string funcString, int window)
         {
             var dataType = DataType;
+            InvokeFuncString(funcString,
+                new Type[] { dataType.MakeArrayType(), typeof(int) },
+                "RollingApply", new Type[] { dataType }, true,
+                new object[] { null, null, window });
+        }
 
-            var methodName = ChooseApplyMethodName(lambda, "AllFuncString", "AllScriptBlock");
-
-            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
-            Debug.Assert(m != null);
-            var gm = m.MakeGenericMethod(new Type[] { dataType });
-
-            var result = (bool)gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
-            return result;
+        public void RollingApplyFill(ScriptBlock scriptBlock, int window)
+        {
+            GenericIListExtensions.RollingApplyScriptBlock((dynamic)UnderlyingList, scriptBlock, window);
         }
 
         public bool All<T>(Func<T, int, bool> func)
@@ -449,23 +458,37 @@ namespace Horker.Numerics.DataMaps
             return ((IList<T>)UnderlyingList).All(func);
         }
 
-        public bool Any(object lambda)
+        public bool All(string funcString)
         {
             var dataType = DataType;
+            return (bool)InvokeFuncString(funcString,
+                new Type[] { dataType, typeof(int), typeof(bool) },
+                "All", new Type[] { dataType }, true,
+                new object[] { UnderlyingList, null });
+        }
 
-            var methodName = ChooseApplyMethodName(lambda, "AnyFuncString", "AnyScriptBlock");
-
-            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
-            Debug.Assert(m != null);
-            var gm = m.MakeGenericMethod(new Type[] { dataType });
-
-            var result = (bool)gm.Invoke(null, new object[] { UnderlyingList, lambda, null, null });
-            return result;
+        public bool All(ScriptBlock scriptBlock)
+        {
+            return (bool)GenericIListExtensions.AllScriptBlock((dynamic)UnderlyingList, scriptBlock);
         }
 
         public bool Any<T>(Func<T, int, bool> func)
         {
             return ((IList<T>)UnderlyingList).Any(func);
+        }
+
+        public bool Any(string funcString)
+        {
+            var dataType = DataType;
+            return (bool)InvokeFuncString(funcString,
+                new Type[] { dataType, typeof(int), typeof(bool) },
+                "Any", new Type[] { dataType }, true,
+                new object[] { UnderlyingList, null });
+        }
+
+        public bool Any(ScriptBlock scriptBlock)
+        {
+            return (bool)GenericIListExtensions.AnyScriptBlock((dynamic)UnderlyingList, scriptBlock);
         }
 
         // Comparison operators
