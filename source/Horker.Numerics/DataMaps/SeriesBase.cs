@@ -36,6 +36,14 @@ namespace Horker.Numerics.DataMaps
             get => GenericIListExtensions.GetDataType(UnderlyingList);
         }
 
+        private DataMap _dataMap;
+
+        public DataMap DataMap
+        {
+            get => _dataMap;
+            set => _dataMap = value;
+        }
+
         // IList implementation
 
         public virtual object this[int index] { get => UnderlyingList[index]; set => UnderlyingList[index] = value; }
@@ -262,7 +270,7 @@ namespace Horker.Numerics.DataMaps
         private object InvokeFuncString(string funcString, Type[] funcTypes, string methodName, Type[] methodGenericTypes,
             bool hasReturnValue, object[] arguments)
         {
-            var func = FunctionCompiler.Compile(funcString, funcTypes, hasReturnValue, null, this);
+            var func = FunctionCompiler.Compile(funcString, funcTypes, hasReturnValue, _dataMap, this);
             arguments[1] = func;
 
             // TODO: Use a cache.

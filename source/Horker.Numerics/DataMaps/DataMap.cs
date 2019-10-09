@@ -234,7 +234,10 @@ namespace Horker.Numerics.DataMaps
             set
             {
                 if (_nameMap.TryGetValue(name, out var node))
+                {
                     node.Value.Data = value;
+                    value.DataMap = this;
+                }
                 else
                     AddLast(name, value);
             }
@@ -298,6 +301,7 @@ namespace Horker.Numerics.DataMaps
             var node = new LinkedListNode<Column>(new Column(name, value));
             _columns.AddLast(node);
             _nameMap.Add(name, node);
+            value.DataMap = this;
         }
 
         public void AddLast(string name, IList value)
