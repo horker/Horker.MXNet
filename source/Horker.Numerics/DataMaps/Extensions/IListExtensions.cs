@@ -175,10 +175,10 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static List<U> Apply<T, U>(this IList<T> self, Func<T, int, U> func)
         {
             List<U> result = result = new List<U>(self.Count);
-            int i = 0;
-            foreach (var e in self)
+
+            for (var i = 0; i < self.Count; ++i)
             {
-                var value = func.Invoke(e, i++);
+                var value = func.Invoke(self[i], i);
                 result.Add(value);
             }
             return result;
@@ -406,11 +406,10 @@ namespace Horker.Numerics.DataMaps.Extensions
             parameters.Add(new PSVariable("value"));
             parameters.Add(new PSVariable("index"));
 
-            var i = 0;
-            foreach (var e in self)
+            for (var i = 0; i < self.Count; ++i)
             {
-                parameters[0].Value = e;
-                parameters[1].Value = i++;
+                parameters[0].Value = self[i];
+                parameters[1].Value = i;
                 var rawValue = scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject;
                 var value = (U)(object)rawValue;
                 result.Add(value);
@@ -425,11 +424,10 @@ namespace Horker.Numerics.DataMaps.Extensions
             parameters.Add(new PSVariable("value"));
             parameters.Add(new PSVariable("index"));
 
-            var i = 0;
-            foreach (var e in self)
+            for (var i = 0; i < self.Count; ++i)
             {
-                parameters[0].Value = e;
-                parameters[1].Value = i++;
+                parameters[0].Value = self[i];
+                parameters[1].Value = i;
                 var rawValue = scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject;
                 var value = (T)(object)rawValue;
                 self[i] = value;
@@ -442,11 +440,10 @@ namespace Horker.Numerics.DataMaps.Extensions
             parameters.Add(new PSVariable("value"));
             parameters.Add(new PSVariable("index"));
 
-            var i = 0;
-            foreach (var e in self)
+            for (var i = 0; i < self.Count; ++i)
             {
-                parameters[0].Value = e;
-                parameters[1].Value = i++;
+                parameters[0].Value = self[i];
+                parameters[1].Value = i;
                 scriptBlock.InvokeWithContext(null, parameters, null);
             }
         }
@@ -459,12 +456,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             parameters.Add(new PSVariable("index"));
             parameters.Add(new PSVariable("result"));
 
-            var i = 0;
             object result = initialValue;
-            foreach (var e in self)
+            for (var i = 0; i < self.Count; ++i)
             {
-                parameters[0].Value = e;
-                parameters[1].Value = i++;
+                parameters[0].Value = self[i];
+                parameters[1].Value = i;
                 parameters[2].Value = result;
                 result = scriptBlock.InvokeWithContext(null, parameters, null)[0];
             }
@@ -478,12 +474,11 @@ namespace Horker.Numerics.DataMaps.Extensions
             parameters.Add(new PSVariable("value"));
             parameters.Add(new PSVariable("index"));
 
-            var i = 0;
             var count = 0;
-            foreach (var e in self)
+            for (var i = 0; i < self.Count; ++i)
             {
-                parameters[0].Value = e;
-                parameters[1].Value = i++;
+                parameters[0].Value = self[i];
+                parameters[1].Value = i;
                 if ((bool)scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject)
                     ++count;
             }
@@ -497,14 +492,13 @@ namespace Horker.Numerics.DataMaps.Extensions
             parameters.Add(new PSVariable("value"));
             parameters.Add(new PSVariable("index"));
 
-            var i = 0;
             var result = new List<T>();
-            foreach (var e in self)
+            for (var i = 0; i < self.Count; ++i)
             {
-                parameters[0].Value = e;
-                parameters[1].Value = i++;
+                parameters[0].Value = self[i];
+                parameters[1].Value = i;
                 if (!(bool)scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject)
-                    result.Add(e);
+                    result.Add(self[i]);
             }
 
             return result;
@@ -587,11 +581,10 @@ namespace Horker.Numerics.DataMaps.Extensions
             parameters.Add(new PSVariable("value"));
             parameters.Add(new PSVariable("index"));
 
-            var i = 0;
-            foreach (var e in self)
+            for (var i = 0; i < self.Count; ++i)
             {
-                parameters[0].Value = e;
-                parameters[1].Value = i++;
+                parameters[0].Value = self[i];
+                parameters[1].Value = i;
                 if (!(bool)scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject)
                     return false;
             }
@@ -605,11 +598,10 @@ namespace Horker.Numerics.DataMaps.Extensions
             parameters.Add(new PSVariable("value"));
             parameters.Add(new PSVariable("index"));
 
-            var i = 0;
-            foreach (var e in self)
+            for (var i = 0; i < self.Count; ++i)
             {
-                parameters[0].Value = e;
-                parameters[1].Value = i++;
+                parameters[0].Value = self[i];
+                parameters[1].Value = i;
                 if ((bool)scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject)
                     return true;
             }
