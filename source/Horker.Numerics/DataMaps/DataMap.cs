@@ -441,6 +441,11 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
+        public GroupBy GroupBy(string[] groupingColumnNames, string[] selectColumns = null)
+        {
+            return new GroupBy(this, groupingColumnNames, selectColumns);
+        }
+
         // Conversions
 
         public Dictionary<string, IList> ToDictionary()

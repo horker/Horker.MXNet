@@ -218,7 +218,8 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
         public static Summary Describe(this IList<MetaNum> self)
         {
             var sorted = self.RemoveNaN();
-            sorted.SortFill();
+            if (sorted.Count > 0)
+                sorted.SortFill();
 
             var summary = new Summary();
             summary.Count = self.Count;
@@ -226,17 +227,20 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
             summary.Unique = self.CountUnique();
             summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
-            summary.Min = sorted[0];
+            summary.Min = sorted.Count > 0 ? (object)sorted[0] : null;
             summary.Q25 = sorted.Quantile(.25, false, true);
             summary.Median = sorted.Quantile(.5, false, true);
             summary.Q75 = sorted.Quantile(.75, false, true);
-            summary.Max = sorted[sorted.Count - 1];
+            summary.Max = sorted.Count > 0 ? (object)sorted[sorted.Count - 1] : null;
 
             return summary;
         }
 
         public static MetaFloat Quantile(this IList<MetaNum> self, double p, bool skipNaN = true, bool isSorted = false)
         {
+            if (self.Count == 0)
+                return MetaFloat.NaN;
+
             // TODO use partial sort
 
             IList<MetaNum> sorted;
@@ -282,7 +286,7 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
             return (MetaFloat)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
-        public static IList<MetaNum> RemoveNaN(this IList<MetaNum> self)
+        public static List<MetaNum> RemoveNaN(this IList<MetaNum> self)
         {
             var result = new List<MetaNum>(self.Count);
             foreach (var value in self)
@@ -292,7 +296,7 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
             return result;
         }
 
-        public static IList<MetaNum> FillNaN(this IList<MetaNum> self, MetaNum fillValue)
+        public static List<MetaNum> FillNaN(this IList<MetaNum> self, MetaNum fillValue)
         {
             var result = new List<MetaNum>(self.Count);
             foreach (var value in self)
@@ -317,6 +321,9 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
 
         public static MetaFloat Kurtosis(this IList<MetaNum> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return MetaFloat.NaN;
+
             var mean = (double)self.Mean();
 
             double n = self.Count;
@@ -353,6 +360,9 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
 
         public static MetaNum Max(this IList<MetaNum> self)
         {
+            if (self.Count == 0)
+                return NaN<MetaNum>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -370,6 +380,9 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
 
         public static MetaNum Min(this IList<MetaNum> self)
         {
+            if (self.Count == 0)
+                return NaN<MetaNum>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -387,6 +400,9 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
 
         public static MetaFloat Mean(this IList<MetaNum> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return MetaFloat.NaN;
+
             MetaFloat mean = (MetaFloat)0.0;
             int actualCount = self.Count;
 
@@ -417,6 +433,9 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
 
         public static MetaNum Mode(this IList<MetaNum> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return NaN<MetaNum>.GetNaNOrRaiseException("No elements");
+
             var values = self.ToArray();
             Array.Sort(values);
 
@@ -466,6 +485,9 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
 
         public static MetaFloat Skewness(this IList<MetaNum> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return MetaFloat.NaN;
+
             double mean = (double)self.Mean();
             double n = self.Count;
 
@@ -499,6 +521,9 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
 
         public static MetaFloat Variance(this IList<MetaNum> self, bool unbiased = true, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return MetaFloat.NaN;
+
             MetaFloat mean = Mean(self, skipNaN);
             if (MetaFloat.IsNaN(mean))
                 return MetaFloat.NaN;

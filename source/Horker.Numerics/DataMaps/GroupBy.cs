@@ -10,15 +10,15 @@ using Horker.Numerics.DataMaps.Extensions;
 
 namespace Horker.Numerics.DataMaps
 {
-    public class GroupBy
+    public class GroupBy : IEnumerable<DataMap>
     {
-        private class KeyColumn
+        private class GroupingColumn
         {
             public string Name;
             public IList CategoryValues;
             public Dictionary<object, bool[]> FilterSet;
 
-            public KeyColumn(string name, IList categoryValues)
+            public GroupingColumn(string name, IList categoryValues)
             {
                 Name = name;
                 CategoryValues = categoryValues;
@@ -77,22 +77,22 @@ namespace Horker.Numerics.DataMaps
 
         private DataMap _dataMap;
         private IList<string> _selectColumns;
-        private List<KeyColumn> _keyColumns;
+        private List<GroupingColumn> _groupingColumns;
         private int _maxRowCount;
         private Dictionary<CacheKey, DataMap> _cache;
 
-        public GroupBy(DataMap dataMap, IList<string> keyColumnNmaes, IList<string> selectColumns = null)
+        public GroupBy(DataMap dataMap, IList<string> groupingColumnNames, IList<string> selectColumns = null)
         {
             _dataMap = dataMap;
             _selectColumns = selectColumns;
-            _keyColumns = new List<KeyColumn>();
+            _groupingColumns = new List<GroupingColumn>();
             _maxRowCount = dataMap.MaxRowCount;
             _cache = new Dictionary<CacheKey, DataMap>();
 
-            foreach (var c in keyColumnNmaes)
+            foreach (var c in groupingColumnNames)
             {
-                var keyColumn = new KeyColumn(c, dataMap[c].Unique().UnderlyingList);
-                _keyColumns.Add(keyColumn);
+                var keyColumn = new GroupingColumn(c, dataMap[c].Unique().UnderlyingList);
+                _groupingColumns.Add(keyColumn);
 
                 foreach (var categoryValue in keyColumn.CategoryValues)
                 {
@@ -130,7 +130,7 @@ namespace Horker.Numerics.DataMaps
 
             for (var i = 0; i < categories.Length; ++i)
             {
-                var keyColumn = _keyColumns[i];
+                var keyColumn = _groupingColumns[i];
                 if (!keyColumn.FilterSet.TryGetValue(categories[i], out var f))
                     Array.Clear(filter, 0, filter.Length);
 
@@ -164,23 +164,33 @@ namespace Horker.Numerics.DataMaps
 
         public IEnumerable<DataMap> Groups()
         {
-            var counts = new int[_keyColumns.Count];
-            var categories = new object[_keyColumns.Count];
+            var counts = new int[_groupingColumns.Count];
+            var categories = new object[_groupingColumns.Count];
 
-            while (counts[0] < _keyColumns[0].CategoryValues.Count)
+            while (counts[0] < _groupingColumns[0].CategoryValues.Count)
             {
                 for (var i = 0; i < categories.Length; ++i)
-                    categories[i] = _keyColumns[i].CategoryValues[i];
+                    categories[i] = _groupingColumns[i].CategoryValues[counts[i]];
 
                 yield return GetSubset(categories);
 
-                for (var i = _keyColumns.Count - 1; i >= 0; --i)
+                for (var i = _groupingColumns.Count - 1; i >= 0; --i)
                 {
                     ++counts[i];
-                    if (counts[i] < _keyColumns[i].CategoryValues.Count)
+                    if (counts[i] < _groupingColumns[i].CategoryValues.Count)
                         break;
                 }
             }
+        }
+
+        public IEnumerator<DataMap> GetEnumerator()
+        {
+            return Groups().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

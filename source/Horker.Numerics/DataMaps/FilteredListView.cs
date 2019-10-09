@@ -88,9 +88,14 @@ namespace Horker.Numerics.DataMaps
             throw new NotImplementedException();
         }
 
-        public IEnumerator GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             return new FilteredListViewEnumerator<T>(this);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         public int IndexOf(T item)
@@ -143,14 +148,9 @@ namespace Horker.Numerics.DataMaps
             for (; index < _link.Count; ++index)
                 --_link[index];
         }
-
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
     }
 
-    public class FilteredListViewEnumerator<T> : IEnumerator
+    public class FilteredListViewEnumerator<T> : IEnumerator<T>
     {
         private FilteredListView<T> _list;
         private int _index;
@@ -161,7 +161,13 @@ namespace Horker.Numerics.DataMaps
             _index = -1;
         }
 
-        public object Current => _list[_index];
+        public T Current => _list[_index];
+
+        object IEnumerator.Current => Current;
+
+        public void Dispose()
+        {
+        }
 
         public bool MoveNext()
         {

@@ -216,7 +216,8 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static Summary Describe(this IList<double> self)
         {
             var sorted = self.RemoveNaN();
-            sorted.SortFill();
+            if (sorted.Count > 0)
+                sorted.SortFill();
 
             var summary = new Summary();
             summary.Count = self.Count;
@@ -224,17 +225,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Unique = self.CountUnique();
             summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
-            summary.Min = sorted[0];
+            summary.Min = sorted.Count > 0 ? (object)sorted[0] : null;
             summary.Q25 = sorted.Quantile(.25, false, true);
             summary.Median = sorted.Quantile(.5, false, true);
             summary.Q75 = sorted.Quantile(.75, false, true);
-            summary.Max = sorted[sorted.Count - 1];
+            summary.Max = sorted.Count > 0 ? (object)sorted[sorted.Count - 1] : null;
 
             return summary;
         }
 
         public static double Quantile(this IList<double> self, double p, bool skipNaN = true, bool isSorted = false)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             // TODO use partial sort
 
             IList<double> sorted;
@@ -280,7 +284,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return (double)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
-        public static IList<double> RemoveNaN(this IList<double> self)
+        public static List<double> RemoveNaN(this IList<double> self)
         {
             var result = new List<double>(self.Count);
             foreach (var value in self)
@@ -290,7 +294,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<double> FillNaN(this IList<double> self, double fillValue)
+        public static List<double> FillNaN(this IList<double> self, double fillValue)
         {
             var result = new List<double>(self.Count);
             foreach (var value in self)
@@ -315,6 +319,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Kurtosis(this IList<double> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             var mean = (double)self.Mean();
 
             double n = self.Count;
@@ -351,6 +358,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Max(this IList<double> self)
         {
+            if (self.Count == 0)
+                return NaN<double>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -368,6 +378,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Min(this IList<double> self)
         {
+            if (self.Count == 0)
+                return NaN<double>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -385,6 +398,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Mean(this IList<double> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = (double)0.0;
             int actualCount = self.Count;
 
@@ -415,6 +431,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Mode(this IList<double> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return NaN<double>.GetNaNOrRaiseException("No elements");
+
             var values = self.ToArray();
             Array.Sort(values);
 
@@ -464,6 +483,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Skewness(this IList<double> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = (double)self.Mean();
             double n = self.Count;
 
@@ -497,6 +519,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Variance(this IList<double> self, bool unbiased = true, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = Mean(self, skipNaN);
             if (double.IsNaN(mean))
                 return double.NaN;
@@ -743,7 +768,8 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static Summary Describe(this IList<float> self)
         {
             var sorted = self.RemoveNaN();
-            sorted.SortFill();
+            if (sorted.Count > 0)
+                sorted.SortFill();
 
             var summary = new Summary();
             summary.Count = self.Count;
@@ -751,17 +777,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Unique = self.CountUnique();
             summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
-            summary.Min = sorted[0];
+            summary.Min = sorted.Count > 0 ? (object)sorted[0] : null;
             summary.Q25 = sorted.Quantile(.25, false, true);
             summary.Median = sorted.Quantile(.5, false, true);
             summary.Q75 = sorted.Quantile(.75, false, true);
-            summary.Max = sorted[sorted.Count - 1];
+            summary.Max = sorted.Count > 0 ? (object)sorted[sorted.Count - 1] : null;
 
             return summary;
         }
 
         public static float Quantile(this IList<float> self, double p, bool skipNaN = true, bool isSorted = false)
         {
+            if (self.Count == 0)
+                return float.NaN;
+
             // TODO use partial sort
 
             IList<float> sorted;
@@ -807,7 +836,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return (float)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
-        public static IList<float> RemoveNaN(this IList<float> self)
+        public static List<float> RemoveNaN(this IList<float> self)
         {
             var result = new List<float>(self.Count);
             foreach (var value in self)
@@ -817,7 +846,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<float> FillNaN(this IList<float> self, float fillValue)
+        public static List<float> FillNaN(this IList<float> self, float fillValue)
         {
             var result = new List<float>(self.Count);
             foreach (var value in self)
@@ -842,6 +871,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static float Kurtosis(this IList<float> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return float.NaN;
+
             var mean = (double)self.Mean();
 
             double n = self.Count;
@@ -878,6 +910,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static float Max(this IList<float> self)
         {
+            if (self.Count == 0)
+                return NaN<float>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -895,6 +930,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static float Min(this IList<float> self)
         {
+            if (self.Count == 0)
+                return NaN<float>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -912,6 +950,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static float Mean(this IList<float> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return float.NaN;
+
             float mean = (float)0.0;
             int actualCount = self.Count;
 
@@ -942,6 +983,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static float Mode(this IList<float> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return NaN<float>.GetNaNOrRaiseException("No elements");
+
             var values = self.ToArray();
             Array.Sort(values);
 
@@ -991,6 +1035,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static float Skewness(this IList<float> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return float.NaN;
+
             double mean = (double)self.Mean();
             double n = self.Count;
 
@@ -1024,6 +1071,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static float Variance(this IList<float> self, bool unbiased = true, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return float.NaN;
+
             float mean = Mean(self, skipNaN);
             if (float.IsNaN(mean))
                 return float.NaN;
@@ -1270,7 +1320,8 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static Summary Describe(this IList<long> self)
         {
             var sorted = self.RemoveNaN();
-            sorted.SortFill();
+            if (sorted.Count > 0)
+                sorted.SortFill();
 
             var summary = new Summary();
             summary.Count = self.Count;
@@ -1278,17 +1329,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Unique = self.CountUnique();
             summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
-            summary.Min = sorted[0];
+            summary.Min = sorted.Count > 0 ? (object)sorted[0] : null;
             summary.Q25 = sorted.Quantile(.25, false, true);
             summary.Median = sorted.Quantile(.5, false, true);
             summary.Q75 = sorted.Quantile(.75, false, true);
-            summary.Max = sorted[sorted.Count - 1];
+            summary.Max = sorted.Count > 0 ? (object)sorted[sorted.Count - 1] : null;
 
             return summary;
         }
 
         public static double Quantile(this IList<long> self, double p, bool skipNaN = true, bool isSorted = false)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             // TODO use partial sort
 
             IList<long> sorted;
@@ -1334,7 +1388,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return (double)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
-        public static IList<long> RemoveNaN(this IList<long> self)
+        public static List<long> RemoveNaN(this IList<long> self)
         {
             var result = new List<long>(self.Count);
             foreach (var value in self)
@@ -1344,7 +1398,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<long> FillNaN(this IList<long> self, long fillValue)
+        public static List<long> FillNaN(this IList<long> self, long fillValue)
         {
             var result = new List<long>(self.Count);
             foreach (var value in self)
@@ -1369,6 +1423,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Kurtosis(this IList<long> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             var mean = (double)self.Mean();
 
             double n = self.Count;
@@ -1405,6 +1462,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static long Max(this IList<long> self)
         {
+            if (self.Count == 0)
+                return NaN<long>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -1422,6 +1482,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static long Min(this IList<long> self)
         {
+            if (self.Count == 0)
+                return NaN<long>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -1439,6 +1502,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Mean(this IList<long> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = (double)0.0;
             int actualCount = self.Count;
 
@@ -1469,6 +1535,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static long Mode(this IList<long> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return NaN<long>.GetNaNOrRaiseException("No elements");
+
             var values = self.ToArray();
             Array.Sort(values);
 
@@ -1518,6 +1587,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Skewness(this IList<long> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = (double)self.Mean();
             double n = self.Count;
 
@@ -1551,6 +1623,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Variance(this IList<long> self, bool unbiased = true, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = Mean(self, skipNaN);
             if (double.IsNaN(mean))
                 return double.NaN;
@@ -1797,7 +1872,8 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static Summary Describe(this IList<int> self)
         {
             var sorted = self.RemoveNaN();
-            sorted.SortFill();
+            if (sorted.Count > 0)
+                sorted.SortFill();
 
             var summary = new Summary();
             summary.Count = self.Count;
@@ -1805,17 +1881,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Unique = self.CountUnique();
             summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
-            summary.Min = sorted[0];
+            summary.Min = sorted.Count > 0 ? (object)sorted[0] : null;
             summary.Q25 = sorted.Quantile(.25, false, true);
             summary.Median = sorted.Quantile(.5, false, true);
             summary.Q75 = sorted.Quantile(.75, false, true);
-            summary.Max = sorted[sorted.Count - 1];
+            summary.Max = sorted.Count > 0 ? (object)sorted[sorted.Count - 1] : null;
 
             return summary;
         }
 
         public static double Quantile(this IList<int> self, double p, bool skipNaN = true, bool isSorted = false)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             // TODO use partial sort
 
             IList<int> sorted;
@@ -1861,7 +1940,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return (double)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
-        public static IList<int> RemoveNaN(this IList<int> self)
+        public static List<int> RemoveNaN(this IList<int> self)
         {
             var result = new List<int>(self.Count);
             foreach (var value in self)
@@ -1871,7 +1950,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<int> FillNaN(this IList<int> self, int fillValue)
+        public static List<int> FillNaN(this IList<int> self, int fillValue)
         {
             var result = new List<int>(self.Count);
             foreach (var value in self)
@@ -1896,6 +1975,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Kurtosis(this IList<int> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             var mean = (double)self.Mean();
 
             double n = self.Count;
@@ -1932,6 +2014,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static int Max(this IList<int> self)
         {
+            if (self.Count == 0)
+                return NaN<int>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -1949,6 +2034,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static int Min(this IList<int> self)
         {
+            if (self.Count == 0)
+                return NaN<int>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -1966,6 +2054,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Mean(this IList<int> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = (double)0.0;
             int actualCount = self.Count;
 
@@ -1996,6 +2087,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static int Mode(this IList<int> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return NaN<int>.GetNaNOrRaiseException("No elements");
+
             var values = self.ToArray();
             Array.Sort(values);
 
@@ -2045,6 +2139,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Skewness(this IList<int> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = (double)self.Mean();
             double n = self.Count;
 
@@ -2078,6 +2175,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Variance(this IList<int> self, bool unbiased = true, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = Mean(self, skipNaN);
             if (double.IsNaN(mean))
                 return double.NaN;
@@ -2324,7 +2424,8 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static Summary Describe(this IList<short> self)
         {
             var sorted = self.RemoveNaN();
-            sorted.SortFill();
+            if (sorted.Count > 0)
+                sorted.SortFill();
 
             var summary = new Summary();
             summary.Count = self.Count;
@@ -2332,17 +2433,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Unique = self.CountUnique();
             summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
-            summary.Min = sorted[0];
+            summary.Min = sorted.Count > 0 ? (object)sorted[0] : null;
             summary.Q25 = sorted.Quantile(.25, false, true);
             summary.Median = sorted.Quantile(.5, false, true);
             summary.Q75 = sorted.Quantile(.75, false, true);
-            summary.Max = sorted[sorted.Count - 1];
+            summary.Max = sorted.Count > 0 ? (object)sorted[sorted.Count - 1] : null;
 
             return summary;
         }
 
         public static double Quantile(this IList<short> self, double p, bool skipNaN = true, bool isSorted = false)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             // TODO use partial sort
 
             IList<short> sorted;
@@ -2388,7 +2492,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return (double)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
-        public static IList<short> RemoveNaN(this IList<short> self)
+        public static List<short> RemoveNaN(this IList<short> self)
         {
             var result = new List<short>(self.Count);
             foreach (var value in self)
@@ -2398,7 +2502,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<short> FillNaN(this IList<short> self, short fillValue)
+        public static List<short> FillNaN(this IList<short> self, short fillValue)
         {
             var result = new List<short>(self.Count);
             foreach (var value in self)
@@ -2423,6 +2527,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Kurtosis(this IList<short> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             var mean = (double)self.Mean();
 
             double n = self.Count;
@@ -2459,6 +2566,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static short Max(this IList<short> self)
         {
+            if (self.Count == 0)
+                return NaN<short>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -2476,6 +2586,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static short Min(this IList<short> self)
         {
+            if (self.Count == 0)
+                return NaN<short>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -2493,6 +2606,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Mean(this IList<short> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = (double)0.0;
             int actualCount = self.Count;
 
@@ -2523,6 +2639,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static short Mode(this IList<short> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return NaN<short>.GetNaNOrRaiseException("No elements");
+
             var values = self.ToArray();
             Array.Sort(values);
 
@@ -2572,6 +2691,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Skewness(this IList<short> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = (double)self.Mean();
             double n = self.Count;
 
@@ -2605,6 +2727,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Variance(this IList<short> self, bool unbiased = true, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = Mean(self, skipNaN);
             if (double.IsNaN(mean))
                 return double.NaN;
@@ -2851,7 +2976,8 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static Summary Describe(this IList<byte> self)
         {
             var sorted = self.RemoveNaN();
-            sorted.SortFill();
+            if (sorted.Count > 0)
+                sorted.SortFill();
 
             var summary = new Summary();
             summary.Count = self.Count;
@@ -2859,17 +2985,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Unique = self.CountUnique();
             summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
-            summary.Min = sorted[0];
+            summary.Min = sorted.Count > 0 ? (object)sorted[0] : null;
             summary.Q25 = sorted.Quantile(.25, false, true);
             summary.Median = sorted.Quantile(.5, false, true);
             summary.Q75 = sorted.Quantile(.75, false, true);
-            summary.Max = sorted[sorted.Count - 1];
+            summary.Max = sorted.Count > 0 ? (object)sorted[sorted.Count - 1] : null;
 
             return summary;
         }
 
         public static double Quantile(this IList<byte> self, double p, bool skipNaN = true, bool isSorted = false)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             // TODO use partial sort
 
             IList<byte> sorted;
@@ -2915,7 +3044,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return (double)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
-        public static IList<byte> RemoveNaN(this IList<byte> self)
+        public static List<byte> RemoveNaN(this IList<byte> self)
         {
             var result = new List<byte>(self.Count);
             foreach (var value in self)
@@ -2925,7 +3054,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<byte> FillNaN(this IList<byte> self, byte fillValue)
+        public static List<byte> FillNaN(this IList<byte> self, byte fillValue)
         {
             var result = new List<byte>(self.Count);
             foreach (var value in self)
@@ -2950,6 +3079,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Kurtosis(this IList<byte> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             var mean = (double)self.Mean();
 
             double n = self.Count;
@@ -2986,6 +3118,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static byte Max(this IList<byte> self)
         {
+            if (self.Count == 0)
+                return NaN<byte>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -3003,6 +3138,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static byte Min(this IList<byte> self)
         {
+            if (self.Count == 0)
+                return NaN<byte>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -3020,6 +3158,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Mean(this IList<byte> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = (double)0.0;
             int actualCount = self.Count;
 
@@ -3050,6 +3191,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static byte Mode(this IList<byte> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return NaN<byte>.GetNaNOrRaiseException("No elements");
+
             var values = self.ToArray();
             Array.Sort(values);
 
@@ -3099,6 +3243,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Skewness(this IList<byte> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = (double)self.Mean();
             double n = self.Count;
 
@@ -3132,6 +3279,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Variance(this IList<byte> self, bool unbiased = true, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = Mean(self, skipNaN);
             if (double.IsNaN(mean))
                 return double.NaN;
@@ -3378,7 +3528,8 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static Summary Describe(this IList<sbyte> self)
         {
             var sorted = self.RemoveNaN();
-            sorted.SortFill();
+            if (sorted.Count > 0)
+                sorted.SortFill();
 
             var summary = new Summary();
             summary.Count = self.Count;
@@ -3386,17 +3537,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Unique = self.CountUnique();
             summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
-            summary.Min = sorted[0];
+            summary.Min = sorted.Count > 0 ? (object)sorted[0] : null;
             summary.Q25 = sorted.Quantile(.25, false, true);
             summary.Median = sorted.Quantile(.5, false, true);
             summary.Q75 = sorted.Quantile(.75, false, true);
-            summary.Max = sorted[sorted.Count - 1];
+            summary.Max = sorted.Count > 0 ? (object)sorted[sorted.Count - 1] : null;
 
             return summary;
         }
 
         public static double Quantile(this IList<sbyte> self, double p, bool skipNaN = true, bool isSorted = false)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             // TODO use partial sort
 
             IList<sbyte> sorted;
@@ -3442,7 +3596,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return (double)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
-        public static IList<sbyte> RemoveNaN(this IList<sbyte> self)
+        public static List<sbyte> RemoveNaN(this IList<sbyte> self)
         {
             var result = new List<sbyte>(self.Count);
             foreach (var value in self)
@@ -3452,7 +3606,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<sbyte> FillNaN(this IList<sbyte> self, sbyte fillValue)
+        public static List<sbyte> FillNaN(this IList<sbyte> self, sbyte fillValue)
         {
             var result = new List<sbyte>(self.Count);
             foreach (var value in self)
@@ -3477,6 +3631,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Kurtosis(this IList<sbyte> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             var mean = (double)self.Mean();
 
             double n = self.Count;
@@ -3513,6 +3670,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static sbyte Max(this IList<sbyte> self)
         {
+            if (self.Count == 0)
+                return NaN<sbyte>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -3530,6 +3690,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static sbyte Min(this IList<sbyte> self)
         {
+            if (self.Count == 0)
+                return NaN<sbyte>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -3547,6 +3710,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Mean(this IList<sbyte> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = (double)0.0;
             int actualCount = self.Count;
 
@@ -3577,6 +3743,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static sbyte Mode(this IList<sbyte> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return NaN<sbyte>.GetNaNOrRaiseException("No elements");
+
             var values = self.ToArray();
             Array.Sort(values);
 
@@ -3626,6 +3795,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Skewness(this IList<sbyte> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = (double)self.Mean();
             double n = self.Count;
 
@@ -3659,6 +3831,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Variance(this IList<sbyte> self, bool unbiased = true, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = Mean(self, skipNaN);
             if (double.IsNaN(mean))
                 return double.NaN;
@@ -3905,7 +4080,8 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static Summary Describe(this IList<decimal> self)
         {
             var sorted = self.RemoveNaN();
-            sorted.SortFill();
+            if (sorted.Count > 0)
+                sorted.SortFill();
 
             var summary = new Summary();
             summary.Count = self.Count;
@@ -3913,17 +4089,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             summary.Unique = self.CountUnique();
             summary.Mean = Mean(self);
             summary.Std = StandardDeviation(self);
-            summary.Min = sorted[0];
+            summary.Min = sorted.Count > 0 ? (object)sorted[0] : null;
             summary.Q25 = sorted.Quantile(.25, false, true);
             summary.Median = sorted.Quantile(.5, false, true);
             summary.Q75 = sorted.Quantile(.75, false, true);
-            summary.Max = sorted[sorted.Count - 1];
+            summary.Max = sorted.Count > 0 ? (object)sorted[sorted.Count - 1] : null;
 
             return summary;
         }
 
         public static double Quantile(this IList<decimal> self, double p, bool skipNaN = true, bool isSorted = false)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             // TODO use partial sort
 
             IList<decimal> sorted;
@@ -3969,7 +4148,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return (double)((double)sorted[i] + (h - hc) * ((double)sorted[i2] - (double)sorted[i]));
         }
 
-        public static IList<decimal> RemoveNaN(this IList<decimal> self)
+        public static List<decimal> RemoveNaN(this IList<decimal> self)
         {
             var result = new List<decimal>(self.Count);
             foreach (var value in self)
@@ -3979,7 +4158,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<decimal> FillNaN(this IList<decimal> self, decimal fillValue)
+        public static List<decimal> FillNaN(this IList<decimal> self, decimal fillValue)
         {
             var result = new List<decimal>(self.Count);
             foreach (var value in self)
@@ -4004,6 +4183,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Kurtosis(this IList<decimal> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             var mean = (double)self.Mean();
 
             double n = self.Count;
@@ -4040,6 +4222,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static decimal Max(this IList<decimal> self)
         {
+            if (self.Count == 0)
+                return NaN<decimal>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -4057,6 +4242,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static decimal Min(this IList<decimal> self)
         {
+            if (self.Count == 0)
+                return NaN<decimal>.GetNaNOrRaiseException("No elements");
+
             var i = 0;
             while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
@@ -4074,6 +4262,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Mean(this IList<decimal> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = (double)0.0;
             int actualCount = self.Count;
 
@@ -4104,6 +4295,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static decimal Mode(this IList<decimal> self, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return NaN<decimal>.GetNaNOrRaiseException("No elements");
+
             var values = self.ToArray();
             Array.Sort(values);
 
@@ -4153,6 +4347,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Skewness(this IList<decimal> self, bool unbiased = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = (double)self.Mean();
             double n = self.Count;
 
@@ -4186,6 +4383,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static double Variance(this IList<decimal> self, bool unbiased = true, bool skipNaN = true)
         {
+            if (self.Count == 0)
+                return double.NaN;
+
             double mean = Mean(self, skipNaN);
             if (double.IsNaN(mean))
                 return double.NaN;

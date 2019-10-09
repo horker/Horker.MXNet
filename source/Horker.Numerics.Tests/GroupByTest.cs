@@ -18,23 +18,53 @@ namespace Horker.Numerics.Tests
                 { "cat", new int[] { 1, 2, 1, 1, 3 } },
                 { "value1", new string[] { "a", "b", "c", "d", "e" } },
                 { "value2", new double[] { 10, 20, 30, 40, 50 } },
-                { "value3", new double[] { 1, 2, 3, 4, 5 } }
+                { "value3", new double[] { 1, 2, 3, 4, 5 } },
+                { "value4", new int[] { 99, 999 } }
             });
 
-            var g = new GroupBy(dm, new string[] { "cat" }, new string[] { "value1", "value3" });
+            var g = new GroupBy(dm, new string[] { "cat" }, new string[] { "value1", "value3", "value4" });
 
             var s1 = g.GetSubset(1);
 
             Assert.Equal(3, s1.MaxRowCount);
-            Assert.Equal(3, s1.MinRowCount);
-            Assert.Equal(new string[] { "value1", "value3" }, s1.ColumnNames);
+            Assert.Equal(1, s1.MinRowCount);
+            Assert.Equal(new string[] { "value1", "value3", "value4" }, s1.ColumnNames);
 
             Assert.Equal(new string[] { "a", "c", "d" }, s1["value1"]);
             Assert.Equal(new double[] { 1, 3, 4 }, s1["value3"]);
+            Assert.Equal(new int[] { 99 }, s1["value4"]);
+
+            var s2 = g.GetSubset(3);
+            Assert.Equal(new string[] { "value1", "value3", "value4" }, s2.ColumnNames);
+
+            Assert.Equal(1, s2.MaxRowCount);
+            Assert.Equal(0, s2.MinRowCount);
+
+            Assert.Equal(new string[] { "e" }, s2["value1"]);
+            Assert.Equal(new double[] { 5 }, s2["value3"]);
+            Assert.Empty(s2["value4"]);
         }
 
         [Fact]
-        public void TestGroupByUpdate()
+        public void TestMultipleColumns()
+        {
+            var dm = DataMap.FromDictionary(new Hashtable()
+            {
+                { "cat1", new int[] { 1, 2, 1, 1, 3 } },
+                { "cat2", new string[] { "a", "b", "c", "a", "a" } },
+                { "value1", new double[] { 1, 2, 3, 4, 5 } }
+            });
+
+            var g = new GroupBy(dm, new string[] { "cat1", "cat2" });
+
+            var s1 = g.GetSubset(1, "a");
+
+            Assert.Equal(new double[] { 1, 4 }, s1["value1"]);
+        }
+
+
+        [Fact]
+        public void TestUpdateSubset()
         {
             var dm = DataMap.FromDictionary(new Hashtable()
             {
