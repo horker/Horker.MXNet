@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Horker.Numerics.DataMaps.Extensions;
 
 namespace Horker.Numerics.DataMaps
 {
@@ -178,6 +179,17 @@ namespace Horker.Numerics.DataMaps
         public void Reset()
         {
             _index = 0;
+        }
+    }
+
+    public static class FilteredListView
+    {
+        public static IList Create(IList list, bool[] filter)
+        {
+            var type = list.GetDataType();
+            var listType = typeof(FilteredListView<>).MakeGenericType(new[] { type });
+            var constructor = listType.GetConstructor(new[] { typeof(IList<>).MakeGenericType(new Type[] { type }), typeof(IList<bool>) });
+            return (IList)constructor.Invoke(new[] { list, filter });
         }
     }
 }

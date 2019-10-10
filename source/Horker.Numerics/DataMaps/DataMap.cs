@@ -393,29 +393,21 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        public DataMap FilterRows(Func<int, bool> filterFunc)
+        public DataMap FilterRows(bool[] filter)
         {
-            var filtered = DataMap.CreateLike(this);
-
-            var newRowCount = 0;
-            for (var i = 0; i < RowCount; ++i)
+            var dataMap = new DataMap();
+            foreach (var c in Columns)
             {
-                if (filterFunc(i))
-                {
-                    var source = Columns.GetEnumerator();
-                    var dest = filtered.Columns.GetEnumerator();
-                    while (source.MoveNext())
-                    {
-                        dest.MoveNext();
-                        var s = source.Current;
-                        var d = dest.Current;
-                        d.Data.Add(s.Data[i]);
-                    }
-                    ++newRowCount;
-                }
+                var filtered = FilteredListView.Create(c.Data.UnderlyingList, filter);
+                dataMap.Add(c.Name, filtered);
             }
 
-            return filtered;
+            return dataMap;
+        }
+
+        public DataMap FilterRows(SeriesBase filter)
+        {
+            return FilterRows(filter.AsArray<bool>());
         }
 
         public static DataMap Concatenate(params DataMap[] maps)

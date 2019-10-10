@@ -49,7 +49,7 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
-        public void TestFilter()
+        public void TestFilterRows()
         {
             var d = DataMap.FromDictionary(new Dictionary<string, IList>()
             {
@@ -59,7 +59,7 @@ namespace Horker.Numerics.Tests
 
             d.SetOrder(new string[] { "foo", "bar" });
 
-            var result = d.FilterRows(i => i % 2 == 0);
+            var result = d.FilterRows(d["foo"].Apply("(x, i) => i % 2 == 0", typeof(bool)));
 
             Assert.Equal(3, result.RowCount);
             Assert.Equal(new string[] { "foo", "bar" }, result.ColumnNames.ToArray());

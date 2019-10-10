@@ -110,14 +110,6 @@ namespace Horker.Numerics.DataMaps
             }
         }
 
-        private IList CreateFilteredListView(IList list, bool[] filter)
-        {
-            var type = list.GetDataType();
-            var listType = typeof(FilteredListView<>).MakeGenericType(new[] { type });
-            var constructor = listType.GetConstructor(new[] { typeof(IList<>).MakeGenericType(new Type[] { type }), typeof(IList<bool>) });
-            return (IList)constructor.Invoke(new[] { list, filter });
-        }
-
         public DataMap GetSubset(params object[] categories)
         {
             var cacheKey = new CacheKey(categories);
@@ -144,7 +136,7 @@ namespace Horker.Numerics.DataMaps
             {
                 foreach (var c in _selectColumns)
                 {
-                    var filtered = CreateFilteredListView(_dataMap[c].UnderlyingList, filter);
+                    var filtered = FilteredListView.Create(_dataMap[c].UnderlyingList, filter);
                     dataMap.Add(c, filtered);
                 }
             }
@@ -152,7 +144,7 @@ namespace Horker.Numerics.DataMaps
             {
                 foreach (var column in _dataMap)
                 {
-                    var filtered = CreateFilteredListView(column.Data.UnderlyingList, filter);
+                    var filtered = FilteredListView.Create(column.Data.UnderlyingList, filter);
                     dataMap.Add(column.Name, filtered);
                 }
             }
