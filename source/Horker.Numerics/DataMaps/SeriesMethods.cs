@@ -910,6 +910,18 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
+        public object CountValues()
+        {
+			try
+			{
+				return (object)GenericIListExtensions.CountValues((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"CountValues() does not support data type {DataType}");
+			}
+        }
+
         public Summary Describe()
         {
 			try

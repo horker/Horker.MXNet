@@ -44,12 +44,12 @@ namespace Horker.Numerics.DataMaps
         }
     }
 
-    public class ValueBin<T>
+    public class ValueBin
     {
-        public int Index { get; internal set; }
-        public T Value { get; internal set; }
-        public int Count { get; internal set; }
-        public double Ratio { get; internal set; }
+        public int Index { get; set; }
+        public object Value { get; set; }
+        public int Count { get; set; }
+        public double Ratio { get; set; }
     }
 
     public class HistogramHelper

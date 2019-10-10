@@ -99,6 +99,7 @@ var nonSeriesMethods = new[]
 	Tuple.Create("CumulativeSumFill", "void", "", ""),
 	Tuple.Create("CountNaN", "int", "", ""),
 	Tuple.Create("CountUnique", "int", "", ""),
+	Tuple.Create("CountValues", "object", "", ""),
 	Tuple.Create("Describe", "Summary", "", ""),
 	Tuple.Create("FillNaNFill", "void", "object fillValue", ", (dynamic)fillValue"),
 	Tuple.Create("Histogram", "HistogramBin[]", "int binCount = -1, double binWidth = double.NaN", ", binCount, binWidth"),

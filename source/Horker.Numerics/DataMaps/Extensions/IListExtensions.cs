@@ -655,6 +655,36 @@ namespace Horker.Numerics.DataMaps.Extensions
             return self.Unique().Count;
         }
 
+        public static ValueBin[] CountValues<T>(this IList<T> self)
+        {
+            var counter = new Dictionary<T, int>();
+
+            foreach (var value in self)
+            {
+                if (counter.TryGetValue(value, out var count))
+                    counter[value] = count + 1;
+                else
+                    counter[value] = 1;
+            }
+
+            var bins = new ValueBin[counter.Count];
+            var i = 0;
+            foreach (var entry in counter)
+            {
+                var bin = new ValueBin()
+                {
+                    Index = i,
+                    Value = entry.Key,
+                    Count = entry.Value,
+                    Ratio = (double)entry.Value / self.Count
+                };
+                bins[i] = bin;
+                ++i;
+            }
+
+            return bins;
+        }
+
         public static Summary Describe<T>(this IList<T> self)
         {
             var summary = new Summary();
