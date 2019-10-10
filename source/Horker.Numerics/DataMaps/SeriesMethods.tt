@@ -48,7 +48,7 @@ var methodNames = new[]
 	Tuple.Create("CumulativeMin", "", ""),
 	Tuple.Create("CumulativeProduct", "", ""),
 	Tuple.Create("CumulativeSum", "", ""),
-	Tuple.Create("GetSortedCopy", "", ""),
+	Tuple.Create("SortedCopy", "", ""),
 	Tuple.Create("FillNaN", "object fillValue", ", (dynamic)fillValue"),
 	Tuple.Create("RemoveNaN", "", ""),
 	Tuple.Create("Unique", "", ""),

@@ -440,16 +440,16 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
-        public SeriesBase GetSortedCopy()
+        public SeriesBase SortedCopy()
         {
 			try
 			{
-				var result = GenericIListExtensions.GetSortedCopy((dynamic)UnderlyingList);
+				var result = GenericIListExtensions.SortedCopy((dynamic)UnderlyingList);
 				return new Series((IList)result);
 			}
 			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
 			{
-				throw new InvalidOperationException($"GetSortedCopy() does not support data type {DataType}");
+				throw new InvalidOperationException($"SortedCopy() does not support data type {DataType}");
 			}
         }
 

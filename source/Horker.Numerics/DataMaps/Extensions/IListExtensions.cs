@@ -751,7 +751,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
-        public static List<T> GetSortedCopy<T>(this IList<T> self)
+        public static List<T> SortedCopy<T>(this IList<T> self)
         {
             var result = new List<T>(self);
             result.Sort();
