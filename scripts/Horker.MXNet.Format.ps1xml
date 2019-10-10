@@ -161,6 +161,57 @@
                  </TableRowEntries>
             </TableControl>
         </View>
+        <View>
+            <Name>Horker.Numerics.DataMaps.HistogramBin</Name>
+            <ViewSelectedBy>
+                <TypeName>Horker.Numerics.DataMaps.HistogramBin</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Label>Index</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Lower</Label>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Upper</Label>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Count</Label>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Ratio</Label>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>Index</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Lower</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Upper</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Count</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Ratio</PropertyName>
+                                <FormatString>0.###</FormatString>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                 </TableRowEntries>
+            </TableControl>
+        </View>
         <!--
         <View>
             <Name>Accord.Statistics.Analysis.MultinomialLogisticRegressionAnalysis</Name>

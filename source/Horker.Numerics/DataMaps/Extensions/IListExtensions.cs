@@ -643,7 +643,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<T>.IsNaN(value))
                     ++count;
             }
 
@@ -668,7 +668,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<T>(self.Count);
             foreach (var value in self)
-                if (!TypeTrait.IsNaN(value))
+                if (!TypeTrait<T>.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -679,7 +679,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<T>(self.Count);
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<T>.IsNaN(value))
                     result.Add(value);
                 else
                     result.Add(fillValue);
@@ -692,7 +692,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]))
+                if (TypeTrait<T>.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }

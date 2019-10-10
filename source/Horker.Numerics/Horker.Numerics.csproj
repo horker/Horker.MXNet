@@ -73,6 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataMaps\HistogramHelper.cs" />
     <Compile Include="DataMaps\GroupBy.cs" />
     <Compile Include="DataMaps\FilteredListView.cs" />
     <Compile Include="DataMaps\Extensions\MetaNumElementwiseUnary.cs" />

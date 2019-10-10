@@ -95,6 +95,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TypeTraitTest.cs" />
     <Compile Include="FilteredListViewTest.cs" />
     <Compile Include="GroupByTest.cs" />
     <Compile Include="TransformerTest.cs" />

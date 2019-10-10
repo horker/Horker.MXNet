@@ -10,22 +10,6 @@ namespace Horker.Numerics.Tests
     public class SeriesTest
     {
         [Fact]
-        public void TestSelect()
-        {
-            var t1 = new Series(new int[] { 1, 2, 3 });
-
-            var t2 = t1.Apply("(x, i) => x * 2");
-
-            Assert.IsType<Series>(t2);
-            Assert.Equal(new int[] { 2, 4, 6 }, t2.AsArray<int>());
-
-            var t3 = t1.Apply("(x, i) => x * i", typeof(double));
-
-            Assert.IsType<Series>(t3);
-            Assert.Equal(new double[] { 0, 2, 6 }, t3.AsArray<double>());
-        }
-
-        [Fact]
         public void TestCumulativeSum()
         {
             var t1 = new Series(new decimal[] { 1, 2, 3 });
@@ -111,5 +95,14 @@ namespace Horker.Numerics.Tests
             Assert.Equal(new double[] { 1, 1.5, 2, 3, 4 }, t3);
         }
 
+        [Fact]
+        public void TestCountNaN()
+        {
+            var t1 = new Series(new string[] { "a", " ", "", null, "xxx" });
+
+            var c = t1.CountNaN();
+
+            Assert.Equal(3, c);
+        }
     }
 }

@@ -416,6 +416,11 @@ namespace Horker.Numerics.DataMaps
 			GenericIListExtensions.FillNaNFill((dynamic)UnderlyingList, (dynamic)fillValue);
         }
 
+        public HistogramBin[] Histogram(int binCount = -1, double binWidth = double.NaN)
+        {
+			return (HistogramBin[])GenericIListExtensions.Histogram((dynamic)UnderlyingList, binCount, binWidth);
+        }
+
         public object Kurtosis(bool unbiased = true)
         {
 			return (object)GenericIListExtensions.Kurtosis((dynamic)UnderlyingList, unbiased);

@@ -22,7 +22,7 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
 
                 for (var i = 0; i < self.Count; ++i)
                 {
-                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                    if (TypeTrait<MetaNum>.IsNaN(self[i]) || TypeTrait<MetaNum>.IsNaN(other[i]))
                         continue;
 
                     s1.Add(self[i]);
@@ -55,7 +55,7 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
             MetaFloat c = (MetaFloat)0.0;
             for (int i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                if (TypeTrait<MetaNum>.IsNaN(self[i]) || TypeTrait<MetaNum>.IsNaN(other[i]))
                 {
                     if (skipNaN)
                     {
@@ -208,7 +208,7 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
             int count = 0;
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<MetaNum>.IsNaN(value))
                     ++count;
             }
 
@@ -290,7 +290,7 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
         {
             var result = new List<MetaNum>(self.Count);
             foreach (var value in self)
-                if (!TypeTrait.IsNaN(value))
+                if (!TypeTrait<MetaNum>.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -301,7 +301,7 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
             var result = new List<MetaNum>(self.Count);
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<MetaNum>.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -314,7 +314,7 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]))
+                if (TypeTrait<MetaNum>.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
@@ -361,10 +361,10 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
         public static MetaNum Max(this IList<MetaNum> self)
         {
             if (self.Count == 0)
-                return NaN<MetaNum>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<MetaNum>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<MetaNum>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             MetaNum max = self[i];
@@ -381,10 +381,10 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
         public static MetaNum Min(this IList<MetaNum> self)
         {
             if (self.Count == 0)
-                return NaN<MetaNum>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<MetaNum>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<MetaNum>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             MetaNum min = self[i];
@@ -434,7 +434,7 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
         public static MetaNum Mode(this IList<MetaNum> self, bool skipNaN = true)
         {
             if (self.Count == 0)
-                return NaN<MetaNum>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<MetaNum>.GetNaNOrRaiseException("No elements");
 
             var values = self.ToArray();
             Array.Sort(values);
@@ -449,7 +449,7 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[i]))
+                while (TypeTrait<MetaNum>.IsNaN(values[i]))
                     ++i;
             }
 
@@ -534,7 +534,7 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
             foreach (var value in self)
             {
                 MetaFloat v = (MetaFloat)value;
-                if (TypeTrait.IsNaN(v))
+                if (TypeTrait<MetaFloat>.IsNaN(v))
                 {
                     if (skipNaN)
                     {
@@ -560,6 +560,50 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
         public static MetaFloat Var(this IList<MetaNum> self, bool unbiased = true, bool skipNaN = true)
         {
             return Variance(self, unbiased, skipNaN);
+        }
+
+        // Histogram
+
+        private static Tuple<int[], int> CollectHistogram(IList<MetaNum> data, HistogramInterval intervals)
+        {
+            var result = new int[intervals.BinCount];
+            var total = 0;
+
+            foreach (var value in data)
+            {
+                if (TypeTrait<MetaNum>.IsNaN(value))
+                    continue;
+
+                var bin = (int)Math.Floor(((double)value - intervals.AdjustedLower) / intervals.BinWidth);
+                ++result[bin];
+                ++total;
+            }
+
+            return Tuple.Create(result, total);
+        }
+
+        public static HistogramBin[] Histogram(this IList<MetaNum> self, int binCount = -1, double binWidth = double.NaN)
+        {
+            var min = (double)self.Min();
+            var max = (double)self.Max();
+            HistogramInterval intervals;
+
+            if (!double.IsNaN(binWidth))
+            {
+                intervals = HistogramHelper.GetHistogramIntervalFromBinWidth(min, max, binWidth);
+            }
+            else
+            {
+                if (binCount < 0)
+                    binCount = HistogramHelper.GetBinCount(min, max, self.Count);
+
+                intervals = HistogramHelper.GetHistogramIntervalFromBinCount(min, max, binCount);
+            }
+
+            var collect = CollectHistogram(self, intervals);
+            var counts = collect.Item1;
+            var total = collect.Item2;
+            return HistogramBin.CreateHistogram(intervals, counts, total);
         }
 
         // CUT BELOW

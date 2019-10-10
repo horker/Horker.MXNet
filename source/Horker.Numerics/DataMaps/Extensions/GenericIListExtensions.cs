@@ -20,7 +20,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 
                 for (var i = 0; i < self.Count; ++i)
                 {
-                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                    if (TypeTrait<double>.IsNaN(self[i]) || TypeTrait<double>.IsNaN(other[i]))
                         continue;
 
                     s1.Add(self[i]);
@@ -53,7 +53,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             double c = (double)0.0;
             for (int i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                if (TypeTrait<double>.IsNaN(self[i]) || TypeTrait<double>.IsNaN(other[i]))
                 {
                     if (skipNaN)
                     {
@@ -206,7 +206,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<double>.IsNaN(value))
                     ++count;
             }
 
@@ -288,7 +288,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<double>(self.Count);
             foreach (var value in self)
-                if (!TypeTrait.IsNaN(value))
+                if (!TypeTrait<double>.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -299,7 +299,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<double>(self.Count);
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<double>.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -312,7 +312,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]))
+                if (TypeTrait<double>.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
@@ -359,10 +359,10 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static double Max(this IList<double> self)
         {
             if (self.Count == 0)
-                return NaN<double>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<double>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<double>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             double max = self[i];
@@ -379,10 +379,10 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static double Min(this IList<double> self)
         {
             if (self.Count == 0)
-                return NaN<double>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<double>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<double>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             double min = self[i];
@@ -432,7 +432,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static double Mode(this IList<double> self, bool skipNaN = true)
         {
             if (self.Count == 0)
-                return NaN<double>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<double>.GetNaNOrRaiseException("No elements");
 
             var values = self.ToArray();
             Array.Sort(values);
@@ -447,7 +447,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[i]))
+                while (TypeTrait<double>.IsNaN(values[i]))
                     ++i;
             }
 
@@ -532,7 +532,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (TypeTrait.IsNaN(v))
+                if (TypeTrait<double>.IsNaN(v))
                 {
                     if (skipNaN)
                     {
@@ -560,6 +560,47 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
+        // Histogram
+
+        private static Tuple<int[], int> CollectHistogram(IList<double> data, HistogramInterval intervals)
+        {
+            var result = new int[intervals.BinCount];
+            var total = 0;
+
+            foreach (var value in data)
+            {
+                var bin = (int)Math.Floor(((double)value - intervals.AdjustedLower) / intervals.BinWidth);
+                ++result[bin];
+                ++total;
+            }
+
+            return Tuple.Create(result, total);
+        }
+
+        public static HistogramBin[] Histogram(this IList<double> self, int binCount = -1, double binWidth = double.NaN)
+        {
+            var min = (double)self.Min();
+            var max = (double)self.Max();
+            HistogramInterval intervals;
+
+            if (!double.IsNaN(binWidth))
+            {
+                intervals = HistogramHelper.GetHistogramIntervalFromBinWidth(min, max, binWidth);
+            }
+            else
+            {
+                if (binCount < 0)
+                    binCount = HistogramHelper.GetBinCount(min, max, self.Count);
+
+                intervals = HistogramHelper.GetHistogramIntervalFromBinCount(min, max, binCount);
+            }
+
+            var collect = CollectHistogram(self, intervals);
+            var counts = collect.Item1;
+            var total = collect.Item2;
+            return HistogramBin.CreateHistogram(intervals, counts, total);
+        }
+
         public static float Correlation(this IList<float> self, IList<float> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -572,7 +613,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 
                 for (var i = 0; i < self.Count; ++i)
                 {
-                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                    if (TypeTrait<float>.IsNaN(self[i]) || TypeTrait<float>.IsNaN(other[i]))
                         continue;
 
                     s1.Add(self[i]);
@@ -605,7 +646,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             float c = (float)0.0;
             for (int i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                if (TypeTrait<float>.IsNaN(self[i]) || TypeTrait<float>.IsNaN(other[i]))
                 {
                     if (skipNaN)
                     {
@@ -758,7 +799,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<float>.IsNaN(value))
                     ++count;
             }
 
@@ -840,7 +881,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<float>(self.Count);
             foreach (var value in self)
-                if (!TypeTrait.IsNaN(value))
+                if (!TypeTrait<float>.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -851,7 +892,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<float>(self.Count);
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<float>.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -864,7 +905,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]))
+                if (TypeTrait<float>.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
@@ -911,10 +952,10 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static float Max(this IList<float> self)
         {
             if (self.Count == 0)
-                return NaN<float>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<float>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<float>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             float max = self[i];
@@ -931,10 +972,10 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static float Min(this IList<float> self)
         {
             if (self.Count == 0)
-                return NaN<float>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<float>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<float>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             float min = self[i];
@@ -984,7 +1025,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static float Mode(this IList<float> self, bool skipNaN = true)
         {
             if (self.Count == 0)
-                return NaN<float>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<float>.GetNaNOrRaiseException("No elements");
 
             var values = self.ToArray();
             Array.Sort(values);
@@ -999,7 +1040,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[i]))
+                while (TypeTrait<float>.IsNaN(values[i]))
                     ++i;
             }
 
@@ -1084,7 +1125,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var value in self)
             {
                 float v = (float)value;
-                if (TypeTrait.IsNaN(v))
+                if (TypeTrait<float>.IsNaN(v))
                 {
                     if (skipNaN)
                     {
@@ -1112,6 +1153,47 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
+        // Histogram
+
+        private static Tuple<int[], int> CollectHistogram(IList<float> data, HistogramInterval intervals)
+        {
+            var result = new int[intervals.BinCount];
+            var total = 0;
+
+            foreach (var value in data)
+            {
+                var bin = (int)Math.Floor(((double)value - intervals.AdjustedLower) / intervals.BinWidth);
+                ++result[bin];
+                ++total;
+            }
+
+            return Tuple.Create(result, total);
+        }
+
+        public static HistogramBin[] Histogram(this IList<float> self, int binCount = -1, double binWidth = double.NaN)
+        {
+            var min = (double)self.Min();
+            var max = (double)self.Max();
+            HistogramInterval intervals;
+
+            if (!double.IsNaN(binWidth))
+            {
+                intervals = HistogramHelper.GetHistogramIntervalFromBinWidth(min, max, binWidth);
+            }
+            else
+            {
+                if (binCount < 0)
+                    binCount = HistogramHelper.GetBinCount(min, max, self.Count);
+
+                intervals = HistogramHelper.GetHistogramIntervalFromBinCount(min, max, binCount);
+            }
+
+            var collect = CollectHistogram(self, intervals);
+            var counts = collect.Item1;
+            var total = collect.Item2;
+            return HistogramBin.CreateHistogram(intervals, counts, total);
+        }
+
         public static double Correlation(this IList<long> self, IList<long> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -1124,7 +1206,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 
                 for (var i = 0; i < self.Count; ++i)
                 {
-                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                    if (TypeTrait<long>.IsNaN(self[i]) || TypeTrait<long>.IsNaN(other[i]))
                         continue;
 
                     s1.Add(self[i]);
@@ -1157,7 +1239,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             double c = (double)0.0;
             for (int i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                if (TypeTrait<long>.IsNaN(self[i]) || TypeTrait<long>.IsNaN(other[i]))
                 {
                     if (skipNaN)
                     {
@@ -1310,7 +1392,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<long>.IsNaN(value))
                     ++count;
             }
 
@@ -1392,7 +1474,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<long>(self.Count);
             foreach (var value in self)
-                if (!TypeTrait.IsNaN(value))
+                if (!TypeTrait<long>.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -1403,7 +1485,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<long>(self.Count);
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<long>.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -1416,7 +1498,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]))
+                if (TypeTrait<long>.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
@@ -1463,10 +1545,10 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static long Max(this IList<long> self)
         {
             if (self.Count == 0)
-                return NaN<long>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<long>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<long>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             long max = self[i];
@@ -1483,10 +1565,10 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static long Min(this IList<long> self)
         {
             if (self.Count == 0)
-                return NaN<long>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<long>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<long>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             long min = self[i];
@@ -1536,7 +1618,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static long Mode(this IList<long> self, bool skipNaN = true)
         {
             if (self.Count == 0)
-                return NaN<long>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<long>.GetNaNOrRaiseException("No elements");
 
             var values = self.ToArray();
             Array.Sort(values);
@@ -1551,7 +1633,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[i]))
+                while (TypeTrait<long>.IsNaN(values[i]))
                     ++i;
             }
 
@@ -1636,7 +1718,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (TypeTrait.IsNaN(v))
+                if (TypeTrait<double>.IsNaN(v))
                 {
                     if (skipNaN)
                     {
@@ -1664,6 +1746,47 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
+        // Histogram
+
+        private static Tuple<int[], int> CollectHistogram(IList<long> data, HistogramInterval intervals)
+        {
+            var result = new int[intervals.BinCount];
+            var total = 0;
+
+            foreach (var value in data)
+            {
+                var bin = (int)Math.Floor(((double)value - intervals.AdjustedLower) / intervals.BinWidth);
+                ++result[bin];
+                ++total;
+            }
+
+            return Tuple.Create(result, total);
+        }
+
+        public static HistogramBin[] Histogram(this IList<long> self, int binCount = -1, double binWidth = double.NaN)
+        {
+            var min = (double)self.Min();
+            var max = (double)self.Max();
+            HistogramInterval intervals;
+
+            if (!double.IsNaN(binWidth))
+            {
+                intervals = HistogramHelper.GetHistogramIntervalFromBinWidth(min, max, binWidth);
+            }
+            else
+            {
+                if (binCount < 0)
+                    binCount = HistogramHelper.GetBinCount(min, max, self.Count);
+
+                intervals = HistogramHelper.GetHistogramIntervalFromBinCount(min, max, binCount);
+            }
+
+            var collect = CollectHistogram(self, intervals);
+            var counts = collect.Item1;
+            var total = collect.Item2;
+            return HistogramBin.CreateHistogram(intervals, counts, total);
+        }
+
         public static double Correlation(this IList<int> self, IList<int> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -1676,7 +1799,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 
                 for (var i = 0; i < self.Count; ++i)
                 {
-                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                    if (TypeTrait<int>.IsNaN(self[i]) || TypeTrait<int>.IsNaN(other[i]))
                         continue;
 
                     s1.Add(self[i]);
@@ -1709,7 +1832,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             double c = (double)0.0;
             for (int i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                if (TypeTrait<int>.IsNaN(self[i]) || TypeTrait<int>.IsNaN(other[i]))
                 {
                     if (skipNaN)
                     {
@@ -1862,7 +1985,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<int>.IsNaN(value))
                     ++count;
             }
 
@@ -1944,7 +2067,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<int>(self.Count);
             foreach (var value in self)
-                if (!TypeTrait.IsNaN(value))
+                if (!TypeTrait<int>.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -1955,7 +2078,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<int>(self.Count);
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<int>.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -1968,7 +2091,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]))
+                if (TypeTrait<int>.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
@@ -2015,10 +2138,10 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static int Max(this IList<int> self)
         {
             if (self.Count == 0)
-                return NaN<int>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<int>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<int>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             int max = self[i];
@@ -2035,10 +2158,10 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static int Min(this IList<int> self)
         {
             if (self.Count == 0)
-                return NaN<int>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<int>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<int>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             int min = self[i];
@@ -2088,7 +2211,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static int Mode(this IList<int> self, bool skipNaN = true)
         {
             if (self.Count == 0)
-                return NaN<int>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<int>.GetNaNOrRaiseException("No elements");
 
             var values = self.ToArray();
             Array.Sort(values);
@@ -2103,7 +2226,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[i]))
+                while (TypeTrait<int>.IsNaN(values[i]))
                     ++i;
             }
 
@@ -2188,7 +2311,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (TypeTrait.IsNaN(v))
+                if (TypeTrait<double>.IsNaN(v))
                 {
                     if (skipNaN)
                     {
@@ -2216,6 +2339,47 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
+        // Histogram
+
+        private static Tuple<int[], int> CollectHistogram(IList<int> data, HistogramInterval intervals)
+        {
+            var result = new int[intervals.BinCount];
+            var total = 0;
+
+            foreach (var value in data)
+            {
+                var bin = (int)Math.Floor(((double)value - intervals.AdjustedLower) / intervals.BinWidth);
+                ++result[bin];
+                ++total;
+            }
+
+            return Tuple.Create(result, total);
+        }
+
+        public static HistogramBin[] Histogram(this IList<int> self, int binCount = -1, double binWidth = double.NaN)
+        {
+            var min = (double)self.Min();
+            var max = (double)self.Max();
+            HistogramInterval intervals;
+
+            if (!double.IsNaN(binWidth))
+            {
+                intervals = HistogramHelper.GetHistogramIntervalFromBinWidth(min, max, binWidth);
+            }
+            else
+            {
+                if (binCount < 0)
+                    binCount = HistogramHelper.GetBinCount(min, max, self.Count);
+
+                intervals = HistogramHelper.GetHistogramIntervalFromBinCount(min, max, binCount);
+            }
+
+            var collect = CollectHistogram(self, intervals);
+            var counts = collect.Item1;
+            var total = collect.Item2;
+            return HistogramBin.CreateHistogram(intervals, counts, total);
+        }
+
         public static double Correlation(this IList<short> self, IList<short> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -2228,7 +2392,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 
                 for (var i = 0; i < self.Count; ++i)
                 {
-                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                    if (TypeTrait<short>.IsNaN(self[i]) || TypeTrait<short>.IsNaN(other[i]))
                         continue;
 
                     s1.Add(self[i]);
@@ -2261,7 +2425,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             double c = (double)0.0;
             for (int i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                if (TypeTrait<short>.IsNaN(self[i]) || TypeTrait<short>.IsNaN(other[i]))
                 {
                     if (skipNaN)
                     {
@@ -2414,7 +2578,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<short>.IsNaN(value))
                     ++count;
             }
 
@@ -2496,7 +2660,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<short>(self.Count);
             foreach (var value in self)
-                if (!TypeTrait.IsNaN(value))
+                if (!TypeTrait<short>.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -2507,7 +2671,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<short>(self.Count);
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<short>.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -2520,7 +2684,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]))
+                if (TypeTrait<short>.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
@@ -2567,10 +2731,10 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static short Max(this IList<short> self)
         {
             if (self.Count == 0)
-                return NaN<short>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<short>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<short>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             short max = self[i];
@@ -2587,10 +2751,10 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static short Min(this IList<short> self)
         {
             if (self.Count == 0)
-                return NaN<short>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<short>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<short>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             short min = self[i];
@@ -2640,7 +2804,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static short Mode(this IList<short> self, bool skipNaN = true)
         {
             if (self.Count == 0)
-                return NaN<short>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<short>.GetNaNOrRaiseException("No elements");
 
             var values = self.ToArray();
             Array.Sort(values);
@@ -2655,7 +2819,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[i]))
+                while (TypeTrait<short>.IsNaN(values[i]))
                     ++i;
             }
 
@@ -2740,7 +2904,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (TypeTrait.IsNaN(v))
+                if (TypeTrait<double>.IsNaN(v))
                 {
                     if (skipNaN)
                     {
@@ -2768,6 +2932,47 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
+        // Histogram
+
+        private static Tuple<int[], int> CollectHistogram(IList<short> data, HistogramInterval intervals)
+        {
+            var result = new int[intervals.BinCount];
+            var total = 0;
+
+            foreach (var value in data)
+            {
+                var bin = (int)Math.Floor(((double)value - intervals.AdjustedLower) / intervals.BinWidth);
+                ++result[bin];
+                ++total;
+            }
+
+            return Tuple.Create(result, total);
+        }
+
+        public static HistogramBin[] Histogram(this IList<short> self, int binCount = -1, double binWidth = double.NaN)
+        {
+            var min = (double)self.Min();
+            var max = (double)self.Max();
+            HistogramInterval intervals;
+
+            if (!double.IsNaN(binWidth))
+            {
+                intervals = HistogramHelper.GetHistogramIntervalFromBinWidth(min, max, binWidth);
+            }
+            else
+            {
+                if (binCount < 0)
+                    binCount = HistogramHelper.GetBinCount(min, max, self.Count);
+
+                intervals = HistogramHelper.GetHistogramIntervalFromBinCount(min, max, binCount);
+            }
+
+            var collect = CollectHistogram(self, intervals);
+            var counts = collect.Item1;
+            var total = collect.Item2;
+            return HistogramBin.CreateHistogram(intervals, counts, total);
+        }
+
         public static double Correlation(this IList<byte> self, IList<byte> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -2780,7 +2985,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 
                 for (var i = 0; i < self.Count; ++i)
                 {
-                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                    if (TypeTrait<byte>.IsNaN(self[i]) || TypeTrait<byte>.IsNaN(other[i]))
                         continue;
 
                     s1.Add(self[i]);
@@ -2813,7 +3018,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             double c = (double)0.0;
             for (int i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                if (TypeTrait<byte>.IsNaN(self[i]) || TypeTrait<byte>.IsNaN(other[i]))
                 {
                     if (skipNaN)
                     {
@@ -2966,7 +3171,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<byte>.IsNaN(value))
                     ++count;
             }
 
@@ -3048,7 +3253,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<byte>(self.Count);
             foreach (var value in self)
-                if (!TypeTrait.IsNaN(value))
+                if (!TypeTrait<byte>.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -3059,7 +3264,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<byte>(self.Count);
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<byte>.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -3072,7 +3277,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]))
+                if (TypeTrait<byte>.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
@@ -3119,10 +3324,10 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static byte Max(this IList<byte> self)
         {
             if (self.Count == 0)
-                return NaN<byte>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<byte>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<byte>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             byte max = self[i];
@@ -3139,10 +3344,10 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static byte Min(this IList<byte> self)
         {
             if (self.Count == 0)
-                return NaN<byte>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<byte>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<byte>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             byte min = self[i];
@@ -3192,7 +3397,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static byte Mode(this IList<byte> self, bool skipNaN = true)
         {
             if (self.Count == 0)
-                return NaN<byte>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<byte>.GetNaNOrRaiseException("No elements");
 
             var values = self.ToArray();
             Array.Sort(values);
@@ -3207,7 +3412,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[i]))
+                while (TypeTrait<byte>.IsNaN(values[i]))
                     ++i;
             }
 
@@ -3292,7 +3497,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (TypeTrait.IsNaN(v))
+                if (TypeTrait<double>.IsNaN(v))
                 {
                     if (skipNaN)
                     {
@@ -3320,6 +3525,47 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
+        // Histogram
+
+        private static Tuple<int[], int> CollectHistogram(IList<byte> data, HistogramInterval intervals)
+        {
+            var result = new int[intervals.BinCount];
+            var total = 0;
+
+            foreach (var value in data)
+            {
+                var bin = (int)Math.Floor(((double)value - intervals.AdjustedLower) / intervals.BinWidth);
+                ++result[bin];
+                ++total;
+            }
+
+            return Tuple.Create(result, total);
+        }
+
+        public static HistogramBin[] Histogram(this IList<byte> self, int binCount = -1, double binWidth = double.NaN)
+        {
+            var min = (double)self.Min();
+            var max = (double)self.Max();
+            HistogramInterval intervals;
+
+            if (!double.IsNaN(binWidth))
+            {
+                intervals = HistogramHelper.GetHistogramIntervalFromBinWidth(min, max, binWidth);
+            }
+            else
+            {
+                if (binCount < 0)
+                    binCount = HistogramHelper.GetBinCount(min, max, self.Count);
+
+                intervals = HistogramHelper.GetHistogramIntervalFromBinCount(min, max, binCount);
+            }
+
+            var collect = CollectHistogram(self, intervals);
+            var counts = collect.Item1;
+            var total = collect.Item2;
+            return HistogramBin.CreateHistogram(intervals, counts, total);
+        }
+
         public static double Correlation(this IList<sbyte> self, IList<sbyte> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -3332,7 +3578,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 
                 for (var i = 0; i < self.Count; ++i)
                 {
-                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                    if (TypeTrait<sbyte>.IsNaN(self[i]) || TypeTrait<sbyte>.IsNaN(other[i]))
                         continue;
 
                     s1.Add(self[i]);
@@ -3365,7 +3611,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             double c = (double)0.0;
             for (int i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                if (TypeTrait<sbyte>.IsNaN(self[i]) || TypeTrait<sbyte>.IsNaN(other[i]))
                 {
                     if (skipNaN)
                     {
@@ -3518,7 +3764,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<sbyte>.IsNaN(value))
                     ++count;
             }
 
@@ -3600,7 +3846,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<sbyte>(self.Count);
             foreach (var value in self)
-                if (!TypeTrait.IsNaN(value))
+                if (!TypeTrait<sbyte>.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -3611,7 +3857,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<sbyte>(self.Count);
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<sbyte>.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -3624,7 +3870,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]))
+                if (TypeTrait<sbyte>.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
@@ -3671,10 +3917,10 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static sbyte Max(this IList<sbyte> self)
         {
             if (self.Count == 0)
-                return NaN<sbyte>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<sbyte>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<sbyte>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             sbyte max = self[i];
@@ -3691,10 +3937,10 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static sbyte Min(this IList<sbyte> self)
         {
             if (self.Count == 0)
-                return NaN<sbyte>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<sbyte>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<sbyte>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             sbyte min = self[i];
@@ -3744,7 +3990,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static sbyte Mode(this IList<sbyte> self, bool skipNaN = true)
         {
             if (self.Count == 0)
-                return NaN<sbyte>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<sbyte>.GetNaNOrRaiseException("No elements");
 
             var values = self.ToArray();
             Array.Sort(values);
@@ -3759,7 +4005,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[i]))
+                while (TypeTrait<sbyte>.IsNaN(values[i]))
                     ++i;
             }
 
@@ -3844,7 +4090,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (TypeTrait.IsNaN(v))
+                if (TypeTrait<double>.IsNaN(v))
                 {
                     if (skipNaN)
                     {
@@ -3872,6 +4118,47 @@ namespace Horker.Numerics.DataMaps.Extensions
             return Variance(self, unbiased, skipNaN);
         }
 
+        // Histogram
+
+        private static Tuple<int[], int> CollectHistogram(IList<sbyte> data, HistogramInterval intervals)
+        {
+            var result = new int[intervals.BinCount];
+            var total = 0;
+
+            foreach (var value in data)
+            {
+                var bin = (int)Math.Floor(((double)value - intervals.AdjustedLower) / intervals.BinWidth);
+                ++result[bin];
+                ++total;
+            }
+
+            return Tuple.Create(result, total);
+        }
+
+        public static HistogramBin[] Histogram(this IList<sbyte> self, int binCount = -1, double binWidth = double.NaN)
+        {
+            var min = (double)self.Min();
+            var max = (double)self.Max();
+            HistogramInterval intervals;
+
+            if (!double.IsNaN(binWidth))
+            {
+                intervals = HistogramHelper.GetHistogramIntervalFromBinWidth(min, max, binWidth);
+            }
+            else
+            {
+                if (binCount < 0)
+                    binCount = HistogramHelper.GetBinCount(min, max, self.Count);
+
+                intervals = HistogramHelper.GetHistogramIntervalFromBinCount(min, max, binCount);
+            }
+
+            var collect = CollectHistogram(self, intervals);
+            var counts = collect.Item1;
+            var total = collect.Item2;
+            return HistogramBin.CreateHistogram(intervals, counts, total);
+        }
+
         public static double Correlation(this IList<decimal> self, IList<decimal> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -3884,7 +4171,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 
                 for (var i = 0; i < self.Count; ++i)
                 {
-                    if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                    if (TypeTrait<decimal>.IsNaN(self[i]) || TypeTrait<decimal>.IsNaN(other[i]))
                         continue;
 
                     s1.Add(self[i]);
@@ -3917,7 +4204,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             double c = (double)0.0;
             for (int i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]) || TypeTrait.IsNaN(other[i]))
+                if (TypeTrait<decimal>.IsNaN(self[i]) || TypeTrait<decimal>.IsNaN(other[i]))
                 {
                     if (skipNaN)
                     {
@@ -4070,7 +4357,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             int count = 0;
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<decimal>.IsNaN(value))
                     ++count;
             }
 
@@ -4152,7 +4439,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             var result = new List<decimal>(self.Count);
             foreach (var value in self)
-                if (!TypeTrait.IsNaN(value))
+                if (!TypeTrait<decimal>.IsNaN(value))
                     result.Add(value);
 
             return result;
@@ -4163,7 +4450,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             var result = new List<decimal>(self.Count);
             foreach (var value in self)
             {
-                if (TypeTrait.IsNaN(value))
+                if (TypeTrait<decimal>.IsNaN(value))
                     result.Add(fillValue);
                 else
                     result.Add(value);
@@ -4176,7 +4463,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
             {
-                if (TypeTrait.IsNaN(self[i]))
+                if (TypeTrait<decimal>.IsNaN(self[i]))
                     self[i] = fillValue;
             }
         }
@@ -4223,10 +4510,10 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static decimal Max(this IList<decimal> self)
         {
             if (self.Count == 0)
-                return NaN<decimal>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<decimal>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<decimal>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             decimal max = self[i];
@@ -4243,10 +4530,10 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static decimal Min(this IList<decimal> self)
         {
             if (self.Count == 0)
-                return NaN<decimal>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<decimal>.GetNaNOrRaiseException("No elements");
 
             var i = 0;
-            while (TypeTrait.IsNaN(self[0]) && i < self.Count - 1)
+            while (TypeTrait<decimal>.IsNaN(self[0]) && i < self.Count - 1)
                 ++i;
 
             decimal min = self[i];
@@ -4296,7 +4583,7 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static decimal Mode(this IList<decimal> self, bool skipNaN = true)
         {
             if (self.Count == 0)
-                return NaN<decimal>.GetNaNOrRaiseException("No elements");
+                return TypeTrait<decimal>.GetNaNOrRaiseException("No elements");
 
             var values = self.ToArray();
             Array.Sort(values);
@@ -4311,7 +4598,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 // After sort, NaNs should be collected to the first location of the sequence.
-                while (TypeTrait.IsNaN(values[i]))
+                while (TypeTrait<decimal>.IsNaN(values[i]))
                     ++i;
             }
 
@@ -4396,7 +4683,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var value in self)
             {
                 double v = (double)value;
-                if (TypeTrait.IsNaN(v))
+                if (TypeTrait<double>.IsNaN(v))
                 {
                     if (skipNaN)
                     {
@@ -4422,6 +4709,47 @@ namespace Horker.Numerics.DataMaps.Extensions
         public static double Var(this IList<decimal> self, bool unbiased = true, bool skipNaN = true)
         {
             return Variance(self, unbiased, skipNaN);
+        }
+
+        // Histogram
+
+        private static Tuple<int[], int> CollectHistogram(IList<decimal> data, HistogramInterval intervals)
+        {
+            var result = new int[intervals.BinCount];
+            var total = 0;
+
+            foreach (var value in data)
+            {
+                var bin = (int)Math.Floor(((double)value - intervals.AdjustedLower) / intervals.BinWidth);
+                ++result[bin];
+                ++total;
+            }
+
+            return Tuple.Create(result, total);
+        }
+
+        public static HistogramBin[] Histogram(this IList<decimal> self, int binCount = -1, double binWidth = double.NaN)
+        {
+            var min = (double)self.Min();
+            var max = (double)self.Max();
+            HistogramInterval intervals;
+
+            if (!double.IsNaN(binWidth))
+            {
+                intervals = HistogramHelper.GetHistogramIntervalFromBinWidth(min, max, binWidth);
+            }
+            else
+            {
+                if (binCount < 0)
+                    binCount = HistogramHelper.GetBinCount(min, max, self.Count);
+
+                intervals = HistogramHelper.GetHistogramIntervalFromBinCount(min, max, binCount);
+            }
+
+            var collect = CollectHistogram(self, intervals);
+            var counts = collect.Item1;
+            var total = collect.Item2;
+            return HistogramBin.CreateHistogram(intervals, counts, total);
         }
 
         public static IList<double> Abs(this IList<double> self)
