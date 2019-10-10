@@ -82,5 +82,26 @@ namespace Horker.Numerics.Tests
 
             Assert.Equal(new double[] { 100, 2, 300, 400, 5 }, dm["value3"]);
         }
+
+        [Fact]
+        public void TestMethodCache()
+        {
+            var dm = DataMap.FromDictionary(new Hashtable()
+            {
+                { "cat", new int[] { 1, 2, 1, 1, 3 } },
+                { "value1", new string[] { "a", "b", "c", "d", "e" } },
+                { "value2", new double[] { 10, 20, 30, 40, 50 } },
+                { "value3", new double[] { 1, 2, 3, 4, 5 } }
+            });
+
+            var result = new List<int>();
+            foreach (var g in dm.GroupBy(new string[] { "cat" }))
+            {
+                var count = g["value2"].CountIf("(x, i) => x <= 30");
+                result.Add(count);
+            }
+
+            Assert.Equal(new int[] { 2, 1, 0 }, result);
+        }
     }
 } 

@@ -12,7 +12,7 @@ namespace Horker.Numerics
 {
     public class FunctionCompiler
     {
-        private static readonly Dictionary<string, Delegate> CodeCache = new Dictionary<string, Delegate>();
+        private static readonly Dictionary<string, MethodInfo> _codeCache = new Dictionary<string, MethodInfo>();
 
         private static int classNameSuffix = 0;
 
@@ -89,24 +89,26 @@ namespace {0} {{
 
         public static Delegate Compile(string funcString, Type[] parameterTypes, bool func, DataMap dataMap = null, SeriesBase series = null, string compilerVersion = "v4.0")
         {
-            if (CodeCache.TryGetValue(funcString, out var f))
-                return f;
-
-            string sourceCode;
-            if (func)
-                sourceCode = FuncSourceCode;
-            else
-                sourceCode = ActionSourceCode;
-
-            var className = "Func" + classNameSuffix++;
             var typeString = string.Join(", ", parameterTypes.Select(x => x.FullName));
-            var sourceString = string.Format(sourceCode, Namespace, className, typeString, typeString, funcString);
 
-            var assembly = CompileString(sourceString, "v3.5");
+            if (!_codeCache.TryGetValue(funcString + "$" + typeString, out var m))
+            {
+                string sourceCode;
+                if (func)
+                    sourceCode = FuncSourceCode;
+                else
+                    sourceCode = ActionSourceCode;
 
-            var t = assembly.GetTypes().Where(c => c.Name == className).First();
-            var m = t.GetMethod("f", BindingFlags.Static | BindingFlags.Public);
+                var className = "Func" + classNameSuffix++;
+                var sourceString = string.Format(sourceCode, Namespace, className, typeString, typeString, funcString);
 
+                var assembly = CompileString(sourceString, "v3.5");
+
+                var t = assembly.GetTypes().Where(c => c.Name == className).First();
+                m = t.GetMethod("f", BindingFlags.Static | BindingFlags.Public);
+
+                _codeCache.Add(funcString + "$" + typeString, m);
+            }
             return (Delegate)m.Invoke(null, new object[] { dataMap, series });
         }
     }
