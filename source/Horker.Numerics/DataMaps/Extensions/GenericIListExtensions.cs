@@ -569,6 +569,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             foreach (var value in data)
             {
+                if (TypeTrait<double>.IsNaN(value))
+                    continue;
+
                 var bin = (int)Math.Floor(((double)value - intervals.AdjustedLower) / intervals.BinWidth);
                 ++result[bin];
                 ++total;
@@ -1162,6 +1165,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             foreach (var value in data)
             {
+                if (TypeTrait<float>.IsNaN(value))
+                    continue;
+
                 var bin = (int)Math.Floor(((double)value - intervals.AdjustedLower) / intervals.BinWidth);
                 ++result[bin];
                 ++total;
@@ -1755,6 +1761,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             foreach (var value in data)
             {
+                if (TypeTrait<long>.IsNaN(value))
+                    continue;
+
                 var bin = (int)Math.Floor(((double)value - intervals.AdjustedLower) / intervals.BinWidth);
                 ++result[bin];
                 ++total;
@@ -2348,6 +2357,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             foreach (var value in data)
             {
+                if (TypeTrait<int>.IsNaN(value))
+                    continue;
+
                 var bin = (int)Math.Floor(((double)value - intervals.AdjustedLower) / intervals.BinWidth);
                 ++result[bin];
                 ++total;
@@ -2941,6 +2953,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             foreach (var value in data)
             {
+                if (TypeTrait<short>.IsNaN(value))
+                    continue;
+
                 var bin = (int)Math.Floor(((double)value - intervals.AdjustedLower) / intervals.BinWidth);
                 ++result[bin];
                 ++total;
@@ -3534,6 +3549,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             foreach (var value in data)
             {
+                if (TypeTrait<byte>.IsNaN(value))
+                    continue;
+
                 var bin = (int)Math.Floor(((double)value - intervals.AdjustedLower) / intervals.BinWidth);
                 ++result[bin];
                 ++total;
@@ -4127,6 +4145,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             foreach (var value in data)
             {
+                if (TypeTrait<sbyte>.IsNaN(value))
+                    continue;
+
                 var bin = (int)Math.Floor(((double)value - intervals.AdjustedLower) / intervals.BinWidth);
                 ++result[bin];
                 ++total;
@@ -4720,6 +4741,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             foreach (var value in data)
             {
+                if (TypeTrait<decimal>.IsNaN(value))
+                    continue;
+
                 var bin = (int)Math.Floor(((double)value - intervals.AdjustedLower) / intervals.BinWidth);
                 ++result[bin];
                 ++total;

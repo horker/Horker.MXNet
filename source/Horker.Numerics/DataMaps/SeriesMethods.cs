@@ -13,477 +13,1093 @@ namespace Horker.Numerics.DataMaps
     {
         public SeriesBase Abs()
         {
-			var result = GenericIListExtensions.Abs((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Abs((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Abs() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Acos()
         {
-			var result = GenericIListExtensions.Acos((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Acos((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Acos() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Asin()
         {
-			var result = GenericIListExtensions.Asin((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Asin((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Asin() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Atan()
         {
-			var result = GenericIListExtensions.Atan((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Atan((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Atan() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Atan2(double x)
         {
-			var result = GenericIListExtensions.Atan2((dynamic)UnderlyingList, x);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Atan2((dynamic)UnderlyingList, x);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Atan2() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Ceiling()
         {
-			var result = GenericIListExtensions.Ceiling((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Ceiling((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Ceiling() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Cos()
         {
-			var result = GenericIListExtensions.Cos((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Cos((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Cos() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Exp()
         {
-			var result = GenericIListExtensions.Exp((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Exp((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Exp() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Log()
         {
-			var result = GenericIListExtensions.Log((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Log((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Log() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Log10()
         {
-			var result = GenericIListExtensions.Log10((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Log10((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Log10() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Negate()
         {
-			var result = GenericIListExtensions.Negate((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Negate((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Negate() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Pow(double exp)
         {
-			var result = GenericIListExtensions.Pow((dynamic)UnderlyingList, exp);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Pow((dynamic)UnderlyingList, exp);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Pow() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Sign()
         {
-			var result = GenericIListExtensions.Sign((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Sign((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Sign() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Sin()
         {
-			var result = GenericIListExtensions.Sin((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Sin((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Sin() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Sinh()
         {
-			var result = GenericIListExtensions.Sinh((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Sinh((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Sinh() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Sqrt()
         {
-			var result = GenericIListExtensions.Sqrt((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Sqrt((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Sqrt() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Tan()
         {
-			var result = GenericIListExtensions.Tan((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Tan((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Tan() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Tanh()
         {
-			var result = GenericIListExtensions.Tanh((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Tanh((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Tanh() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Truncate()
         {
-			var result = GenericIListExtensions.Truncate((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Truncate((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Truncate() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase ElementAdd(SeriesBase other)
         {
-			var result = GenericIListExtensions.ElementAdd((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.ElementAdd((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementAdd() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase ElementAdd(object other)
         {
-			var result = GenericIListExtensions.ElementAdd((dynamic)UnderlyingList, (dynamic)other);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.ElementAdd((dynamic)UnderlyingList, (dynamic)other);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementAdd() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase ElementSubtract(SeriesBase other)
         {
-			var result = GenericIListExtensions.ElementSubtract((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.ElementSubtract((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementSubtract() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase ElementSubtract(object other)
         {
-			var result = GenericIListExtensions.ElementSubtract((dynamic)UnderlyingList, (dynamic)other);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.ElementSubtract((dynamic)UnderlyingList, (dynamic)other);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementSubtract() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase ElementMultiply(SeriesBase other)
         {
-			var result = GenericIListExtensions.ElementMultiply((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.ElementMultiply((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementMultiply() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase ElementMultiply(object other)
         {
-			var result = GenericIListExtensions.ElementMultiply((dynamic)UnderlyingList, (dynamic)other);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.ElementMultiply((dynamic)UnderlyingList, (dynamic)other);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementMultiply() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase ElementDivide(SeriesBase other)
         {
-			var result = GenericIListExtensions.ElementDivide((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.ElementDivide((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementDivide() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase ElementDivide(object other)
         {
-			var result = GenericIListExtensions.ElementDivide((dynamic)UnderlyingList, (dynamic)other);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.ElementDivide((dynamic)UnderlyingList, (dynamic)other);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementDivide() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase CumulativeMax()
         {
-			var result = GenericIListExtensions.CumulativeMax((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.CumulativeMax((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"CumulativeMax() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase CumulativeMin()
         {
-			var result = GenericIListExtensions.CumulativeMin((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.CumulativeMin((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"CumulativeMin() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase CumulativeProduct()
         {
-			var result = GenericIListExtensions.CumulativeProduct((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.CumulativeProduct((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"CumulativeProduct() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase CumulativeSum()
         {
-			var result = GenericIListExtensions.CumulativeSum((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.CumulativeSum((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"CumulativeSum() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase GetSortedCopy()
         {
-			var result = GenericIListExtensions.GetSortedCopy((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.GetSortedCopy((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"GetSortedCopy() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase FillNaN(object fillValue)
         {
-			var result = GenericIListExtensions.FillNaN((dynamic)UnderlyingList, (dynamic)fillValue);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.FillNaN((dynamic)UnderlyingList, (dynamic)fillValue);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"FillNaN() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase RemoveNaN()
         {
-			var result = GenericIListExtensions.RemoveNaN((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.RemoveNaN((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"RemoveNaN() does not support data type {DataType}");
+			}
         }
 
         public SeriesBase Unique()
         {
-			var result = GenericIListExtensions.Unique((dynamic)UnderlyingList);
-            return new Series((IList)result);
+			try
+			{
+				var result = GenericIListExtensions.Unique((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Unique() does not support data type {DataType}");
+			}
         }
 
         public void AbsFill()
         {
-			GenericIListExtensions.AbsFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.AbsFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"AbsFill() does not support data type {DataType}");
+			}
         }
 
         public void AcosFill()
         {
-			GenericIListExtensions.AcosFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.AcosFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"AcosFill() does not support data type {DataType}");
+			}
         }
 
         public void AsinFill()
         {
-			GenericIListExtensions.AsinFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.AsinFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"AsinFill() does not support data type {DataType}");
+			}
         }
 
         public void AtanFill()
         {
-			GenericIListExtensions.AtanFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.AtanFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"AtanFill() does not support data type {DataType}");
+			}
         }
 
         public void Atan2Fill(double x)
         {
-			GenericIListExtensions.Atan2Fill((dynamic)UnderlyingList, x);
+			try
+			{
+				GenericIListExtensions.Atan2Fill((dynamic)UnderlyingList, x);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Atan2Fill() does not support data type {DataType}");
+			}
         }
 
         public void CeilingFill()
         {
-			GenericIListExtensions.CeilingFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.CeilingFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"CeilingFill() does not support data type {DataType}");
+			}
         }
 
         public void CosFill()
         {
-			GenericIListExtensions.CosFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.CosFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"CosFill() does not support data type {DataType}");
+			}
         }
 
         public void ExpFill()
         {
-			GenericIListExtensions.ExpFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.ExpFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ExpFill() does not support data type {DataType}");
+			}
         }
 
         public void LogFill()
         {
-			GenericIListExtensions.LogFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.LogFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"LogFill() does not support data type {DataType}");
+			}
         }
 
         public void Log10Fill()
         {
-			GenericIListExtensions.Log10Fill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.Log10Fill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Log10Fill() does not support data type {DataType}");
+			}
         }
 
         public void NegateFill()
         {
-			GenericIListExtensions.NegateFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.NegateFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"NegateFill() does not support data type {DataType}");
+			}
         }
 
         public void PowFill(double exp)
         {
-			GenericIListExtensions.PowFill((dynamic)UnderlyingList, exp);
+			try
+			{
+				GenericIListExtensions.PowFill((dynamic)UnderlyingList, exp);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"PowFill() does not support data type {DataType}");
+			}
         }
 
         public void SignFill()
         {
-			GenericIListExtensions.SignFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.SignFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"SignFill() does not support data type {DataType}");
+			}
         }
 
         public void SinFill()
         {
-			GenericIListExtensions.SinFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.SinFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"SinFill() does not support data type {DataType}");
+			}
         }
 
         public void SinhFill()
         {
-			GenericIListExtensions.SinhFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.SinhFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"SinhFill() does not support data type {DataType}");
+			}
         }
 
         public void SqrtFill()
         {
-			GenericIListExtensions.SqrtFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.SqrtFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"SqrtFill() does not support data type {DataType}");
+			}
         }
 
         public void TanFill()
         {
-			GenericIListExtensions.TanFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.TanFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"TanFill() does not support data type {DataType}");
+			}
         }
 
         public void TanhFill()
         {
-			GenericIListExtensions.TanhFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.TanhFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"TanhFill() does not support data type {DataType}");
+			}
         }
 
         public void TruncateFill()
         {
-			GenericIListExtensions.TruncateFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.TruncateFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"TruncateFill() does not support data type {DataType}");
+			}
         }
 
         public void ElementAddFill(SeriesBase other)
         {
-			GenericIListExtensions.ElementAddFill((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+			try
+			{
+				GenericIListExtensions.ElementAddFill((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementAddFill() does not support data type {DataType}");
+			}
         }
 
         public void ElementAddFill(object other)
         {
-			GenericIListExtensions.ElementAddFill((dynamic)UnderlyingList, (dynamic)other);
+			try
+			{
+				GenericIListExtensions.ElementAddFill((dynamic)UnderlyingList, (dynamic)other);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementAddFill() does not support data type {DataType}");
+			}
         }
 
         public void ElementSubtractFill(SeriesBase other)
         {
-			GenericIListExtensions.ElementSubtractFill((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+			try
+			{
+				GenericIListExtensions.ElementSubtractFill((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementSubtractFill() does not support data type {DataType}");
+			}
         }
 
         public void ElementSubtractFill(object other)
         {
-			GenericIListExtensions.ElementSubtractFill((dynamic)UnderlyingList, (dynamic)other);
+			try
+			{
+				GenericIListExtensions.ElementSubtractFill((dynamic)UnderlyingList, (dynamic)other);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementSubtractFill() does not support data type {DataType}");
+			}
         }
 
         public void ElementMultiplyFill(SeriesBase other)
         {
-			GenericIListExtensions.ElementMultiplyFill((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+			try
+			{
+				GenericIListExtensions.ElementMultiplyFill((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementMultiplyFill() does not support data type {DataType}");
+			}
         }
 
         public void ElementMultiplyFill(object other)
         {
-			GenericIListExtensions.ElementMultiplyFill((dynamic)UnderlyingList, (dynamic)other);
+			try
+			{
+				GenericIListExtensions.ElementMultiplyFill((dynamic)UnderlyingList, (dynamic)other);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementMultiplyFill() does not support data type {DataType}");
+			}
         }
 
         public void ElementDivideFill(SeriesBase other)
         {
-			GenericIListExtensions.ElementDivideFill((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+			try
+			{
+				GenericIListExtensions.ElementDivideFill((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementDivideFill() does not support data type {DataType}");
+			}
         }
 
         public void ElementDivideFill(object other)
         {
-			GenericIListExtensions.ElementDivideFill((dynamic)UnderlyingList, (dynamic)other);
+			try
+			{
+				GenericIListExtensions.ElementDivideFill((dynamic)UnderlyingList, (dynamic)other);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementDivideFill() does not support data type {DataType}");
+			}
         }
 
         public object Correlation(SeriesBase other, bool skipNaN = true)
         {
-			return (object)GenericIListExtensions.Correlation((dynamic)UnderlyingList, (dynamic)other.UnderlyingList, skipNaN);
+			try
+			{
+				return (object)GenericIListExtensions.Correlation((dynamic)UnderlyingList, (dynamic)other.UnderlyingList, skipNaN);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Correlation() does not support data type {DataType}");
+			}
         }
 
         public object Cor(SeriesBase other, bool skipNaN = true)
         {
-			return (object)GenericIListExtensions.Cor((dynamic)UnderlyingList, (dynamic)other.UnderlyingList, skipNaN);
+			try
+			{
+				return (object)GenericIListExtensions.Cor((dynamic)UnderlyingList, (dynamic)other.UnderlyingList, skipNaN);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Cor() does not support data type {DataType}");
+			}
         }
 
         public object Covariance(SeriesBase other, bool unbiased = true, bool skipNaN = true)
         {
-			return (object)GenericIListExtensions.Covariance((dynamic)UnderlyingList, (dynamic)other.UnderlyingList, unbiased, skipNaN);
+			try
+			{
+				return (object)GenericIListExtensions.Covariance((dynamic)UnderlyingList, (dynamic)other.UnderlyingList, unbiased, skipNaN);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Covariance() does not support data type {DataType}");
+			}
         }
 
         public object Cov(SeriesBase other, bool unbiased = true, bool skipNaN = true)
         {
-			return (object)GenericIListExtensions.Cov((dynamic)UnderlyingList, (dynamic)other.UnderlyingList, unbiased, skipNaN);
+			try
+			{
+				return (object)GenericIListExtensions.Cov((dynamic)UnderlyingList, (dynamic)other.UnderlyingList, unbiased, skipNaN);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Cov() does not support data type {DataType}");
+			}
         }
 
         public void CumulativeMaxFill()
         {
-			GenericIListExtensions.CumulativeMaxFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.CumulativeMaxFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"CumulativeMaxFill() does not support data type {DataType}");
+			}
         }
 
         public void CumulativeMinFill()
         {
-			GenericIListExtensions.CumulativeMinFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.CumulativeMinFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"CumulativeMinFill() does not support data type {DataType}");
+			}
         }
 
         public void CumulativeProductFill()
         {
-			GenericIListExtensions.CumulativeProductFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.CumulativeProductFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"CumulativeProductFill() does not support data type {DataType}");
+			}
         }
 
         public void CumulativeSumFill()
         {
-			GenericIListExtensions.CumulativeSumFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.CumulativeSumFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"CumulativeSumFill() does not support data type {DataType}");
+			}
         }
 
         public int CountNaN()
         {
-			return (int)GenericIListExtensions.CountNaN((dynamic)UnderlyingList);
+			try
+			{
+				return (int)GenericIListExtensions.CountNaN((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"CountNaN() does not support data type {DataType}");
+			}
         }
 
         public int CountUnique()
         {
-			return (int)GenericIListExtensions.CountUnique((dynamic)UnderlyingList);
+			try
+			{
+				return (int)GenericIListExtensions.CountUnique((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"CountUnique() does not support data type {DataType}");
+			}
         }
 
         public Summary Describe()
         {
-			return (Summary)GenericIListExtensions.Describe((dynamic)UnderlyingList);
+			try
+			{
+				return (Summary)GenericIListExtensions.Describe((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Describe() does not support data type {DataType}");
+			}
         }
 
         public void FillNaNFill(object fillValue)
         {
-			GenericIListExtensions.FillNaNFill((dynamic)UnderlyingList, (dynamic)fillValue);
+			try
+			{
+				GenericIListExtensions.FillNaNFill((dynamic)UnderlyingList, (dynamic)fillValue);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"FillNaNFill() does not support data type {DataType}");
+			}
         }
 
         public HistogramBin[] Histogram(int binCount = -1, double binWidth = double.NaN)
         {
-			return (HistogramBin[])GenericIListExtensions.Histogram((dynamic)UnderlyingList, binCount, binWidth);
+			try
+			{
+				return (HistogramBin[])GenericIListExtensions.Histogram((dynamic)UnderlyingList, binCount, binWidth);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Histogram() does not support data type {DataType}");
+			}
         }
 
         public object Kurtosis(bool unbiased = true)
         {
-			return (object)GenericIListExtensions.Kurtosis((dynamic)UnderlyingList, unbiased);
+			try
+			{
+				return (object)GenericIListExtensions.Kurtosis((dynamic)UnderlyingList, unbiased);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Kurtosis() does not support data type {DataType}");
+			}
         }
 
         public object Max()
         {
-			return (object)GenericIListExtensions.Max((dynamic)UnderlyingList);
+			try
+			{
+				return (object)GenericIListExtensions.Max((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Max() does not support data type {DataType}");
+			}
         }
 
         public object Min()
         {
-			return (object)GenericIListExtensions.Min((dynamic)UnderlyingList);
+			try
+			{
+				return (object)GenericIListExtensions.Min((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Min() does not support data type {DataType}");
+			}
         }
 
         public object Mean(bool skipNaN = true)
         {
-			return (object)GenericIListExtensions.Mean((dynamic)UnderlyingList, skipNaN);
+			try
+			{
+				return (object)GenericIListExtensions.Mean((dynamic)UnderlyingList, skipNaN);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Mean() does not support data type {DataType}");
+			}
         }
 
         public object Median(bool skipNaN = true, bool isSorted = false)
         {
-			return (object)GenericIListExtensions.Median((dynamic)UnderlyingList, skipNaN, isSorted);
+			try
+			{
+				return (object)GenericIListExtensions.Median((dynamic)UnderlyingList, skipNaN, isSorted);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Median() does not support data type {DataType}");
+			}
         }
 
         public object Mode(bool skipNaN = true)
         {
-			return (object)GenericIListExtensions.Mode((dynamic)UnderlyingList, skipNaN);
+			try
+			{
+				return (object)GenericIListExtensions.Mode((dynamic)UnderlyingList, skipNaN);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Mode() does not support data type {DataType}");
+			}
         }
 
         public object Quantile(double p, bool skipNaN = true, bool isSorted = false)
         {
-			return (object)GenericIListExtensions.Quantile((dynamic)UnderlyingList, p, skipNaN, isSorted);
+			try
+			{
+				return (object)GenericIListExtensions.Quantile((dynamic)UnderlyingList, p, skipNaN, isSorted);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Quantile() does not support data type {DataType}");
+			}
         }
 
         public object Skewness(bool unbiased = true)
         {
-			return (object)GenericIListExtensions.Skewness((dynamic)UnderlyingList, unbiased);
+			try
+			{
+				return (object)GenericIListExtensions.Skewness((dynamic)UnderlyingList, unbiased);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Skewness() does not support data type {DataType}");
+			}
         }
 
         public object StandardDeviation(bool unbiased = true, bool skipNaN = true)
         {
-			return (object)GenericIListExtensions.StandardDeviation((dynamic)UnderlyingList, unbiased, skipNaN);
+			try
+			{
+				return (object)GenericIListExtensions.StandardDeviation((dynamic)UnderlyingList, unbiased, skipNaN);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"StandardDeviation() does not support data type {DataType}");
+			}
         }
 
         public object Std(bool unbiased = true, bool skipNaN = true)
         {
-			return (object)GenericIListExtensions.Std((dynamic)UnderlyingList, unbiased, skipNaN);
+			try
+			{
+				return (object)GenericIListExtensions.Std((dynamic)UnderlyingList, unbiased, skipNaN);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Std() does not support data type {DataType}");
+			}
         }
 
         public object Variance(bool unbiased = true, bool skipNaN = true)
         {
-			return (object)GenericIListExtensions.Variance((dynamic)UnderlyingList, unbiased, skipNaN);
+			try
+			{
+				return (object)GenericIListExtensions.Variance((dynamic)UnderlyingList, unbiased, skipNaN);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Variance() does not support data type {DataType}");
+			}
         }
 
         public object Var(bool unbiased = true, bool skipNaN = true)
         {
-			return (object)GenericIListExtensions.Var((dynamic)UnderlyingList, unbiased, skipNaN);
+			try
+			{
+				return (object)GenericIListExtensions.Var((dynamic)UnderlyingList, unbiased, skipNaN);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Var() does not support data type {DataType}");
+			}
         }
 
         public void SortFill()
         {
-			GenericIListExtensions.SortFill((dynamic)UnderlyingList);
+			try
+			{
+				GenericIListExtensions.SortFill((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"SortFill() does not support data type {DataType}");
+			}
         }
 
 	}
