@@ -42,6 +42,8 @@ var methodNames = new[]
 
 	// Other operations
 
+	Tuple.Create("Copy", "", ""),
+	Tuple.Create("CreateLike", "", ""),
 	Tuple.Create("CumulativeMax", "", ""),
 	Tuple.Create("CumulativeMin", "", ""),
 	Tuple.Create("CumulativeProduct", "", ""),

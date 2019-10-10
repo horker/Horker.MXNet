@@ -638,6 +638,11 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         // Other operations
 
+        public static IList<T> Copy<T>(this IList<T> self)
+        {
+            return new List<T>(self);
+        }
+
         public static int CountNaN<T>(this IList<T> self)
         {
             int count = 0;
@@ -683,6 +688,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             return bins;
+        }
+
+        public static IList<T> CreateLike<T>(this IList<T> self)
+            where T: new()
+        {
+            var result = new List<T>(self.Count);
+            for (var i = 0; i < self.Count; ++i)
+                result.Add(new T());
+
+            return result;
+        }
+
+        public static IList<string> CreateLike(this IList<string> self)
+        {
+            var result = new List<string>(self.Count);
+            for (var i = 0; i < self.Count; ++i)
+                result.Add(string.Empty);
+
+            return result;
         }
 
         public static Summary Describe<T>(this IList<T> self)

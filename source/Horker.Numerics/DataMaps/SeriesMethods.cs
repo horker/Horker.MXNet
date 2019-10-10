@@ -362,6 +362,32 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
+        public SeriesBase Copy()
+        {
+			try
+			{
+				var result = GenericIListExtensions.Copy((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Copy() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase CreateLike()
+        {
+			try
+			{
+				var result = GenericIListExtensions.CreateLike((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"CreateLike() does not support data type {DataType}");
+			}
+        }
+
         public SeriesBase CumulativeMax()
         {
 			try
