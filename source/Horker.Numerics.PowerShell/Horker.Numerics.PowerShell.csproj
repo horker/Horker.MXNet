@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="ConvertType.cs" />
     <Compile Include="ConvertToDataMap.cs" />
+    <Compile Include="NewDataMapSeries.cs" />
     <Compile Include="NewDataMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
