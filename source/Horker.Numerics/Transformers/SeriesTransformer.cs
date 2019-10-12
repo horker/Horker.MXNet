@@ -12,10 +12,18 @@ namespace Horker.Numerics.Transformers
         public virtual DataMap Parameters { get => null; set { } }
 
         public abstract void Fit(SeriesBase data);
-        public abstract Series Transform(SeriesBase data);
-        public abstract DataMap TransformToDataMap(SeriesBase data);
 
-        public virtual Series FitTransform(SeriesBase data)
+        public virtual SeriesBase Transform(SeriesBase data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual DataMap TransformToDataMap(SeriesBase data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual SeriesBase FitTransform(SeriesBase data)
         {
             Fit(data);
             return Transform(data);

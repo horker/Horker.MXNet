@@ -41,11 +41,6 @@ namespace Horker.Numerics.Transformers
             }
         }
 
-        public override Series Transform(SeriesBase data)
-        {
-            throw new NotImplementedException();
-        }
-
         public override DataMap TransformToDataMap(SeriesBase data)
         {
             var listMap = new Dictionary<string, int[]>();

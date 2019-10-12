@@ -27,5 +27,19 @@ namespace Horker.Numerics.Tests
             Assert.Equal(new int[] { 0, 1, 0, 0 }, r["test_yyy"]);
             Assert.Equal(new int[] { 1, 0, 0, 0 }, r["test_zzz"]);
         }
+
+        [Fact]
+        public void TestDummyEncoding()
+        {
+            var t1 = new double[] { 10, 11, 12, 13 };
+            var t2 = new double[] { 13, 13, 11, 12, 999 };
+
+            var trans = new DummyEncodingSeriesTransformer<double>(true, -100);
+
+            trans.Fit(t1);
+            var r = trans.Transform(t2);
+
+            Assert.Equal(new double[] { 3, 3, 1, 2, -100 }, r);
+        }
     }
 }
