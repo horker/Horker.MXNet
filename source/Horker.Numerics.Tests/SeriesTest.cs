@@ -10,6 +10,16 @@ namespace Horker.Numerics.Tests
     public class SeriesTest
     {
         [Fact]
+        public void TestContains()
+        {
+            var t1 = new Series(new double[] { 0, 1, 2, 3 });
+
+            var contains = t1.Contains(2); // try an integer value
+
+            Assert.True(contains);
+        }
+
+        [Fact]
         public void TestCumulativeSum()
         {
             var t1 = new Series(new decimal[] { 1, 2, 3 });
@@ -43,6 +53,12 @@ namespace Horker.Numerics.Tests
             t1.FillNaNFill(999);
 
             Assert.Equal(new double[] { 1, 999, 2, 999}, t1.AsArray<double>());
+
+            var t3 = new Series(new string[] { "a", " ", "", null, "b" });
+
+            var t4 = t3.FillNaN("XXX");
+
+            Assert.Equal(new string[] { "a", "XXX", "XXX", "XXX", "b" }, t4.AsArray<string>());
         }
 
         [Fact]

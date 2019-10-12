@@ -218,6 +218,21 @@ namespace Horker.Numerics.DataMaps.Extensions
             return count;
         }
 
+        public static void Fill<T>(this IList<T> self, T value)
+        {
+            for (int i = 0; i < self.Count; ++i)
+                self[i] = value;
+        }
+
+        public static void FillIf<T>(this IList<T> self, Func<T, int, bool> func, T value)
+        {
+            for (int i = 0; i < self.Count; ++i)
+            {
+                if (func.Invoke(self[i], i))
+                    self[i] = value;
+            }
+        }
+
         public static List<T> RemoveIf<T>(this IList<T> self, Func<T, int, bool> func)
         {
             var result = new List<T>();
@@ -389,6 +404,21 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
 
             return count;
+        }
+
+        public static void FillIfScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock, T value)
+        {
+            var parameters = new List<PSVariable>();
+            parameters.Add(new PSVariable("value"));
+            parameters.Add(new PSVariable("index"));
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                parameters[0].Value = self[i];
+                parameters[1].Value = i;
+                if ((bool)scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject)
+                    self[i] = value;
+            }
         }
 
         public static List<T> RemoveIfScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock)
@@ -734,9 +764,9 @@ namespace Horker.Numerics.DataMaps.Extensions
             foreach (var value in self)
             {
                 if (TypeTrait<T>.IsNaN(value))
-                    result.Add(value);
-                else
                     result.Add(fillValue);
+                else
+                    result.Add(value);
             }
 
             return result;

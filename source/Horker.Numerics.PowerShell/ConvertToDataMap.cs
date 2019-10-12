@@ -6,6 +6,7 @@ using System.Management.Automation;
 using System.Text;
 using System.Threading.Tasks;
 using Horker.Numerics.DataMaps;
+using Horker.Numerics.Utilities;
 
 namespace Horker.Numerics.PowerShell
 {
@@ -45,10 +46,7 @@ namespace Horker.Numerics.PowerShell
 
                 try
                 {
-                    var value = prop.Value;
-                    if (value is PSObject pso)
-                        value = pso.BaseObject;
-
+                    var value = Utils.StripOffPSObject(prop.Value);
                     column.Add(value);
                 }
                 catch (Exception)

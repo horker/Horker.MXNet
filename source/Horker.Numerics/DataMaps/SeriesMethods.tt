@@ -103,6 +103,7 @@ var nonSeriesMethods = new[]
 	Tuple.Create("CountUnique", "int", "", ""),
 	Tuple.Create("CountValues", "object", "", ""),
 	Tuple.Create("Describe", "Summary", "", ""),
+	Tuple.Create("Fill", "void", "object value", ", (dynamic)value"),
 	Tuple.Create("FillNaNFill", "void", "object fillValue", ", (dynamic)fillValue"),
 	Tuple.Create("Histogram", "HistogramBin[]", "int binCount = -1, double binWidth = double.NaN", ", binCount, binWidth"),
 	Tuple.Create("Kurtosis", "object","bool unbiased = true", ", unbiased"),

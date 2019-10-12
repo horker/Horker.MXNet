@@ -5,6 +5,7 @@ using System.Linq;
 using System.Management.Automation;
 using System.Text;
 using System.Threading.Tasks;
+using Horker.Numerics.Utilities;
 
 namespace Horker.Numerics.DataMaps
 {
@@ -18,17 +19,13 @@ namespace Horker.Numerics.DataMaps
         {
             get
             {
-                if (index is PSObject pso)
-                    index = pso.BaseObject;
-                
+                index = Utils.StripOffPSObject(index);
                 return _sorted[index];
             }
 
             set
             {
-                if (index is PSObject pso)
-                    index = pso.BaseObject;
-                
+                index = Utils.StripOffPSObject(index);
                 _sorted[index] = value;
             }
         }

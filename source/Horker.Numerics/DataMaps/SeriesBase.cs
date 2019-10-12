@@ -10,6 +10,7 @@ using Horker.Numerics.Transformers;
 using Horker.Numerics.DataMaps.Extensions;
 using System.Management.Automation;
 using System.Diagnostics;
+using Horker.Numerics.Utilities;
 
 namespace Horker.Numerics.DataMaps
 {
@@ -60,11 +61,15 @@ namespace Horker.Numerics.DataMaps
 
         public void Add(object value)
         {
+            value = Utils.StripOffPSObject(value);
+
             UnderlyingList.Add(value);
         }
 
         int IList.Add(object value)
         {
+            value = Utils.StripOffPSObject(value);
+
             return UnderlyingList.Add(value);
         }
 
@@ -73,14 +78,21 @@ namespace Horker.Numerics.DataMaps
             UnderlyingList.Clear();
         }
 
+        private static bool ContainsTyped<T>(IList<T> list, T value)
+        {
+            return list.Contains(value);
+        }
+
         public bool Contains(object value)
         {
-            return Contains(value);
+            value = Utils.StripOffPSObject(value);
+
+            return ContainsTyped((dynamic)UnderlyingList, (dynamic)value);
         }
 
         public void CopyTo(Array array, int index)
         {
-            CopyTo(array, index);
+            UnderlyingList.CopyTo(array, index);
         }
 
         public IEnumerator GetEnumerator()
@@ -88,19 +100,35 @@ namespace Horker.Numerics.DataMaps
             return UnderlyingList.GetEnumerator();
         }
 
+        private static int IndexOfTyped<T>(IList<T> list, T value)
+        {
+            return list.IndexOf(value);
+        }
+
         public int IndexOf(object value)
         {
-            return UnderlyingList.IndexOf(value);
+            value = Utils.StripOffPSObject(value);
+
+            return IndexOfTyped((dynamic)UnderlyingList, (dynamic)value);
         }
 
         public void Insert(int index, object value)
         {
+            value = Utils.StripOffPSObject(value);
+
             UnderlyingList.Insert(index, value);
+        }
+
+        private static void RemoveTyped<T>(IList<T> list, T value)
+        {
+            list.Remove(value);
         }
 
         public void Remove(object value)
         {
-            UnderlyingList.Remove(value);
+            value = Utils.StripOffPSObject(value);
+
+            RemoveTyped((dynamic)UnderlyingList, (dynamic)value);
         }
 
         public void RemoveAt(int index)
@@ -394,6 +422,25 @@ namespace Horker.Numerics.DataMaps
                 new Type[] { dataType, typeof(int), typeof(bool) },
                 "CountIf", new Type[] { dataType }, true,
                 new object[] { UnderlyingList, null });
+        }
+
+        public void FillIf(ScriptBlock scriptBlock, object value)
+        {
+            GenericIListExtensions.FillIfScriptBlock((dynamic)UnderlyingList, scriptBlock, value);
+        }
+
+        public void FillIf<T>(Func<T, int, bool> func, T value)
+        {
+            ((IList<T>)UnderlyingList).FillIf(func, value);
+        }
+
+        public void FillIf(string funcString, object value)
+        {
+            var dataType = DataType;
+            InvokeFuncString(funcString,
+                new Type[] { dataType, typeof(int), typeof(bool) },
+                "FillIf", new Type[] { dataType }, true,
+                new object[] { UnderlyingList, null, value });
         }
 
         public int CountIf(ScriptBlock scriptpBlock)

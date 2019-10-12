@@ -960,6 +960,18 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
+        public void Fill(object value)
+        {
+			try
+			{
+				GenericIListExtensions.Fill((dynamic)UnderlyingList, (dynamic)value);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Fill() does not support data type {DataType}");
+			}
+        }
+
         public void FillNaNFill(object fillValue)
         {
 			try

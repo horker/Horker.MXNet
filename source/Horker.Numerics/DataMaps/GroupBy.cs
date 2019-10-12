@@ -7,6 +7,7 @@ using System.Management.Automation;
 using System.Text;
 using System.Threading.Tasks;
 using Horker.Numerics.DataMaps.Extensions;
+using Horker.Numerics.Utilities;
 
 namespace Horker.Numerics.DataMaps
 {
@@ -35,13 +36,7 @@ namespace Horker.Numerics.DataMaps
                 _keys = new object[keys.Length];
 
                 for (var i = 0; i < keys.Length; ++i)
-                {
-                    var value = keys[i];
-                    if (value is PSObject psobj)
-                        value = psobj.BaseObject;
-
-                    _keys[i] = value;
-                }
+                    _keys[i] = Utils.StripOffPSObject(keys[i]);
             }
 
             public override bool Equals(object obj)
@@ -54,10 +49,7 @@ namespace Horker.Numerics.DataMaps
 
                 for (var i = 0; i < _keys.Length; ++i)
                 {
-                    var value = other._keys[i];
-                    if (value is PSObject psobj)
-                        value = psobj.BaseObject;
-
+                    var value = Utils.StripOffPSObject(other._keys[i]);
                     if (_keys[i] != value)
                         return false;
                 }
