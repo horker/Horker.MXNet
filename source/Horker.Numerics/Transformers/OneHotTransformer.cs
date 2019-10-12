@@ -16,13 +16,13 @@ namespace Horker.Numerics.Transformers
         EffectCoding
     }
 
-    public class OneHotSeriesTransformer : SeriesTransformer
+    public class OneHotTransformer : SeriesTransformer
     {
         private OneHotType _oneHotType;
         private OrderedDictionary _encoding;
         private string _columnNameFormat;
 
-        public OneHotSeriesTransformer(OneHotType oneHotType, string columnNameFormat = "{0}")
+        public OneHotTransformer(OneHotType oneHotType, string columnNameFormat = "{0}")
         {
             _oneHotType = oneHotType;
             _columnNameFormat = columnNameFormat ?? "{0}";

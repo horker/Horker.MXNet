@@ -105,8 +105,8 @@
     </Compile>
     <Compile Include="DataMaps\Summary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Transformers\DummyEncodingSeriesTransformer.cs" />
-    <Compile Include="Transformers\OneHotSeriesTransformer.cs" />
+    <Compile Include="Transformers\DummyEncodingTransformer.cs" />
+    <Compile Include="Transformers\OneHotTransformer.cs" />
     <Compile Include="Transformers\SeriesTransformer.cs" />
     <Compile Include="Utilities\Utils.cs" />
     <Compile Include="Utilities\FunctionCompiler.cs" />

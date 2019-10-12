@@ -666,7 +666,7 @@ namespace Horker.Numerics.DataMaps
 
         public DataMap OneHot(OneHotType oneHotType = OneHotType.OneHot, string columnNameFormat = "{0}")
         {
-            var trans = new OneHotSeriesTransformer(oneHotType, columnNameFormat);
+            var trans = new OneHotTransformer(oneHotType, columnNameFormat);
             return trans.FitTransformToDataMap(this);
         }
     }

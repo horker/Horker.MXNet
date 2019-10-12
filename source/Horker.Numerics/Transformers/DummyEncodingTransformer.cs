@@ -9,14 +9,14 @@ using Horker.Numerics.DataMaps;
 
 namespace Horker.Numerics.Transformers
 {
-    public class DummyEncodingSeriesTransformer<T> : SeriesTransformer
+    public class DummyEncodingTransformer<T> : SeriesTransformer
     {
         private bool _useFallback;
         private T _fallbackValue;
 
         private Dictionary<object, T> _encoding;
 
-        public DummyEncodingSeriesTransformer(bool useFallback = false, T fallbackValue = default(T))
+        public DummyEncodingTransformer(bool useFallback = false, T fallbackValue = default(T))
         {
             _useFallback = useFallback;
             _fallbackValue = fallbackValue;

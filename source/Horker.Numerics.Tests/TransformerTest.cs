@@ -16,7 +16,7 @@ namespace Horker.Numerics.Tests
             var t1 = new string[] { "xxx", "yyy", "zzz" };
             var t2 = new string[] { "zzz", "yyy", "xxx", "aaa" };
 
-            var trans = new OneHotSeriesTransformer(OneHotType.OneHot, "test_{0}");
+            var trans = new OneHotTransformer(OneHotType.OneHot, "test_{0}");
 
             trans.Fit(t1);
             var r = trans.TransformToDataMap(t2);
@@ -34,7 +34,7 @@ namespace Horker.Numerics.Tests
             var t1 = new double[] { 10, 11, 12, 13 };
             var t2 = new double[] { 13, 13, 11, 12, 999 };
 
-            var trans = new DummyEncodingSeriesTransformer<double>(true, -100);
+            var trans = new DummyEncodingTransformer<double>(true, -100);
 
             trans.Fit(t1);
             var r = trans.Transform(t2);
