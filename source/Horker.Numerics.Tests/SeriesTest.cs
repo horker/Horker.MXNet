@@ -120,5 +120,15 @@ namespace Horker.Numerics.Tests
 
             Assert.Equal(3, c);
         }
+
+        [Fact]
+        public void TestMap()
+        {
+            var t1 = new Series(new double[] { 1, 2, 3, 4 });
+
+            var t2 = t1.Map(new Hashtable() { { 2, 99 }, { 3, 999 } });
+
+            Assert.Equal(new double[] { 1, 99, 999, 4 }, t2);
+        }
     }
 }

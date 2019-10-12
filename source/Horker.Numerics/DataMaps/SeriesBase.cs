@@ -618,6 +618,50 @@ namespace Horker.Numerics.DataMaps
             return new Series(UnderlyingList.Between(left, right, inclusive));
         }
 
+        // Other methods
+
+        public static SeriesBase MapTyped<T>(IList<T> list, IDictionary map)
+        {
+            if (!(map is IDictionary<T, T> typedMap))
+            {
+                typedMap = new Dictionary<T, T>();
+                foreach (DictionaryEntry entry in map)
+                {
+                    var key = SmartConverter.ConvertTo<T>(entry.Key);
+                    var value = SmartConverter.ConvertTo<T>(entry.Value);
+                    typedMap.Add(key, value);
+                }
+            }
+
+            return new Series(list.Map(typedMap));
+        }
+
+        public SeriesBase Map(IDictionary map)
+        {
+            return MapTyped((dynamic)UnderlyingList, map);
+        }
+
+        public static void MapFillTyped<T>(IList<T> list, IDictionary map)
+        {
+            if (!(map is IDictionary<T, T> typedMap))
+            {
+                typedMap = new Dictionary<T, T>();
+                foreach (DictionaryEntry entry in map)
+                {
+                    var key = SmartConverter.ConvertTo<T>(entry.Key);
+                    var value = SmartConverter.ConvertTo<T>(entry.Value);
+                    typedMap.Add(key, value);
+                }
+            }
+
+            list.MapFill(typedMap);
+        }
+
+        public void MapFill(IDictionary map)
+        {
+            MapFillTyped((dynamic)UnderlyingList, map);
+        }
+
         // Transformers
 
         public DataMap OneHot(OneHotType oneHotType = OneHotType.OneHot, string columnNameFormat = "{0}")

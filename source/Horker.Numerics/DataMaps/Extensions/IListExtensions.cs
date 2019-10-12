@@ -759,16 +759,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             return summary;
         }
 
-        public static List<T> RemoveNaN<T>(this IList<T> self)
-        {
-            var result = new List<T>(self.Count);
-            foreach (var value in self)
-                if (!TypeTrait<T>.IsNaN(value))
-                    result.Add(value);
-
-            return result;
-        }
-
         public static List<T> FillNaN<T>(this IList<T> self, T fillValue)
         {
             var result = new List<T>(self.Count);
@@ -792,34 +782,44 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+        public static List<T> Map<T>(this IList<T> self, IDictionary<T, T> map)
+        {
+            var result = new List<T>();
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (map.TryGetValue(self[i], out var value))
+                    result.Add(value);
+                else
+                    result.Add(self[i]);
+            }
+
+            return result;
+        }
+
+        public static void MapFill<T>(this IList<T> self, IDictionary<T, T> map)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (map.TryGetValue(self[i], out var value))
+                    self[i] = value;
+            }
+        }
+
+        public static List<T> RemoveNaN<T>(this IList<T> self)
+        {
+            var result = new List<T>(self.Count);
+            foreach (var value in self)
+                if (!TypeTrait<T>.IsNaN(value))
+                    result.Add(value);
+
+            return result;
+        }
+
         public static List<T> SortedCopy<T>(this IList<T> self)
         {
             var result = new List<T>(self);
             result.Sort();
             return result;
-        }
-
-        public static List<T> Map<T>(this IList<T> self, IDictionary map)
-        {
-            var result = new List<T>();
-            foreach (var value in self)
-            {
-                if (map.Contains(value))
-                    result.Add((T)map[value]);
-                else
-                    result.Add(value);
-            }
-
-            return result;
-        }
-
-        public static void MapFill<T>(this IList<T> self, IDictionary map)
-        {
-            for (var i = 0; i < self.Count; ++i)
-            {
-                if (map.Contains(self[i]))
-                    self[i] = (T)map[self[i]];
-            }
         }
 
         public static void SortFill<T>(this IList<T> self)
