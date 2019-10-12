@@ -233,6 +233,17 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+        public static List<T> Filter<T>(this IList<T> self, Func<T, int, bool> func)
+        {
+            var result = new List<T>();
+            for (int i = 0; i < self.Count; ++i)
+            {
+                if (func.Invoke(self[i], i))
+                    result.Add(self[i]);
+            }
+            return result;
+        }
+
         public static List<T> RemoveIf<T>(this IList<T> self, Func<T, int, bool> func)
         {
             var result = new List<T>();

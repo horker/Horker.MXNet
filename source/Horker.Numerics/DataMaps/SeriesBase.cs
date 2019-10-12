@@ -448,6 +448,11 @@ namespace Horker.Numerics.DataMaps
             return GenericIListExtensions.CountIfScriptBlock((dynamic)UnderlyingList, scriptpBlock);
         }
 
+        public SeriesBase Filter<T>(Func<T, int, bool> func)
+        {
+            return new Series(((IList<T>)UnderlyingList).Filter(func));
+        }
+
         public SeriesBase RemoveIf<T>(Func<T, int, bool> func)
         {
             return new Series(((IList<T>)UnderlyingList).RemoveIf(func));
