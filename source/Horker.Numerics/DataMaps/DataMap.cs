@@ -261,21 +261,23 @@ namespace Horker.Numerics.DataMaps
             AddLast(name, value);
         }
 
-        public bool Contains(string name)
+        public void Add(params DataMap[] maps)
         {
-            return _nameMap.ContainsKey(name);
-        }
+            var rowCount = Math.Max(RowCount, maps.Max(df => df.RowCount));
 
-        public bool Remove(string name)
-        {
-            LinkedListNode<Column> column = null;
-            if (_nameMap.TryGetValue(name, out column))
+            foreach (var df in maps)
             {
-                _nameMap.Remove(name);
-                _columns.Remove(column);
-                return true;
+                foreach (var column in df.Columns)
+                {
+                    var name = column.Name;
+
+                    var i = 1;
+                    while (Contains(name))
+                        name = column.Name + "_" + i++;
+
+                    Add(name, column.Data);
+                }
             }
-            return false;
         }
 
         public void AddFirst(string name, SeriesBase value)
@@ -343,6 +345,23 @@ namespace Horker.Numerics.DataMaps
         public void AddAfter(string before, string name, IList value)
         {
             AddAfter(before, name, new Series(value));
+        }
+
+        public bool Contains(string name)
+        {
+            return _nameMap.ContainsKey(name);
+        }
+
+        public bool Remove(string name)
+        {
+            LinkedListNode<Column> column = null;
+            if (_nameMap.TryGetValue(name, out column))
+            {
+                _nameMap.Remove(name);
+                _columns.Remove(column);
+                return true;
+            }
+            return false;
         }
 
         public void MoveToFirst(string name)
