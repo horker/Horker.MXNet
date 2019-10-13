@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Horker.Numerics.DataMaps;
 using Horker.Numerics.DataMaps.Extensions;
+using Horker.Numerics.DataMaps.Utilities;
 
 namespace Horker.Numerics.Transformers
 {

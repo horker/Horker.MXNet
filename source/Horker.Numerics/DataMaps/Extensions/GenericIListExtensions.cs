@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Horker.Numerics.DataMaps.Utilities;
 
 namespace Horker.Numerics.DataMaps.Extensions
 {

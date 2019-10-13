@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Horker.Numerics.DataMaps.Extensions;
+using Horker.Numerics.DataMaps.Utilities;
 using Xunit;
 
 namespace Horker.Numerics.Tests
