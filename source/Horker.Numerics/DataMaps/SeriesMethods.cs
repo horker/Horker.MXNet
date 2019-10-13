@@ -440,6 +440,19 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
+        public SeriesBase Fill(object value)
+        {
+			try
+			{
+				var result = GenericIListExtensions.Fill((dynamic)UnderlyingList, (dynamic)value);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Fill() does not support data type {DataType}");
+			}
+        }
+
         public SeriesBase Shuffle(int seed = -1)
         {
 			try
@@ -973,15 +986,15 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
-        public void Fill(object value)
+        public void FillFill(object value)
         {
 			try
 			{
-				GenericIListExtensions.Fill((dynamic)UnderlyingList, (dynamic)value);
+				GenericIListExtensions.FillFill((dynamic)UnderlyingList, (dynamic)value);
 			}
 			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
 			{
-				throw new InvalidOperationException($"Fill() does not support data type {DataType}");
+				throw new InvalidOperationException($"FillFill() does not support data type {DataType}");
 			}
         }
 

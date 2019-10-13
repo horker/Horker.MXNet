@@ -424,22 +424,41 @@ namespace Horker.Numerics.DataMaps
                 new object[] { UnderlyingList, null });
         }
 
-        public void FillIf(ScriptBlock scriptBlock, object value)
+        public SeriesBase FillIf(ScriptBlock scriptBlock, object value)
         {
-            GenericIListExtensions.FillIfScriptBlock((dynamic)UnderlyingList, scriptBlock, value);
+            return new Series(GenericIListExtensions.FillIfScriptBlock((dynamic)UnderlyingList, scriptBlock, value));
         }
 
-        public void FillIf<T>(Func<T, int, bool> func, T value)
+        public SeriesBase FillIf<T>(Func<T, int, bool> func, T value)
         {
-            ((IList<T>)UnderlyingList).FillIf(func, value);
+            return new Series(((IList<T>)UnderlyingList).FillIf(func, value));
         }
 
-        public void FillIf(string funcString, object value)
+        public SeriesBase FillIf(string funcString, object value)
+        {
+            var dataType = DataType;
+            return new Series((IList)InvokeFuncString(funcString,
+                new Type[] { dataType, typeof(int), typeof(bool) },
+                "FillIf", new Type[] { dataType }, true,
+                new object[] { UnderlyingList, null, value }));
+        }
+
+        public void FillIfFill(ScriptBlock scriptBlock, object value)
+        {
+            GenericIListExtensions.FillIfFillScriptBlock((dynamic)UnderlyingList, scriptBlock, value);
+        }
+
+        public void FillIfFill<T>(Func<T, int, bool> func, T value)
+        {
+            ((IList<T>)UnderlyingList).FillIfFill(func, value);
+        }
+
+        public void FillIfFill(string funcString, object value)
         {
             var dataType = DataType;
             InvokeFuncString(funcString,
                 new Type[] { dataType, typeof(int), typeof(bool) },
-                "FillIf", new Type[] { dataType }, true,
+                "FillIfFill", new Type[] { dataType }, true,
                 new object[] { UnderlyingList, null, value });
         }
 

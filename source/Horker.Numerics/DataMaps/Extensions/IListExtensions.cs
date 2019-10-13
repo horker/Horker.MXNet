@@ -219,13 +219,34 @@ namespace Horker.Numerics.DataMaps.Extensions
             return count;
         }
 
-        public static void Fill<T>(this IList<T> self, T value)
+        public static List<T> Fill<T>(this IList<T> self, T value)
+        {
+            var result = new List<T>(self.Count);
+            for (int i = 0; i < self.Count; ++i)
+                result.Add(value);
+            return result;
+        }
+
+        public static void FillFill<T>(this IList<T> self, T value)
         {
             for (int i = 0; i < self.Count; ++i)
                 self[i] = value;
         }
 
-        public static void FillIf<T>(this IList<T> self, Func<T, int, bool> func, T value)
+        public static List<T> FillIf<T>(this IList<T> self, Func<T, int, bool> func, T value)
+        {
+            var result = new List<T>(self.Count);
+            for (int i = 0; i < self.Count; ++i)
+            {
+                if (func.Invoke(self[i], i))
+                    result.Add(value);
+                else
+                    result.Add(self[i]);
+            }
+            return result;
+        }
+
+        public static void FillIfFill<T>(this IList<T> self, Func<T, int, bool> func, T value)
         {
             for (int i = 0; i < self.Count; ++i)
             {
@@ -431,6 +452,27 @@ namespace Horker.Numerics.DataMaps.Extensions
                 if ((bool)scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject)
                     self[i] = value;
             }
+        }
+
+        public static List<T> FillIfFillScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock, T value)
+        {
+            var parameters = new List<PSVariable>();
+            parameters.Add(new PSVariable("value"));
+            parameters.Add(new PSVariable("index"));
+
+            var result = new List<T>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                parameters[0].Value = self[i];
+                parameters[1].Value = i;
+                if ((bool)scriptBlock.InvokeWithContext(null, parameters, null)[0].BaseObject)
+                    result.Add(value);
+                else
+                    result.Add(self[i]);
+            }
+
+            return result;
         }
 
         public static List<T> RemoveIfScriptBlock<T>(this IList<T> self, ScriptBlock scriptBlock)
