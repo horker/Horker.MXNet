@@ -10,6 +10,24 @@ namespace Horker.Numerics.Tests
     public class SeriesTest
     {
         [Fact]
+        public void TestApply()
+        {
+            var t1 = new Series(new double[] { 1, 2, 3, 4 });
+            var t2 = t1.Apply("(x, i) => (double)series[series.Count - 1 - i]");
+
+            Assert.Equal(new double[] { 4, 3, 2, 1 }, t2);
+        }
+
+        [Fact]
+        public void TestApplyFill()
+        {
+            var t1 = new Series(new double[] { 1, 2, 3, 4 });
+
+            t1.ApplyFill("(x, i) => x * i + 1");
+            Assert.Equal(new double[] { 1, 3, 7, 13 }, t1.AsArray());
+        }
+
+        [Fact]
         public void TestContains()
         {
             var t1 = new Series(new double[] { 0, 1, 2, 3 });
@@ -17,6 +35,39 @@ namespace Horker.Numerics.Tests
             var contains = t1.Contains(2); // try an integer value
 
             Assert.True(contains);
+        }
+
+        [Fact]
+        public void TestCountIf()
+        {
+            var t1 = new Series(new double[] { 1, 2, 3, 4 });
+
+            var count = t1.CountIf("(x, i) => x >= 2");
+            Assert.Equal(3, count);
+        }
+
+        [Fact]
+        public void TestCountNaN()
+        {
+            var t1 = new Series(new string[] { "a", " ", "", null, "xxx" });
+
+            var c = t1.CountNaN();
+
+            Assert.Equal(3, c);
+        }
+
+        [Fact]
+        public void TestCountValues()
+        {
+            var t1 = new Series(new double[] { 1, 2, 3, 4, 1, 2, 2 });
+
+            var c = (ValueBin[])t1.CountValues();
+
+            Assert.IsType<ValueBin>(c[0]);
+            Assert.Equal(4, c.Length);
+            Assert.Equal(0, c[0].Index);
+            Assert.Equal(1.0, c[0].Value);
+            Assert.Equal(2, c[0].Count);
         }
 
         [Fact]
@@ -62,21 +113,13 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
-        public void TestApply()
-        {
-            var t1 = new Series(new double[] { 1, 2, 3, 4 });
-            var t2 = t1.Apply("(x, i) => (double)series[series.Count - 1 - i]");
-
-            Assert.Equal(new double[] { 4, 3, 2, 1 }, t2);
-        }
-
-        [Fact]
-        public void TestApplyFill()
+        public void TestMap()
         {
             var t1 = new Series(new double[] { 1, 2, 3, 4 });
 
-            t1.ApplyFill("(x, i) => x * i + 1");
-            Assert.Equal(new double[] { 1, 3, 7, 13 }, t1.AsArray());
+            var t2 = t1.Map(new Hashtable() { { 2, 99 }, { 3, 999 } });
+
+            Assert.Equal(new double[] { 1, 99, 999, 4 }, t2);
         }
 
         public static int Sum = 0;
@@ -91,15 +134,6 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
-        public void TestCountIf()
-        {
-            var t1 = new Series(new double[] { 1, 2, 3, 4 });
-
-            var count = t1.CountIf("(x, i) => x >= 2");
-            Assert.Equal(3, count);
-        }
-
-        [Fact]
         public void TestRollingApply()
         {
             var t1 = new Series(new double[] { 1, 2, 3, 4, 5 });
@@ -109,26 +143,6 @@ namespace Horker.Numerics.Tests
 
             var t3 = t1.RollingApply("(values, i) => values.Average()", 3);
             Assert.Equal(new double[] { 1, 1.5, 2, 3, 4 }, t3);
-        }
-
-        [Fact]
-        public void TestCountNaN()
-        {
-            var t1 = new Series(new string[] { "a", " ", "", null, "xxx" });
-
-            var c = t1.CountNaN();
-
-            Assert.Equal(3, c);
-        }
-
-        [Fact]
-        public void TestMap()
-        {
-            var t1 = new Series(new double[] { 1, 2, 3, 4 });
-
-            var t2 = t1.Map(new Hashtable() { { 2, 99 }, { 3, 999 } });
-
-            Assert.Equal(new double[] { 1, 99, 999, 4 }, t2);
         }
     }
 }
