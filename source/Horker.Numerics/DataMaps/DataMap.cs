@@ -406,7 +406,7 @@ namespace Horker.Numerics.DataMaps
 
         public DataMap FilterRows(bool[] filter)
         {
-            var dataMap = new DataMap();
+            var dataMap = new DataMap(ColumnNameComparer);
             foreach (var c in Columns)
             {
                 var filtered = FilteredListView.Create(c.Data.UnderlyingList, filter);
@@ -419,6 +419,34 @@ namespace Horker.Numerics.DataMaps
         public DataMap FilterRows(SeriesBase filter)
         {
             return FilterRows(filter.AsArray<bool>());
+        }
+
+        public DataMap TopRows(int rowCount)
+        {
+            var dataMap = new DataMap(ColumnNameComparer);
+
+            var filter = new bool[rowCount];
+            for (var i = 0; i < rowCount; ++i)
+                filter[i] = true;
+
+            foreach (var c in Columns)
+                dataMap.Add(c.Name, FilteredListView.Create(c.Data.UnderlyingList, filter));
+
+            return dataMap;
+        }
+
+        public DataMap BottomRows(int rowCount)
+        {
+            var dataMap = new DataMap(ColumnNameComparer);
+
+            var filter = new bool[MaxRowCount];
+            for (var i = 0; i < rowCount; ++i)
+                filter[filter.Length - 1 - i] = true;
+
+            foreach (var c in Columns)
+                dataMap.Add(c.Name, FilteredListView.Create(c.Data.UnderlyingList, filter));
+
+            return dataMap;
         }
 
         public static DataMap Concatenate(params DataMap[] maps)

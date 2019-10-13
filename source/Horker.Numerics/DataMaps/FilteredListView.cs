@@ -15,14 +15,11 @@ namespace Horker.Numerics.DataMaps
 
         public FilteredListView(IList<T> underlying, IList<bool> filter)
         {
-            if (underlying.Count > filter.Count)
-                throw new ArgumentException("Underlying list should be longer than filter");
-
             _underlying = underlying;
 
             _link = new List<int>();
 
-            for (var i = 0; i < underlying.Count; ++i)
+            for (var i = 0; i < Math.Min(filter.Count, underlying.Count); ++i)
             {
                 if (filter[i])
                     _link.Add(i);

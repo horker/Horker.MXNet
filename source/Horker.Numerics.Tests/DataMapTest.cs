@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using Horker.Numerics.DataMaps;
 using Horker.Numerics.Transformers;
@@ -69,6 +70,47 @@ namespace Horker.Numerics.Tests
 
             var c2 = result.GetAs<string>("bar");
             Assert.Equal(new string[] { "a", "c", "e" }, c2);
+        }
+
+        [Fact]
+        public void TestTopRows()
+        {
+            var d = DataMap.FromDictionary(new OrderedDictionary()
+            {
+                { "foo", new float[]{ 1, 2, 3, 4, 5 } },
+                { "bar", new string[]{ "a", "b", "c", "d", "e" } },
+                { "baz", new int[]{ 10, 20 } }
+            });
+
+            var d2 = d.TopRows(3);
+
+            Assert.Equal(3, d2.MaxRowCount);
+            Assert.Equal(2, d2.MinRowCount);
+            Assert.IsType<FilteredListView<float>>(d2["foo"].UnderlyingList);
+
+            Assert.Equal(new float[] { 1, 2, 3 }, d2["foo"]);
+            Assert.Equal(new int[] { 10, 20 }, d2["baz"]);
+        }
+
+        [Fact]
+        public void TestBottomRows()
+        {
+            var d = DataMap.FromDictionary(new OrderedDictionary()
+            {
+                { "foo", new float[]{ 1, 2, 3, 4, 5 } },
+                { "bar", new string[]{ "a", "b", "c", "d" } },
+                { "baz", new int[]{ 10, 20 } }
+            });
+
+            var d2 = d.BottomRows(3);
+
+            Assert.Equal(3, d2.MaxRowCount);
+            Assert.Equal(0, d2.MinRowCount);
+            Assert.IsType<FilteredListView<float>>(d2["foo"].UnderlyingList);
+
+            Assert.Equal(new float[] { 3, 4, 5 }, d2["foo"]);
+            Assert.Equal(new string[] { "c", "d" }, d2["bar"]);
+            Assert.Equal(new int[0], d2["baz"]);
         }
 
         [Fact]
