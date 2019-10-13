@@ -438,6 +438,29 @@ namespace Horker.Numerics.DataMaps
             return new GroupBy(this, groupingColumnNames, selectColumns);
         }
 
+        public IEnumerable<Summary> Describe()
+        {
+            foreach (var column in Columns)
+            {
+                Summary result = null;
+                try
+                {
+                    result = column.Data.Describe();
+                }
+                catch (InvalidOperationException)
+                {
+                    result = new Summary()
+                    {
+                        Count = column.Data.Count,
+                        NaN = column.Data.CountNaN(),
+                        Unique = column.Data.CountUnique()
+                    };
+                }
+                result.Name = column.Name;
+                yield return result;
+            }
+        }
+
         // Conversions
 
         public Dictionary<string, IList> ToDictionary()
@@ -548,29 +571,6 @@ namespace Horker.Numerics.DataMaps
                 AddBefore(columnName, column.Name, column.Data);
 
             Remove(columnName);
-        }
-
-        public IEnumerable<Summary> Describe()
-        {
-            foreach (var column in Columns)
-            {
-                Summary result = null;
-                try
-                {
-                    result = column.Data.Describe();
-                }
-                catch (InvalidOperationException)
-                {
-                    result = new Summary()
-                    {
-                        Count = column.Data.Count,
-                        NaN = column.Data.CountNaN(),
-                        Unique = column.Data.CountUnique()
-                    };
-                }
-                result.Name = column.Name;
-                yield return result;
-            }
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Horker.Numerics.Transformers
         EffectCoding
     }
 
-    public class OneHotTransformer : SeriesTransformer
+    public class OneHotTransformer<T> : SeriesTransformer
     {
         private OneHotType _oneHotType;
         private OrderedDictionary _encoding;

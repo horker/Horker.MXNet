@@ -30,8 +30,10 @@ namespace Horker.Numerics.Transformers
             foreach (var value in data.UnderlyingList)
             {
                 if (!_encoding.ContainsKey(value))
+                {
                     _encoding.Add(value, SmartConverter.ConvertTo<T>(count));
-                ++count;
+                    ++count;
+                }
             }
         }
 
