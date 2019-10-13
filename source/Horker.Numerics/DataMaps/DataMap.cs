@@ -267,7 +267,7 @@ namespace Horker.Numerics.DataMaps
                     while (Contains(name))
                         name = column.Name + "_" + i++;
 
-                    Add(name, column.Data);
+                    AddLast(name, column.Data);
                 }
             }
         }

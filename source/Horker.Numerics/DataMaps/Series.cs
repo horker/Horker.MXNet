@@ -16,6 +16,9 @@ namespace Horker.Numerics.DataMaps
 
         public Series(IList underlying)
         {
+            while (underlying is SeriesBase s)
+                underlying = s.UnderlyingList;
+
             _underlying = underlying;
         }
 
