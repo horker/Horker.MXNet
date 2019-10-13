@@ -495,9 +495,9 @@ namespace Horker.Numerics.DataMaps
             }
         }
 
-        public GroupBy GroupBy(string[] groupingColumnNames, string[] selectColumns = null)
+        public GroupBy GroupBy(string[] groupingColumnNames, string[] selectColumnNames = null)
         {
-            return new GroupBy(this, groupingColumnNames, selectColumns);
+            return new GroupBy(this, groupingColumnNames, selectColumnNames);
         }
 
         public IEnumerable<KFold> KFold(int k, bool shuffle = false, int seed = -1)

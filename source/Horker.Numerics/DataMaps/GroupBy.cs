@@ -68,15 +68,15 @@ namespace Horker.Numerics.DataMaps
         }
 
         private DataMap _dataMap;
-        private IList<string> _selectColumns;
+        private IList<string> _selectColumnNames;
         private List<GroupingColumn> _groupingColumns;
         private int _maxRowCount;
         private Dictionary<CacheKey, DataMap> _cache;
 
-        public GroupBy(DataMap dataMap, IList<string> groupingColumnNames, IList<string> selectColumns = null)
+        public GroupBy(DataMap dataMap, IList<string> groupingColumnNames, IList<string> selectColumnNames = null)
         {
             _dataMap = dataMap;
-            _selectColumns = selectColumns;
+            _selectColumnNames = selectColumnNames;
             _groupingColumns = new List<GroupingColumn>();
             _maxRowCount = dataMap.MaxRowCount;
             _cache = new Dictionary<CacheKey, DataMap>();
@@ -124,9 +124,9 @@ namespace Horker.Numerics.DataMaps
 
             var dataMap = new DataMap();
 
-            if (_selectColumns != null)
+            if (_selectColumnNames != null)
             {
-                foreach (var c in _selectColumns)
+                foreach (var c in _selectColumnNames)
                 {
                     var filtered = FilteredListView.Create(_dataMap[c].UnderlyingList, filter);
                     dataMap.Add(c, filtered);
