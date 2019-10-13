@@ -80,12 +80,12 @@ namespace Horker.Numerics.DataMaps
 
         // Constructors and factory methods
 
-        public DataMap(IEqualityComparer<string> keyComparaer = null)
+        public DataMap(IEqualityComparer<string> keyComparer = null)
         {
-            _keyComparer = keyComparaer ?? StringComparer.InvariantCultureIgnoreCase;
+            _keyComparer = keyComparer ?? StringComparer.CurrentCultureIgnoreCase;
 
             _columns = new LinkedList<Column>();
-            _nameMap = new Dictionary<string, LinkedListNode<Column>>(keyComparaer);
+            _nameMap = new Dictionary<string, LinkedListNode<Column>>(_keyComparer);
         }
 
         public static DataMap CreateLike(DataMap source)
@@ -465,7 +465,7 @@ namespace Horker.Numerics.DataMaps
 
         public Dictionary<string, IList> ToDictionary()
         {
-            var result = new Dictionary<string, IList>();
+            var result = new Dictionary<string, IList>(ColumnNameComparer);
 
             foreach (var column in Columns)
                 result[column.Name] = column.Data;
