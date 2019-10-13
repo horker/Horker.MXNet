@@ -36,11 +36,7 @@ namespace Horker.Numerics.DataMaps.Extensions
                 return (T)(object)DateTimeOffset.MinValue;
 
             if (typeof(T).IsValueType)
-            {
-                var constructor = typeof(T).GetConstructor(Type.EmptyTypes);
-                if (constructor != null)
-                    return (T)constructor.Invoke(new object[0]);
-            }
+                return (T)Activator.CreateInstance(typeof(T));
 
             return (T)(object)null;
         }
@@ -84,6 +80,72 @@ namespace Horker.Numerics.DataMaps.Extensions
                 return DateTimeOffset.MinValue.Equals(value);
 
             return value == null;
+        }
+
+        public static T GetZero()
+        {
+            if (typeof(T) == typeof(double))
+                return (T)(object)0.0;
+            if (typeof(T) == typeof(float))
+                return (T)(object)0.0f;
+            if (typeof(T) == typeof(long))
+                return (T)(object)0;
+            if (typeof(T) == typeof(int))
+                return (T)(object)0;
+            if (typeof(T) == typeof(short))
+                return (T)(object)0;
+            if (typeof(T) == typeof(byte))
+                return (T)(object)0;
+            if (typeof(T) == typeof(sbyte))
+                return (T)(object)0;
+            if (typeof(T) == typeof(decimal))
+                return (T)(object)0;
+
+            throw new InvalidCastException("Type {typeof(T)} is not numeric type");
+        }
+
+        public static T GetOne()
+        {
+            if (typeof(T) == typeof(double))
+                return (T)(object)1.0;
+            if (typeof(T) == typeof(float))
+                return (T)(object)1.0f;
+            if (typeof(T) == typeof(long))
+                return (T)(object)1;
+            if (typeof(T) == typeof(int))
+                return (T)(object)1;
+            if (typeof(T) == typeof(short))
+                return (T)(object)1;
+            if (typeof(T) == typeof(byte))
+                return (T)(object)1;
+            if (typeof(T) == typeof(sbyte))
+                return (T)(object)1;
+            if (typeof(T) == typeof(decimal))
+                return (T)(object)1;
+
+            throw new InvalidCastException("Type {typeof(T)} is not numeric type");
+        }
+
+        public static T GetMinusOne()
+        {
+            if (typeof(T) == typeof(double))
+                return (T)(object)-1.0;
+            if (typeof(T) == typeof(float))
+                return (T)(object)-1.0f;
+            if (typeof(T) == typeof(long))
+                return (T)(object)-1;
+            if (typeof(T) == typeof(int))
+                return (T)(object)-1;
+            if (typeof(T) == typeof(short))
+                return (T)(object)-1;
+            if (typeof(T) == typeof(byte))
+                return (T)(object)-1;
+            if (typeof(T) == typeof(sbyte))
+                return (T)(object)-1;
+            if (typeof(T) == typeof(decimal))
+                return (T)(object)-1;
+
+            throw new InvalidCastException("Type {typeof(T)} is not numeric type");
         }
     }
 }

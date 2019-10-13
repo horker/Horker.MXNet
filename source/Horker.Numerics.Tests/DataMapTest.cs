@@ -227,9 +227,9 @@ namespace Horker.Numerics.Tests
 
             Assert.Equal(new[] { "xxx_10", "xxx_20", "xxx_30" }, d.ColumnNames);
 
-            Assert.Equal(new int[] { 1, 0, 0 }, d["xxx_20"]);
-            Assert.Equal(new int[] { 0, 1, 0 }, d["xxx_10"]);
-            Assert.Equal(new int[] { 0, 0, 1 }, d["xxx_30"]);
+            Assert.Equal(new double[] { 1, 0, 0 }, d["xxx_20"]);
+            Assert.Equal(new double[] { 0, 1, 0 }, d["xxx_10"]);
+            Assert.Equal(new double[] { 0, 0, 1 }, d["xxx_30"]);
         }
     }
 }

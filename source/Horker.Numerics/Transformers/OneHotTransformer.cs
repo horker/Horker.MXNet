@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Horker.Numerics.DataMaps;
+using Horker.Numerics.DataMaps.Extensions;
 
 namespace Horker.Numerics.Transformers
 {
@@ -43,7 +44,7 @@ namespace Horker.Numerics.Transformers
 
         public override DataMap TransformToDataMap(SeriesBase data)
         {
-            var listMap = new Dictionary<string, int[]>();
+            var listMap = new Dictionary<string, T[]>();
             var size = data.Count;
 
             string firstKey = null;
@@ -55,7 +56,7 @@ namespace Horker.Numerics.Transformers
                     continue;
                 }
 
-                listMap[entry.Key as string] = new int[size];
+                listMap[entry.Key as string] = new T[size];
             }
 
             int i = 0;
@@ -66,7 +67,7 @@ namespace Horker.Numerics.Transformers
                     {
                         var name = e.ToString();
                         if (listMap.TryGetValue(name, out var list))
-                            list[i] = 1;
+                            list[i] = TypeTrait<T>.GetOne();
                         ++i;
                     }
                     break;
@@ -76,7 +77,7 @@ namespace Horker.Numerics.Transformers
                     {
                         var name = e.ToString();
                         if (name != firstKey && listMap.TryGetValue(name, out var list))
-                            list[i] = 1;
+                            list[i] = TypeTrait<T>.GetOne();
                         ++i;
                     }
                     break;
@@ -88,12 +89,12 @@ namespace Horker.Numerics.Transformers
                         if (name != firstKey)
                         {
                             if (listMap.TryGetValue(name, out var list))
-                                list[i] = 1;
+                                list[i] = TypeTrait<T>.GetOne();
                         }
                         else
                         {
                             foreach (var entry in listMap)
-                                entry.Value[i] = -1;
+                                entry.Value[i] = TypeTrait<T>.GetOne();
                         }
                         ++i;
                     }
