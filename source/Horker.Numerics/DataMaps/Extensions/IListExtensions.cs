@@ -760,6 +760,26 @@ namespace Horker.Numerics.DataMaps.Extensions
             return summary;
         }
 
+        public static List<T> Shuffle<T>(this IList<T> self, int seed = -1)
+        {
+            var list = self.ToList();
+            ShuffleFill(list, seed);
+            return list;
+        }
+
+        public static void ShuffleFill<T>(this IList<T> self, int seed = -1)
+        {
+            var random = seed == -1 ? new Random() : new Random(seed);
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                var j = random.Next(i + 1);
+                var temp = self[i];
+                self[i] = self[j];
+                self[j] = temp;
+            }
+        }
+
         public static List<T> FillNaN<T>(this IList<T> self, T fillValue)
         {
             var result = new List<T>(self.Count);

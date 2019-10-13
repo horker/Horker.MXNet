@@ -440,6 +440,19 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
+        public SeriesBase Shuffle(int seed = -1)
+        {
+			try
+			{
+				var result = GenericIListExtensions.Shuffle((dynamic)UnderlyingList, seed);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Shuffle() does not support data type {DataType}");
+			}
+        }
+
         public SeriesBase SortedCopy()
         {
 			try
@@ -1077,6 +1090,18 @@ namespace Horker.Numerics.DataMaps
 			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
 			{
 				throw new InvalidOperationException($"Quantile() does not support data type {DataType}");
+			}
+        }
+
+        public void ShuffleFill(int seed = -1)
+        {
+			try
+			{
+				GenericIListExtensions.ShuffleFill((dynamic)UnderlyingList, seed);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ShuffleFill() does not support data type {DataType}");
 			}
         }
 

@@ -472,11 +472,6 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        public GroupBy GroupBy(string[] groupingColumnNames, string[] selectColumns = null)
-        {
-            return new GroupBy(this, groupingColumnNames, selectColumns);
-        }
-
         public IEnumerable<Summary> Describe()
         {
             foreach (var column in Columns)
@@ -498,6 +493,17 @@ namespace Horker.Numerics.DataMaps
                 result.Name = column.Name;
                 yield return result;
             }
+        }
+
+        public GroupBy GroupBy(string[] groupingColumnNames, string[] selectColumns = null)
+        {
+            return new GroupBy(this, groupingColumnNames, selectColumns);
+        }
+
+        public IEnumerable<KFold> KFold(int k, bool shuffle = false, int seed = -1)
+        {
+            var splitter = new KFoldSplitter(this, k, shuffle, seed);
+            return splitter.EnumerateFolds();
         }
 
         // Conversions
