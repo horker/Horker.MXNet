@@ -34,15 +34,7 @@ namespace Horker.Numerics.DataMaps
         public Column First => _columns.First.Value;
         public Column Last => _columns.Last.Value;
 
-        public int RowCount
-        {
-            get
-            {
-                if (_columns.Count > 0)
-                    return _columns.First.Value.Data.Count;
-                return 0;
-            }
-        }
+        public int RowCount => MaxRowCount;
 
         public int MaxRowCount
         {
