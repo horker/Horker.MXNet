@@ -42,7 +42,7 @@ namespace Horker.Numerics.Tests
 
             Assert.Equal(new string[] { "e" }, s2["value1"].UnderlyingList);
             Assert.Equal(new double[] { 5 }, s2["value3"].UnderlyingList);
-            Assert.Empty(s2["value4"]);
+            Assert.Empty(s2["value4"].UnderlyingList);
         }
 
         [Fact]

@@ -9,7 +9,7 @@ using Horker.Numerics.DataMaps.Extensions;
 
 namespace Horker.Numerics.DataMaps
 {
-    public partial class SeriesBase : IList
+    public partial class SeriesBase
     {
         public SeriesBase Abs()
         {

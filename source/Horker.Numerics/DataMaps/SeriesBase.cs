@@ -14,7 +14,7 @@ using Horker.Numerics.Utilities;
 
 namespace Horker.Numerics.DataMaps
 {
-    public partial class SeriesBase : IList
+    public partial class SeriesBase
     {
         // Methods to be overrriden by subclasses
 
@@ -45,6 +45,8 @@ namespace Horker.Numerics.DataMaps
             set => _dataMap = value;
         }
 
+        public IList Values => UnderlyingList;
+
         // IList implementation
 
         public virtual object this[int index] { get => UnderlyingList[index]; set => UnderlyingList[index] = value; }
@@ -64,13 +66,6 @@ namespace Horker.Numerics.DataMaps
             value = Utils.StripOffPSObject(value);
 
             UnderlyingList.Add(value);
-        }
-
-        int IList.Add(object value)
-        {
-            value = Utils.StripOffPSObject(value);
-
-            return UnderlyingList.Add(value);
         }
 
         public void Clear()

@@ -267,12 +267,22 @@ namespace Horker.Numerics.DataMaps
         public IList<T> FirstAs<T>() => First.AsList<T>();
         public IList<T> LastAs<T>() => Last.AsList<T>();
 
+        public void Add(string name, SeriesBase value)
+        {
+            AddLast(name, value);
+        }
+
+        public void Add(string name, Array value)
+        {
+            AddLast(name, value);
+        }
+
         public void Add(string name, IList value)
         {
             AddLast(name, value);
         }
 
-        public void Add(string name, Series value)
+        public void Add<T>(string name, List<T> value)
         {
             AddLast(name, value);
         }
@@ -322,7 +332,17 @@ namespace Horker.Numerics.DataMaps
             value.DataMap = this;
         }
 
+        public void AddLast(string name, Array value)
+        {
+            AddLast(name, new Series(value));
+        }
+
         public void AddLast(string name, IList value)
+        {
+            AddLast(name, new Series(value));
+        }
+
+        public void AddLast<T>(string name, List<T> value)
         {
             AddLast(name, new Series(value));
         }
@@ -565,7 +585,7 @@ namespace Horker.Numerics.DataMaps
             var result = new Dictionary<string, IList>(ColumnNameComparer);
 
             foreach (var column in Columns)
-                result[column.Name] = column.Data;
+                result[column.Name] = column.Data.UnderlyingList;
 
             return result;
         }
