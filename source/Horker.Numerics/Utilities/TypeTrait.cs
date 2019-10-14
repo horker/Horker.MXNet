@@ -8,7 +8,7 @@ namespace Horker.Numerics.DataMaps.Utilities
 {
     public static class TypeTrait<T>
     {
-        private static T GetNaN()
+        public static T GetNaN()
         {
             if (typeof(T) == typeof(double))
                 return (T)(object)double.NaN;

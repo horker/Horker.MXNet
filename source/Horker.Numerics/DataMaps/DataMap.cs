@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Management.Automation;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Horker.Numerics.DataMaps.Utilities;
 using Horker.Numerics.Transformers;
 
 namespace Horker.Numerics.DataMaps
@@ -114,6 +117,27 @@ namespace Horker.Numerics.DataMaps
 
             foreach (DictionaryEntry entry in source)
                 result.AddLast((string)entry.Key, (IList)entry.Value);
+
+            return result;
+        }
+
+        public static DataMap FromJagged<T>(T[][] source, string[] columnNames, IEqualityComparer<string> keyComparaer = null)
+        {
+            var result = new DataMap(keyComparaer);
+
+            for (var i = 0; i < columnNames.Length; ++i)
+            {
+                var data = new List<T>(source.Length);
+                result.Add(columnNames[i], data);
+                for (var j = 0; j < source.Length; ++j)
+                {
+                    var row = source[j];
+                    if (i < row.Length)
+                        data.Add(row[i]);
+                    else
+                        data.Add(TypeTrait<T>.GetNaN());
+                }
+            }
 
             return result;
         }
@@ -565,6 +589,45 @@ namespace Horker.Numerics.DataMaps
             if (type == typeof(DateTimeOffset)) return To2DArray<DateTimeOffset>();
 
             return To2DArray<object>();
+        }
+
+        public T[][] ToJagged<T>()
+        {
+            var columnCount = ColumnCount;
+            var maxRowCount = MaxRowCount;
+
+            var result = new T[maxRowCount][];
+
+            for (var i = 0; i < maxRowCount; ++i)
+            {
+                var row = new T[columnCount];
+                result[i] = row;
+                var c = 0;
+                foreach (var column in _columns)
+                {
+                    var list = column.Data.UnderlyingList;
+                    if (i < list.Count)
+                        row[c] = (T)list[i];
+                    else
+                        row[c] = TypeTrait<T>.GetNaN();
+                    ++c;
+                }
+            }
+
+            return result;
+        }
+
+        public Array ToJagged(Type type = null)
+        {
+            type = type ?? First.DataType;
+
+            var m = typeof(DataMap).GetMethod("ToJagged",
+                BindingFlags.Public | BindingFlags.Instance,
+                null, CallingConventions.Any, Type.EmptyTypes, null);
+            Debug.Assert(m != null);
+            var gm = m.MakeGenericMethod(type);
+
+            return (Array)gm.Invoke(this, new object[0]);
         }
 
         public IEnumerable<PSObject> ToPSObject(int maxCount = int.MaxValue, int skip = 0)

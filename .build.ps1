@@ -15,6 +15,10 @@ $MODULE_PATH_DEBUG = "$PSScriptRoot\module\debug\Horker.MXNet"
 $SOLUTION_FILE = "$PSScriptRoot\source\Horker.MXNet.sln"
 
 $OBJECT_FILES = @(
+    "Accord.dll"
+    "Accord.Math.dll"
+    "Accord.Math.Core.dll"
+    "Accord.Statistics.dll"
     "Horker.MXNet.dll"
     "Horker.MXNet.pdb"
     "Horker.MXNet.PowerShell.dll"

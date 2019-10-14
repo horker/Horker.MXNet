@@ -203,6 +203,27 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
+        public void TestToJagged()
+        {
+            var t1 = DataMap.FromDictionary(new OrderedDictionary()
+            {
+                {"a", new int[]{1,2,3,4,5 } },
+                {"b", new int[]{100,200,300,400 } }
+            });
+
+            var a = t1.ToJagged<int>();
+
+            Assert.Equal(1, a.Rank);
+            Assert.Equal(5, a.Length);
+
+            Assert.Equal(new int[] { 1, 100 }, a[0]);
+            Assert.Equal(new int[] { 2, 200 }, a[1]);
+            Assert.Equal(new int[] { 3, 300 }, a[2]);
+            Assert.Equal(new int[] { 4, 400 }, a[3]);
+            Assert.Equal(new int[] { 5, 0 }, a[4]);
+        }
+
+        [Fact]
         public void TestConvert()
         {
             var t1 = new List<float>(new float[] { 1, 0, 0 });

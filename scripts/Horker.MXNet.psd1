@@ -59,6 +59,9 @@ DotNetFrameworkVersion = '4.7.2'
 
 # Assemblies that must be loaded prior to importing this module
 RequiredAssemblies = @(
+    "Accord.dll"
+    "Accord.Math.dll"
+    "Accord.Statistics.dll"
     "Horker.MXNet.dll"
     "Horker.Numerics.dll"
 )
