@@ -253,6 +253,7 @@ namespace Horker.Numerics.DataMaps
         public static implicit operator SeriesBase(List<short> value) { return new Series(value); }
         public static implicit operator SeriesBase(List<byte> value) { return new Series(value); }
         public static implicit operator SeriesBase(List<sbyte> value) { return new Series(value); }
+        public static implicit operator SeriesBase(List<decimal> value) { return new Series(value); }
         public static implicit operator SeriesBase(List<string> value) { return new Series(value); }
         public static implicit operator SeriesBase(List<bool> value) { return new Series(value); }
         public static implicit operator SeriesBase(List<DateTime> value) { return new Series(value); }
@@ -266,6 +267,7 @@ namespace Horker.Numerics.DataMaps
         public static explicit operator short[](SeriesBase value) { return value.UnderlyingList.AsArray<short>(); }
         public static explicit operator byte[](SeriesBase value) { return value.UnderlyingList.AsArray<byte>(); }
         public static explicit operator sbyte[](SeriesBase value) { return value.UnderlyingList.AsArray<sbyte>(); }
+        public static explicit operator decimal[](SeriesBase value) { return value.UnderlyingList.AsArray<decimal>(); }
         public static explicit operator string[](SeriesBase value) { return value.UnderlyingList.AsArray<string>(); }
         public static explicit operator bool[](SeriesBase value) { return value.UnderlyingList.AsArray<bool>(); }
         public static explicit operator DateTime[](SeriesBase value) { return value.UnderlyingList.AsArray<DateTime>(); }

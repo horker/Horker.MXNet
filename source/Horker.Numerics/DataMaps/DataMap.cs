@@ -532,6 +532,34 @@ namespace Horker.Numerics.DataMaps
 
         // Conversions
 
+        public static explicit operator double[,](DataMap value) { return value.To2DArray<double>(); }
+        public static explicit operator float[,](DataMap value) { return value.To2DArray<float>(); }
+        public static explicit operator long[,](DataMap value) { return value.To2DArray<long>(); }
+        public static explicit operator int[,](DataMap value) { return value.To2DArray<int>(); }
+        public static explicit operator short[,](DataMap value) { return value.To2DArray<short>(); }
+        public static explicit operator byte[,](DataMap value) { return value.To2DArray<byte>(); }
+        public static explicit operator sbyte[,](DataMap value) { return value.To2DArray<sbyte>(); }
+        public static explicit operator decimal[,](DataMap value) { return value.To2DArray<decimal>(); }
+        public static explicit operator string[,](DataMap value) { return value.To2DArray<string>(); }
+        public static explicit operator bool[,](DataMap value) { return value.To2DArray<bool>(); }
+        public static explicit operator DateTime[,](DataMap value) { return value.To2DArray<DateTime>(); }
+        public static explicit operator DateTimeOffset[,](DataMap value) { return value.To2DArray<DateTimeOffset>(); }
+        public static explicit operator object[,](DataMap value) { return value.To2DArray<object>(); }
+
+        public static explicit operator double[][](DataMap value) { return value.ToJagged<double>(); }
+        public static explicit operator float[][](DataMap value) { return value.ToJagged<float>(); }
+        public static explicit operator long[][](DataMap value) { return value.ToJagged<long>(); }
+        public static explicit operator int[][](DataMap value) { return value.ToJagged<int>(); }
+        public static explicit operator short[][](DataMap value) { return value.ToJagged<short>(); }
+        public static explicit operator byte[][](DataMap value) { return value.ToJagged<byte>(); }
+        public static explicit operator sbyte[][](DataMap value) { return value.ToJagged<sbyte>(); }
+        public static explicit operator decimal[][](DataMap value) { return value.ToJagged<decimal>(); }
+        public static explicit operator string[][](DataMap value) { return value.ToJagged<string>(); }
+        public static explicit operator bool[][](DataMap value) { return value.ToJagged<bool>(); }
+        public static explicit operator DateTime[][](DataMap value) { return value.ToJagged<DateTime>(); }
+        public static explicit operator DateTimeOffset[][](DataMap value) { return value.ToJagged<DateTimeOffset>(); }
+        public static explicit operator object[][](DataMap value) { return value.ToJagged<object>(); }
+
         public Dictionary<string, IList> ToDictionary()
         {
             var result = new Dictionary<string, IList>(ColumnNameComparer);
@@ -542,7 +570,7 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        public DataMap TryTypeConversion(Type[] possibleTypes = null)
+        public DataMap TypeConversion(Type[] possibleTypes = null)
         {
             var d = new DataMap(ColumnNameComparer);
 
