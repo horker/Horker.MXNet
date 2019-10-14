@@ -29,7 +29,7 @@ namespace Horker.Numerics.Estimators
             Model.OrdinaryLeastSquares.UseIntercept = UseIntercept;
             Model.OrdinaryLeastSquares.IsRobust = IsRobust;
 
-            Model.Learn(x.ToJagged<double>(), y.First.Data.ToArray<double>());
+            Model.Learn(x.ToJagged<double>(), y.First.ToArray<double>());
 
             Model.Inputs = x.ColumnNames.ToArray();
         }
@@ -46,8 +46,8 @@ namespace Horker.Numerics.Estimators
 
         public double Score(DataMap x, DataMap y)
         {
-            var predicted = Predict(x).First.Data.ToArray<double>();
-            var expected = y.First.Data.ToArray<double>();
+            var predicted = Predict(x).First.ToArray<double>();
+            var expected = y.First.ToArray<double>();
             return Metrics.AdjustedRSquared(expected, predicted);
         }
     }

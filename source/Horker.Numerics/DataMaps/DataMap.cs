@@ -34,8 +34,8 @@ namespace Horker.Numerics.DataMaps
 
         public IEqualityComparer<string> ColumnNameComparer => _keyComparer;
 
-        public Column First => _columns.First.Value;
-        public Column Last => _columns.Last.Value;
+        public SeriesBase First => _columns.First.Value.Data;
+        public SeriesBase Last => _columns.Last.Value.Data;
 
         public int RowCount => MaxRowCount;
 
@@ -264,8 +264,8 @@ namespace Horker.Numerics.DataMaps
             return _nameMap[name].Value.Data.AsList<T>();
         }
 
-        public IList<T> FirstAs<T>() => First.Data.AsList<T>();
-        public IList<T> LastAs<T>() => Last.Data.AsList<T>();
+        public IList<T> FirstAs<T>() => First.AsList<T>();
+        public IList<T> LastAs<T>() => Last.AsList<T>();
 
         public void Add(string name, IList value)
         {
