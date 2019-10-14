@@ -46,7 +46,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             var result = new T[value.Count];
             for (var i = 0; i < result.Length; ++i)
-                result[i] = (T)value[i];
+                result[i] = SmartConverter.ConvertTo<T>(value[i]);
 
             return result;
         }
@@ -58,7 +58,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             var result = new List<T>(value.Count);
             for (var i = 0; i < value.Count; ++i)
-                result.Add((T)value[i]);
+                result.Add(SmartConverter.ConvertTo<T>(value[i]));
 
             return result;
         }
@@ -74,7 +74,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             var result = new T[value.Count];
             for (var i = 0; i < result.Length; ++i)
-                result[i] = (T)value[i];
+                result[i] = SmartConverter.ConvertTo<T>(value[i]);
 
             return result;
         }
@@ -86,23 +86,9 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             var result = new List<T>(value.Count);
             for (var i = 0; i < value.Count; ++i)
-                result.Add((T)value[i]);
-
-            return result;
-        }
-
-        public static List<T> Convert<T>(this IList value)
-        {
-            var result = new List<T>(value.Count);
-            for (var i = 0; i < value.Count; ++i)
                 result.Add(SmartConverter.ConvertTo<T>(value[i]));
 
             return result;
-        }
-
-        public static IList Convert(this IList value, Type type)
-        {
-            return SmartConverter.ConvertTo(type, value);
         }
 
         public static IList CastDownToFirstElementType(this IList self)
@@ -144,7 +130,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList Convert(this IList self, Type[] possibleTypes = null, bool raiseError = false)
+        public static IList TryConversion(this IList self, Type[] possibleTypes = null, bool raiseError = false)
         {
             possibleTypes = possibleTypes ?? DataMap.ConversionTypes;
 

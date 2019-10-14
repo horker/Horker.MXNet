@@ -25,8 +25,8 @@ namespace Horker.Numerics.Tests
             Assert.Equal(2, d.ColumnCount);
             Assert.Equal(6, d.RowCount);
 
-            Assert.Equal(t1, d["int"].AsArray<int>());
-            Assert.Equal(t2, d["string"].AsArray<string>());
+            Assert.Equal(t1, d["int"].UnderlyingList);
+            Assert.Equal(t2, d["string"].UnderlyingList);
 
             Assert.Equal(t1, d.GetAs<int>("int"));
             Assert.Equal(t2, d.GetAs<string>("string"));
@@ -88,8 +88,8 @@ namespace Horker.Numerics.Tests
             Assert.Equal(2, d2.MinRowCount);
             Assert.IsType<FilteredListView<float>>(d2["foo"].UnderlyingList);
 
-            Assert.Equal(new float[] { 1, 2, 3 }, d2["foo"]);
-            Assert.Equal(new int[] { 10, 20 }, d2["baz"]);
+            Assert.Equal(new float[] { 1, 2, 3 }, d2["foo"].UnderlyingList);
+            Assert.Equal(new int[] { 10, 20 }, d2["baz"].UnderlyingList);
         }
 
         [Fact]
@@ -108,9 +108,9 @@ namespace Horker.Numerics.Tests
             Assert.Equal(0, d2.MinRowCount);
             Assert.IsType<FilteredListView<float>>(d2["foo"].UnderlyingList);
 
-            Assert.Equal(new float[] { 3, 4, 5 }, d2["foo"]);
-            Assert.Equal(new string[] { "c", "d" }, d2["bar"]);
-            Assert.Equal(new int[0], d2["baz"]);
+            Assert.Equal(new float[] { 3, 4, 5 }, d2["foo"].UnderlyingList);
+            Assert.Equal(new string[] { "c", "d" }, d2["bar"].UnderlyingList);
+            Assert.Equal(new int[0], d2["baz"].UnderlyingList);
         }
 
         [Fact]
@@ -231,9 +231,9 @@ namespace Horker.Numerics.Tests
             var d = new DataMap();
             d.Add("foo", t1);
 
-            var t2 = d["foo"].Convert<bool>();
+            var t2 = d["foo"].ToArray<bool>();
 
-            Assert.Equal(new bool[] { true, false, false }, t2.ToArray());
+            Assert.Equal(new bool[] { true, false, false }, t2);
         }
 
         [Fact]
@@ -248,9 +248,9 @@ namespace Horker.Numerics.Tests
 
             Assert.Equal(new[] { "xxx_10", "xxx_20", "xxx_30" }, d.ColumnNames);
 
-            Assert.Equal(new double[] { 1, 0, 0 }, d["xxx_20"]);
-            Assert.Equal(new double[] { 0, 1, 0 }, d["xxx_10"]);
-            Assert.Equal(new double[] { 0, 0, 1 }, d["xxx_30"]);
+            Assert.Equal(new double[] { 1, 0, 0 }, d["xxx_20"].UnderlyingList);
+            Assert.Equal(new double[] { 0, 1, 0 }, d["xxx_10"].UnderlyingList);
+            Assert.Equal(new double[] { 0, 0, 1 }, d["xxx_30"].UnderlyingList);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Horker.Numerics.Tests
             var t1 = new Series(new double[] { 1, 2, 3, 4 });
             var t2 = t1.Apply("(x, i) => (double)series[series.Count - 1 - i]");
 
-            Assert.Equal(new double[] { 4, 3, 2, 1 }, t2);
+            Assert.Equal(new double[] { 4, 3, 2, 1 }, t2.UnderlyingList);
         }
 
         [Fact]
@@ -24,7 +24,7 @@ namespace Horker.Numerics.Tests
             var t1 = new Series(new double[] { 1, 2, 3, 4 });
 
             t1.ApplyFill("(x, i) => x * i + 1");
-            Assert.Equal(new double[] { 1, 3, 7, 13 }, t1.AsArray());
+            Assert.Equal(new double[] { 1, 3, 7, 13 }, t1.UnderlyingList);
         }
 
         [Fact]
@@ -78,11 +78,11 @@ namespace Horker.Numerics.Tests
             var t2 = t1.CumulativeSum();
 
             Assert.IsType<Series>(t2);
-            Assert.Equal(new decimal[] { 1, 3, 6 }, t2.AsArray<decimal>());
+            Assert.Equal(new decimal[] { 1, 3, 6 }, t2.UnderlyingList);
 
             t1.CumulativeSumFill();
 
-            Assert.Equal(new decimal[] { 1, 3, 6 }, t1.AsArray<decimal>());
+            Assert.Equal(new decimal[] { 1, 3, 6 }, t1.UnderlyingList);
 
             var t3 = new Series(new string[] { "a", "b", "c" });
 
@@ -99,17 +99,17 @@ namespace Horker.Numerics.Tests
             var t2 = t1.FillNaN(99);
 
             Assert.IsType<Series>(t2);
-            Assert.Equal(new double[] { 1, 99, 2, 99 }, t2.AsArray<double>());
+            Assert.Equal(new double[] { 1, 99, 2, 99 }, t2.UnderlyingList);
 
             t1.FillNaNFill(999);
 
-            Assert.Equal(new double[] { 1, 999, 2, 999}, t1.AsArray<double>());
+            Assert.Equal(new double[] { 1, 999, 2, 999}, t1.UnderlyingList);
 
             var t3 = new Series(new string[] { "a", " ", "", null, "b" });
 
             var t4 = t3.FillNaN("XXX");
 
-            Assert.Equal(new string[] { "a", "XXX", "XXX", "XXX", "b" }, t4.AsArray<string>());
+            Assert.Equal(new string[] { "a", "XXX", "XXX", "XXX", "b" }, t4.UnderlyingList);
         }
 
         [Fact]
@@ -119,7 +119,7 @@ namespace Horker.Numerics.Tests
 
             var t2 = t1.Map(new Hashtable() { { 2, 99 }, { 3, 999 } });
 
-            Assert.Equal(new double[] { 1, 99, 999, 4 }, t2);
+            Assert.Equal(new double[] { 1, 99, 999, 4 }, t2.UnderlyingList);
         }
 
         public static int Sum = 0;
@@ -139,10 +139,10 @@ namespace Horker.Numerics.Tests
             var t1 = new Series(new double[] { 1, 2, 3, 4, 5 });
 
             var t2 = t1.RollingApply("(values, i) => values[values.Length - 1] ", 3);
-            Assert.Equal(new double[] { 1, 2, 3, 4, 5 }, t2);
+            Assert.Equal(new double[] { 1, 2, 3, 4, 5 }, t2.UnderlyingList);
 
             var t3 = t1.RollingApply("(values, i) => values.Average()", 3);
-            Assert.Equal(new double[] { 1, 1.5, 2, 3, 4 }, t3);
+            Assert.Equal(new double[] { 1, 1.5, 2, 3, 4 }, t3.UnderlyingList);
         }
     }
 }

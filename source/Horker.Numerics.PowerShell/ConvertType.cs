@@ -23,7 +23,7 @@ namespace Horker.Numerics.PowerShell
 
         protected override void BeginProcessing()
         {
-            var result = Data.Convert(Types);
+            var result = Data.TryConversion(Types);
             WriteObject(result);
         }
 

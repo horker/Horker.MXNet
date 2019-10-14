@@ -23,9 +23,9 @@ namespace Horker.Numerics.Tests
 
             Assert.Equal(new[] { "test_xxx", "test_yyy", "test_zzz" }, r.ColumnNames);
 
-            Assert.Equal(new int[] { 0, 0, 1, 0 }, r["test_xxx"]);
-            Assert.Equal(new int[] { 0, 1, 0, 0 }, r["test_yyy"]);
-            Assert.Equal(new int[] { 1, 0, 0, 0 }, r["test_zzz"]);
+            Assert.Equal(new int[] { 0, 0, 1, 0 }, r["test_xxx"].UnderlyingList);
+            Assert.Equal(new int[] { 0, 1, 0, 0 }, r["test_yyy"].UnderlyingList);
+            Assert.Equal(new int[] { 1, 0, 0, 0 }, r["test_zzz"].UnderlyingList);
         }
 
         [Fact]
@@ -39,7 +39,7 @@ namespace Horker.Numerics.Tests
             trans.Fit(t1);
             var r = trans.Transform(t2);
 
-            Assert.Equal(new double[] { 3, 3, 1, 2, -100 }, r);
+            Assert.Equal(new double[] { 3, 3, 1, 2, -100 }, r.UnderlyingList);
         }
     }
 }

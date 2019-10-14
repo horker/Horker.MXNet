@@ -144,6 +144,15 @@ namespace Horker.Numerics.DataMaps
 
         // Conversion methods
 
+        private T InvokeConversionMethod<T>(string methodName, Type type)
+        {
+            // TODO: use cache
+            type = type ?? DataType;
+            var m = typeof(GenericIListExtensions).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static);
+            var gm = m.MakeGenericMethod(new[] { type });
+            return (T)gm.Invoke(null, new[] { UnderlyingList });
+        }
+
         public T[] ToArray<T>()
         {
             return GenericIListExtensions.ToArray<T>(UnderlyingList);
@@ -151,22 +160,7 @@ namespace Horker.Numerics.DataMaps
 
         public Array ToArray(Type type = null)
         {
-            type = type ?? DataType;
-
-            if (type == typeof(double)) return ToArray<double>();
-            if (type == typeof(float)) return ToArray<float>();
-            if (type == typeof(long)) return ToArray<long>();
-            if (type == typeof(int)) return ToArray<int>();
-            if (type == typeof(short)) return ToArray<short>();
-            if (type == typeof(byte)) return ToArray<byte>();
-            if (type == typeof(sbyte)) return ToArray<sbyte>();
-            if (type == typeof(decimal)) return ToArray<decimal>();
-            if (type == typeof(bool)) return ToArray<bool>();
-            if (type == typeof(string)) return ToArray<string>();
-            if (type == typeof(DateTime)) return ToArray<DateTime>();
-            if (type == typeof(DateTimeOffset)) return ToArray<DateTimeOffset>();
-
-            return ToArray<object>();
+            return InvokeConversionMethod<Array>("ToArray", type);
         }
 
         public IList<T> ToList<T>()
@@ -174,24 +168,9 @@ namespace Horker.Numerics.DataMaps
             return GenericIListExtensions.ToList<T>(UnderlyingList);
         }
 
-        public object ToList(Type type = null)
+        public IList ToList(Type type = null)
         {
-            type = type ?? DataType;
-
-            if (type == typeof(double)) return ToList<double>();
-            if (type == typeof(float)) return ToList<float>();
-            if (type == typeof(long)) return ToList<long>();
-            if (type == typeof(int)) return ToList<int>();
-            if (type == typeof(short)) return ToList<short>();
-            if (type == typeof(byte)) return ToList<byte>();
-            if (type == typeof(sbyte)) return ToList<sbyte>();
-            if (type == typeof(decimal)) return ToList<decimal>();
-            if (type == typeof(bool)) return ToList<bool>();
-            if (type == typeof(string)) return ToList<string>();
-            if (type == typeof(DateTime)) return ToList<DateTime>();
-            if (type == typeof(DateTimeOffset)) return ToList<DateTimeOffset>();
-
-            return ToList<object>();
+            return InvokeConversionMethod<IList>("ToList", type);
         }
 
         public T[] AsArray<T>()
@@ -201,22 +180,7 @@ namespace Horker.Numerics.DataMaps
 
         public Array AsArray(Type type = null)
         {
-            type = type ?? DataType;
-
-            if (type == typeof(double)) return AsArray<double>();
-            if (type == typeof(float)) return AsArray<float>();
-            if (type == typeof(long)) return AsArray<long>();
-            if (type == typeof(int)) return AsArray<int>();
-            if (type == typeof(short)) return AsArray<short>();
-            if (type == typeof(byte)) return AsArray<byte>();
-            if (type == typeof(sbyte)) return AsArray<sbyte>();
-            if (type == typeof(decimal)) return AsArray<decimal>();
-            if (type == typeof(bool)) return AsArray<bool>();
-            if (type == typeof(string)) return AsArray<string>();
-            if (type == typeof(DateTime)) return AsArray<DateTime>();
-            if (type == typeof(DateTimeOffset)) return AsArray<DateTimeOffset>();
-
-            return AsArray<object>();
+            return InvokeConversionMethod<Array>("AsArray", type);
         }
 
         public IList<T> AsList<T>()
@@ -224,44 +188,45 @@ namespace Horker.Numerics.DataMaps
             return GenericIListExtensions.AsList<T>(UnderlyingList);
         }
 
-        public object AsList(Type type = null)
+        public IList AsList(Type type = null)
         {
-            type = type ?? DataType;
-
-            if (type == typeof(double)) return AsList<double>();
-            if (type == typeof(float)) return AsList<float>();
-            if (type == typeof(long)) return AsList<long>();
-            if (type == typeof(int)) return AsList<int>();
-            if (type == typeof(short)) return AsList<short>();
-            if (type == typeof(byte)) return AsList<byte>();
-            if (type == typeof(sbyte)) return AsList<sbyte>();
-            if (type == typeof(decimal)) return AsList<decimal>();
-            if (type == typeof(bool)) return AsList<bool>();
-            if (type == typeof(string)) return AsList<string>();
-            if (type == typeof(DateTime)) return AsList<DateTime>();
-            if (type == typeof(DateTimeOffset)) return AsList<DateTimeOffset>();
-
-            return AsList<object>();
+            return InvokeConversionMethod<IList>("AsList", type);
         }
 
-        public List<T> Convert<T>()
+        public IList TryConversion(Type[] possibleTypes = null, bool raiseError = false)
         {
-            return GenericIListExtensions.Convert<T>(UnderlyingList);
-        }
-
-        public IList Convert(Type type)
-        {
-            return GenericIListExtensions.Convert(UnderlyingList, type);
-        }
-
-        public IList Convert(Type[] possibleTypes = null, bool raiseError = false)
-        {
-            return GenericIListExtensions.Convert(UnderlyingList, possibleTypes, raiseError);
+            return GenericIListExtensions.TryConversion(UnderlyingList, possibleTypes, raiseError);
         }
 
         public SortedListIndexSeries ToSortedListIndexSeries()
         {
             return new SortedListIndexSeries(UnderlyingList);
+        }
+
+        public void EnsureDataType(Type type)
+        {
+            if (type == DataType)
+                return;
+
+            UnderlyingList = ToList();
+        }
+
+        public void EnsureSizeable()
+        {
+            if (!UnderlyingList.IsFixedSize)
+                return;
+
+            var listType = typeof(List<>).MakeGenericType(DataType);
+            UnderlyingList = (IList)Activator.CreateInstance(listType, UnderlyingList);
+        }
+
+        public void EnsureWritable()
+        {
+            if (!UnderlyingList.IsReadOnly)
+                return;
+
+            var listType = typeof(List<>).MakeGenericType(DataType);
+            UnderlyingList = (IList)Activator.CreateInstance(listType, UnderlyingList);
         }
 
         // Arithmetic operators
@@ -292,6 +257,20 @@ namespace Horker.Numerics.DataMaps
         public static implicit operator SeriesBase(List<bool> value) { return new Series(value); }
         public static implicit operator SeriesBase(List<DateTime> value) { return new Series(value); }
         public static implicit operator SeriesBase(List<DateTimeOffset> value) { return new Series(value); }
+        public static implicit operator SeriesBase(List<object> value) { return new Series(value); }
+
+        public static explicit operator double[](SeriesBase value) { return value.UnderlyingList.AsArray<double>(); }
+        public static explicit operator float[](SeriesBase value) { return value.UnderlyingList.AsArray<float>(); }
+        public static explicit operator long[](SeriesBase value) { return value.UnderlyingList.AsArray<long>(); }
+        public static explicit operator int[](SeriesBase value) { return value.UnderlyingList.AsArray<int>(); }
+        public static explicit operator short[](SeriesBase value) { return value.UnderlyingList.AsArray<short>(); }
+        public static explicit operator byte[](SeriesBase value) { return value.UnderlyingList.AsArray<byte>(); }
+        public static explicit operator sbyte[](SeriesBase value) { return value.UnderlyingList.AsArray<sbyte>(); }
+        public static explicit operator string[](SeriesBase value) { return value.UnderlyingList.AsArray<string>(); }
+        public static explicit operator bool[](SeriesBase value) { return value.UnderlyingList.AsArray<bool>(); }
+        public static explicit operator DateTime[](SeriesBase value) { return value.UnderlyingList.AsArray<DateTime>(); }
+        public static explicit operator DateTimeOffset[](SeriesBase value) { return value.UnderlyingList.AsArray<DateTimeOffset>(); }
+        public static explicit operator object[](SeriesBase value) { return value.UnderlyingList.AsArray<object>(); }
 
         // Apply and friends
 

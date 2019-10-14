@@ -41,11 +41,11 @@ namespace Horker.Numerics.Tests
             Assert.Equal(1, folds[2].Validation.MaxRowCount);
             Assert.Equal(0, folds[2].Validation.MinRowCount);
 
-            Assert.Equal(new int[] { 1, 2, 3, 4, 5, 6 }, folds[2].Training["x"]);
-            Assert.Equal(new string[] { "a", "b", "c", "d" }, folds[2].Training["y"]);
+            Assert.Equal(new int[] { 1, 2, 3, 4, 5, 6 }, folds[2].Training["x"].UnderlyingList);
+            Assert.Equal(new string[] { "a", "b", "c", "d" }, folds[2].Training["y"].UnderlyingList);
 
-            Assert.Equal(new int[] { 7 }, folds[2].Validation["x"]);
-            Assert.Equal(new string[] {}, folds[2].Validation["y"]);
+            Assert.Equal(new int[] { 7 }, folds[2].Validation["x"].UnderlyingList);
+            Assert.Equal(new string[] {}, folds[2].Validation["y"].UnderlyingList);
         }
     }
 }

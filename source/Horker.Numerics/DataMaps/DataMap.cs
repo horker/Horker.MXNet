@@ -547,7 +547,7 @@ namespace Horker.Numerics.DataMaps
             var d = new DataMap(ColumnNameComparer);
 
             foreach (var column in Columns)
-                d.Add(column.Name, column.Data.Convert(possibleTypes));
+                d.Add(column.Name, column.Data.TryConversion(possibleTypes));
 
             return d;
         }

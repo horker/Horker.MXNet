@@ -12,7 +12,11 @@ namespace Horker.Numerics.DataMaps
     {
         private IList _underlying;
 
-        public override IList UnderlyingList => _underlying;
+        public override IList UnderlyingList
+        {
+            get => _underlying;
+            set => _underlying = value;
+        }
 
         public Series(IList underlying)
         {

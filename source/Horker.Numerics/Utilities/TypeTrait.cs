@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Horker.Numerics.DataMaps.Utilities
 {
-    public static class TypeTrait<T>
+    public struct TypeTrait<T>
     {
         public static T GetNaN()
         {

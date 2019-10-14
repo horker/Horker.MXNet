@@ -30,9 +30,9 @@ namespace Horker.Numerics.Tests
             Assert.Equal(1, s1.MinRowCount);
             Assert.Equal(new string[] { "value1", "value3", "value4" }, s1.ColumnNames);
 
-            Assert.Equal(new string[] { "a", "c", "d" }, s1["value1"]);
-            Assert.Equal(new double[] { 1, 3, 4 }, s1["value3"]);
-            Assert.Equal(new int[] { 99 }, s1["value4"]);
+            Assert.Equal(new string[] { "a", "c", "d" }, s1["value1"].UnderlyingList);
+            Assert.Equal(new double[] { 1, 3, 4 }, s1["value3"].UnderlyingList);
+            Assert.Equal(new int[] { 99 }, s1["value4"].UnderlyingList);
 
             var s2 = g.GetSubset(3);
             Assert.Equal(new string[] { "value1", "value3", "value4" }, s2.ColumnNames);
@@ -40,8 +40,8 @@ namespace Horker.Numerics.Tests
             Assert.Equal(1, s2.MaxRowCount);
             Assert.Equal(0, s2.MinRowCount);
 
-            Assert.Equal(new string[] { "e" }, s2["value1"]);
-            Assert.Equal(new double[] { 5 }, s2["value3"]);
+            Assert.Equal(new string[] { "e" }, s2["value1"].UnderlyingList);
+            Assert.Equal(new double[] { 5 }, s2["value3"].UnderlyingList);
             Assert.Empty(s2["value4"]);
         }
 
@@ -59,7 +59,7 @@ namespace Horker.Numerics.Tests
 
             var s1 = g.GetSubset(1, "a");
 
-            Assert.Equal(new double[] { 1, 4 }, s1["value1"]);
+            Assert.Equal(new double[] { 1, 4 }, s1["value1"].UnderlyingList);
         }
 
 
@@ -80,7 +80,7 @@ namespace Horker.Numerics.Tests
 
             s1["value3"].ApplyFill<double>((x, i) => x * 100);
 
-            Assert.Equal(new double[] { 100, 2, 300, 400, 5 }, dm["value3"]);
+            Assert.Equal(new double[] { 100, 2, 300, 400, 5 }, dm["value3"].UnderlyingList);
         }
 
         [Fact]
