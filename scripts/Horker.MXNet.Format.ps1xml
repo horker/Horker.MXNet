@@ -55,7 +55,42 @@
                                 <ScriptBlock>$_.Data.Count</ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <ScriptBlock>$_.Data</ScriptBlock>
+                                <ScriptBlock>$_.Data.Values</ScriptBlock>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                 </TableRowEntries>
+            </TableControl>
+        </View>
+        <View>
+            <Name>Horker.Numerics.DataMaps.SeriesBase</Name>
+            <ViewSelectedBy>
+                <TypeName>Horker.Numerics.DataMaps.SeriesBase</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Label>DataType</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Count</Label>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Data</Label>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <ScriptBlock>$_.DataType</ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>$_.Count</ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>$_.Values</ScriptBlock>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
@@ -255,7 +290,6 @@
                  </TableRowEntries>
             </TableControl>
         </View>
-        <!--
         <View>
             <Name>Accord.Statistics.Analysis.MultinomialLogisticRegressionAnalysis</Name>
             <ViewSelectedBy>
@@ -273,7 +307,6 @@ $tab.Add([PSCustomObject]@{
     Class = $_.OutputNames[0]
     Feature = "(baseline)"
     Coefficient = [double]::NaN
-    Confidence = $null
     "Std.Error" = [double]::NaN
     WaldTest = [double]::NaN
 })
@@ -287,7 +320,6 @@ for ($i = 0; $i -lt $_.NumberOfOutputs - 1; ++$i) {
             Class = $_.OutputNames[$i + 1]
             Feature = (@("Intercept") + $_.InputNames)[$j]
             Coefficient = [Math]::Round($_.CoefficientValues[$i][$j], 5)
-            Confidence = "[" + $coef.ConfidenceLower.ToString("g5") + ", " + $coef.ConfidenceUpper.ToString("g5") + "]"
             "Std.Error" = [Math]::Round($_.StandardErrors[$i][$j], 5)
             WaldTest = $_.WaldTests[$i][$j].PValue.ToString("g3")
         }
@@ -299,7 +331,7 @@ $out = @"
 $(($tab | Format-Table | Out-String).Trim())
 
 ChiSquare = $($_.ChiSquare.PValue.ToString("g3"))
-LogLikelihood = $($_.LogLikelihood.ToString("g3")), Deviance = $($_.Deviance.ToString("g3")), AIC = $((-2 * $_.LogLikelihood + 2 * ($_.Coefficients.Count - 1)).ToString("g3"))
+LogLikelihood = $($_.LogLikelihood.ToString("g3")), Deviance = $($_.Deviance.ToString("g3"))
 "@
 $out
                                 </ScriptBlock>
@@ -309,6 +341,5 @@ $out
                 </CustomEntries>
             </CustomControl>
         </View>
-        -->
     </ViewDefinitions>
 </Configuration>
