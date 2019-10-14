@@ -592,7 +592,7 @@ namespace Horker.Numerics.DataMaps
             {
                 var r = 0;
                 foreach (var e in column.Data.UnderlyingList)
-                    result[c, r++] = (T)e;
+                    result[c, r++] = SmartConverter.ConvertTo<T>(e);
                 ++c;
             }
 
@@ -635,7 +635,7 @@ namespace Horker.Numerics.DataMaps
                 {
                     var list = column.Data.UnderlyingList;
                     if (i < list.Count)
-                        row[c] = (T)list[i];
+                        row[c] = SmartConverter.ConvertTo<T>(list[i]);
                     else
                         row[c] = TypeTrait<T>.GetNaN();
                     ++c;

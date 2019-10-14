@@ -68,9 +68,8 @@ namespace Horker.Numerics
 
             try
             {
-                if (input is string)
+                if (input is string s)
                 {
-                    var s = input as string;
                     if (string.IsNullOrWhiteSpace(s))
                         return double.NaN;
 
