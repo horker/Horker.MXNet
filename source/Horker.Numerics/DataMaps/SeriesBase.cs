@@ -689,9 +689,9 @@ namespace Horker.Numerics.DataMaps
             return trans.FitTransformToDataMap(this);
         }
 
-        public SeriesBase DummyEncoding()
+        public SeriesBase LabelEncoding()
         {
-            var trans = new DummyEncodingTransformer<double>();
+            var trans = new LabelEncodingTransformer<double>();
             return trans.FitTransform(this);
         }
     }

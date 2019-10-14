@@ -34,7 +34,7 @@ namespace Horker.Numerics.Tests
             var t1 = new double[] { 10, 11, 11, 10, 12, 13, 13 };
             var t2 = new double[] { 13, 13, 11, 12, 999 };
 
-            var trans = new DummyEncodingTransformer<double>(true, -100);
+            var trans = new LabelEncodingTransformer<double>(true, -100);
 
             trans.Fit(t1);
             var r = trans.Transform(t2);
