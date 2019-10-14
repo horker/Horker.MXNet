@@ -4985,6 +4985,22 @@ namespace Horker.Numerics.DataMaps.Extensions
                 self[i] = (double)((double)Math.Pow((double)self[i], exp));
         }
 
+        public static IList<double> Round(this IList<double> self, int digits = 0, MidpointRounding mode = MidpointRounding.ToEven)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Round((double)self[i], digits, mode));
+
+            return result;
+        }
+
+        public static void RoundFill(this IList<double> self, int digits = 0, MidpointRounding mode = MidpointRounding.ToEven)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)((double)Math.Round((double)self[i], digits, mode));
+        }
+
         public static IList<double> Sign(this IList<double> self)
         {
             var result = new List<double>(self.Count);
@@ -5303,6 +5319,22 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (float)((float)Math.Pow((double)self[i], exp));
+        }
+
+        public static IList<float> Round(this IList<float> self, int digits = 0, MidpointRounding mode = MidpointRounding.ToEven)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)Math.Round((double)self[i], digits, mode));
+
+            return result;
+        }
+
+        public static void RoundFill(this IList<float> self, int digits = 0, MidpointRounding mode = MidpointRounding.ToEven)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)((float)Math.Round((double)self[i], digits, mode));
         }
 
         public static IList<float> Sign(this IList<float> self)
@@ -5625,6 +5657,22 @@ namespace Horker.Numerics.DataMaps.Extensions
                 self[i] = (long)((double)Math.Pow((double)self[i], exp));
         }
 
+        public static IList<double> Round(this IList<long> self, int digits = 0, MidpointRounding mode = MidpointRounding.ToEven)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Round((double)self[i], digits, mode));
+
+            return result;
+        }
+
+        public static void RoundFill(this IList<long> self, int digits = 0, MidpointRounding mode = MidpointRounding.ToEven)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)((double)Math.Round((double)self[i], digits, mode));
+        }
+
         public static IList<double> Sign(this IList<long> self)
         {
             var result = new List<double>(self.Count);
@@ -5943,6 +5991,22 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (int)((double)Math.Pow((double)self[i], exp));
+        }
+
+        public static IList<double> Round(this IList<int> self, int digits = 0, MidpointRounding mode = MidpointRounding.ToEven)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Round((double)self[i], digits, mode));
+
+            return result;
+        }
+
+        public static void RoundFill(this IList<int> self, int digits = 0, MidpointRounding mode = MidpointRounding.ToEven)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)((double)Math.Round((double)self[i], digits, mode));
         }
 
         public static IList<double> Sign(this IList<int> self)
@@ -6265,6 +6329,22 @@ namespace Horker.Numerics.DataMaps.Extensions
                 self[i] = (short)((double)Math.Pow((double)self[i], exp));
         }
 
+        public static IList<double> Round(this IList<short> self, int digits = 0, MidpointRounding mode = MidpointRounding.ToEven)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Round((double)self[i], digits, mode));
+
+            return result;
+        }
+
+        public static void RoundFill(this IList<short> self, int digits = 0, MidpointRounding mode = MidpointRounding.ToEven)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)((double)Math.Round((double)self[i], digits, mode));
+        }
+
         public static IList<double> Sign(this IList<short> self)
         {
             var result = new List<double>(self.Count);
@@ -6583,6 +6663,22 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (byte)((double)Math.Pow((double)self[i], exp));
+        }
+
+        public static IList<double> Round(this IList<byte> self, int digits = 0, MidpointRounding mode = MidpointRounding.ToEven)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Round((double)self[i], digits, mode));
+
+            return result;
+        }
+
+        public static void RoundFill(this IList<byte> self, int digits = 0, MidpointRounding mode = MidpointRounding.ToEven)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)((double)Math.Round((double)self[i], digits, mode));
         }
 
         public static IList<double> Sign(this IList<byte> self)
@@ -6905,6 +7001,22 @@ namespace Horker.Numerics.DataMaps.Extensions
                 self[i] = (sbyte)((double)Math.Pow((double)self[i], exp));
         }
 
+        public static IList<double> Round(this IList<sbyte> self, int digits = 0, MidpointRounding mode = MidpointRounding.ToEven)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Round((double)self[i], digits, mode));
+
+            return result;
+        }
+
+        public static void RoundFill(this IList<sbyte> self, int digits = 0, MidpointRounding mode = MidpointRounding.ToEven)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)((double)Math.Round((double)self[i], digits, mode));
+        }
+
         public static IList<double> Sign(this IList<sbyte> self)
         {
             var result = new List<double>(self.Count);
@@ -7223,6 +7335,22 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (decimal)((double)Math.Pow((double)self[i], exp));
+        }
+
+        public static IList<double> Round(this IList<decimal> self, int digits = 0, MidpointRounding mode = MidpointRounding.ToEven)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)Math.Round((double)self[i], digits, mode));
+
+            return result;
+        }
+
+        public static void RoundFill(this IList<decimal> self, int digits = 0, MidpointRounding mode = MidpointRounding.ToEven)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)((double)Math.Round((double)self[i], digits, mode));
         }
 
         public static IList<double> Sign(this IList<decimal> self)

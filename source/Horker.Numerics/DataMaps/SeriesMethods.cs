@@ -115,6 +115,19 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
+        public SeriesBase Floor()
+        {
+			try
+			{
+				var result = GenericIListExtensions.Floor((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Floor() does not support data type {DataType}");
+			}
+        }
+
         public SeriesBase Log()
         {
 			try
@@ -164,6 +177,19 @@ namespace Horker.Numerics.DataMaps
 			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
 			{
 				throw new InvalidOperationException($"Pow() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase Round(int digits = 0, MidpointRounding mode = MidpointRounding.ToEven)
+        {
+			try
+			{
+				var result = GenericIListExtensions.Round((dynamic)UnderlyingList, digits, mode);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Round() does not support data type {DataType}");
 			}
         }
 
