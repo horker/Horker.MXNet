@@ -238,6 +238,11 @@ namespace Horker.Numerics.DataMaps
         public static SeriesBase operator *(SeriesBase lhs, object rhs) { return lhs.ElementMultiply(rhs);  }
         public static SeriesBase operator /(SeriesBase lhs, object rhs) { return lhs.ElementDivide(rhs);  }
 
+        public static SeriesBase operator +(object lhs, SeriesBase rhs) { return rhs.ElementAddR(lhs);  }
+        public static SeriesBase operator -(object lhs, SeriesBase rhs) { return rhs.ElementSubtractR(lhs);  }
+        public static SeriesBase operator *(object lhs, SeriesBase rhs) { return rhs.ElementMultiplyR(lhs);  }
+        public static SeriesBase operator /(object lhs, SeriesBase rhs) { return rhs.ElementDivideR(lhs);  }
+
         // Implicit conversion operators
 
         public static implicit operator SeriesBase(Array value) { return new Series(value); }
@@ -659,7 +664,7 @@ namespace Horker.Numerics.DataMaps
 
         // Transformers
 
-        public DataMap OneHot(OneHotType oneHotType = OneHotType.OneHot, string columnNameFormat = "{0}")
+        public DataMap OneHotEncoding(OneHotType oneHotType = OneHotType.OneHot, string columnNameFormat = "{0}")
         {
             var trans = new OneHotTransformer<double>(oneHotType, columnNameFormat);
             return trans.FitTransformToDataMap(this);

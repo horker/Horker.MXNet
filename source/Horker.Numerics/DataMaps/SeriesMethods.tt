@@ -42,6 +42,15 @@ var methodNames = new[]
 	Tuple.Create("ElementDivide", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
 	Tuple.Create("ElementDivide", "object other", ", (dynamic)other"),
 
+	Tuple.Create("ElementAddR", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
+	Tuple.Create("ElementAddR", "object other", ", (dynamic)other"),
+	Tuple.Create("ElementSubtractR", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
+	Tuple.Create("ElementSubtractR", "object other", ", (dynamic)other"),
+	Tuple.Create("ElementMultiplyR", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
+	Tuple.Create("ElementMultiplyR", "object other", ", (dynamic)other"),
+	Tuple.Create("ElementDivideR", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
+	Tuple.Create("ElementDivideR", "object other", ", (dynamic)other"),
+
 	// Other operations
 
 	Tuple.Create("Copy", "", ""),
@@ -92,6 +101,15 @@ var nonSeriesMethods = new[]
 	Tuple.Create("ElementMultiplyFill", "void", "object other", ", (dynamic)other"),
 	Tuple.Create("ElementDivideFill", "void", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
 	Tuple.Create("ElementDivideFill", "void", "object other", ", (dynamic)other"),
+
+	Tuple.Create("ElementAddRFill", "void", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
+	Tuple.Create("ElementAddRFill", "void", "object other", ", (dynamic)other"),
+	Tuple.Create("ElementSubtractRFill", "void", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
+	Tuple.Create("ElementSubtractRFill", "void", "object other", ", (dynamic)other"),
+	Tuple.Create("ElementMultiplyRFill", "void", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
+	Tuple.Create("ElementMultiplyRFill", "void", "object other", ", (dynamic)other"),
+	Tuple.Create("ElementDivideRFill", "void", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
+	Tuple.Create("ElementDivideRFill", "void", "object other", ", (dynamic)other"),
 
 	// Other operations
 

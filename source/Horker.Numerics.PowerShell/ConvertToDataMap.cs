@@ -68,7 +68,7 @@ namespace Horker.Numerics.PowerShell
                 d.AddLast(entry.Key, entry.Value);
 
            if (ConvertTypes)
-                d = d.TypeConversion(PossibleTypes);
+                d = d.TryConversion(PossibleTypes);
 
             WriteObject(d);
         }

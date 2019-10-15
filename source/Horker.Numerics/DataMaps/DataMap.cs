@@ -590,7 +590,7 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        public DataMap TypeConversion(Type[] possibleTypes = null)
+        public DataMap TryConversion(Type[] possibleTypes = null)
         {
             var d = new DataMap(ColumnNameComparer);
 
@@ -718,10 +718,10 @@ namespace Horker.Numerics.DataMaps
 
         // Transformers
 
-        public void OneHot(string columnName, OneHotType oneHotType = OneHotType.OneHot, string columnNameFormat = "{1}_{0}")
+        public void OneHotEncoding(string columnName, OneHotType oneHotType = OneHotType.OneHot, string columnNameFormat = "{1}_{0}")
         {
             var format = string.Format(columnNameFormat, "{0}", columnName);
-            var oneHot = this[columnName].OneHot(oneHotType, format);
+            var oneHot = this[columnName].OneHotEncoding(oneHotType, format);
 
             foreach (var column in oneHot)
                 AddBefore(columnName, column.Name, column.Data);

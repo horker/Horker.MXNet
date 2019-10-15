@@ -50,7 +50,13 @@ var binaryOperators = new[] {
 	Tuple.Create("ElementAdd", "(MetaNum)(self[i] + other[i])", "(MetaNum)(self[i] + value)"),
 	Tuple.Create("ElementSubtract", "(MetaNum)(self[i] - other[i])", "(MetaNum)(self[i] - value)"),
 	Tuple.Create("ElementMultiply", "(MetaNum)(self[i] * other[i])", "(MetaNum)(self[i] * value)"),
-	Tuple.Create("ElementDivide", "(MetaNum)(self[i] / other[i])", "(MetaNum)(self[i] / value)")
+	Tuple.Create("ElementDivide", "(MetaNum)(self[i] / other[i])", "(MetaNum)(self[i] / value)"),
+	Tuple.Create("ElementMod", "(MetaNum)(self[i] % other[i])", "(MetaNum)(self[i] % value)"),
+	Tuple.Create("ElementAddR", "(MetaNum)(other[i] + self[i])", "(MetaNum)(value - self[i])"),
+	Tuple.Create("ElementSubtractR", "(MetaNum)(other[i] - self[i])", "(MetaNum)(value - self[i])"),
+	Tuple.Create("ElementMultiplyR", "(MetaNum)(other[i] * self[i])", "(MetaNum)(value * self[i])"),
+	Tuple.Create("ElementDivideR", "(MetaNum)(other[i] / self[i])", "(MetaNum)(value / self[i])"),
+	Tuple.Create("ElementModR", "(MetaNum)(other[i] % self[i])", "(MetaNum)(value % self[i])")
 };
 
 TextInfo textInfo = Thread.CurrentThread.CurrentCulture.TextInfo;

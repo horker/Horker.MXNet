@@ -244,7 +244,7 @@ namespace Horker.Numerics.Tests
             var d = new DataMap();
             d["xxx"] = t1;
 
-            d.OneHot("xxx", OneHotType.OneHot);
+            d.OneHotEncoding("xxx", OneHotType.OneHot);
 
             Assert.Equal(new[] { "xxx_10", "xxx_20", "xxx_30" }, d.ColumnNames);
 

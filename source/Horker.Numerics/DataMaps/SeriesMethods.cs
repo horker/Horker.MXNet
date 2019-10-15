@@ -388,6 +388,110 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
+        public SeriesBase ElementAddR(SeriesBase other)
+        {
+			try
+			{
+				var result = GenericIListExtensions.ElementAddR((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementAddR() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase ElementAddR(object other)
+        {
+			try
+			{
+				var result = GenericIListExtensions.ElementAddR((dynamic)UnderlyingList, (dynamic)other);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementAddR() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase ElementSubtractR(SeriesBase other)
+        {
+			try
+			{
+				var result = GenericIListExtensions.ElementSubtractR((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementSubtractR() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase ElementSubtractR(object other)
+        {
+			try
+			{
+				var result = GenericIListExtensions.ElementSubtractR((dynamic)UnderlyingList, (dynamic)other);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementSubtractR() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase ElementMultiplyR(SeriesBase other)
+        {
+			try
+			{
+				var result = GenericIListExtensions.ElementMultiplyR((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementMultiplyR() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase ElementMultiplyR(object other)
+        {
+			try
+			{
+				var result = GenericIListExtensions.ElementMultiplyR((dynamic)UnderlyingList, (dynamic)other);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementMultiplyR() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase ElementDivideR(SeriesBase other)
+        {
+			try
+			{
+				var result = GenericIListExtensions.ElementDivideR((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementDivideR() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase ElementDivideR(object other)
+        {
+			try
+			{
+				var result = GenericIListExtensions.ElementDivideR((dynamic)UnderlyingList, (dynamic)other);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementDivideR() does not support data type {DataType}");
+			}
+        }
+
         public SeriesBase Copy()
         {
 			try
@@ -865,6 +969,102 @@ namespace Horker.Numerics.DataMaps
 			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
 			{
 				throw new InvalidOperationException($"ElementDivideFill() does not support data type {DataType}");
+			}
+        }
+
+        public void ElementAddRFill(SeriesBase other)
+        {
+			try
+			{
+				GenericIListExtensions.ElementAddRFill((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementAddRFill() does not support data type {DataType}");
+			}
+        }
+
+        public void ElementAddRFill(object other)
+        {
+			try
+			{
+				GenericIListExtensions.ElementAddRFill((dynamic)UnderlyingList, (dynamic)other);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementAddRFill() does not support data type {DataType}");
+			}
+        }
+
+        public void ElementSubtractRFill(SeriesBase other)
+        {
+			try
+			{
+				GenericIListExtensions.ElementSubtractRFill((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementSubtractRFill() does not support data type {DataType}");
+			}
+        }
+
+        public void ElementSubtractRFill(object other)
+        {
+			try
+			{
+				GenericIListExtensions.ElementSubtractRFill((dynamic)UnderlyingList, (dynamic)other);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementSubtractRFill() does not support data type {DataType}");
+			}
+        }
+
+        public void ElementMultiplyRFill(SeriesBase other)
+        {
+			try
+			{
+				GenericIListExtensions.ElementMultiplyRFill((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementMultiplyRFill() does not support data type {DataType}");
+			}
+        }
+
+        public void ElementMultiplyRFill(object other)
+        {
+			try
+			{
+				GenericIListExtensions.ElementMultiplyRFill((dynamic)UnderlyingList, (dynamic)other);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementMultiplyRFill() does not support data type {DataType}");
+			}
+        }
+
+        public void ElementDivideRFill(SeriesBase other)
+        {
+			try
+			{
+				GenericIListExtensions.ElementDivideRFill((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementDivideRFill() does not support data type {DataType}");
+			}
+        }
+
+        public void ElementDivideRFill(object other)
+        {
+			try
+			{
+				GenericIListExtensions.ElementDivideRFill((dynamic)UnderlyingList, (dynamic)other);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementDivideRFill() does not support data type {DataType}");
 			}
         }
 

@@ -7629,6 +7629,252 @@ namespace Horker.Numerics.DataMaps.Extensions
                 self[i] = (double)(self[i] / value);
         }
 
+        public static IList<double> ElementMod(this IList<double> self, IList<double> other)
+        {
+            var result = new List<double>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((double)(self[i] % other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<double> ElementMod(this IList<double> self, double value)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)(self[i] % value));
+
+            return result;
+        }
+
+        public static void ElementModFill(this IList<double> self, IList<double> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (double)(self[i] % other[i]);
+        }
+
+        public static void ElementModFill(this IList<double> self, double value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)(self[i] % value);
+        }
+
+        public static IList<double> ElementAddR(this IList<double> self, IList<double> other)
+        {
+            var result = new List<double>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((double)(other[i] + self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<double> ElementAddR(this IList<double> self, double value)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)(value - self[i]));
+
+            return result;
+        }
+
+        public static void ElementAddRFill(this IList<double> self, IList<double> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (double)(other[i] + self[i]);
+        }
+
+        public static void ElementAddRFill(this IList<double> self, double value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)(value - self[i]);
+        }
+
+        public static IList<double> ElementSubtractR(this IList<double> self, IList<double> other)
+        {
+            var result = new List<double>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((double)(other[i] - self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<double> ElementSubtractR(this IList<double> self, double value)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)(value - self[i]));
+
+            return result;
+        }
+
+        public static void ElementSubtractRFill(this IList<double> self, IList<double> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (double)(other[i] - self[i]);
+        }
+
+        public static void ElementSubtractRFill(this IList<double> self, double value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)(value - self[i]);
+        }
+
+        public static IList<double> ElementMultiplyR(this IList<double> self, IList<double> other)
+        {
+            var result = new List<double>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((double)(other[i] * self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<double> ElementMultiplyR(this IList<double> self, double value)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)(value * self[i]));
+
+            return result;
+        }
+
+        public static void ElementMultiplyRFill(this IList<double> self, IList<double> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (double)(other[i] * self[i]);
+        }
+
+        public static void ElementMultiplyRFill(this IList<double> self, double value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)(value * self[i]);
+        }
+
+        public static IList<double> ElementDivideR(this IList<double> self, IList<double> other)
+        {
+            var result = new List<double>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((double)(other[i] / self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<double> ElementDivideR(this IList<double> self, double value)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)(value / self[i]));
+
+            return result;
+        }
+
+        public static void ElementDivideRFill(this IList<double> self, IList<double> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (double)(other[i] / self[i]);
+        }
+
+        public static void ElementDivideRFill(this IList<double> self, double value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)(value / self[i]);
+        }
+
+        public static IList<double> ElementModR(this IList<double> self, IList<double> other)
+        {
+            var result = new List<double>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((double)(other[i] % self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<double> ElementModR(this IList<double> self, double value)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((double)(value % self[i]));
+
+            return result;
+        }
+
+        public static void ElementModRFill(this IList<double> self, IList<double> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (double)(other[i] % self[i]);
+        }
+
+        public static void ElementModRFill(this IList<double> self, double value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (double)(value % self[i]);
+        }
+
         public static IList<float> ElementAdd(this IList<float> self, IList<float> other)
         {
             var result = new List<float>(Math.Max(self.Count, other.Count));
@@ -7791,6 +8037,252 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (float)(self[i] / value);
+        }
+
+        public static IList<float> ElementMod(this IList<float> self, IList<float> other)
+        {
+            var result = new List<float>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((float)(self[i] % other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<float> ElementMod(this IList<float> self, float value)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)(self[i] % value));
+
+            return result;
+        }
+
+        public static void ElementModFill(this IList<float> self, IList<float> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (float)(self[i] % other[i]);
+        }
+
+        public static void ElementModFill(this IList<float> self, float value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)(self[i] % value);
+        }
+
+        public static IList<float> ElementAddR(this IList<float> self, IList<float> other)
+        {
+            var result = new List<float>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((float)(other[i] + self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<float> ElementAddR(this IList<float> self, float value)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)(value - self[i]));
+
+            return result;
+        }
+
+        public static void ElementAddRFill(this IList<float> self, IList<float> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (float)(other[i] + self[i]);
+        }
+
+        public static void ElementAddRFill(this IList<float> self, float value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)(value - self[i]);
+        }
+
+        public static IList<float> ElementSubtractR(this IList<float> self, IList<float> other)
+        {
+            var result = new List<float>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((float)(other[i] - self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<float> ElementSubtractR(this IList<float> self, float value)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)(value - self[i]));
+
+            return result;
+        }
+
+        public static void ElementSubtractRFill(this IList<float> self, IList<float> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (float)(other[i] - self[i]);
+        }
+
+        public static void ElementSubtractRFill(this IList<float> self, float value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)(value - self[i]);
+        }
+
+        public static IList<float> ElementMultiplyR(this IList<float> self, IList<float> other)
+        {
+            var result = new List<float>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((float)(other[i] * self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<float> ElementMultiplyR(this IList<float> self, float value)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)(value * self[i]));
+
+            return result;
+        }
+
+        public static void ElementMultiplyRFill(this IList<float> self, IList<float> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (float)(other[i] * self[i]);
+        }
+
+        public static void ElementMultiplyRFill(this IList<float> self, float value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)(value * self[i]);
+        }
+
+        public static IList<float> ElementDivideR(this IList<float> self, IList<float> other)
+        {
+            var result = new List<float>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((float)(other[i] / self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<float> ElementDivideR(this IList<float> self, float value)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)(value / self[i]));
+
+            return result;
+        }
+
+        public static void ElementDivideRFill(this IList<float> self, IList<float> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (float)(other[i] / self[i]);
+        }
+
+        public static void ElementDivideRFill(this IList<float> self, float value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)(value / self[i]);
+        }
+
+        public static IList<float> ElementModR(this IList<float> self, IList<float> other)
+        {
+            var result = new List<float>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((float)(other[i] % self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<float> ElementModR(this IList<float> self, float value)
+        {
+            var result = new List<float>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((float)(value % self[i]));
+
+            return result;
+        }
+
+        public static void ElementModRFill(this IList<float> self, IList<float> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (float)(other[i] % self[i]);
+        }
+
+        public static void ElementModRFill(this IList<float> self, float value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (float)(value % self[i]);
         }
 
         public static IList<long> ElementAdd(this IList<long> self, IList<long> other)
@@ -7957,6 +8449,252 @@ namespace Horker.Numerics.DataMaps.Extensions
                 self[i] = (long)(self[i] / value);
         }
 
+        public static IList<long> ElementMod(this IList<long> self, IList<long> other)
+        {
+            var result = new List<long>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((long)(self[i] % other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<long> ElementMod(this IList<long> self, long value)
+        {
+            var result = new List<long>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((long)(self[i] % value));
+
+            return result;
+        }
+
+        public static void ElementModFill(this IList<long> self, IList<long> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (long)(self[i] % other[i]);
+        }
+
+        public static void ElementModFill(this IList<long> self, long value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)(self[i] % value);
+        }
+
+        public static IList<long> ElementAddR(this IList<long> self, IList<long> other)
+        {
+            var result = new List<long>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((long)(other[i] + self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<long> ElementAddR(this IList<long> self, long value)
+        {
+            var result = new List<long>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((long)(value - self[i]));
+
+            return result;
+        }
+
+        public static void ElementAddRFill(this IList<long> self, IList<long> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (long)(other[i] + self[i]);
+        }
+
+        public static void ElementAddRFill(this IList<long> self, long value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)(value - self[i]);
+        }
+
+        public static IList<long> ElementSubtractR(this IList<long> self, IList<long> other)
+        {
+            var result = new List<long>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((long)(other[i] - self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<long> ElementSubtractR(this IList<long> self, long value)
+        {
+            var result = new List<long>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((long)(value - self[i]));
+
+            return result;
+        }
+
+        public static void ElementSubtractRFill(this IList<long> self, IList<long> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (long)(other[i] - self[i]);
+        }
+
+        public static void ElementSubtractRFill(this IList<long> self, long value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)(value - self[i]);
+        }
+
+        public static IList<long> ElementMultiplyR(this IList<long> self, IList<long> other)
+        {
+            var result = new List<long>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((long)(other[i] * self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<long> ElementMultiplyR(this IList<long> self, long value)
+        {
+            var result = new List<long>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((long)(value * self[i]));
+
+            return result;
+        }
+
+        public static void ElementMultiplyRFill(this IList<long> self, IList<long> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (long)(other[i] * self[i]);
+        }
+
+        public static void ElementMultiplyRFill(this IList<long> self, long value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)(value * self[i]);
+        }
+
+        public static IList<long> ElementDivideR(this IList<long> self, IList<long> other)
+        {
+            var result = new List<long>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((long)(other[i] / self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<long> ElementDivideR(this IList<long> self, long value)
+        {
+            var result = new List<long>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((long)(value / self[i]));
+
+            return result;
+        }
+
+        public static void ElementDivideRFill(this IList<long> self, IList<long> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (long)(other[i] / self[i]);
+        }
+
+        public static void ElementDivideRFill(this IList<long> self, long value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)(value / self[i]);
+        }
+
+        public static IList<long> ElementModR(this IList<long> self, IList<long> other)
+        {
+            var result = new List<long>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((long)(other[i] % self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<long> ElementModR(this IList<long> self, long value)
+        {
+            var result = new List<long>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((long)(value % self[i]));
+
+            return result;
+        }
+
+        public static void ElementModRFill(this IList<long> self, IList<long> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (long)(other[i] % self[i]);
+        }
+
+        public static void ElementModRFill(this IList<long> self, long value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (long)(value % self[i]);
+        }
+
         public static IList<int> ElementAdd(this IList<int> self, IList<int> other)
         {
             var result = new List<int>(Math.Max(self.Count, other.Count));
@@ -8119,6 +8857,252 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (int)(self[i] / value);
+        }
+
+        public static IList<int> ElementMod(this IList<int> self, IList<int> other)
+        {
+            var result = new List<int>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((int)(self[i] % other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<int> ElementMod(this IList<int> self, int value)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((int)(self[i] % value));
+
+            return result;
+        }
+
+        public static void ElementModFill(this IList<int> self, IList<int> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (int)(self[i] % other[i]);
+        }
+
+        public static void ElementModFill(this IList<int> self, int value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)(self[i] % value);
+        }
+
+        public static IList<int> ElementAddR(this IList<int> self, IList<int> other)
+        {
+            var result = new List<int>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((int)(other[i] + self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<int> ElementAddR(this IList<int> self, int value)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((int)(value - self[i]));
+
+            return result;
+        }
+
+        public static void ElementAddRFill(this IList<int> self, IList<int> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (int)(other[i] + self[i]);
+        }
+
+        public static void ElementAddRFill(this IList<int> self, int value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)(value - self[i]);
+        }
+
+        public static IList<int> ElementSubtractR(this IList<int> self, IList<int> other)
+        {
+            var result = new List<int>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((int)(other[i] - self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<int> ElementSubtractR(this IList<int> self, int value)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((int)(value - self[i]));
+
+            return result;
+        }
+
+        public static void ElementSubtractRFill(this IList<int> self, IList<int> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (int)(other[i] - self[i]);
+        }
+
+        public static void ElementSubtractRFill(this IList<int> self, int value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)(value - self[i]);
+        }
+
+        public static IList<int> ElementMultiplyR(this IList<int> self, IList<int> other)
+        {
+            var result = new List<int>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((int)(other[i] * self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<int> ElementMultiplyR(this IList<int> self, int value)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((int)(value * self[i]));
+
+            return result;
+        }
+
+        public static void ElementMultiplyRFill(this IList<int> self, IList<int> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (int)(other[i] * self[i]);
+        }
+
+        public static void ElementMultiplyRFill(this IList<int> self, int value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)(value * self[i]);
+        }
+
+        public static IList<int> ElementDivideR(this IList<int> self, IList<int> other)
+        {
+            var result = new List<int>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((int)(other[i] / self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<int> ElementDivideR(this IList<int> self, int value)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((int)(value / self[i]));
+
+            return result;
+        }
+
+        public static void ElementDivideRFill(this IList<int> self, IList<int> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (int)(other[i] / self[i]);
+        }
+
+        public static void ElementDivideRFill(this IList<int> self, int value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)(value / self[i]);
+        }
+
+        public static IList<int> ElementModR(this IList<int> self, IList<int> other)
+        {
+            var result = new List<int>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((int)(other[i] % self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<int> ElementModR(this IList<int> self, int value)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((int)(value % self[i]));
+
+            return result;
+        }
+
+        public static void ElementModRFill(this IList<int> self, IList<int> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (int)(other[i] % self[i]);
+        }
+
+        public static void ElementModRFill(this IList<int> self, int value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (int)(value % self[i]);
         }
 
         public static IList<short> ElementAdd(this IList<short> self, IList<short> other)
@@ -8285,6 +9269,252 @@ namespace Horker.Numerics.DataMaps.Extensions
                 self[i] = (short)(self[i] / value);
         }
 
+        public static IList<short> ElementMod(this IList<short> self, IList<short> other)
+        {
+            var result = new List<short>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((short)(self[i] % other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<short> ElementMod(this IList<short> self, short value)
+        {
+            var result = new List<short>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((short)(self[i] % value));
+
+            return result;
+        }
+
+        public static void ElementModFill(this IList<short> self, IList<short> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (short)(self[i] % other[i]);
+        }
+
+        public static void ElementModFill(this IList<short> self, short value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)(self[i] % value);
+        }
+
+        public static IList<short> ElementAddR(this IList<short> self, IList<short> other)
+        {
+            var result = new List<short>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((short)(other[i] + self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<short> ElementAddR(this IList<short> self, short value)
+        {
+            var result = new List<short>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((short)(value - self[i]));
+
+            return result;
+        }
+
+        public static void ElementAddRFill(this IList<short> self, IList<short> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (short)(other[i] + self[i]);
+        }
+
+        public static void ElementAddRFill(this IList<short> self, short value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)(value - self[i]);
+        }
+
+        public static IList<short> ElementSubtractR(this IList<short> self, IList<short> other)
+        {
+            var result = new List<short>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((short)(other[i] - self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<short> ElementSubtractR(this IList<short> self, short value)
+        {
+            var result = new List<short>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((short)(value - self[i]));
+
+            return result;
+        }
+
+        public static void ElementSubtractRFill(this IList<short> self, IList<short> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (short)(other[i] - self[i]);
+        }
+
+        public static void ElementSubtractRFill(this IList<short> self, short value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)(value - self[i]);
+        }
+
+        public static IList<short> ElementMultiplyR(this IList<short> self, IList<short> other)
+        {
+            var result = new List<short>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((short)(other[i] * self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<short> ElementMultiplyR(this IList<short> self, short value)
+        {
+            var result = new List<short>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((short)(value * self[i]));
+
+            return result;
+        }
+
+        public static void ElementMultiplyRFill(this IList<short> self, IList<short> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (short)(other[i] * self[i]);
+        }
+
+        public static void ElementMultiplyRFill(this IList<short> self, short value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)(value * self[i]);
+        }
+
+        public static IList<short> ElementDivideR(this IList<short> self, IList<short> other)
+        {
+            var result = new List<short>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((short)(other[i] / self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<short> ElementDivideR(this IList<short> self, short value)
+        {
+            var result = new List<short>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((short)(value / self[i]));
+
+            return result;
+        }
+
+        public static void ElementDivideRFill(this IList<short> self, IList<short> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (short)(other[i] / self[i]);
+        }
+
+        public static void ElementDivideRFill(this IList<short> self, short value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)(value / self[i]);
+        }
+
+        public static IList<short> ElementModR(this IList<short> self, IList<short> other)
+        {
+            var result = new List<short>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((short)(other[i] % self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<short> ElementModR(this IList<short> self, short value)
+        {
+            var result = new List<short>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((short)(value % self[i]));
+
+            return result;
+        }
+
+        public static void ElementModRFill(this IList<short> self, IList<short> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (short)(other[i] % self[i]);
+        }
+
+        public static void ElementModRFill(this IList<short> self, short value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (short)(value % self[i]);
+        }
+
         public static IList<byte> ElementAdd(this IList<byte> self, IList<byte> other)
         {
             var result = new List<byte>(Math.Max(self.Count, other.Count));
@@ -8447,6 +9677,252 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (byte)(self[i] / value);
+        }
+
+        public static IList<byte> ElementMod(this IList<byte> self, IList<byte> other)
+        {
+            var result = new List<byte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((byte)(self[i] % other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<byte> ElementMod(this IList<byte> self, byte value)
+        {
+            var result = new List<byte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((byte)(self[i] % value));
+
+            return result;
+        }
+
+        public static void ElementModFill(this IList<byte> self, IList<byte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (byte)(self[i] % other[i]);
+        }
+
+        public static void ElementModFill(this IList<byte> self, byte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)(self[i] % value);
+        }
+
+        public static IList<byte> ElementAddR(this IList<byte> self, IList<byte> other)
+        {
+            var result = new List<byte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((byte)(other[i] + self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<byte> ElementAddR(this IList<byte> self, byte value)
+        {
+            var result = new List<byte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((byte)(value - self[i]));
+
+            return result;
+        }
+
+        public static void ElementAddRFill(this IList<byte> self, IList<byte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (byte)(other[i] + self[i]);
+        }
+
+        public static void ElementAddRFill(this IList<byte> self, byte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)(value - self[i]);
+        }
+
+        public static IList<byte> ElementSubtractR(this IList<byte> self, IList<byte> other)
+        {
+            var result = new List<byte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((byte)(other[i] - self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<byte> ElementSubtractR(this IList<byte> self, byte value)
+        {
+            var result = new List<byte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((byte)(value - self[i]));
+
+            return result;
+        }
+
+        public static void ElementSubtractRFill(this IList<byte> self, IList<byte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (byte)(other[i] - self[i]);
+        }
+
+        public static void ElementSubtractRFill(this IList<byte> self, byte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)(value - self[i]);
+        }
+
+        public static IList<byte> ElementMultiplyR(this IList<byte> self, IList<byte> other)
+        {
+            var result = new List<byte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((byte)(other[i] * self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<byte> ElementMultiplyR(this IList<byte> self, byte value)
+        {
+            var result = new List<byte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((byte)(value * self[i]));
+
+            return result;
+        }
+
+        public static void ElementMultiplyRFill(this IList<byte> self, IList<byte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (byte)(other[i] * self[i]);
+        }
+
+        public static void ElementMultiplyRFill(this IList<byte> self, byte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)(value * self[i]);
+        }
+
+        public static IList<byte> ElementDivideR(this IList<byte> self, IList<byte> other)
+        {
+            var result = new List<byte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((byte)(other[i] / self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<byte> ElementDivideR(this IList<byte> self, byte value)
+        {
+            var result = new List<byte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((byte)(value / self[i]));
+
+            return result;
+        }
+
+        public static void ElementDivideRFill(this IList<byte> self, IList<byte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (byte)(other[i] / self[i]);
+        }
+
+        public static void ElementDivideRFill(this IList<byte> self, byte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)(value / self[i]);
+        }
+
+        public static IList<byte> ElementModR(this IList<byte> self, IList<byte> other)
+        {
+            var result = new List<byte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((byte)(other[i] % self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<byte> ElementModR(this IList<byte> self, byte value)
+        {
+            var result = new List<byte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((byte)(value % self[i]));
+
+            return result;
+        }
+
+        public static void ElementModRFill(this IList<byte> self, IList<byte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (byte)(other[i] % self[i]);
+        }
+
+        public static void ElementModRFill(this IList<byte> self, byte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (byte)(value % self[i]);
         }
 
         public static IList<sbyte> ElementAdd(this IList<sbyte> self, IList<sbyte> other)
@@ -8613,6 +10089,252 @@ namespace Horker.Numerics.DataMaps.Extensions
                 self[i] = (sbyte)(self[i] / value);
         }
 
+        public static IList<sbyte> ElementMod(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var result = new List<sbyte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((sbyte)(self[i] % other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<sbyte> ElementMod(this IList<sbyte> self, sbyte value)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((sbyte)(self[i] % value));
+
+            return result;
+        }
+
+        public static void ElementModFill(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (sbyte)(self[i] % other[i]);
+        }
+
+        public static void ElementModFill(this IList<sbyte> self, sbyte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)(self[i] % value);
+        }
+
+        public static IList<sbyte> ElementAddR(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var result = new List<sbyte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((sbyte)(other[i] + self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<sbyte> ElementAddR(this IList<sbyte> self, sbyte value)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((sbyte)(value - self[i]));
+
+            return result;
+        }
+
+        public static void ElementAddRFill(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (sbyte)(other[i] + self[i]);
+        }
+
+        public static void ElementAddRFill(this IList<sbyte> self, sbyte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)(value - self[i]);
+        }
+
+        public static IList<sbyte> ElementSubtractR(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var result = new List<sbyte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((sbyte)(other[i] - self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<sbyte> ElementSubtractR(this IList<sbyte> self, sbyte value)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((sbyte)(value - self[i]));
+
+            return result;
+        }
+
+        public static void ElementSubtractRFill(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (sbyte)(other[i] - self[i]);
+        }
+
+        public static void ElementSubtractRFill(this IList<sbyte> self, sbyte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)(value - self[i]);
+        }
+
+        public static IList<sbyte> ElementMultiplyR(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var result = new List<sbyte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((sbyte)(other[i] * self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<sbyte> ElementMultiplyR(this IList<sbyte> self, sbyte value)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((sbyte)(value * self[i]));
+
+            return result;
+        }
+
+        public static void ElementMultiplyRFill(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (sbyte)(other[i] * self[i]);
+        }
+
+        public static void ElementMultiplyRFill(this IList<sbyte> self, sbyte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)(value * self[i]);
+        }
+
+        public static IList<sbyte> ElementDivideR(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var result = new List<sbyte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((sbyte)(other[i] / self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<sbyte> ElementDivideR(this IList<sbyte> self, sbyte value)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((sbyte)(value / self[i]));
+
+            return result;
+        }
+
+        public static void ElementDivideRFill(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (sbyte)(other[i] / self[i]);
+        }
+
+        public static void ElementDivideRFill(this IList<sbyte> self, sbyte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)(value / self[i]);
+        }
+
+        public static IList<sbyte> ElementModR(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var result = new List<sbyte>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((sbyte)(other[i] % self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<sbyte> ElementModR(this IList<sbyte> self, sbyte value)
+        {
+            var result = new List<sbyte>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((sbyte)(value % self[i]));
+
+            return result;
+        }
+
+        public static void ElementModRFill(this IList<sbyte> self, IList<sbyte> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (sbyte)(other[i] % self[i]);
+        }
+
+        public static void ElementModRFill(this IList<sbyte> self, sbyte value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (sbyte)(value % self[i]);
+        }
+
         public static IList<decimal> ElementAdd(this IList<decimal> self, IList<decimal> other)
         {
             var result = new List<decimal>(Math.Max(self.Count, other.Count));
@@ -8775,6 +10497,252 @@ namespace Horker.Numerics.DataMaps.Extensions
         {
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (decimal)(self[i] / value);
+        }
+
+        public static IList<decimal> ElementMod(this IList<decimal> self, IList<decimal> other)
+        {
+            var result = new List<decimal>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((decimal)(self[i] % other[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<decimal> ElementMod(this IList<decimal> self, decimal value)
+        {
+            var result = new List<decimal>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((decimal)(self[i] % value));
+
+            return result;
+        }
+
+        public static void ElementModFill(this IList<decimal> self, IList<decimal> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (decimal)(self[i] % other[i]);
+        }
+
+        public static void ElementModFill(this IList<decimal> self, decimal value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)(self[i] % value);
+        }
+
+        public static IList<decimal> ElementAddR(this IList<decimal> self, IList<decimal> other)
+        {
+            var result = new List<decimal>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((decimal)(other[i] + self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<decimal> ElementAddR(this IList<decimal> self, decimal value)
+        {
+            var result = new List<decimal>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((decimal)(value - self[i]));
+
+            return result;
+        }
+
+        public static void ElementAddRFill(this IList<decimal> self, IList<decimal> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (decimal)(other[i] + self[i]);
+        }
+
+        public static void ElementAddRFill(this IList<decimal> self, decimal value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)(value - self[i]);
+        }
+
+        public static IList<decimal> ElementSubtractR(this IList<decimal> self, IList<decimal> other)
+        {
+            var result = new List<decimal>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((decimal)(other[i] - self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<decimal> ElementSubtractR(this IList<decimal> self, decimal value)
+        {
+            var result = new List<decimal>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((decimal)(value - self[i]));
+
+            return result;
+        }
+
+        public static void ElementSubtractRFill(this IList<decimal> self, IList<decimal> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (decimal)(other[i] - self[i]);
+        }
+
+        public static void ElementSubtractRFill(this IList<decimal> self, decimal value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)(value - self[i]);
+        }
+
+        public static IList<decimal> ElementMultiplyR(this IList<decimal> self, IList<decimal> other)
+        {
+            var result = new List<decimal>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((decimal)(other[i] * self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<decimal> ElementMultiplyR(this IList<decimal> self, decimal value)
+        {
+            var result = new List<decimal>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((decimal)(value * self[i]));
+
+            return result;
+        }
+
+        public static void ElementMultiplyRFill(this IList<decimal> self, IList<decimal> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (decimal)(other[i] * self[i]);
+        }
+
+        public static void ElementMultiplyRFill(this IList<decimal> self, decimal value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)(value * self[i]);
+        }
+
+        public static IList<decimal> ElementDivideR(this IList<decimal> self, IList<decimal> other)
+        {
+            var result = new List<decimal>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((decimal)(other[i] / self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<decimal> ElementDivideR(this IList<decimal> self, decimal value)
+        {
+            var result = new List<decimal>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((decimal)(value / self[i]));
+
+            return result;
+        }
+
+        public static void ElementDivideRFill(this IList<decimal> self, IList<decimal> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (decimal)(other[i] / self[i]);
+        }
+
+        public static void ElementDivideRFill(this IList<decimal> self, decimal value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)(value / self[i]);
+        }
+
+        public static IList<decimal> ElementModR(this IList<decimal> self, IList<decimal> other)
+        {
+            var result = new List<decimal>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add((decimal)(other[i] % self[i]));
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<decimal> ElementModR(this IList<decimal> self, decimal value)
+        {
+            var result = new List<decimal>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add((decimal)(value % self[i]));
+
+            return result;
+        }
+
+        public static void ElementModRFill(this IList<decimal> self, IList<decimal> other)
+        {
+            var i = 0;
+            for (; i < Math.Min(self.Count, other.Count); ++i)
+                self[i] = (decimal)(other[i] % self[i]);
+        }
+
+        public static void ElementModRFill(this IList<decimal> self, decimal value)
+        {
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = (decimal)(value % self[i]);
         }
     }
 }
