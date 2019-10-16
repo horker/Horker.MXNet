@@ -12,7 +12,7 @@ using Horker.Numerics.Transformers;
 
 namespace Horker.Numerics.DataMaps
 {
-    public class DataMap : IList<Column>
+    public class DataMap
     {
         // Private fields
 
@@ -235,11 +235,6 @@ namespace Horker.Numerics.DataMaps
         public void RemoveAt(int index)
         {
             throw new NotImplementedException();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
 
         // Other methods

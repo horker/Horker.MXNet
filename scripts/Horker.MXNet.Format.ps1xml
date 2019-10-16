@@ -63,6 +63,25 @@
             </TableControl>
         </View>
         <View>
+            <Name>Horker.Numerics.DataMaps.DataMap</Name>
+            <ViewSelectedBy>
+                <TypeName>Horker.Numerics.DataMaps.DataMap</TypeName>
+            </ViewSelectedBy>
+            <CustomControl>
+                <CustomEntries>
+                    <CustomEntry>
+                        <CustomItem>
+                            <ExpressionBinding>
+                                <ScriptBlock>
+($_.Columns | Format-Table | Out-String).Trim()
+                                </ScriptBlock>
+                            </ExpressionBinding>
+                        </CustomItem>
+                    </CustomEntry>
+                </CustomEntries>
+            </CustomControl>
+        </View>
+        <View>
             <Name>Horker.Numerics.DataMaps.SeriesBase</Name>
             <ViewSelectedBy>
                 <TypeName>Horker.Numerics.DataMaps.SeriesBase</TypeName>
