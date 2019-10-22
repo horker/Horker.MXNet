@@ -121,8 +121,16 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        public static DataMap FromJagged<T>(T[][] source, string[] columnNames, IEqualityComparer<string> keyComparaer = null)
+        public static DataMap FromJagged<T>(T[][] source, string[] columnNames = null, IEqualityComparer<string> keyComparaer = null)
         {
+            if (columnNames == null)
+            {
+                var c = source[0].Length;
+                columnNames = new string[c];
+                for (var i = 0; i < c; ++i)
+                    columnNames[i] = "Column" + i;
+            }
+
             var result = new DataMap(keyComparaer);
 
             for (var i = 0; i < columnNames.Length; ++i)
@@ -137,6 +145,29 @@ namespace Horker.Numerics.DataMaps
                     else
                         data.Add(TypeTrait<T>.GetNaN());
                 }
+            }
+
+            return result;
+        }
+
+        public static DataMap From2DArray<T>(T[,] source, string[] columnNames = null, IEqualityComparer<string> keyComparaer = null)
+        {
+            if (columnNames == null)
+            {
+                var c = source.GetLength(1);
+                columnNames = new string[c];
+                for (var i = 0; i < c; ++i)
+                    columnNames[i] = "Column" + i;
+            }
+
+            var result = new DataMap(keyComparaer);
+
+            for (var i = 0; i < source.GetLength(1); ++i)
+            {
+                var data = new List<T>(source.Length);
+                result.Add(columnNames[i], data);
+                for (var j = 0; j < source.GetLength(0); ++j)
+                    data.Add(source[j, i]);
             }
 
             return result;

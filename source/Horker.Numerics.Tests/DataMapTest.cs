@@ -33,6 +33,25 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
+        public void TestFrom2DArray()
+        {
+            var data = new double[5, 3]
+            {
+                { 0, 1, 2 },
+                { 10, 11, 12 },
+                { 20, 21, 22 },
+                { 30, 31, 32 },
+                { 40, 41, 42 }
+            };
+
+            var d = DataMap.From2DArray(data);
+
+            Assert.Equal(new[] { "Column0", "Column1", "Column2" }, d.ColumnNames);
+
+            Assert.Equal(new double[] { 1, 11, 21, 31, 41 }, d["Column1"].Values);
+        }
+
+        [Fact]
         public void TestSelectColumns()
         {
             var d = DataMap.FromDictionary(new Dictionary<string, IList>()
