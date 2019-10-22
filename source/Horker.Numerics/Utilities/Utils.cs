@@ -16,5 +16,17 @@ namespace Horker.Numerics.Utilities
 
             return obj;
         }
+
+        public static bool IsNumeric(Type type)
+        {
+            return type == typeof(double) ||
+                type == typeof(float) ||
+                type == typeof(long) ||
+                type == typeof(int) ||
+                type == typeof(short) ||
+                type == typeof(byte) ||
+                type == typeof(sbyte) ||
+                type == typeof(decimal);
+        }
     }
 }

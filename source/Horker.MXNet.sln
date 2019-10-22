@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horker.Numerics.Tests", "Ho
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horker.Numerics.PowerShell", "Horker.Numerics.PowerShell\Horker.Numerics.PowerShell.csproj", "{9F1F3934-6E5F-406A-99E1-5EB048EE78B5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horker.Numerics.LightGBM", "Horker.Numerics.LightGBM\Horker.Numerics.LightGBM.csproj", "{7E224FCB-C910-4C12-A82E-A63E00131471}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightGBMTestProgram", "LightGBMTestProgram\LightGBMTestProgram.csproj", "{C1DD85B6-DD35-4CEC-B1C3-C0ECCFF7E732}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +95,22 @@ Global
 		{9F1F3934-6E5F-406A-99E1-5EB048EE78B5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9F1F3934-6E5F-406A-99E1-5EB048EE78B5}.Release|x64.ActiveCfg = Release|x64
 		{9F1F3934-6E5F-406A-99E1-5EB048EE78B5}.Release|x64.Build.0 = Release|x64
+		{7E224FCB-C910-4C12-A82E-A63E00131471}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E224FCB-C910-4C12-A82E-A63E00131471}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E224FCB-C910-4C12-A82E-A63E00131471}.Debug|x64.ActiveCfg = Debug|x64
+		{7E224FCB-C910-4C12-A82E-A63E00131471}.Debug|x64.Build.0 = Debug|x64
+		{7E224FCB-C910-4C12-A82E-A63E00131471}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E224FCB-C910-4C12-A82E-A63E00131471}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E224FCB-C910-4C12-A82E-A63E00131471}.Release|x64.ActiveCfg = Release|x64
+		{7E224FCB-C910-4C12-A82E-A63E00131471}.Release|x64.Build.0 = Release|x64
+		{C1DD85B6-DD35-4CEC-B1C3-C0ECCFF7E732}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1DD85B6-DD35-4CEC-B1C3-C0ECCFF7E732}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1DD85B6-DD35-4CEC-B1C3-C0ECCFF7E732}.Debug|x64.ActiveCfg = Debug|x64
+		{C1DD85B6-DD35-4CEC-B1C3-C0ECCFF7E732}.Debug|x64.Build.0 = Debug|x64
+		{C1DD85B6-DD35-4CEC-B1C3-C0ECCFF7E732}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1DD85B6-DD35-4CEC-B1C3-C0ECCFF7E732}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1DD85B6-DD35-4CEC-B1C3-C0ECCFF7E732}.Release|x64.ActiveCfg = Release|x64
+		{C1DD85B6-DD35-4CEC-B1C3-C0ECCFF7E732}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

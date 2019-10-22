@@ -15,6 +15,10 @@ namespace Horker.Numerics.Transformers
         private T _fallbackValue;
 
         private Dictionary<object, T> _encoding;
+        private List<object> _categories;
+
+        public Dictionary<object, T> Encoding => _encoding;
+        public List<object> Categories => _categories;
 
         public LabelEncodingTransformer(bool useFallback = false, T fallbackValue = default(T))
         {
@@ -25,6 +29,7 @@ namespace Horker.Numerics.Transformers
         public override void Fit(SeriesBase data)
         {
             _encoding = new Dictionary<object, T>();
+            _categories = new List<object>();
 
             var count = 0;
             foreach (var value in data.UnderlyingList)
@@ -32,6 +37,7 @@ namespace Horker.Numerics.Transformers
                 if (!_encoding.ContainsKey(value))
                 {
                     _encoding.Add(value, SmartConverter.ConvertTo<T>(count));
+                    _categories.Add(value);
                     ++count;
                 }
             }
