@@ -15,6 +15,11 @@ namespace Horker.Numerics.Estimators
             return Accuracy(expected.ArgMax(1), predicted.ArgMax(1));
         }
 
+        public static double Accuracy(double[,] expected, double[,] predicted)
+        {
+            return Accuracy(expected.ArgMax(1), predicted.ArgMax(1));
+        }
+
         public static double Accuracy(int[] expected, int[] predicted)
         {
             return 1.0 - new AccuracyLoss(expected).Loss(predicted);
