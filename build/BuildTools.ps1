@@ -62,3 +62,29 @@ function Copy-ObjectFiles {
         Copy-Item2 $_ $TargetPath
     }
 }
+
+############################################################
+# Common tasks
+############################################################
+
+task Build {
+    "Debug", "Release" | foreach {
+        $build = $_
+        Copy-ObjectFiles $ScriptFiles ($ModulePath -f $build)
+        Copy-ObjectFiles ($ObjectFiles | foreach { $_-f $build }) ($ModulePath -f $build)
+    }
+}
+
+task Test {
+    Invoke-Pester $TestPath
+}
+
+task ImportDebug {
+    Import-Module ($ModulePath -f "Debug") -Force
+}
+
+task Clean {
+    "Debug", "Release" | foreach {
+        Remove-Item2 ("$ModulePath\*" -f $_)
+    }
+}

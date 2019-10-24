@@ -9,7 +9,8 @@ Set-StrictMode -Version Latest
 $SolutionFile = "$PSScriptRoot\source\Horker.MXNet.sln"
 
 $BuildFiles = @(
-    "$PSScirptRoot\build\Horker.MXNet.build.ps1"
+    "$PSScriptRoot\build\Horker.MXNet.build.ps1"
+    "$PSScriptRoot\build\Horker.Numerics.build.ps1"
 )
 
 ############################################################
