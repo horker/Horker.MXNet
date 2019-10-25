@@ -6,6 +6,9 @@ Set-StrictMode -Version Latest
 # Settings
 ############################################################
 
+$LocalRepoPath = "$HOME\localpsrepo"
+$LocalRepoName = "LocalPSRepo"
+
 $SolutionFile = "$PSScriptRoot\source\Horker.MXNet.sln"
 
 $BuildFiles = @(
@@ -18,8 +21,8 @@ $BuildFiles = @(
 ############################################################
 
 task Compile {
-    msbuild $SolutionFile /p:Configuration=Debug /p:Platform=x64 /nologo /v:minimal
-    msbuild $SolutionFile /p:Configuration=Release /p:Platform=x64 /nologo /v:minimal
+    msbuild.exe $SolutionFile /p:Configuration=Debug /p:Platform=x64 /nologo /v:minimal
+    msbuild.exe $SolutionFile /p:Configuration=Release /p:Platform=x64 /nologo /v:minimal
 }
 
 task Build {
@@ -47,8 +50,7 @@ task Clean {
 }
 
 task PublishLocal {
-    rm ~\localpsrepo\Horker.MXNet.*.nupkg
-    Publish-Module -path .\module\Release\Horker.MXNet\ -Repository LocalPSrepo -NuGetApiKey any
-    Install-Module Horker.MXNet -Force
-    Update-Module Horker.MXNet -Force
+    $BuildFiles | foreach {
+        Invoke-Build -File $_ -Task PublishLocal
+    }
 }

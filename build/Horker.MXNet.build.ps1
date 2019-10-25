@@ -8,11 +8,14 @@ task . Build, ImportDebug, Test
 # Settings
 ############################################################
 
-$ModulePath = "$PSScriptRoot\..\module\{0}\Horker.MXNet"
+$ModuleName = "Horker.MXNet"
 
-$ScriptFiles = "$PSScriptRoot\..\scripts\Horker.MXNet\*"
+$ModulePath = "$PSScriptRoot\..\module\{0}\$ModuleName"
+
+$ScriptFiles = "$PSScriptRoot\..\scripts\$ModuleName\*"
 
 $ObjectPath = "$PSScriptRoot\..\source\bin\x64\{0}"
+
 $ObjectFiles = @(
     "$ObjectPath\Accord.dll"
     "$ObjectPath\Accord.Math.dll"
@@ -28,4 +31,4 @@ $ObjectFiles = @(
     "$ObjectPath\Horker.Numerics.PowerShell.pdb"
 )
 
-$TestPath = "$PSScriptRoot\..\tests\Horker.MXNet"
+$TestPath = "$PSScriptRoot\..\tests\$ModuleName"

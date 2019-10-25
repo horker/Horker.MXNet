@@ -88,3 +88,18 @@ task Clean {
         Remove-Item2 ("$ModulePath\*" -f $_)
     }
 }
+
+task PublishLocal {
+    # Delete the existing .nupkg file beforehand
+    # because Publish-Module denies re-publishing the module with the same version number.
+    Remove-Item "$LocalRepoPath\$ModuleName.*.nupkg"
+
+    Publish-Module -Path "$PSScriptRoot\..\module\Release\$ModuleName\" -Repository $LocalRepoName -NuGetApiKey any
+
+    if (-not (Get-Module $ModuleName)) {
+        Install-Module $ModuleName -Force -Repository $LocalRepoName -AllowClobber
+    }
+    else {
+        Update-Module $ModuleName -Force
+    }
+}

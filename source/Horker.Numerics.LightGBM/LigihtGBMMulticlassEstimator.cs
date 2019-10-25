@@ -10,15 +10,23 @@ namespace Horker.Numerics.LightGBM
 {
     public sealed class LightGBMMulticlassEstimator : IEstimator, IDisposable
     {
+        private Parameters _parameters;
+        private MulticlassTrainer _trainer;
+        private Predictors<double[]> _predicators;
+        private string[] _categories;
+
         public DataMap Parameters { get => null; set => throw new NotImplementedException(); }
 
-        Parameters _parameters;
+        public MulticlassTrainer Trainer => _trainer;
+        public Predictors<double[]> Predictors => _predicators;
+        public string[] Categories => _categories;
 
-        MulticlassTrainer _trainer;
-        Predictors<double[]> _predicators;
-        string[] _categories;
+        public LightGBMMulticlassEstimator()
+            : this(null)
+        {
+        }
 
-        public LightGBMMulticlassEstimator(Parameters parameters = null)
+        public LightGBMMulticlassEstimator(Parameters parameters)
         {
             if (parameters == null)
                 parameters = new Parameters();
