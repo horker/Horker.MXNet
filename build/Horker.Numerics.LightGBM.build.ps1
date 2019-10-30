@@ -25,7 +25,9 @@ $LibPath = "$PSScriptRoot\..\lib\lightgbm"
 
 $LibFiles = @(
     "$LibPath\LightGBMNet.Train.dll"
+    "$LibPath\LightGBMNet.Train.pdb"
     "$LibPath\LightGBMNet.Tree.dll"
+    "$LibPath\LightGBMNet.Tree.pdb"
 )
 
 $LibX64Path = "$PSScriptRoot\..\lib\lightgbm\x64"

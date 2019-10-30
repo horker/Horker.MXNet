@@ -31,7 +31,6 @@ namespace Horker.Numerics.LightGBM
             if (parameters == null)
                 parameters = new Parameters();
 
-            parameters.Objective.Objective = ObjectiveType.MultiClass;
             _parameters = parameters;
             _trainer = new MulticlassTrainer(_parameters.Learning, _parameters.Objective);
         }

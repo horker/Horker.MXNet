@@ -59,6 +59,8 @@ RequiredModules = @(
 
 # Assemblies that must be loaded prior to importing this module
 RequiredAssemblies = @(
+    "LightGBMNet.Tree.dll"
+    "LightGBMNet.Train.dll"
     "Horker.Numerics.LightGBM.dll"
 )
 

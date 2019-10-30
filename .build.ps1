@@ -12,8 +12,9 @@ $LocalRepoName = "LocalPSRepo"
 $SolutionFile = "$PSScriptRoot\source\Horker.MXNet.sln"
 
 $BuildFiles = @(
-    "$PSScriptRoot\build\Horker.MXNet.build.ps1"
+#    "$PSScriptRoot\build\Horker.MXNet.build.ps1"
     "$PSScriptRoot\build\Horker.Numerics.build.ps1"
+    "$PSScriptRoot\build\Horker.Numerics.LightGBM.build.ps1"
 )
 
 ############################################################

@@ -45,7 +45,7 @@ namespace Horker.Numerics.Transformers
 
         public override SeriesBase Transform(SeriesBase data)
         {
-            var result = new Series(typeof(double), data.Count, _fallbackValue);
+            var result = new Series(typeof(T), data.Count, _fallbackValue);
 
             for (var i = 0; i < result.Count; ++i)
             {
