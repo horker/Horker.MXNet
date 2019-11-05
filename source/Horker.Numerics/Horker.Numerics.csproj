@@ -87,6 +87,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataMaps\SlicedListView.cs" />
     <Compile Include="DataMaps\HistogramHelper.cs" />
     <Compile Include="DataMaps\GroupBy.cs" />
     <Compile Include="DataMaps\FilteredListView.cs" />

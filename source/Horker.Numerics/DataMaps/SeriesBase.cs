@@ -662,6 +662,11 @@ namespace Horker.Numerics.DataMaps
             MapFillTyped((dynamic)UnderlyingList, map);
         }
 
+        public SeriesBase Slice(int start, int count)
+        {
+            return new Series(SlicedListView.Create(UnderlyingList, start, count, true));
+        }
+
         // Transformers
 
         public DataMap OneHotEncoding(OneHotType oneHotType = OneHotType.OneHot, string columnNameFormat = "{0}")

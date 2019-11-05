@@ -8,31 +8,27 @@ using LightGBMNet.Train;
 
 namespace Horker.Numerics.LightGBM
 {
-    public sealed class LightGBMMulticlassEstimator : IEstimator, IDisposable
+    public abstract class LightGBMCategoricalEstimator<E, T> : IEstimator, IDisposable
+        where E: TrainerBase<T>
     {
         private Parameters _parameters;
-        private MulticlassTrainer _trainer;
-        private Predictors<double[]> _predicators;
+        private TrainerBase<T> _trainer;
+        private Predictors<T> _predicators;
         private string[] _categories;
 
         public DataMap Parameters { get => null; set => throw new NotImplementedException(); }
 
-        public MulticlassTrainer Trainer => _trainer;
-        public Predictors<double[]> Predictors => _predicators;
+        public E Trainer => (E)_trainer;
+        public Predictors<T> Predictors => _predicators;
         public string[] Categories => _categories;
 
-        public LightGBMMulticlassEstimator()
-            : this(null)
-        {
-        }
-
-        public LightGBMMulticlassEstimator(Parameters parameters)
+        public LightGBMCategoricalEstimator(Parameters parameters, E trainer)
         {
             if (parameters == null)
                 parameters = new Parameters();
 
             _parameters = parameters;
-            _trainer = new MulticlassTrainer(_parameters.Learning, _parameters.Objective);
+            _trainer = trainer;
         }
 
         public void Fit(DataMap x, DataMap y)
@@ -68,15 +64,40 @@ namespace Horker.Numerics.LightGBM
             return DataMap.From2DArray(pred, _categories);
         }
 
-        public double Score(DataMap x, DataMap y)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract double Score(DataMap x, DataMap y);
 
         public void Dispose()
         {
             _trainer.Dispose();
             _predicators.Dispose();
+        }
+    }
+
+    public class LightGBMBinaryEstimator : LightGBMCategoricalEstimator<BinaryTrainer, double>
+    {
+        public LightGBMBinaryEstimator(Parameters parameters)
+            : base(parameters, new BinaryTrainer(parameters.Learning, parameters.Objective))
+        { }
+
+        public override double Score(DataMap x, DataMap y)
+        {
+            var predicted = Predict(x).First.ToArray<int>();
+            var expected = y.First.ToArray<int>();
+            return 1.0 - Metrics.Accuracy(expected, predicted);
+        }
+    }
+
+    public class LightGBMMulticlassEstimator : LightGBMCategoricalEstimator<MulticlassTrainer, double[]>
+    {
+        public LightGBMMulticlassEstimator(Parameters parameters)
+            : base(parameters, new MulticlassTrainer(parameters.Learning, parameters.Objective))
+        { }
+
+        public override double Score(DataMap x, DataMap y)
+        {
+            var predicted = Predict(x).ToJagged<double>();
+            var expected = y.ToJagged<double>();
+            return 1.0 - Metrics.Accuracy(expected, predicted);
         }
     }
 }

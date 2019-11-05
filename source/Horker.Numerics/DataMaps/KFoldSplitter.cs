@@ -49,8 +49,8 @@ namespace Horker.Numerics.DataMaps
                     validFilter[j] = _folds[j] == i;
                 }
 
-                var train = _dataMap.FilterRows(trainFilter);
-                var valid = _dataMap.FilterRows(validFilter);
+                var train = _dataMap.Filter(trainFilter);
+                var valid = _dataMap.Filter(validFilter);
 
                 yield return new KFold(i, train, valid);
             }

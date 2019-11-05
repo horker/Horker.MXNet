@@ -69,7 +69,7 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
-        public void TestFilterRows()
+        public void TestFilter()
         {
             var d = DataMap.FromDictionary(new Dictionary<string, IList>()
             {
@@ -79,7 +79,7 @@ namespace Horker.Numerics.Tests
 
             d.SetOrder(new string[] { "foo", "bar" });
 
-            var result = d.FilterRows(d["foo"].Apply("(x, i) => i % 2 == 0", typeof(bool)));
+            var result = d.Filter(d["foo"].Apply("(x, i) => i % 2 == 0", typeof(bool)));
 
             Assert.Equal(3, result.RowCount);
             Assert.Equal(new string[] { "foo", "bar" }, result.ColumnNames.ToArray());
@@ -166,7 +166,7 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
-        public void TestAsArrayKeepArrayInstance()
+        public void TestAsArrayKeepsArrayInstance()
         {
             var t1 = new float[] { 1, 2, 3 };
 
@@ -179,7 +179,7 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
-        public void TestAsListKeepListInstance()
+        public void TestAsListKeepsListInstance()
         {
             var t1 = new List<int>(new[] { 1, 2, 3 });
 
@@ -193,6 +193,24 @@ namespace Horker.Numerics.Tests
             var t3 = d["foo"].ToList<int>();
 
             Assert.False(ReferenceEquals(t1, t3));
+        }
+
+        [Fact]
+        public void TestSlice()
+        {
+            var d1 = DataMap.FromDictionary(new Dictionary<string, IList>()
+            {
+                { "foo", new float[]{ 1,2,3,4,5 } },
+                { "bar", new string[]{ "a", "b" } }
+            });
+
+            var d2 = d1.Slice(1, 2);
+
+            Assert.Equal(new[] { "foo", "bar" }, d2.ColumnNames);
+            Assert.Equal(2, d2["foo"].Count);
+            Assert.Equal(new float[] { 2, 3 }, d2["foo"].AsList<float>());
+            Assert.Equal(1, d2["bar"].Count);
+            Assert.Equal(new string[] { "b" }, d2["bar"].AsList<string>());
         }
 
         [Fact]

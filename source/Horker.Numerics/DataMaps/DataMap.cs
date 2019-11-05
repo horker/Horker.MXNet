@@ -474,7 +474,7 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        public DataMap FilterRows(bool[] filter)
+        public DataMap Filter(bool[] filter)
         {
             var dataMap = new DataMap(ColumnNameComparer);
             foreach (var c in Columns)
@@ -486,9 +486,62 @@ namespace Horker.Numerics.DataMaps
             return dataMap;
         }
 
-        public DataMap FilterRows(SeriesBase filter)
+        public DataMap Filter(SeriesBase filter)
         {
-            return FilterRows(filter.AsArray<bool>());
+            return Filter(filter.AsArray<bool>());
+        }
+
+        public DataMap Slice(int start, int count)
+        {
+            var dataMap = new DataMap(ColumnNameComparer);
+            foreach (var c in Columns)
+            {
+                var slice = SlicedListView.Create(c.Data.UnderlyingList, start, count, false);
+                dataMap.Add(c.Name, slice);
+            }
+
+            return dataMap;
+        }
+
+        public DataMap[] Split(params int[] counts)
+        {
+            var results = new DataMap[counts.Length];
+
+            int start = 0;
+            for (var i = 0; i < counts.Length; ++i)
+            {
+                var dataMap = new DataMap(ColumnNameComparer);
+                foreach (var c in Columns)
+                {
+                    var slice = SlicedListView.Create(c.Data.UnderlyingList, start, counts[i], false);
+                    dataMap.Add(c.Name, slice);
+                }
+
+                results[i] = dataMap;
+                start += counts[i];
+            }
+
+            return results;
+        }
+
+        public DataMap[] Split(params double[] props)
+        {
+            if (Math.Abs(props.Sum() - 1.0) > 1e-5)
+                throw new ArgumentException("Sum of proportions should be equal to 1.0");
+
+            var counts = new int[props.Length];
+
+            int start = 0;
+            int maxRowCount = MaxRowCount;
+            for (var i = 0; i < props.Length; ++i)
+            {
+                if (i == props.Length - 1)
+                    counts[i] = maxRowCount - start;
+                else
+                    counts[i] = (int)(props[i] * maxRowCount);
+            }
+
+            return Split(counts);
         }
 
         public DataMap TopRows(int rowCount)
