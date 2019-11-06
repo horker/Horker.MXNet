@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Horker.Numerics.DataMaps;
 using Horker.Numerics.Estimators;
@@ -14,13 +15,12 @@ namespace Horker.Numerics.LightGBM
         private Parameters _parameters;
         private TrainerBase<T> _trainer;
         private Predictors<T> _predicators;
-        private string[] _categories;
 
         public DataMap Parameters { get => null; set => throw new NotImplementedException(); }
 
         public E Trainer => (E)_trainer;
         public Predictors<T> Predictors => _predicators;
-        public string[] Categories => _categories;
+        public string[] Categories { get; set; } = null;
 
         public LightGBMCategoricalEstimator(Parameters parameters, E trainer)
         {
@@ -31,37 +31,44 @@ namespace Horker.Numerics.LightGBM
             _trainer = trainer;
         }
 
-        public void Fit(DataMap x, DataMap y)
+        public void Fit(DataMap x, DataMap y, DataMap validX, DataMap validY)
         {
-            SeriesBase labels;
-            var dataType = y.First.DataType;
-            if (Utils.IsNumeric(dataType))
-            {
-                labels = y.First;
-            }
-            else
-            {
-                var trans = new LabelEncodingTransformer<float>();
-                labels = trans.FitTransform(y.First);
-                _categories = trans.Categories.Cast<string>().ToArray();
-            }
-
-            var dense = new DataDense()
+            var trainDense = new DataDense()
             {
                 Features = x.ToJagged<float>(),
-                Labels = labels.AsArray<float>()
+                Labels = y.First.AsArray<float>()
             };
 
-            using (var datasets = new Datasets(_parameters.Common, _parameters.Dataset, dense, null))
+            DataDense validDense = null;
+            if (validX != null)
+            {
+                validDense = new DataDense()
+                {
+                    Features = validX.ToJagged<float>(),
+                    Labels = validY.First.AsArray<float>()
+                };
+            }
+
+            using (var datasets = new Datasets(_parameters.Common, _parameters.Dataset, trainDense, validDense))
             {
                 _predicators = _trainer.Train(datasets);
             }
         }
 
+        public void Fit(DataMap x, DataMap y)
+        {
+            Fit(x, y, null, null);
+        }
+
+        public DataMap Predict(DataMap x, Booster.PredictType predictType)
+        {
+            var pred = _trainer.Evaluate(predictType, (float[][])x, -1);
+            return DataMap.From2DArray(pred, Categories);
+        }
+
         public DataMap Predict(DataMap x)
         {
-            var pred = _trainer.Evaluate(Booster.PredictType.Normal, (float[][])x, -1);
-            return DataMap.From2DArray(pred, _categories);
+            return Predict(x, Booster.PredictType.Normal);
         }
 
         public abstract double Score(DataMap x, DataMap y);
@@ -77,7 +84,9 @@ namespace Horker.Numerics.LightGBM
     {
         public LightGBMBinaryEstimator(Parameters parameters)
             : base(parameters, new BinaryTrainer(parameters.Learning, parameters.Objective))
-        { }
+        {
+            Categories = new[] { "Result" };
+        }
 
         public override double Score(DataMap x, DataMap y)
         {
