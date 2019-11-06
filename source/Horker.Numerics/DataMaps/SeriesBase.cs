@@ -636,9 +636,30 @@ namespace Horker.Numerics.DataMaps
             return new Series(list.Map(typedMap));
         }
 
+        public static SeriesBase MapTyped<T, U>(IList<T> list, IDictionary map, U fallback)
+        {
+            if (!(map is IDictionary<T, U> typedMap))
+            {
+                typedMap = new Dictionary<T, U>();
+                foreach (DictionaryEntry entry in map)
+                {
+                    var key = SmartConverter.ConvertTo<T>(entry.Key);
+                    var value = SmartConverter.ConvertTo<U>(entry.Value);
+                    typedMap.Add(key, value);
+                }
+            }
+
+            return new Series(list.Map(typedMap, fallback));
+        }
+
         public SeriesBase Map(IDictionary map)
         {
             return MapTyped((dynamic)UnderlyingList, map);
+        }
+
+        public SeriesBase Map(IDictionary map, object fallback)
+        {
+            return MapTyped((dynamic)UnderlyingList, map, (dynamic)fallback);
         }
 
         public static void MapFillTyped<T>(IList<T> list, IDictionary map)

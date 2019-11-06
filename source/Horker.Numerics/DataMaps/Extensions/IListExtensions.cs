@@ -845,6 +845,20 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
+        public static List<U> Map<T, U>(this IList<T> self, IDictionary<T, U> map, U fallback)
+        {
+            var result = new List<U>();
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (map.TryGetValue(self[i], out var value))
+                    result.Add(value);
+                else
+                    result.Add(fallback);
+            }
+
+            return result;
+        }
+
         public static void MapFill<T>(this IList<T> self, IDictionary<T, T> map)
         {
             for (var i = 0; i < self.Count; ++i)
