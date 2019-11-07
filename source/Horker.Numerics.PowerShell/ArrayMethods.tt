@@ -1,0 +1,47 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+var methods = new[] {
+	Tuple.Create("Mean", ", bool skipNaN = true", ", skipNaN"),
+	Tuple.Create("Median", ", bool skipNaN = true", ", skipNaN"),
+	Tuple.Create("Mode", ", bool skipNaN = true", ", skipNaN")
+};
+#>
+using Horker.Numerics.DataMaps.Extensions;
+using Horker.Numerics.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Management.Automation;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Horker.Numerics.PowerShell
+{
+    public static class ArrayMethods
+    {
+<#
+foreach (var m in methods)
+{
+#>
+        public static PSObject <#= m.Item1 #>(PSObject self<#= m.Item2 #>)
+        {
+            object array = self.BaseObject;
+
+			// Convert values to double if they are not numeric
+            var type = array.GetType().GetElementType();
+            if (!Utils.IsNumeric(type))
+                array = SmartConverter.ConvertTo<double>((dynamic)array);
+
+            return GenericIListExtensions.<#= m.Item1 #>((dynamic)array<#= m.Item3 #>);
+        }
+
+<#
+}
+#>
+    }
+}

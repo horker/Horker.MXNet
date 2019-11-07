@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Horker.Numerics
 {
-    static class SmartConverter
+    public static class SmartConverter
     {
         private static readonly Regex NUMERIC_RE = new Regex(@"(NaN|(?:[+-]?((?:[\d,]+\.?(?:\d*))|(?:\.\d+))(?:[eE][+-]?\d+)?))");
 
@@ -363,6 +363,16 @@ namespace Horker.Numerics
 
             foreach (var e in input)
                 result.Add(ConvertTo<T>(e));
+
+            return result;
+        }
+
+        public static T[] ConvertTo<T, U>(U[] input)
+        {
+            var result = new T[input.Length];
+
+            for (var i = 0; i < input.Length; ++i)
+                result[i] = ConvertTo<T>(input[i]);
 
             return result;
         }

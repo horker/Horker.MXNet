@@ -14,11 +14,10 @@ function script:Define-PowerShellMethods {
     }
 }
 
-#$typesAndMethods = (
-#    ,([Horker.MXNet.Core.NDArray], [Horker.MXNet.PowerShell.NDArrayMethods])
-#)
-#
-#foreach ($tm in $typesAndMethods) {
-#    Define-PowerShellMethods $tm[0] $tm[1]
-#}
-#
+$typesAndMethods = (
+    ,([System.Array], [Horker.Numerics.PowerShell.ArrayMethods])
+)
+
+foreach ($tm in $typesAndMethods) {
+    Define-PowerShellMethods $tm[0] $tm[1]
+}
