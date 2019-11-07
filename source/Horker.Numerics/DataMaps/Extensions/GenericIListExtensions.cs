@@ -246,6 +246,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 sorted = self.RemoveNaN();
+                if (sorted.Count == 0)
+                    return double.NaN;
                 sorted.SortFill();
             }
             else
@@ -842,6 +844,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 sorted = self.RemoveNaN();
+                if (sorted.Count == 0)
+                    return float.NaN;
                 sorted.SortFill();
             }
             else
@@ -1438,6 +1442,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 sorted = self.RemoveNaN();
+                if (sorted.Count == 0)
+                    return double.NaN;
                 sorted.SortFill();
             }
             else
@@ -2034,6 +2040,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 sorted = self.RemoveNaN();
+                if (sorted.Count == 0)
+                    return double.NaN;
                 sorted.SortFill();
             }
             else
@@ -2630,6 +2638,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 sorted = self.RemoveNaN();
+                if (sorted.Count == 0)
+                    return double.NaN;
                 sorted.SortFill();
             }
             else
@@ -3226,6 +3236,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 sorted = self.RemoveNaN();
+                if (sorted.Count == 0)
+                    return double.NaN;
                 sorted.SortFill();
             }
             else
@@ -3822,6 +3834,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 sorted = self.RemoveNaN();
+                if (sorted.Count == 0)
+                    return double.NaN;
                 sorted.SortFill();
             }
             else
@@ -4418,6 +4432,8 @@ namespace Horker.Numerics.DataMaps.Extensions
             if (skipNaN)
             {
                 sorted = self.RemoveNaN();
+                if (sorted.Count == 0)
+                    return double.NaN;
                 sorted.SortFill();
             }
             else

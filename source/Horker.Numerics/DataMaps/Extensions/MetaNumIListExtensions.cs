@@ -248,6 +248,8 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
             if (skipNaN)
             {
                 sorted = self.RemoveNaN();
+                if (sorted.Count == 0)
+                    return MetaFloat.NaN;
                 sorted.SortFill();
             }
             else

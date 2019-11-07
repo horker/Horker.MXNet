@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Horker.Numerics.DataMaps.Utilities;
 using Horker.Numerics.Transformers;
+using Horker.Numerics.Utilities;
 
 namespace Horker.Numerics.DataMaps
 {
@@ -574,8 +575,6 @@ namespace Horker.Numerics.DataMaps
 
         public static DataMap Concatenate(params DataMap[] maps)
         {
-            var rowCount = maps.Max(df => df.RowCount);
-
             var result = new DataMap();
 
             foreach (var df in maps)
@@ -590,6 +589,44 @@ namespace Horker.Numerics.DataMaps
 
                     result.Add(name, column.Data);
                 }
+            }
+
+            return result;
+        }
+
+        public static DataMap Pile(params DataMap[] maps)
+        {
+            var rowCount = maps.Select(x => x.MaxRowCount).Sum();
+
+            var result = new DataMap();
+            foreach (var m in maps)
+            {
+                foreach (var c in m.Columns)
+                {
+                    if (!result.Contains(c.Name))
+                        result.Add(c.Name, Utils.CreateList(c.DataType, rowCount));
+                }
+            }
+
+            var offset = 0;
+            foreach (var m in maps)
+            {
+                foreach (var c in m.Columns)
+                {
+                    var series = result[c.Name];
+                    if (series.DataType == c.DataType)
+                    {
+                        for (var i = 0; i < c.Data.Count; ++i)
+                            series[i + offset] = c.Data[i];
+                    }
+                    else
+                    {
+                        var l = SmartConverter.ConvertTo(series.DataType, c.Data.UnderlyingList);
+                        for (var i = 0; i < l.Count; ++i)
+                            series[i + offset] = l[i];
+                    }
+                }
+                offset += m.MaxRowCount;
             }
 
             return result;
