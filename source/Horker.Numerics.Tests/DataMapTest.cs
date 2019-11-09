@@ -133,7 +133,7 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
-        public void TestConcatenate()
+        public void TestConcatenateAll()
         {
             var d1 = DataMap.FromDictionary(new Dictionary<string, IList>()
             {
@@ -147,7 +147,7 @@ namespace Horker.Numerics.Tests
                 { "baz", new bool[]{ true, false, false } }
             });
 
-            var result = DataMap.Concatenate(d1, d2);
+            var result = DataMap.ConcatenateAll(d1, d2);
 
             Assert.Equal(5, result.RowCount);
             Assert.Equal(new string[] { "foo", "bar", "bar_1", "baz" }, result.ColumnNames.ToArray());
@@ -167,7 +167,7 @@ namespace Horker.Numerics.Tests
 
 
         [Fact]
-        public void TestPile()
+        public void TestPileAll()
         {
             var d1 = DataMap.FromDictionary(new Dictionary<string, IList>()
             {
@@ -182,7 +182,7 @@ namespace Horker.Numerics.Tests
                 { "baz", new bool[]{ true, false, false } }
             });
 
-            var result = DataMap.Pile(d1, d2);
+            var result = DataMap.PileAll(d1, d2);
 
             Assert.Equal(6, result.MaxRowCount);
             Assert.Equal(new string[] { "foo", "bar", "baz" }, result.ColumnNames.ToArray());

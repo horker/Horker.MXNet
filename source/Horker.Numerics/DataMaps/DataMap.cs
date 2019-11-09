@@ -573,10 +573,8 @@ namespace Horker.Numerics.DataMaps
             return dataMap;
         }
 
-        public static DataMap Concatenate(params DataMap[] maps)
+        public void Concatenate(params DataMap[] maps)
         {
-            var result = new DataMap();
-
             foreach (var df in maps)
             {
                 foreach (var column in df.Columns)
@@ -584,27 +582,31 @@ namespace Horker.Numerics.DataMaps
                     var name = column.Name;
 
                     var i = 1;
-                    while (result.Contains(name))
+                    while (Contains(name))
                         name = column.Name + "_" + i++;
 
-                    result.Add(name, column.Data);
+                    Add(name, column.Data);
                 }
             }
+        }
 
+        public static DataMap ConcatenateAll(params DataMap[] maps)
+        {
+            var result = new DataMap();
+            result.Concatenate(maps);
             return result;
         }
 
-        public static DataMap Pile(params DataMap[] maps)
+        public void Pile(params DataMap[] maps)
         {
             var rowCount = maps.Select(x => x.MaxRowCount).Sum();
 
-            var result = new DataMap();
             foreach (var m in maps)
             {
                 foreach (var c in m.Columns)
                 {
-                    if (!result.Contains(c.Name))
-                        result.Add(c.Name, Utils.CreateList(c.DataType, rowCount));
+                    if (!Contains(c.Name))
+                        Add(c.Name, Utils.CreateList(c.DataType, rowCount));
                 }
             }
 
@@ -613,7 +615,7 @@ namespace Horker.Numerics.DataMaps
             {
                 foreach (var c in m.Columns)
                 {
-                    var series = result[c.Name];
+                    var series = this[c.Name];
                     if (series.DataType == c.DataType)
                     {
                         for (var i = 0; i < c.Data.Count; ++i)
@@ -628,7 +630,12 @@ namespace Horker.Numerics.DataMaps
                 }
                 offset += m.MaxRowCount;
             }
+        }
 
+        public static DataMap PileAll(params DataMap[] maps)
+        {
+            var result = new DataMap();
+            result.Pile(maps);
             return result;
         }
 
