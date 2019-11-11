@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Horker.Numerics.DataMaps.Utilities
 {
-    public struct TypeTrait<T>
+    public static class TypeTrait<T>
     {
         public static T GetNaN()
         {
@@ -146,6 +146,42 @@ namespace Horker.Numerics.DataMaps.Utilities
                 return (T)(object)-1;
 
             throw new InvalidCastException("Type {typeof(T)} is not numeric type");
+        }
+    }
+
+    public static class TypeTrait
+    {
+        public static object GetNaN(Type type)
+        {
+            if (type == typeof(double))
+                return double.NaN;
+            if (type == typeof(float))
+                return float.NaN;
+            if (type == typeof(long))
+                return (long)0;
+            if (type == typeof(int))
+                return (int)0;
+            if (type == typeof(short))
+                return (short)0;
+            if (type == typeof(byte))
+                return (byte)0;
+            if (type == typeof(sbyte))
+                return (sbyte)0;
+            if (type == typeof(decimal))
+                return (decimal)0;
+            if (type == typeof(string))
+                return string.Empty;
+            if (type == typeof(bool))
+                return false;
+            if (type == typeof(DateTime))
+                return DateTime.MinValue;
+            if (type == typeof(DateTimeOffset))
+                return DateTimeOffset.MinValue;
+
+            if (type.IsValueType)
+                return Activator.CreateInstance(type);
+
+            return null;
         }
     }
 }

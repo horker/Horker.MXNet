@@ -314,25 +314,6 @@ namespace Horker.Numerics.DataMaps
             AddLast(name, value);
         }
 
-        public void Add(params DataMap[] maps)
-        {
-            var rowCount = Math.Max(RowCount, maps.Max(df => df.RowCount));
-
-            foreach (var df in maps)
-            {
-                foreach (var column in df.Columns)
-                {
-                    var name = column.Name;
-
-                    var i = 1;
-                    while (Contains(name))
-                        name = column.Name + "_" + i++;
-
-                    AddLast(name, column.Data);
-                }
-            }
-        }
-
         public void AddFirst(string name, SeriesBase value)
         {
             if (_nameMap.ContainsKey(name))
@@ -575,9 +556,9 @@ namespace Horker.Numerics.DataMaps
 
         public void Concatenate(params DataMap[] maps)
         {
-            foreach (var df in maps)
+            foreach (var m in maps)
             {
-                foreach (var column in df.Columns)
+                foreach (var column in m.Columns)
                 {
                     var name = column.Name;
 
@@ -606,7 +587,7 @@ namespace Horker.Numerics.DataMaps
                 foreach (var c in m.Columns)
                 {
                     if (!Contains(c.Name))
-                        Add(c.Name, Utils.CreateList(c.DataType, rowCount));
+                        Add(c.Name, Utils.CreateList(c.DataType, rowCount, rowCount));
                 }
             }
 
@@ -636,6 +617,106 @@ namespace Horker.Numerics.DataMaps
         {
             var result = new DataMap();
             result.Pile(maps);
+            return result;
+        }
+
+        public DataMap Unstack(string columnToUnstack,
+            IList<string> keyColumns = null,
+            IList<string> selectColumnNames = null,
+            int maxColumnCount = int.MaxValue)
+        {
+            if (selectColumnNames == null)
+                selectColumnNames = ColumnNames.ToList();
+
+            var result = new DataMap();
+
+            // Prepare groups that are grouped by key column values.
+
+            DataMap[] groups;
+            if (keyColumns == null)
+                groups = new[] { this };
+            else
+            {
+                var columns = new List<string>(keyColumns);
+                columns.Add(columnToUnstack);
+                columns.AddRange(selectColumnNames);
+                groups = new GroupBy(this, keyColumns, columns).Groups().ToArray();
+            }
+
+            var groupCount = groups.Length;
+
+            // Insert key column values.
+
+            foreach (var k in keyColumns)
+            {
+                var list = Utils.CreateList(this[k].DataType, groupCount, 0);
+                foreach (var g in groups)
+                    list.Add(g[k][0]);
+                result.Add(k, list);
+            }
+
+            // Prepare columnHash -- the mapping from values to be unstacked to lists.
+
+            var toUnstack = this[columnToUnstack];
+            var columnHash = new Dictionary<object, Dictionary<string, IList>>();
+            for (var i = 0; i < Math.Min(toUnstack.Count, maxColumnCount); ++i)
+            {
+                if (!columnHash.ContainsKey(toUnstack[i]))
+                {
+                    var columnToListMap = new Dictionary<string, IList>();
+                    foreach (var s in selectColumnNames)
+                    {
+                        var name = toUnstack[i].ToString() + "_" + s;
+                        var list = Utils.CreateList(this[s].DataType, groupCount, 0);
+                        result.Add(name, list);
+                        columnToListMap.Add(s, list);
+                    }
+                    columnHash.Add(toUnstack[i], columnToListMap);
+                }
+            }
+
+            // Insert unstacked values.
+
+            for (var i = 0; i < groups.Length; ++i)
+            {
+                var w = groups[i][columnToUnstack];
+                for (var j = 0; j < w.Count; ++j)
+                {
+                    if (!columnHash.TryGetValue(w[j], out var columnToListMap))
+                        throw new ArgumentException($"Unknown value: '{w[j]}'");
+
+                    foreach (var s in selectColumnNames)
+                    {
+                        var from = groups[i][s];
+                        var to = columnToListMap[s];
+
+                        if (to.Count > i)
+                            throw new ArgumentException($"In the row {i}, the value '{w[j]}' appears more than once");
+
+                        if (to.Count < i)
+                        {
+                            var nan = TypeTrait.GetNaN(from.DataType);
+                            while (to.Count < i)
+                                to.Add(nan);
+                        }
+
+                        to.Add(from[j]);
+                    }
+                }
+            }
+
+            // Fill the last rows with NaN values.
+
+            foreach (var c in result.Columns)
+            {
+                if (c.Data.Count < groupCount)
+                {
+                    var nan = TypeTrait.GetNaN(c.DataType);
+                    while (c.Data.Count < groupCount)
+                        c.Data.Add(nan);
+                }
+            }
+
             return result;
         }
 

@@ -198,6 +198,52 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
+        public void TestUnstack1()
+        {
+            var d1 = DataMap.FromDictionary(new Dictionary<string, IList>()
+            {
+                { "foo", new string[]{ "a", "a", "a" } },
+                { "bar", new string[]{ "a", "b", "c" } },
+                { "baz", new float[]{ 1 , 2, 3 } },
+                { "baz2", new string[]{ "xxx", "yyy", "zzz" } }
+            });
+
+            var unstack = d1.Unstack("bar", new[] { "foo" }, new[] { "baz", "baz2" });
+
+            Assert.Equal(new[] { "foo", "a_baz", "a_baz2", "b_baz", "b_baz2",  "c_baz", "c_baz2", }, unstack.ColumnNames);
+            Assert.Equal(new string[] { "a" }, unstack["foo"].AsList<string>());
+            Assert.Equal(new float[] { 1 }, unstack["a_baz"].AsList<float>());
+            Assert.Equal(new float[] { 2 }, unstack["b_baz"].AsList<float>());
+            Assert.Equal(new float[] { 3 }, unstack["c_baz"].AsList<float>());
+            Assert.Equal(new string[] { "xxx" }, unstack["a_baz2"].AsList<string>());
+            Assert.Equal(new string[] { "yyy" }, unstack["b_baz2"].AsList<string>());
+            Assert.Equal(new string[] { "zzz" }, unstack["c_baz2"].AsList<string>());
+        }
+
+        [Fact]
+        public void TestUnstack2()
+        {
+            var d1 = DataMap.FromDictionary(new Dictionary<string, IList>()
+            {
+                { "foo", new string[]{ "a", "a", "b" } },
+                { "bar", new string[]{ "a", "b", "c" } },
+                { "baz", new float[]{ 1 , 2, 3 } },
+                { "baz2", new string[]{ "xxx", "yyy", "zzz" } }
+            });
+
+            var unstack = d1.Unstack("bar", new[] { "foo" }, new[] { "baz", "baz2" });
+
+            Assert.Equal(new[] { "foo", "a_baz", "a_baz2", "b_baz", "b_baz2",  "c_baz", "c_baz2", }, unstack.ColumnNames);
+            Assert.Equal(new string[] { "a", "b" }, unstack["foo"].AsList<string>());
+            Assert.Equal(new float[] { 1, float.NaN }, unstack["a_baz"].AsList<float>());
+            Assert.Equal(new float[] { 2, float.NaN }, unstack["b_baz"].AsList<float>());
+            Assert.Equal(new float[] { float.NaN, 3 }, unstack["c_baz"].AsList<float>());
+            Assert.Equal(new string[] { "xxx", string.Empty }, unstack["a_baz2"].AsList<string>());
+            Assert.Equal(new string[] { "yyy", string.Empty }, unstack["b_baz2"].AsList<string>());
+            Assert.Equal(new string[] { string.Empty, "zzz" }, unstack["c_baz2"].AsList<string>());
+        }
+
+        [Fact]
         public void TestAsArrayKeepsArrayInstance()
         {
             var t1 = new float[] { 1, 2, 3 };

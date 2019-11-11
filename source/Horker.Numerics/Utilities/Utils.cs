@@ -32,9 +32,9 @@ namespace Horker.Numerics.Utilities
                 type == typeof(decimal);
         }
 
-        public static List<T> CreateListTyped<T>(int count)
+        public static List<T> CreateListTyped<T>(int capacity, int count)
         {
-            var result = new List<T>(count == 0 ? 10 : count);
+            var result = new List<T>(capacity);
             for (var i = 0; i < count; ++i)
                 result.Add(TypeTrait<T>.GetNaN());
 
@@ -44,10 +44,10 @@ namespace Horker.Numerics.Utilities
         private static MethodInfo _methodCreateListTyped =
             typeof(Utils).GetMethod(nameof(CreateListTyped), BindingFlags.Static | BindingFlags.Public);
 
-        public static IList CreateList(Type dataType, int count)
+        public static IList CreateList(Type dataType, int capacity, int count)
         {
             var gm = _methodCreateListTyped.MakeGenericMethod(new[] { dataType });
-            return (IList)gm.Invoke(null, new object[] { count });
+            return (IList)gm.Invoke(null, new object[] { capacity, count });
         }
     }
 }
