@@ -203,7 +203,7 @@ namespace Horker.Numerics.DataMaps
             if (type == DataType)
                 return;
 
-            UnderlyingList = ToList();
+            UnderlyingList = ToList(type);
         }
 
         public void EnsureSizeable()
