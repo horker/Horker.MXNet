@@ -158,7 +158,7 @@ namespace Horker.Numerics.DataMaps
             return InvokeConversionMethod<Array>("ToArray", type);
         }
 
-        public IList<T> ToList<T>()
+        public List<T> ToList<T>()
         {
             return GenericIListExtensions.ToList<T>(UnderlyingList);
         }
@@ -186,6 +186,16 @@ namespace Horker.Numerics.DataMaps
         public IList AsList(Type type = null)
         {
             return InvokeConversionMethod<IList>("AsList", type);
+        }
+
+        public SeriesBase ConvertType<T>()
+        {
+            return new Series(ToList<T>());
+        }
+
+        public SeriesBase ConvertType(Type type)
+        {
+            return new Series(ToList(type));
         }
 
         public IList TryConversion(Type[] possibleTypes = null, bool raiseError = false)

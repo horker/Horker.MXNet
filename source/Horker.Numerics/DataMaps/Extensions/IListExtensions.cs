@@ -51,7 +51,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList<T> ToList<T>(this IList value)
+        public static List<T> ToList<T>(this IList value)
         {
             if (value is IList<T> l)
                 return new List<T>(l);
@@ -155,6 +155,46 @@ namespace Horker.Numerics.DataMaps.Extensions
             // If any possible types are not adequate, try to cast down the type of the first non-null element.
 
             return CastDownToFirstElementType(self);
+        }
+
+        // Element-wise operations of string
+
+        public static IList<string> ElementAdd(this IList<string> self, IList<string> other)
+        {
+            var result = new List<string>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add(self[i] + other[i]);
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<string> ElementAdd(this IList<string> self, string value)
+        {
+            var result = new List<string>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add(self[i] + value);
+
+            return result;
+        }
+
+        public static IList<string> ElementAddR(this IList<string> self, string value)
+        {
+            var result = new List<string>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add(value + self[i]);
+
+            return result;
         }
 
         // Apply and friends
