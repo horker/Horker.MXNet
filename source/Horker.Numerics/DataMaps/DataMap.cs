@@ -631,13 +631,13 @@ namespace Horker.Numerics.DataMaps
         }
 
         public DataMap Unstack(string columnToUnstack,
-            IList<string> keyColumns = null,
-            IList<string> selectColumnNames = null,
+            string[] keyColumns = null,
+            string[] selectColumnNames = null,
             int minColumnCount = 0,
             int maxColumnCount = int.MaxValue)
         {
             if (selectColumnNames == null)
-                selectColumnNames = ColumnNames.ToList();
+                selectColumnNames = ColumnNames.ToArray();
 
             var result = new DataMap();
 
