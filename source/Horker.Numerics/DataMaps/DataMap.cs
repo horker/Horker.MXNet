@@ -620,9 +620,20 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
+        private string GetUniqueColumnName(string baseName)
+        {
+            var name = baseName;
+            int i = 1;
+            while (_nameMap.ContainsKey(name))
+                name = baseName + "_" + i++;
+
+            return name;
+        }
+
         public DataMap Unstack(string columnToUnstack,
             IList<string> keyColumns = null,
             IList<string> selectColumnNames = null,
+            int minColumnCount = 0,
             int maxColumnCount = int.MaxValue)
         {
             if (selectColumnNames == null)
@@ -659,19 +670,35 @@ namespace Horker.Numerics.DataMaps
 
             var toUnstack = this[columnToUnstack];
             var columnHash = new Dictionary<object, Dictionary<string, IList>>();
-            for (var i = 0; i < Math.Min(toUnstack.Count, maxColumnCount); ++i)
+            var columnCount = 0;
+            for (var i = 0; i < toUnstack.Count; ++i)
             {
                 if (!columnHash.ContainsKey(toUnstack[i]))
                 {
                     var columnToListMap = new Dictionary<string, IList>();
                     foreach (var s in selectColumnNames)
                     {
-                        var name = toUnstack[i].ToString() + "_" + s;
+                        var name = result.GetUniqueColumnName(toUnstack[i].ToString() + "_" + s);
                         var list = Utils.CreateList(this[s].DataType, groupCount, 0);
                         result.Add(name, list);
                         columnToListMap.Add(s, list);
                     }
                     columnHash.Add(toUnstack[i], columnToListMap);
+                    ++columnCount;
+                    if (columnCount >= maxColumnCount)
+                        break;
+                }
+            }
+
+            // Add columns to satisfy minimum column count requirement.
+
+            for (; columnCount < minColumnCount; ++columnCount)
+            {
+                foreach (var s in selectColumnNames)
+                {
+                    var name = result.GetUniqueColumnName("na_" + s);
+                    var list = Utils.CreateList(this[s].DataType, groupCount, groupCount);
+                    result.Add(name, list);
                 }
             }
 
@@ -683,7 +710,7 @@ namespace Horker.Numerics.DataMaps
                 for (var j = 0; j < w.Count; ++j)
                 {
                     if (!columnHash.TryGetValue(w[j], out var columnToListMap))
-                        throw new ArgumentException($"Unknown value: '{w[j]}'");
+                        continue;
 
                     foreach (var s in selectColumnNames)
                     {

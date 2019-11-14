@@ -244,6 +244,27 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
+        public void TestUnstackMinColumnCount()
+        {
+            var d1 = DataMap.FromDictionary(new Dictionary<string, IList>()
+            {
+                { "foo", new string[]{ "a", "a", "b" } },
+                { "bar", new string[]{ "a", "b", "c" } },
+                { "baz", new float[]{ 1, 2, 3 } }
+            });
+
+            var unstack = d1.Unstack("bar", new[] { "foo" }, new[] { "baz" }, 5);
+
+            Assert.Equal(new[] { "foo", "a_baz", "b_baz", "c_baz", "na_baz", "na_baz_1", }, unstack.ColumnNames);
+            Assert.Equal(new string[] { "a", "b" }, unstack["foo"].AsList<string>());
+            Assert.Equal(new float[] { 1, float.NaN }, unstack["a_baz"].AsList<float>());
+            Assert.Equal(new float[] { 2, float.NaN }, unstack["b_baz"].AsList<float>());
+            Assert.Equal(new float[] { float.NaN, 3 }, unstack["c_baz"].AsList<float>());
+            Assert.Equal(new float[] { float.NaN, float.NaN }, unstack["na_baz"].AsList<float>());
+            Assert.Equal(new float[] { float.NaN, float.NaN }, unstack["na_baz_1"].AsList<float>());
+        }
+
+        [Fact]
         public void TestAsArrayKeepsArrayInstance()
         {
             var t1 = new float[] { 1, 2, 3 };
