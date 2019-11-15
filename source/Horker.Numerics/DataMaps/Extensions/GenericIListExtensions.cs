@@ -473,6 +473,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             return bestValue;
         }
 
+        public static double Product(this IList<double> self, bool skipNaN = true, int minCount = 0)
+        {
+            double product = (double)1;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<double>.IsNaN(value))
+                    continue;
+                product *= value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<double>.GetNaN();
+
+            return product;
+        }
+
         public static double StandardDeviation(this IList<double> self, bool unbiased = true, bool skipNaN = true)
         {
             var variance = Variance(self, unbiased, skipNaN);
@@ -518,6 +537,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             {
                 return (double)g;
             }
+        }
+
+        public static double Sum(this IList<double> self, bool skipNaN = true, int minCount = 0)
+        {
+            double sum = (double)0.0;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<double>.IsNaN(value))
+                    continue;
+                sum += value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<double>.GetNaN();
+
+            return sum;
         }
 
         public static double Variance(this IList<double> self, bool unbiased = true, bool skipNaN = true)
@@ -1071,6 +1109,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             return bestValue;
         }
 
+        public static float Product(this IList<float> self, bool skipNaN = true, int minCount = 0)
+        {
+            float product = (float)1;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<float>.IsNaN(value))
+                    continue;
+                product *= value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<float>.GetNaN();
+
+            return product;
+        }
+
         public static float StandardDeviation(this IList<float> self, bool unbiased = true, bool skipNaN = true)
         {
             var variance = Variance(self, unbiased, skipNaN);
@@ -1116,6 +1173,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             {
                 return (float)g;
             }
+        }
+
+        public static float Sum(this IList<float> self, bool skipNaN = true, int minCount = 0)
+        {
+            float sum = (float)0.0;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<float>.IsNaN(value))
+                    continue;
+                sum += value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<float>.GetNaN();
+
+            return sum;
         }
 
         public static float Variance(this IList<float> self, bool unbiased = true, bool skipNaN = true)
@@ -1669,6 +1745,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             return bestValue;
         }
 
+        public static long Product(this IList<long> self, bool skipNaN = true, int minCount = 0)
+        {
+            long product = (long)1;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<long>.IsNaN(value))
+                    continue;
+                product *= value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<long>.GetNaN();
+
+            return product;
+        }
+
         public static double StandardDeviation(this IList<long> self, bool unbiased = true, bool skipNaN = true)
         {
             var variance = Variance(self, unbiased, skipNaN);
@@ -1714,6 +1809,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             {
                 return (double)g;
             }
+        }
+
+        public static long Sum(this IList<long> self, bool skipNaN = true, int minCount = 0)
+        {
+            long sum = (long)0.0;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<long>.IsNaN(value))
+                    continue;
+                sum += value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<long>.GetNaN();
+
+            return sum;
         }
 
         public static double Variance(this IList<long> self, bool unbiased = true, bool skipNaN = true)
@@ -2267,6 +2381,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             return bestValue;
         }
 
+        public static int Product(this IList<int> self, bool skipNaN = true, int minCount = 0)
+        {
+            int product = (int)1;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<int>.IsNaN(value))
+                    continue;
+                product *= value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<int>.GetNaN();
+
+            return product;
+        }
+
         public static double StandardDeviation(this IList<int> self, bool unbiased = true, bool skipNaN = true)
         {
             var variance = Variance(self, unbiased, skipNaN);
@@ -2312,6 +2445,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             {
                 return (double)g;
             }
+        }
+
+        public static int Sum(this IList<int> self, bool skipNaN = true, int minCount = 0)
+        {
+            int sum = (int)0.0;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<int>.IsNaN(value))
+                    continue;
+                sum += value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<int>.GetNaN();
+
+            return sum;
         }
 
         public static double Variance(this IList<int> self, bool unbiased = true, bool skipNaN = true)
@@ -2865,6 +3017,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             return bestValue;
         }
 
+        public static short Product(this IList<short> self, bool skipNaN = true, int minCount = 0)
+        {
+            short product = (short)1;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<short>.IsNaN(value))
+                    continue;
+                product *= value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<short>.GetNaN();
+
+            return product;
+        }
+
         public static double StandardDeviation(this IList<short> self, bool unbiased = true, bool skipNaN = true)
         {
             var variance = Variance(self, unbiased, skipNaN);
@@ -2910,6 +3081,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             {
                 return (double)g;
             }
+        }
+
+        public static short Sum(this IList<short> self, bool skipNaN = true, int minCount = 0)
+        {
+            short sum = (short)0.0;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<short>.IsNaN(value))
+                    continue;
+                sum += value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<short>.GetNaN();
+
+            return sum;
         }
 
         public static double Variance(this IList<short> self, bool unbiased = true, bool skipNaN = true)
@@ -3463,6 +3653,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             return bestValue;
         }
 
+        public static byte Product(this IList<byte> self, bool skipNaN = true, int minCount = 0)
+        {
+            byte product = (byte)1;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<byte>.IsNaN(value))
+                    continue;
+                product *= value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<byte>.GetNaN();
+
+            return product;
+        }
+
         public static double StandardDeviation(this IList<byte> self, bool unbiased = true, bool skipNaN = true)
         {
             var variance = Variance(self, unbiased, skipNaN);
@@ -3508,6 +3717,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             {
                 return (double)g;
             }
+        }
+
+        public static byte Sum(this IList<byte> self, bool skipNaN = true, int minCount = 0)
+        {
+            byte sum = (byte)0.0;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<byte>.IsNaN(value))
+                    continue;
+                sum += value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<byte>.GetNaN();
+
+            return sum;
         }
 
         public static double Variance(this IList<byte> self, bool unbiased = true, bool skipNaN = true)
@@ -4061,6 +4289,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             return bestValue;
         }
 
+        public static sbyte Product(this IList<sbyte> self, bool skipNaN = true, int minCount = 0)
+        {
+            sbyte product = (sbyte)1;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<sbyte>.IsNaN(value))
+                    continue;
+                product *= value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<sbyte>.GetNaN();
+
+            return product;
+        }
+
         public static double StandardDeviation(this IList<sbyte> self, bool unbiased = true, bool skipNaN = true)
         {
             var variance = Variance(self, unbiased, skipNaN);
@@ -4106,6 +4353,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             {
                 return (double)g;
             }
+        }
+
+        public static sbyte Sum(this IList<sbyte> self, bool skipNaN = true, int minCount = 0)
+        {
+            sbyte sum = (sbyte)0.0;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<sbyte>.IsNaN(value))
+                    continue;
+                sum += value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<sbyte>.GetNaN();
+
+            return sum;
         }
 
         public static double Variance(this IList<sbyte> self, bool unbiased = true, bool skipNaN = true)
@@ -4659,6 +4925,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             return bestValue;
         }
 
+        public static decimal Product(this IList<decimal> self, bool skipNaN = true, int minCount = 0)
+        {
+            decimal product = (decimal)1;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<decimal>.IsNaN(value))
+                    continue;
+                product *= value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<decimal>.GetNaN();
+
+            return product;
+        }
+
         public static double StandardDeviation(this IList<decimal> self, bool unbiased = true, bool skipNaN = true)
         {
             var variance = Variance(self, unbiased, skipNaN);
@@ -4704,6 +4989,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             {
                 return (double)g;
             }
+        }
+
+        public static decimal Sum(this IList<decimal> self, bool skipNaN = true, int minCount = 0)
+        {
+            decimal sum = (decimal)0.0;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<decimal>.IsNaN(value))
+                    continue;
+                sum += value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<decimal>.GetNaN();
+
+            return sum;
         }
 
         public static double Variance(this IList<decimal> self, bool unbiased = true, bool skipNaN = true)

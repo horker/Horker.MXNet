@@ -475,6 +475,25 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
             return bestValue;
         }
 
+        public static MetaNum Product(this IList<MetaNum> self, bool skipNaN = true, int minCount = 0)
+        {
+            MetaNum product = (MetaNum)1;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<MetaNum>.IsNaN(value))
+                    continue;
+                product *= value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<MetaNum>.GetNaN();
+
+            return product;
+        }
+
         public static MetaFloat StandardDeviation(this IList<MetaNum> self, bool unbiased = true, bool skipNaN = true)
         {
             var variance = Variance(self, unbiased, skipNaN);
@@ -520,6 +539,25 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
             {
                 return (MetaFloat)g;
             }
+        }
+
+        public static MetaNum Sum(this IList<MetaNum> self, bool skipNaN = true, int minCount = 0)
+        {
+            MetaNum sum = (MetaNum)0.0;
+            int count = 0;
+
+            foreach (var value in self)
+            {
+                if (skipNaN && TypeTrait<MetaNum>.IsNaN(value))
+                    continue;
+                sum += value;
+                ++count;
+            }
+
+            if (count < minCount)
+                return TypeTrait<MetaNum>.GetNaN();
+
+            return sum;
         }
 
         public static MetaFloat Variance(this IList<MetaNum> self, bool unbiased = true, bool skipNaN = true)

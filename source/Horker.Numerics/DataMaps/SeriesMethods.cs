@@ -1320,6 +1320,18 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
+        public object Product(bool skipNaN = true, int minCount = 0)
+        {
+			try
+			{
+				return (object)GenericIListExtensions.Product((dynamic)UnderlyingList, skipNaN, minCount);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Product() does not support data type {DataType}");
+			}
+        }
+
         public object Quantile(double p, bool skipNaN = true, bool isSorted = false)
         {
 			try
@@ -1341,6 +1353,18 @@ namespace Horker.Numerics.DataMaps
 			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
 			{
 				throw new InvalidOperationException($"ShuffleFill() does not support data type {DataType}");
+			}
+        }
+
+        public object Sum(bool skipNaN = true, int minCount = 0)
+        {
+			try
+			{
+				return (object)GenericIListExtensions.Sum((dynamic)UnderlyingList, skipNaN, minCount);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Sum() does not support data type {DataType}");
 			}
         }
 
