@@ -80,7 +80,7 @@ namespace Horker.Numerics.LightGBM
             return Predict(x, Booster.PredictType.Normal);
         }
 
-        public DataMap GetFeatureImportance(int numIteration, Booster.ImportanceType importanceType)
+        public DataMap GetFeatureImportance(Booster.ImportanceType importanceType, int numIteration = 0)
         {
             var featureNames = _predicator.Booster.FeatureNames;
             var imp = _predicator.Booster.GetFeatureImportance(numIteration, importanceType);
