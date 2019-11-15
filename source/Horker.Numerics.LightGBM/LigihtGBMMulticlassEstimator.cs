@@ -14,13 +14,13 @@ namespace Horker.Numerics.LightGBM
     {
         private Parameters _parameters;
         private TrainerBase<T> _trainer;
-        private Predictors<T> _predicators;
+        private NativePredictorBase<T> _predicator;
 
         public DataMap Parameters { get => null; set => throw new NotImplementedException(); }
 
         public E Trainer => (E)_trainer;
-        public Predictors<T> Predictors => _predicators;
-        public string[] Categories { get; set; } = null;
+        public NativePredictorBase<T> Predictor => _predicator;
+        public string[] OutputCategories { get; set; } = null;
 
         public LightGBMCategoricalEstimator(Parameters parameters, E trainer)
         {
@@ -29,6 +29,11 @@ namespace Horker.Numerics.LightGBM
 
             _parameters = parameters;
             _trainer = trainer;
+        }
+
+        public LightGBMCategoricalEstimator(NativePredictorBase<T> predictor)
+        {
+            _predicator = predictor;
         }
 
         public void Fit(DataMap x, DataMap y, DataMap validX, DataMap validY)
@@ -51,7 +56,11 @@ namespace Horker.Numerics.LightGBM
 
             using (var datasets = new Datasets(_parameters.Common, _parameters.Dataset, trainDense, validDense))
             {
-                _predicators = _trainer.Train(datasets);
+                datasets.Training.SetFeatureNames(x.ColumnNames.ToArray());
+                datasets.Validation.SetFeatureNames(validX.ColumnNames.ToArray());
+
+                var predicators = _trainer.Train(datasets);
+                _predicator = (NativePredictorBase<T>)predicators.Native;
             }
         }
 
@@ -62,8 +71,8 @@ namespace Horker.Numerics.LightGBM
 
         public DataMap Predict(DataMap x, Booster.PredictType predictType)
         {
-            var pred = _trainer.Evaluate(predictType, (float[][])x, -1);
-            return DataMap.From2DArray(pred, Categories);
+            var pred = _predicator.Booster.PredictForMatsMulti(predictType, (float[][])x, -1);
+            return DataMap.From2DArray(pred, OutputCategories);
         }
 
         public DataMap Predict(DataMap x)
@@ -71,12 +80,27 @@ namespace Horker.Numerics.LightGBM
             return Predict(x, Booster.PredictType.Normal);
         }
 
+        public DataMap GetFeatureImportance(int numIteration, Booster.ImportanceType importanceType)
+        {
+            var featureNames = _predicator.Booster.FeatureNames;
+            var imp = _predicator.Booster.GetFeatureImportance(numIteration, importanceType);
+
+            var result = new DataMap();
+            result.Add("Names", featureNames);
+            result.Add("Importance", imp);
+
+            return result;
+        }
+
         public abstract double Score(DataMap x, DataMap y);
 
         public void Dispose()
         {
-            _trainer.Dispose();
-            _predicators.Dispose();
+            if (_trainer != null)
+                _trainer.Dispose();
+
+            if (_predicator != null)
+                _predicator.Dispose();
         }
     }
 
@@ -85,7 +109,7 @@ namespace Horker.Numerics.LightGBM
         public LightGBMBinaryEstimator(Parameters parameters)
             : base(parameters, new BinaryTrainer(parameters.Learning, parameters.Objective))
         {
-            Categories = new[] { "Result" };
+            OutputCategories = new[] { "Result" };
         }
 
         public override double Score(DataMap x, DataMap y)
