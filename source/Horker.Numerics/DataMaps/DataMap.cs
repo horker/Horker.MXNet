@@ -456,6 +456,19 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
+        public int GetColumnIndex(string name)
+        {
+            var i = 0;
+            foreach (var c in _columns)
+            {
+                if (c.Name == name)
+                    return i;
+                ++i;
+            }
+
+            return -1;
+        }
+
         public DataMap Filter(bool[] filter)
         {
             var dataMap = new DataMap(ColumnNameComparer);
