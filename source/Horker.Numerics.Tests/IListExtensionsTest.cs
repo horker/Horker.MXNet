@@ -36,6 +36,42 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
+        public void TestArgMaxArgMin()
+        {
+            var s = new double[] { 1, 2, 3, 4, 5, 4, 3, 0, 2, 1 };
+
+            var max = s.ArgMax();
+            Assert.Equal(4, max);
+
+            var min = s.ArgMin();
+            Assert.Equal(7, min);
+
+            s = new double[] { 1, 2, 3, 4, 5 };
+
+            max = s.ArgMax();
+            Assert.Equal(4, max);
+
+            min = s.ArgMin();
+            Assert.Equal(0, min);
+
+            s = new double[] { 10, 9, 8, 7 };
+
+            max = s.ArgMax();
+            Assert.Equal(0, max);
+
+            min = s.ArgMin();
+            Assert.Equal(3, min);
+
+            s = new double[] { 10 };
+
+            max = s.ArgMax();
+            Assert.Equal(0, max);
+
+            min = s.ArgMin();
+            Assert.Equal(0, min);
+        }
+
+        [Fact]
         public void TestCorrelation()
         {
             var s1 = new double[] { 1, 2, 3, 4, 5 };

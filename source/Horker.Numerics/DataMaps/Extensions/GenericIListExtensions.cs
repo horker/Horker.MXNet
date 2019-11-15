@@ -9,6 +9,60 @@ namespace Horker.Numerics.DataMaps.Extensions
 	public static partial class GenericIListExtensions
 	{
 
+        public static int ArgMax(this IList<double> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<double>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            double max = self[i];
+            int argmax = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                {
+                    max = self[i];
+                    argmax = i;
+                }
+            }
+
+            return argmax;
+        }
+
+        public static int ArgMin(this IList<double> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<double>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            double min = self[i];
+            int argmin = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                {
+                    min = self[i];
+                    argmin = i;
+                }
+            }
+
+            return argmin;
+        }
+
         public static double Correlation(this IList<double> self, IList<double> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -643,6 +697,60 @@ namespace Horker.Numerics.DataMaps.Extensions
             var counts = collect.Item1;
             var total = collect.Item2;
             return HistogramBin.CreateHistogram(intervals, counts, total);
+        }
+
+        public static int ArgMax(this IList<float> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<float>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            float max = self[i];
+            int argmax = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                {
+                    max = self[i];
+                    argmax = i;
+                }
+            }
+
+            return argmax;
+        }
+
+        public static int ArgMin(this IList<float> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<float>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            float min = self[i];
+            int argmin = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                {
+                    min = self[i];
+                    argmin = i;
+                }
+            }
+
+            return argmin;
         }
 
         public static float Correlation(this IList<float> self, IList<float> other, bool skipNaN = true)
@@ -1281,6 +1389,60 @@ namespace Horker.Numerics.DataMaps.Extensions
             return HistogramBin.CreateHistogram(intervals, counts, total);
         }
 
+        public static int ArgMax(this IList<long> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<long>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            long max = self[i];
+            int argmax = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                {
+                    max = self[i];
+                    argmax = i;
+                }
+            }
+
+            return argmax;
+        }
+
+        public static int ArgMin(this IList<long> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<long>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            long min = self[i];
+            int argmin = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                {
+                    min = self[i];
+                    argmin = i;
+                }
+            }
+
+            return argmin;
+        }
+
         public static double Correlation(this IList<long> self, IList<long> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -1915,6 +2077,60 @@ namespace Horker.Numerics.DataMaps.Extensions
             var counts = collect.Item1;
             var total = collect.Item2;
             return HistogramBin.CreateHistogram(intervals, counts, total);
+        }
+
+        public static int ArgMax(this IList<int> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<int>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            int max = self[i];
+            int argmax = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                {
+                    max = self[i];
+                    argmax = i;
+                }
+            }
+
+            return argmax;
+        }
+
+        public static int ArgMin(this IList<int> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<int>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            int min = self[i];
+            int argmin = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                {
+                    min = self[i];
+                    argmin = i;
+                }
+            }
+
+            return argmin;
         }
 
         public static double Correlation(this IList<int> self, IList<int> other, bool skipNaN = true)
@@ -2553,6 +2769,60 @@ namespace Horker.Numerics.DataMaps.Extensions
             return HistogramBin.CreateHistogram(intervals, counts, total);
         }
 
+        public static int ArgMax(this IList<short> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<short>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            short max = self[i];
+            int argmax = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                {
+                    max = self[i];
+                    argmax = i;
+                }
+            }
+
+            return argmax;
+        }
+
+        public static int ArgMin(this IList<short> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<short>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            short min = self[i];
+            int argmin = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                {
+                    min = self[i];
+                    argmin = i;
+                }
+            }
+
+            return argmin;
+        }
+
         public static double Correlation(this IList<short> self, IList<short> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -3187,6 +3457,60 @@ namespace Horker.Numerics.DataMaps.Extensions
             var counts = collect.Item1;
             var total = collect.Item2;
             return HistogramBin.CreateHistogram(intervals, counts, total);
+        }
+
+        public static int ArgMax(this IList<byte> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<byte>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            byte max = self[i];
+            int argmax = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                {
+                    max = self[i];
+                    argmax = i;
+                }
+            }
+
+            return argmax;
+        }
+
+        public static int ArgMin(this IList<byte> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<byte>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            byte min = self[i];
+            int argmin = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                {
+                    min = self[i];
+                    argmin = i;
+                }
+            }
+
+            return argmin;
         }
 
         public static double Correlation(this IList<byte> self, IList<byte> other, bool skipNaN = true)
@@ -3825,6 +4149,60 @@ namespace Horker.Numerics.DataMaps.Extensions
             return HistogramBin.CreateHistogram(intervals, counts, total);
         }
 
+        public static int ArgMax(this IList<sbyte> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<sbyte>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            sbyte max = self[i];
+            int argmax = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                {
+                    max = self[i];
+                    argmax = i;
+                }
+            }
+
+            return argmax;
+        }
+
+        public static int ArgMin(this IList<sbyte> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<sbyte>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            sbyte min = self[i];
+            int argmin = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                {
+                    min = self[i];
+                    argmin = i;
+                }
+            }
+
+            return argmin;
+        }
+
         public static double Correlation(this IList<sbyte> self, IList<sbyte> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
@@ -4459,6 +4837,60 @@ namespace Horker.Numerics.DataMaps.Extensions
             var counts = collect.Item1;
             var total = collect.Item2;
             return HistogramBin.CreateHistogram(intervals, counts, total);
+        }
+
+        public static int ArgMax(this IList<decimal> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<decimal>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            decimal max = self[i];
+            int argmax = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                {
+                    max = self[i];
+                    argmax = i;
+                }
+            }
+
+            return argmax;
+        }
+
+        public static int ArgMin(this IList<decimal> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<decimal>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            decimal min = self[i];
+            int argmin = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                {
+                    min = self[i];
+                    argmin = i;
+                }
+            }
+
+            return argmin;
         }
 
         public static double Correlation(this IList<decimal> self, IList<decimal> other, bool skipNaN = true)

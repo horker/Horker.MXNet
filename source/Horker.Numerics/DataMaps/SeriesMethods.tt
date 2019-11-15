@@ -113,6 +113,8 @@ var nonSeriesMethods = new[]
 
 	// Other operations
 
+    Tuple.Create("ArgMax", "int", "", ""),
+    Tuple.Create("ArgMin", "int", "", ""),
 	Tuple.Create("Correlation", "object", "SeriesBase other, bool skipNaN = true", ", (dynamic)other.UnderlyingList, skipNaN"),
 	Tuple.Create("Cor", "object", "SeriesBase other, bool skipNaN = true", ", (dynamic)other.UnderlyingList, skipNaN"),
 	Tuple.Create("Covariance", "object", "SeriesBase other, bool unbiased = true, bool skipNaN = true", ", (dynamic)other.UnderlyingList, unbiased, skipNaN"),

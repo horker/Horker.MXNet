@@ -1068,6 +1068,30 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
+        public int ArgMax()
+        {
+			try
+			{
+				return (int)GenericIListExtensions.ArgMax((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ArgMax() does not support data type {DataType}");
+			}
+        }
+
+        public int ArgMin()
+        {
+			try
+			{
+				return (int)GenericIListExtensions.ArgMin((dynamic)UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ArgMin() does not support data type {DataType}");
+			}
+        }
+
         public object Correlation(SeriesBase other, bool skipNaN = true)
         {
 			try

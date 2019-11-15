@@ -11,6 +11,60 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
     public static partial class MetaNumIListExtensions
     {
         // CUT ABOVE
+        public static int ArgMax(this IList<MetaNum> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<MetaNum>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            MetaNum max = self[i];
+            int argmax = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] > max)
+                {
+                    max = self[i];
+                    argmax = i;
+                }
+            }
+
+            return argmax;
+        }
+
+        public static int ArgMin(this IList<MetaNum> self)
+        {
+            if (self.Count == 0)
+                throw new InvalidCastException("No elements");
+
+            var i = 0;
+            while (TypeTrait<MetaNum>.IsNaN(self[0]) && i < self.Count)
+                ++i;
+
+            if (i == self.Count)
+                throw new InvalidCastException("No elements");
+
+            MetaNum min = self[i];
+            int argmin = i;
+
+            for (++i;  i < self.Count; ++i)
+            {
+                if (self[i] < min)
+                {
+                    min = self[i];
+                    argmin = i;
+                }
+            }
+
+            return argmin;
+        }
+
         public static MetaFloat Correlation(this IList<MetaNum> self, IList<MetaNum> other, bool skipNaN = true)
         {
             if (self.Count != other.Count)
