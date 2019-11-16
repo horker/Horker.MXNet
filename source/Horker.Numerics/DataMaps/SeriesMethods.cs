@@ -492,6 +492,19 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
+        public SeriesBase ArgSort()
+        {
+			try
+			{
+				var result = GenericIListExtensions.ArgSort((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ArgSort() does not support data type {DataType}");
+			}
+        }
+
         public SeriesBase Copy()
         {
 			try

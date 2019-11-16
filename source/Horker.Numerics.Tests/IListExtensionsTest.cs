@@ -72,6 +72,17 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
+        public void TestArgSort()
+        {
+            var s = new float[] { 4, 5, 1, 2, 3, 9 };
+            var expected = new int[] { 3, 4, 0, 1, 2, 5 };
+
+            var sorted = s.ArgSort();
+
+            Assert.Equal(expected, sorted);
+        }
+
+        [Fact]
         public void TestCorrelation()
         {
             var s1 = new double[] { 1, 2, 3, 4, 5 };

@@ -943,6 +943,23 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+        public static int[] ArgSort<T>(this IList<T> self)
+        {
+            var interm = new int[self.Count];
+            for (var i = 0; i < self.Count; ++i)
+                interm[i] = i;
+
+            var s = self.ToArray();
+            Array.Sort(s, interm);
+
+            var result = new int[self.Count];
+
+            for (var i = 0; i < self.Count; ++i)
+                result[interm[i]] = i;
+
+            return result;
+        }
+
         public static List<T> Unique<T>(this IList<T> self)
         {
             return new HashSet<T>(self).ToList();

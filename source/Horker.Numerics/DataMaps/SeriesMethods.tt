@@ -53,6 +53,7 @@ var methodNames = new[]
 
 	// Other operations
 
+	Tuple.Create("ArgSort", "", ""),
 	Tuple.Create("Copy", "", ""),
 	Tuple.Create("CreateLike", "", ""),
 	Tuple.Create("CumulativeMax", "", ""),

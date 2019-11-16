@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Horker.Numerics.DataMaps;
 using Horker.Numerics.Estimators;
@@ -15,12 +16,33 @@ namespace Horker.Numerics.LightGBM
         private Parameters _parameters;
         private TrainerBase<T> _trainer;
         private NativePredictorBase<T> _predicator;
+        private string[] _outputCategories;
 
         public DataMap Parameters { get => null; set => throw new NotImplementedException(); }
 
         public E Trainer => (E)_trainer;
         public NativePredictorBase<T> Predictor => _predicator;
-        public string[] OutputCategories { get; set; } = null;
+
+        public string[] OutputCategories
+        {
+            get
+            {
+                if (_outputCategories == null)
+                {
+                    var classCount = _predicator.Booster.NumClasses;
+                    _outputCategories = new string[classCount];
+                    for (var i = 0; i < _outputCategories.Length; ++i)
+                        _outputCategories[i] = "Class" + i;
+                }
+
+                return _outputCategories;
+            }
+
+            set
+            {
+                _outputCategories = value;
+            }
+        }
 
         public LightGBMCategoricalEstimator(Parameters parameters, E trainer)
         {
@@ -34,6 +56,12 @@ namespace Horker.Numerics.LightGBM
         public LightGBMCategoricalEstimator(NativePredictorBase<T> predictor)
         {
             _predicator = predictor;
+        }
+
+        public void Save(string path)
+        {
+            var text = _predicator.Booster.GetModelString();
+            File.WriteAllText(path, text);
         }
 
         public void Fit(DataMap x, DataMap y, DataMap validX, DataMap validY)
@@ -57,7 +85,8 @@ namespace Horker.Numerics.LightGBM
             using (var datasets = new Datasets(_parameters.Common, _parameters.Dataset, trainDense, validDense))
             {
                 datasets.Training.SetFeatureNames(x.ColumnNames.ToArray());
-                datasets.Validation.SetFeatureNames(validX.ColumnNames.ToArray());
+                if (validX != null)
+                    datasets.Validation.SetFeatureNames(validX.ColumnNames.ToArray());
 
                 var predicators = _trainer.Train(datasets);
                 _predicator = (NativePredictorBase<T>)predicators.Native;
@@ -112,6 +141,16 @@ namespace Horker.Numerics.LightGBM
             OutputCategories = new[] { "Result" };
         }
 
+        public LightGBMBinaryEstimator(NativePredictorBase<double> predictor)
+            : base(predictor)
+        {
+            OutputCategories = new[] { "Result" };
+        }
+
+        public LightGBMBinaryEstimator(string path)
+            : base(new BinaryNativePredictor(Booster.FromFile(path)))
+        { }
+
         public override double Score(DataMap x, DataMap y)
         {
             var predicted = Predict(x).First.ToArray<int>();
@@ -124,6 +163,14 @@ namespace Horker.Numerics.LightGBM
     {
         public LightGBMMulticlassEstimator(Parameters parameters)
             : base(parameters, new MulticlassTrainer(parameters.Learning, parameters.Objective))
+        { }
+
+        public LightGBMMulticlassEstimator(NativePredictorBase<double[]> predictor)
+            : base(predictor)
+        { }
+
+        public LightGBMMulticlassEstimator(string path)
+            : base(new MulticlassNativePredictor(Booster.FromFile(path)))
         { }
 
         public override double Score(DataMap x, DataMap y)
