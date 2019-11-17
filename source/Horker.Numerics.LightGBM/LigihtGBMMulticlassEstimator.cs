@@ -137,15 +137,11 @@ namespace Horker.Numerics.LightGBM
     {
         public LightGBMBinaryEstimator(Parameters parameters)
             : base(parameters, new BinaryTrainer(parameters.Learning, parameters.Objective))
-        {
-            OutputCategories = new[] { "Result" };
-        }
+        { }
 
         public LightGBMBinaryEstimator(NativePredictorBase<double> predictor)
             : base(predictor)
-        {
-            OutputCategories = new[] { "Result" };
-        }
+        { }
 
         public LightGBMBinaryEstimator(string path)
             : base(new BinaryNativePredictor(Booster.FromFile(path)))

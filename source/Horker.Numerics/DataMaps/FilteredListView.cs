@@ -78,12 +78,17 @@ namespace Horker.Numerics.DataMaps
 
         public void CopyTo(Array array, int index)
         {
-            throw new NotImplementedException();
+            var buffer = new T[_link.Count];
+            for (var i = 0; i < _link.Count; ++i)
+                buffer[i + index] = _underlying[_link[i]];
+
+            Array.Copy(buffer, 0, array, index, _link.Count);
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            for (var i = 0; i < _link.Count; ++i)
+                array[i + arrayIndex] = _underlying[_link[i]];
         }
 
         public IEnumerator<T> GetEnumerator()
