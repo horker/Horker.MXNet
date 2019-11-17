@@ -1,0 +1,7 @@
+Series: And/Or/Not/Xor and corresponding operators
+DataMap: join (inner outer left anti)
+GLM
+t-SNE
+kNN
+incorporate psmath functions and cmdlets
+array methods
