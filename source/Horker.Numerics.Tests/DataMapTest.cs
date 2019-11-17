@@ -265,6 +265,24 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
+        public void TestSort()
+        {
+            var d1 = DataMap.FromDictionary(new Dictionary<string, IList>()
+            {
+                { "foo", new string[]{ "c", "a", "b" } },
+                { "bar", new string[]{ "x", "y", "Z" } },
+                { "baz", new float[]{ 1, 2, 3 } }
+            });
+
+            var sorted = d1.Sort("foo");
+
+            Assert.Equal(new string[] { "foo", "bar", "baz" }, sorted.ColumnNames);
+            Assert.Equal(new string[] { "a", "b", "c" }, sorted["foo"].AsArray<string>());
+            Assert.Equal(new string[] { "y", "Z", "x" }, sorted["bar"].AsArray<string>());
+            Assert.Equal(new float[] { 2, 3, 1 }, sorted["baz"].AsArray<float>());
+        }
+
+        [Fact]
         public void TestAsArrayKeepsArrayInstance()
         {
             var t1 = new float[] { 1, 2, 3 };

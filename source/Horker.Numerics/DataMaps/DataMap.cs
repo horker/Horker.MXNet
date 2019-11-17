@@ -481,6 +481,8 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
+        // Other manipulation
+
         public int GetColumnIndex(string name)
         {
             var i = 0;
@@ -817,6 +819,39 @@ namespace Horker.Numerics.DataMaps
         {
             var splitter = new KFoldSplitter(this, k, shuffle, seed);
             return splitter.EnumerateFolds();
+        }
+
+        private int[] GetOrder<T>(IList<T> list)
+        {
+            var order = new int[list.Count];
+            for (var i = 0; i < order.Length; ++i)
+                order[i] = i;
+
+            Array.Sort(list.ToArray(), order, 0, order.Length);
+            return order;
+        }
+
+        private IList GetReorderedList<T>(IList<T> list, int[] order)
+        {
+            var result = new List<T>(list.Count);
+            for (var i = 0; i < list.Count; ++i)
+                result.Add(list[order[i]]);
+
+            return result;
+        }
+
+        public DataMap Sort(string keyColumn)
+        {
+            var order = GetOrder((dynamic)this[keyColumn].UnderlyingList);
+
+            var result = new DataMap();
+            foreach (var column in Columns)
+            {
+                var reordered = GetReorderedList((dynamic)column.Data.UnderlyingList, order);
+                result.Add(column.Name, new Series(reordered));
+            }
+
+            return result;
         }
 
         // Conversions
