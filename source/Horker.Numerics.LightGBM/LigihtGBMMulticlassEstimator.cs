@@ -115,7 +115,7 @@ namespace Horker.Numerics.LightGBM
             var imp = _predicator.Booster.GetFeatureImportance(numIteration, importanceType);
 
             var result = new DataMap();
-            result.Add("Names", featureNames);
+            result.Add("Name", featureNames);
             result.Add("Importance", imp);
 
             return result;
