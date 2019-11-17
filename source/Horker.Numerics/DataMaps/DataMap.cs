@@ -456,6 +456,31 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
+        // Copy methods
+
+        public DataMap ShallowCopy()
+        {
+            var result = new DataMap(_keyComparer);
+
+            foreach (var column in _columns)
+                result.Add(column.Name, column.Data);
+
+            return result;
+        }
+
+        public DataMap DeepCopy()
+        {
+            var result = new DataMap(_keyComparer);
+
+            foreach (var column in _columns)
+            {
+                var l = column.Data.Copy();
+                result.Add(column.Name, l);
+            }
+
+            return result;
+        }
+
         public int GetColumnIndex(string name)
         {
             var i = 0;
