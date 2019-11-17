@@ -84,22 +84,6 @@ namespace Horker.Numerics.DataMaps
             _nameMap = new Dictionary<string, LinkedListNode<Column>>(_keyComparer);
         }
 
-        public static DataMap CreateLike(DataMap source)
-        {
-            var result = new DataMap(source.ColumnNameComparer);
-
-            foreach (var column in source.Columns)
-            {
-                var v = column.Data;
-                var t = column.DataType;
-                var data = (IList)typeof(List<>).MakeGenericType(t).GetConstructor(new Type[0]).Invoke(new object[0]);
-
-                result.AddLast(column.Name, data);
-            }
-
-            return result;
-        }
-
         /*
                 public static DataMap FromDictionary(IDictionary<string, IList> source)
                 {
@@ -476,6 +460,22 @@ namespace Horker.Numerics.DataMaps
             {
                 var l = column.Data.Copy();
                 result.Add(column.Name, l);
+            }
+
+            return result;
+        }
+
+        public DataMap CreateLike(int capacity = 0, int count = 0)
+        {
+            var result = new DataMap(_keyComparer);
+
+            foreach (var column in Columns)
+            {
+                var v = column.Data;
+                var t = column.DataType;
+                var data = Utils.CreateList(t, capacity, count);
+
+                result.AddLast(column.Name, data);
             }
 
             return result;
