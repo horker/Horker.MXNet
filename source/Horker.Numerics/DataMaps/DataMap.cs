@@ -257,7 +257,14 @@ namespace Horker.Numerics.DataMaps
 
         public virtual SeriesBase this[string name]
         {
-            get => _nameMap[name].Value.Data;
+            get
+            {
+                if (_nameMap.TryGetValue(name, out var node))
+                    return node.Value.Data;
+
+                throw new KeyNotFoundException($"Column '{name}' is not found");
+            }
+
             set
             {
                 if (_nameMap.TryGetValue(name, out var node))
@@ -266,7 +273,9 @@ namespace Horker.Numerics.DataMaps
                     value.DataMap = this;
                 }
                 else
+                {
                     AddLast(name, value);
+                }
             }
         }
 
