@@ -961,17 +961,26 @@ namespace Horker.Numerics.DataMaps
 
             for (var i = 0; i < maxRowCount; ++i)
             {
-                var row = new T[columnCount];
-                result[i] = row;
-                var c = 0;
-                foreach (var column in _columns)
+                string columnName = ""; // for better exception message
+                try
                 {
-                    var list = column.Data.UnderlyingList;
-                    if (i < list.Count)
-                        row[c] = SmartConverter.ConvertTo<T>(list[i]);
-                    else
-                        row[c] = TypeTrait<T>.GetNaN();
-                    ++c;
+                    var row = new T[columnCount];
+                    result[i] = row;
+                    var c = 0;
+                    foreach (var column in _columns)
+                    {
+                        columnName = column.Name;
+                        var list = column.Data.UnderlyingList;
+                        if (i < list.Count)
+                            row[c] = SmartConverter.ConvertTo<T>(list[i]);
+                        else
+                            row[c] = TypeTrait<T>.GetNaN();
+                        ++c;
+                    }
+                }
+                catch (ArgumentException ex)
+                {
+                    throw new ArgumentException($"Error occurred in column '{columnName}' at row {i}; See inner exception for details", ex);
                 }
             }
 
