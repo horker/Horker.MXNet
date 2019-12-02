@@ -75,6 +75,12 @@ namespace Horker.Numerics
 
                     s = CURRENCY_RE.Replace(s, "");
 
+                    if (s == "∞" || s == "+∞")
+                        return double.PositiveInfinity;
+
+                    if (s == "-∞")
+                        return double.NegativeInfinity;
+
                     var success = double.TryParse(s, NumberStyles.Any, NumberFormatInfo.InvariantInfo, out double result);
                     if (!success)
                         return ReturnFallbackValue(input, fallback, null);
