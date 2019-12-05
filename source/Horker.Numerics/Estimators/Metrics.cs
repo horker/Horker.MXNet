@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Accord.Math;
 using Accord.Math.Optimization.Losses;
+using Accord.Statistics.Analysis;
 
 namespace Horker.Numerics.Estimators
 {
@@ -54,6 +55,13 @@ namespace Horker.Numerics.Estimators
         public static double MeanSquareError(double[] expected, double[] predicted)
         {
             return new SquareLoss(expected).Loss(predicted);
+        }
+
+        public static double Auc(double[] expected, double[] predicted)
+        {
+            var roc = new ReceiverOperatingCharacteristic(expected, predicted);
+            roc.Compute(predicted);
+            return roc.Area;
         }
 
         public static double RootMeanSquareError(double[] expected, double[] predicted)
