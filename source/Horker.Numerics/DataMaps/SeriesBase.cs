@@ -568,6 +568,11 @@ namespace Horker.Numerics.DataMaps
             return new Series(UnderlyingList.Eq(other));
         }
 
+        public SeriesBase Eq(SeriesBase other)
+        {
+            return new Series(UnderlyingList.Eq(other.UnderlyingList));
+        }
+
         public SeriesBase Eq(object value)
         {
             return new Series(UnderlyingList.Eq(value));
@@ -576,6 +581,11 @@ namespace Horker.Numerics.DataMaps
         public SeriesBase Ne(IList other)
         {
             return new Series(UnderlyingList.Ne(other));
+        }
+
+        public SeriesBase Ne(SeriesBase other)
+        {
+            return new Series(UnderlyingList.Ne(other.UnderlyingList));
         }
 
         public SeriesBase Ne(object value)
@@ -588,6 +598,11 @@ namespace Horker.Numerics.DataMaps
             return new Series(UnderlyingList.Lt(other));
         }
 
+        public SeriesBase Lt(SeriesBase other)
+        {
+            return new Series(UnderlyingList.Lt(other.UnderlyingList));
+        }
+
         public SeriesBase Lt(object value)
         {
             return new Series(UnderlyingList.Lt(value));
@@ -596,6 +611,11 @@ namespace Horker.Numerics.DataMaps
         public SeriesBase Le(IList other)
         {
             return new Series(UnderlyingList.Le(other));
+        }
+
+        public SeriesBase Le(SeriesBase other)
+        {
+            return new Series(UnderlyingList.Le(other.UnderlyingList));
         }
 
         public SeriesBase Le(object value)
@@ -608,6 +628,11 @@ namespace Horker.Numerics.DataMaps
             return new Series(UnderlyingList.Gt(other));
         }
 
+        public SeriesBase Gt(SeriesBase other)
+        {
+            return new Series(UnderlyingList.Gt(other.UnderlyingList));
+        }
+
         public SeriesBase Gt(object value)
         {
             return new Series(UnderlyingList.Gt(value));
@@ -616,6 +641,11 @@ namespace Horker.Numerics.DataMaps
         public SeriesBase Ge(IList other)
         {
             return new Series(UnderlyingList.Ge(other));
+        }
+
+        public SeriesBase Ge(SeriesBase other)
+        {
+            return new Series(UnderlyingList.Ge(other.UnderlyingList));
         }
 
         public SeriesBase Ge(object value)
