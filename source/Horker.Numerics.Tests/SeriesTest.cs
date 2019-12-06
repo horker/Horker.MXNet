@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Horker.Numerics.DataMaps;
 using Xunit;
@@ -143,6 +144,23 @@ namespace Horker.Numerics.Tests
 
             var t3 = t1.RollingApply("(values, i) => values.Average()", 3);
             Assert.Equal(new double[] { 1, 1.5, 2, 3, 4 }, t3.UnderlyingList);
+        }
+
+        [Fact]
+        public void TestSerialization()
+        {
+            var s = new Series(new float[] { 1, 2, 3 });
+
+            using (var stream = new MemoryStream())
+            {
+
+                s.Save(stream);
+                stream.Position = 0;
+
+                var s2 = SeriesBase.Load(stream);
+
+                Assert.Equal(new float[] { 1, 2, 3 }, s2.ToArray<float>());
+            }
         }
     }
 }

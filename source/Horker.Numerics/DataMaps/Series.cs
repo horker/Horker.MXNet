@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Horker.Numerics.DataMaps
 {
+    [Serializable]
     public class Series : SeriesBase
     {
         private IList _underlying;
@@ -24,6 +28,23 @@ namespace Horker.Numerics.DataMaps
                 underlying = s.UnderlyingList;
 
             _underlying = underlying;
+        }
+
+        public Series(Type dataType, int size, object value = null)
+        {
+            if (value == null)
+            {
+                var m = typeof(Series).GetMethod("CreateList", BindingFlags.NonPublic | BindingFlags.Static);
+                var gm = m.MakeGenericMethod(new Type[] { dataType });
+                _underlying = (IList)gm.Invoke(null, new object[] { size });
+
+            }
+            else
+            {
+                var m = typeof(Series).GetMethod("CreateListWithValue", BindingFlags.NonPublic | BindingFlags.Static);
+                var gm = m.MakeGenericMethod(new Type[] { dataType });
+                _underlying = (IList)gm.Invoke(null, new object[] { size, value });
+            }
         }
 
         private static IList CreateList<T>(int size)
@@ -44,21 +65,16 @@ namespace Horker.Numerics.DataMaps
             return list;
         }
 
-        public Series(Type dataType, int size, object value = null)
-        {
-            if (value == null)
-            {
-                var m = typeof(Series).GetMethod("CreateList", BindingFlags.NonPublic | BindingFlags.Static);
-                var gm = m.MakeGenericMethod(new Type[] { dataType });
-                _underlying = (IList)gm.Invoke(null, new object[] { size });
+        // ISerializable implementation
 
-            }
-            else
-            {
-                var m = typeof(Series).GetMethod("CreateListWithValue", BindingFlags.NonPublic | BindingFlags.Static);
-                var gm = m.MakeGenericMethod(new Type[] { dataType });
-                _underlying = (IList)gm.Invoke(null, new object[] { size, value });
-            }
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("underlying", _underlying);
+        }
+
+        public Series(SerializationInfo info, StreamingContext context)
+        {
+            _underlying = (IList)info.GetValue("underlying", typeof(IList));
         }
     }
 }

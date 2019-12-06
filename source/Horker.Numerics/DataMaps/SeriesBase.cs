@@ -11,10 +11,14 @@ using Horker.Numerics.DataMaps.Extensions;
 using System.Management.Automation;
 using System.Diagnostics;
 using Horker.Numerics.Utilities;
+using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Horker.Numerics.DataMaps
 {
-    public partial class SeriesBase
+    [Serializable]
+    public partial class SeriesBase : ISerializable
     {
         // Methods to be overrriden by subclasses
 
@@ -45,9 +49,44 @@ namespace Horker.Numerics.DataMaps
             set => _dataMap = value;
         }
 
-        public IList Values => UnderlyingList;
+        // ISerializable implementation
+
+        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Save(Stream stream)
+        {
+            var formatter = new BinaryFormatter();
+            formatter.Serialize(stream, this);
+        }
+
+        public void Save(string path)
+        {
+            using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                Save(stream);
+            }
+        }
+
+        public static SeriesBase Load(Stream stream)
+        {
+            var formatter = new BinaryFormatter();
+            return (SeriesBase)formatter.Deserialize(stream);
+        }
+
+        public static SeriesBase Load(string path)
+        {
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+            {
+                return Load(stream);
+            }
+        }
 
         // IList implementation
+
+        public IList Values => UnderlyingList;
 
         public virtual object this[int index] { get => UnderlyingList[index]; set => UnderlyingList[index] = value; }
 
