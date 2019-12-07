@@ -782,7 +782,7 @@ namespace Horker.Numerics.DataMaps
             MapFillTyped((dynamic)UnderlyingList, map);
         }
 
-        public SeriesBase Slice(int start, int count)
+        public SeriesBase Slice(int start, int count = -1)
         {
             return new Series(SlicedListView.Create(UnderlyingList, start, count, true));
         }

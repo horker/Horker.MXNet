@@ -210,6 +210,9 @@ namespace Horker.Numerics.DataMaps
     {
         public static IList Create(IList list, int start, int count, bool strict)
         {
+            if (count == -1)
+                count = list.Count - start;
+
             var type = list.GetDataType();
             var listType = typeof(SlicedListView<>).MakeGenericType(new[] { type });
             var constructor = listType.GetConstructor(

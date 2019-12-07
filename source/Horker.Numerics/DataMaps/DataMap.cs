@@ -581,7 +581,7 @@ namespace Horker.Numerics.DataMaps
             return Filter(filter.AsArray<bool>());
         }
 
-        public DataMap Slice(int start, int count)
+        public DataMap Slice(int start, int count = -1)
         {
             var dataMap = new DataMap(ColumnNameComparer);
             foreach (var c in Columns)
