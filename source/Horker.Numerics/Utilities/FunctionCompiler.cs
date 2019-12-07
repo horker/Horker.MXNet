@@ -93,25 +93,29 @@ namespace {0} {{
         {
             var typeString = string.Join(", ", parameterTypes.Select(x => x.FullName));
 
-            if (!_codeCache.TryGetValue(funcString + "$" + typeString, out var m))
+            lock (_codeCache)
             {
-                string sourceCode;
-                if (func)
-                    sourceCode = FuncSourceCode;
-                else
-                    sourceCode = ActionSourceCode;
+                if (!_codeCache.TryGetValue(funcString + "$" + typeString, out var m))
+                {
+                    string sourceCode;
+                    if (func)
+                        sourceCode = FuncSourceCode;
+                    else
+                        sourceCode = ActionSourceCode;
 
-                var className = "Class" + classNameSuffix++;
-                var sourceString = string.Format(sourceCode, Namespace, className, typeString, typeString, funcString);
+                    var className = "Class" + classNameSuffix++;
+                    var sourceString = string.Format(sourceCode, Namespace, className, typeString, typeString, funcString);
 
-                var assembly = CompileString(sourceString, "v4.0");
+                    var assembly = CompileString(sourceString, "v4.0");
 
-                var t = assembly.GetTypes().Where(c => c.Name == className).First();
-                m = t.GetMethod("f", BindingFlags.Static | BindingFlags.Public);
+                    var t = assembly.GetTypes().Where(c => c.Name == className).First();
+                    m = t.GetMethod("f", BindingFlags.Static | BindingFlags.Public);
 
-                _codeCache.Add(funcString + "$" + typeString, m);
+                    _codeCache.Add(funcString + "$" + typeString, m);
+                }
+
+                return (Delegate)m.Invoke(null, new object[] { dataMap, column });
             }
-            return (Delegate)m.Invoke(null, new object[] { dataMap, column });
         }
     }
 }
