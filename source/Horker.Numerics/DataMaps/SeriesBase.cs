@@ -700,6 +700,11 @@ namespace Horker.Numerics.DataMaps
             return new Series(UnderlyingList.Between(left, right, inclusive));
         }
 
+        public SeriesBase In(object[] values)
+        {
+            return new Series(UnderlyingList.In(values));
+        }
+
         // Other methods
 
         public static SeriesBase MapTyped<T>(IList<T> list, IDictionary map)

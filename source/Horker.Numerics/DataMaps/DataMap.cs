@@ -903,14 +903,12 @@ namespace Horker.Numerics.DataMaps
 
         public DataMap Summarize(string[] groupingColumnNames, IDictionary aggregators)
         {
-            return new GroupBy(this, groupingColumnNames).
-                Summarize(groupingColumnNames, aggregators);
+            return new GroupBy(this, groupingColumnNames).Summarize( aggregators);
         }
 
         public DataMap Summarize(string[] groupingColumnNames, object[] aggregators)
         {
-            return new GroupBy(this, groupingColumnNames).
-                Summarize(groupingColumnNames, aggregators);
+            return new GroupBy(this, groupingColumnNames).Summarize(aggregators);
         }
 
         public DataMap Summarize(string[] groupingColumnNames, string[] aggregateColumnNames, IDictionary aggregators)

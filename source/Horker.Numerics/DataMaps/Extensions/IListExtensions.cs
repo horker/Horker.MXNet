@@ -746,6 +746,29 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
+        public static List<bool> In(this IList self, params object[] values)
+        {
+            var result = new List<bool>(self.Count);
+            var comparer = Comparer.Default;
+
+            for (var i = 0; i < self.Count; ++i)
+            {
+                var c = false;
+                for (var j = 0; j < values.Length; ++j)
+                {
+                    if (comparer.Compare(self[i], values[j]) == 0)
+                    {
+                        c = true;
+                        break;
+                    }
+                }
+
+                result.Add(c);
+            }
+
+            return result;
+        }
+
         // Other operations
 
         public static IList<T> Copy<T>(this IList<T> self)
