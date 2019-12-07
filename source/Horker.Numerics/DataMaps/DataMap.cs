@@ -901,12 +901,16 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        public DataMap Summarize(string[] groupingColumnNames, string[] aggregateColumnNames, IDictionary<string, object> aggregators)
+        public DataMap Summarize(string[] groupingColumnNames, IDictionary aggregators)
         {
-            var columns = JoinArrays(groupingColumnNames, aggregateColumnNames);
+            return new GroupBy(this, groupingColumnNames).
+                Summarize(groupingColumnNames, aggregators);
+        }
 
-            return new GroupBy(this, groupingColumnNames, columns).
-                Summarize(aggregateColumnNames, aggregators);
+        public DataMap Summarize(string[] groupingColumnNames, object[] aggregators)
+        {
+            return new GroupBy(this, groupingColumnNames).
+                Summarize(groupingColumnNames, aggregators);
         }
 
         public DataMap Summarize(string[] groupingColumnNames, string[] aggregateColumnNames, IDictionary aggregators)

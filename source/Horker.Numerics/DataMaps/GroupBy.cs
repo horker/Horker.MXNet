@@ -186,58 +186,9 @@ namespace Horker.Numerics.DataMaps
             return GetEnumerator();
         }
 
-        public SeriesBase Summarize(ScriptBlock aggregator)
-        {
-            var result = new List<object>();
-            var arguments = new object[1];
-
-            foreach (var g in Groups())
-            {
-                arguments[0] = g;
-                var value = aggregator.Invoke(arguments)[0];
-                result.Add(value.BaseObject ?? value);
-            }
-
-            return new Series(result);
-        }
-
-        public DataMap Summarize<T>(string[] aggregationNames, ScriptBlock[] aggregators)
-        {
-            var result = new DataMap();
-
-            foreach (var c in _groupingColumnNames)
-                result.Add(c, new List<T>());
-
-            foreach (var c in aggregationNames)
-                result.Add(c, new List<T>());
-
-            var variables = new List<PSVariable>();
-            variables.Add(new PSVariable("group", null));
-            var arguments = new object[1];
-            foreach (var g in Groups())
-            {
-                foreach (var c in _groupingColumnNames)
-                    result[c].Add(g[c][0]);
-
-                for (var i = 0; i < aggregationNames.Length; ++i)
-                {
-                    var column = result[aggregationNames[i]];
-                    variables[0].Value = g;
-                    arguments[0] = g;
-                    var values = aggregators[i].InvokeWithContext(null, variables, arguments);
-                    if (values == null || values.Count == 0)
-                        column.Add(null);
-                    else
-                        column.Add(values[0].BaseObject ?? values[0]);
-                }
-            }
-
-            return result;
-        }
-
         private static Regex _methodNameRegex = new Regex(@"^\w+(\([^)]*\))?$");
 
-        private Tuple<object[], bool> PreprocessAggregators(object[] aggregators)
+        private Tuple<object[], bool> PreprocessAggregators<T>(object[] aggregators)
         {
             var funcs = new object[aggregators.Length];
             bool scriptBlockGiven = false;
@@ -263,12 +214,12 @@ namespace Horker.Numerics.DataMaps
                         else
                         {
                             // We accept method name plus arguments for convinience.
-                            st = "column => column." + st;
+                            st = "n => n." + st;
                         }
                     }
 
-                    funcs[i] = (Func<SeriesBase, object>)FunctionCompiler.Compile(
-                        st, new[] { typeof(SeriesBase), typeof(object) }, true, _dataMap, null);
+                    funcs[i] = (Func<T, object>)FunctionCompiler.Compile(
+                        st, new[] { typeof(T), typeof(object) }, true, _dataMap, null);
                 }
                 else
                 {
@@ -279,13 +230,95 @@ namespace Horker.Numerics.DataMaps
             return Tuple.Create(funcs, scriptBlockGiven);
         }
 
+        private string[] GetAggregatorNames(object[] aggregators)
+        {
+            var names = new string[aggregators.Length];
+            var count = 1;
+            for (var i = 0; i < aggregators.Length; ++i)
+            {
+                var agg = aggregators[i];
+                if (agg is string st)
+                    names[i] = st;
+                else
+                    names[i] = "expr" + count++;
+            }
+
+            return names;
+        }
+
+        // Summarize() family that process per group
+
+        private DataMap SummarizeInternal<T>(string[] aggregationNames, object[] aggregators)
+        {
+            var pre = PreprocessAggregators<DataMap>(aggregators);
+            var funcs = pre.Item1;
+            var scriptBlockGiven = pre.Item2;
+
+            var result = new DataMap();
+
+            foreach (var c in _groupingColumnNames)
+                result.Add(c, new List<T>());
+
+            foreach (var c in aggregationNames)
+                result.Add(c, new List<T>());
+
+            var variables = new List<PSVariable>();
+            variables.Add(new PSVariable("group", null));
+            var arguments = new object[1];
+            foreach (var group in Groups())
+            {
+                foreach (var c in _groupingColumnNames)
+                    result[c].Add(group[c][0]);
+
+                for (var i = 0; i < aggregationNames.Length; ++i)
+                {
+                    object value = null;
+                    if (funcs[i] is ScriptBlock sb)
+                    {
+                        variables[0].Value = group;
+                        arguments[0] = group;
+                        var values = sb.InvokeWithContext(null, variables, arguments);
+                        value = (values == null || values.Count == 0) ? null : (values[0].BaseObject ?? values[0]);
+                    }
+                    else if (funcs[i] is Func<DataMap, object> f)
+                    {
+                        value = f.Invoke(group);
+                    }
+                    else if (funcs[i] is string st)
+                    {
+                        var m = group.GetType().GetMethod(st, BindingFlags.Public | BindingFlags.Instance);
+                        value = m.Invoke(group, new object[0]);
+                    }
+
+                    var name = aggregationNames[i];
+                    result[name].Add(value);
+                }
+            }
+
+            return result;
+        }
+
+        public DataMap Summarize(IDictionary aggregators)
+        {
+            var args = ConvertToArrayPair(aggregators);
+            return SummarizeInternal<object>(args.Item1, args.Item2);
+        }
+
+        public DataMap Summarize(object[] aggregators)
+        {
+            var names = GetAggregatorNames(aggregators);
+            return SummarizeInternal<object>(names, aggregators);
+        }
+
+        // Summarize() family that process per columns
+
         private DataMap SummarizeInternal<T>(
             string[] columnNames, string[] aggregationNames, object[] aggregators)
         {
             if (columnNames == null || columnNames.Length == 0)
                 columnNames = _dataMap.ColumnNames.Except(_groupingColumnNames).ToArray();
 
-            var pre = PreprocessAggregators(aggregators);
+            var pre = PreprocessAggregators<SeriesBase>(aggregators);
             var funcs = pre.Item1;
             var scriptBlockGiven = pre.Item2;
 
@@ -363,27 +396,6 @@ namespace Horker.Numerics.DataMaps
 
             return Tuple.Create(names, funcs);
         }
-/*
-        public DataMap Summarize(IDictionary<string, object> aggregators)
-        {
-            var names = aggregators.Keys.ToArray();
-            var funcs = aggregators.Values.ToArray();
-            return Summarize<object>(names, funcs);
-        }
-
-        public DataMap Summarize(IDictionary aggregators)
-        {
-            var args = ConvertToArrayPair(aggregators);
-            return Summarize<object>(args.Item1, args.Item2);
-        }
-*/
-
-        public DataMap Summarize(string[] columnNames, IDictionary<string, object> aggregators)
-        {
-            var names = aggregators.Keys.ToArray();
-            var scriptBlocks = aggregators.Values.ToArray();
-            return SummarizeInternal<object>(columnNames, names, scriptBlocks);
-        }
 
         public DataMap Summarize(string[] columnNames, IDictionary aggregators)
         {
@@ -393,16 +405,7 @@ namespace Horker.Numerics.DataMaps
 
         public DataMap Summarize(string[] columnNames, object[] aggregators)
         {
-            var names = new string[aggregators.Length];
-            var count = 1;
-            for (var i = 0; i < aggregators.Length; ++i)
-            {
-                var agg = aggregators[i];
-                if (agg is string st)
-                    names[i] = st;
-                else
-                    names[i] = "expr" + count++;
-            }
+            var names = GetAggregatorNames(aggregators);
             return SummarizeInternal<object>(columnNames, names, aggregators);
         }
     }
