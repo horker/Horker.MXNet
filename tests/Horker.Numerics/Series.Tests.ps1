@@ -26,8 +26,8 @@ Describe "Series tests" {
         $s1.Values | Should -Be 1, 4, 9, 16
     }
 
-    It "can refer to the series object from func string" {
-        $s1 = $s.Apply('(x, i) => x * (int)series[i]')
+    It "can refer to the column object from func string" {
+        $s1 = $s.Apply('(x, i) => x * (int)column[i]')
         $s1.Values | Should -Be 1, 4, 9, 16
     }
 }

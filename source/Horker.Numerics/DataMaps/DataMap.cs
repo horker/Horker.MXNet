@@ -1120,6 +1120,8 @@ namespace Horker.Numerics.DataMaps
             }
         }
 
+        public IEnumerable<PSObject> Rows => ToPSObject();
+
         public IEnumerable<PSObject> Head(int maxCount = 10)
         {
             return ToPSObject(maxCount);

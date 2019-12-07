@@ -27,7 +27,7 @@ using Horker.Numerics.DataMaps.Extensions;
 namespace {0} {{
     public static class {1}
     {{
-        public static Func<{2}> f(DataMap dataMap, SeriesBase series)
+        public static Func<{2}> f(DataMap dataMap, SeriesBase column)
         {{
             return new Func<{3}>({4});
         }}
@@ -44,7 +44,7 @@ using Horker.Numerics.DataMaps.Extensions;
 namespace {0} {{
     public static class {1}
     {{
-        public static Action<{2}> f(DataMap dataMap, SeriesBase series)
+        public static Action<{2}> f(DataMap dataMap, SeriesBase column)
         {{
             return new Action<{3}>({4});
         }}
@@ -87,7 +87,7 @@ namespace {0} {{
             return cr.CompiledAssembly;
         }
 
-        public static Delegate Compile(string funcString, Type[] parameterTypes, bool func, DataMap dataMap = null, SeriesBase series = null, string compilerVersion = "v4.0")
+        public static Delegate Compile(string funcString, Type[] parameterTypes, bool func, DataMap dataMap = null, SeriesBase column = null, string compilerVersion = "v4.0")
         {
             var typeString = string.Join(", ", parameterTypes.Select(x => x.FullName));
 
@@ -109,7 +109,7 @@ namespace {0} {{
 
                 _codeCache.Add(funcString + "$" + typeString, m);
             }
-            return (Delegate)m.Invoke(null, new object[] { dataMap, series });
+            return (Delegate)m.Invoke(null, new object[] { dataMap, column });
         }
     }
 }
