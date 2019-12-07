@@ -5,3 +5,4 @@ t-SNE
 kNN
 incorporate psmath functions and cmdlets
 array methods
+float/double type conversions of comparison operators like Eq()

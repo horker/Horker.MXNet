@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using Horker.Numerics.DataMaps;
 using Horker.Numerics.Transformers;
@@ -405,6 +406,27 @@ namespace Horker.Numerics.Tests
             Assert.Equal(new double[] { 1, 0, 0 }, d["xxx_20"].UnderlyingList);
             Assert.Equal(new double[] { 0, 1, 0 }, d["xxx_10"].UnderlyingList);
             Assert.Equal(new double[] { 0, 0, 1 }, d["xxx_30"].UnderlyingList);
+        }
+
+        [Fact]
+        public void TestSerialization()
+        {
+            var t1 = DataMap.FromDictionary(new OrderedDictionary()
+            {
+                {"a", new int[]{1,2,3,4,5 } },
+                {"b", new int[]{100,200,300,400 } }
+            });
+
+            using (var stream = new MemoryStream())
+            {
+                t1.Save(stream);
+                stream.Position = 0;
+
+                var t2 = DataMap.Load(stream);
+
+                Assert.Equal(new[] { "a", "b" }, t2.ColumnNames);
+                Assert.Equal(new int[] { 1, 2, 3, 4, 5 }, t2["a"].ToArray<int>());
+            }
         }
     }
 }

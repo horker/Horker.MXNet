@@ -153,7 +153,6 @@ namespace Horker.Numerics.Tests
 
             using (var stream = new MemoryStream())
             {
-
                 s.Save(stream);
                 stream.Position = 0;
 

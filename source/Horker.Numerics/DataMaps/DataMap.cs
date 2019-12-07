@@ -2,9 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Management.Automation;
 using System.Reflection;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using Horker.Numerics.DataMaps.Utilities;
@@ -13,7 +16,8 @@ using Horker.Numerics.Utilities;
 
 namespace Horker.Numerics.DataMaps
 {
-    public class DataMap
+    [Serializable]
+    public class DataMap : ISerializable
     {
         // Private fields
 
@@ -184,6 +188,61 @@ namespace Horker.Numerics.DataMaps
         public override int GetHashCode()
         {
             return _columns.GetHashCode() * 17 + _nameMap.GetHashCode();
+        }
+
+        // ISerializable implementation
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("names", ColumnNames.ToArray());
+            info.AddValue("values", _columns.Select(c => c.Data.UnderlyingList).ToArray());
+
+            // TODO: StringComparer is not serializable
+            // info.AddValue("comparer", _keyComparer);
+        }
+
+        protected DataMap(SerializationInfo info, StreamingContext context)
+        {
+            var names = (string[])info.GetValue("names", typeof(string[]));
+            var values = (IList[])info.GetValue("values", typeof(IList[]));
+
+            _columns = new LinkedList<Column>();
+            _nameMap = new Dictionary<string, LinkedListNode<Column>>();
+
+            // TODO: StringComparer is not serializable
+            // _keyComparer = (IEqualityComparer<string>)info.GetValue("comparer", typeof(IEqualityComparer<string>));
+            _keyComparer = StringComparer.CurrentCultureIgnoreCase;
+
+            for (var i = 0; i < names.Length; ++i)
+                AddLast(names[i], values[i]);
+        }
+
+        public void Save(Stream stream)
+        {
+            var formatter = new BinaryFormatter();
+            formatter.Serialize(stream, this);
+        }
+
+        public void Save(string path)
+        {
+            using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                Save(stream);
+            }
+        }
+
+        public static DataMap Load(Stream stream)
+        {
+            var formatter = new BinaryFormatter();
+            return (DataMap)formatter.Deserialize(stream);
+        }
+
+        public static DataMap Load(string path)
+        {
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+            {
+                return Load(stream);
+            }
         }
 
         // IList implementation
