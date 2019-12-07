@@ -97,6 +97,7 @@
   <ItemGroup>
     <Compile Include="EstimatorTest.cs" />
     <Compile Include="KFoldTest.cs" />
+    <Compile Include="FunctionCompilerTest.cs" />
     <Compile Include="TypeTraitTest.cs" />
     <Compile Include="FilteredListViewTest.cs" />
     <Compile Include="GroupByTest.cs" />

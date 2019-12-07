@@ -55,7 +55,7 @@ namespace {0} {{
 
         private static Assembly CompileString(string sourceString, string compilerVersion)
         {
-            var provider = new CSharpCodeProvider(new Dictionary<string, string> { { "CompilerVersion", compilerVersion } });
+            var provider = new CSharpCodeProvider( new Dictionary<string, string> { { "CompilerVersion", compilerVersion } });
 
             var param = new CompilerParameters()
             {
@@ -104,7 +104,7 @@ namespace {0} {{
                 var className = "Class" + classNameSuffix++;
                 var sourceString = string.Format(sourceCode, Namespace, className, typeString, typeString, funcString);
 
-                var assembly = CompileString(sourceString, "v3.5");
+                var assembly = CompileString(sourceString, "v4.0");
 
                 var t = assembly.GetTypes().Where(c => c.Name == className).First();
                 m = t.GetMethod("f", BindingFlags.Static | BindingFlags.Public);
