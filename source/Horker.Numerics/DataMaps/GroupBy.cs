@@ -369,6 +369,7 @@ namespace Horker.Numerics.DataMaps
             return Summarize<object>(args.Item1, args.Item2);
         }
 */
+
         public DataMap Summarize(string[] columnNames, IDictionary<string, object> aggregators)
         {
             var names = aggregators.Keys.ToArray();

@@ -901,6 +901,14 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
+        public DataMap Summarize(string[] groupingColumnNames, string[] aggregateColumnNames, IDictionary<string, object> aggregators)
+        {
+            var columns = JoinArrays(groupingColumnNames, aggregateColumnNames);
+
+            return new GroupBy(this, groupingColumnNames, columns).
+                Summarize(aggregateColumnNames, aggregators);
+        }
+
         public DataMap Summarize(string[] groupingColumnNames, string[] aggregateColumnNames, IDictionary aggregators)
         {
             var columns = JoinArrays(groupingColumnNames, aggregateColumnNames);
