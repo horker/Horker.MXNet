@@ -264,6 +264,34 @@ namespace Horker.Numerics
             {
                 if (input is string s)
                 {
+                    if (s.Length == 14)
+                    {
+                        if (int.TryParse(s.Substring(0, 4), out var year) &&
+                            int.TryParse(s.Substring(4, 2), out var month) &&
+                            int.TryParse(s.Substring(6, 2), out var day) &&
+                            int.TryParse(s.Substring(8, 2), out var hour) &&
+                            int.TryParse(s.Substring(10, 2), out var minute) &&
+                            int.TryParse(s.Substring(12, 2), out var second))
+                            return new DateTime(year, month, day, hour, minute, second, assumeLocal ? DateTimeKind.Local : DateTimeKind.Utc);
+                    }
+                    else if (s.Length == 8)
+                    {
+                        if (int.TryParse(s.Substring(0, 4), out var year) &&
+                            int.TryParse(s.Substring(4, 2), out var month) &&
+                            int.TryParse(s.Substring(6, 2), out var day))
+                            return new DateTime(year, month, day, 0, 0, 0, assumeLocal ? DateTimeKind.Local : DateTimeKind.Utc);
+                    }
+                    else if (s.Length == 6)
+                    {
+                        if (int.TryParse(s.Substring(0, 2), out var year) &&
+                            int.TryParse(s.Substring(2, 2), out var month) &&
+                            int.TryParse(s.Substring(4, 2), out var day))
+                        {
+                            year += year >= 30 ? 1900 : 2000;
+                            return new DateTime(year, month, day, 0, 0, 0, assumeLocal ? DateTimeKind.Local : DateTimeKind.Utc);
+                        }
+                    }
+
                     DateTimeStyles style = DateTimeStyles.AllowWhiteSpaces;
                     if (assumeLocal)
                         style |= DateTimeStyles.AssumeLocal;
@@ -313,6 +341,42 @@ namespace Horker.Numerics
             {
                 if (input is string s)
                 {
+                    if (s.Length == 14)
+                    {
+                        if (int.TryParse(s.Substring(0, 4), out var year) &&
+                            int.TryParse(s.Substring(4, 2), out var month) &&
+                            int.TryParse(s.Substring(6, 2), out var day) &&
+                            int.TryParse(s.Substring(8, 2), out var hour) &&
+                            int.TryParse(s.Substring(10, 2), out var minute) &&
+                            int.TryParse(s.Substring(12, 2), out var second))
+                        {
+                            var d = new DateTime(year, month, day, hour, minute, second, assumeLocal ? DateTimeKind.Local : DateTimeKind.Utc);
+                            return new DateTimeOffset(d);
+                        }
+
+                    }
+                    else if (s.Length == 8)
+                    {
+                        if (int.TryParse(s.Substring(0, 4), out var year) &&
+                            int.TryParse(s.Substring(4, 2), out var month) &&
+                            int.TryParse(s.Substring(6, 2), out var day))
+                        {
+                            var d = new DateTime(year, month, day, 0, 0, 0, assumeLocal ? DateTimeKind.Local : DateTimeKind.Utc);
+                            return new DateTimeOffset(d);
+                        }
+                    }
+                    else if (s.Length == 6)
+                    {
+                        if (int.TryParse(s.Substring(0, 2), out var year) &&
+                            int.TryParse(s.Substring(2, 2), out var month) &&
+                            int.TryParse(s.Substring(4, 2), out var day))
+                        {
+                            year += year >= 30 ? 1900 : 2000;
+                            var d = new DateTime(year, month, day, 0, 0, 0, assumeLocal ? DateTimeKind.Local : DateTimeKind.Utc);
+                            return new DateTimeOffset(d);
+                        }
+                    }
+
                     DateTimeStyles style = DateTimeStyles.AllowWhiteSpaces;
                     if (assumeLocal)
                         style |= DateTimeStyles.AssumeLocal;
