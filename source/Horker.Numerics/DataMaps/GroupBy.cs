@@ -385,7 +385,7 @@ namespace Horker.Numerics.DataMaps
         public DataMap Summarize(string[] columnNames, object[] aggregators)
         {
             var names = new string[aggregators.Length];
-            var count = 0;
+            var count = 1;
             for (var i = 0; i < aggregators.Length; ++i)
             {
                 var agg = aggregators[i];

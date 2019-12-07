@@ -909,7 +909,7 @@ namespace Horker.Numerics.DataMaps
                 Summarize(aggregateColumnNames, aggregators);
         }
 
-        public DataMap Summarize(string[] groupingColumnNames, string[] aggregateColumnNames, string[] aggregators)
+        public DataMap Summarize(string[] groupingColumnNames, string[] aggregateColumnNames, object[] aggregators)
         {
             var columns = JoinArrays(groupingColumnNames, aggregateColumnNames);
 
