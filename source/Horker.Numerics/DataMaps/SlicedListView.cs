@@ -20,8 +20,16 @@ namespace Horker.Numerics.DataMaps
             _start = start;
             _count = count;
 
-            if (start < 0 || count < 0)
-                    throw new ArgumentOutOfRangeException("start");
+            if (start < 0)
+                throw new ArgumentOutOfRangeException("start");
+
+            if (count < 0)
+            {
+                if (strict)
+                    throw new ArgumentOutOfRangeException("count");
+                else
+                    _count = Math.Max(underlying.Count - start, 0);
+            }
 
             if (start > underlying.Count - 1)
             {

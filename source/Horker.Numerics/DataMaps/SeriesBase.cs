@@ -784,7 +784,7 @@ namespace Horker.Numerics.DataMaps
 
         public SeriesBase Slice(int start, int count = -1)
         {
-            return new Series(SlicedListView.Create(UnderlyingList, start, count, true));
+            return new Series(SlicedListView.Create(UnderlyingList, start, count, false));
         }
 
         // Transformers
