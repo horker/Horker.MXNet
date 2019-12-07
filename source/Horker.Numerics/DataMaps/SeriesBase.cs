@@ -227,12 +227,12 @@ namespace Horker.Numerics.DataMaps
             return InvokeConversionMethod<IList>("AsList", type);
         }
 
-        public SeriesBase ConvertType<T>()
+        public SeriesBase ConvertDataType<T>()
         {
             return new Series(ToList<T>());
         }
 
-        public SeriesBase ConvertType(Type type)
+        public SeriesBase ConvertDataType(Type type)
         {
             return new Series(ToList(type));
         }

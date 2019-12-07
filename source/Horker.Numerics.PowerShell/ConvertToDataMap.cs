@@ -17,10 +17,10 @@ namespace Horker.Numerics.PowerShell
         public PSObject InputObject;
 
         [Parameter(Position = 1, Mandatory = false)]
-        public Type[] PossibleTypes = null;
+        public Type[] DataTypes = null;
 
         [Parameter(Position = 2, Mandatory = false)]
-        public SwitchParameter ConvertTypes;
+        public SwitchParameter Convert;
 
         private Dictionary<string, List<object>> _data;
         private int _recordCount;
@@ -67,8 +67,8 @@ namespace Horker.Numerics.PowerShell
             foreach (var entry in _data)
                 d.AddLast(entry.Key, entry.Value);
 
-           if (ConvertTypes)
-                d = d.TryConversion(PossibleTypes);
+           if (Convert)
+                d = d.TryConversion(DataTypes);
 
             WriteObject(d);
         }
