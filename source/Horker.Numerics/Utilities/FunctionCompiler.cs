@@ -7,6 +7,7 @@ using Microsoft.CSharp;
 using System.CodeDom.Compiler;
 using System.Reflection;
 using Horker.Numerics.DataMaps;
+using System.Management.Automation;
 
 namespace Horker.Numerics
 {
@@ -65,6 +66,7 @@ namespace {0} {{
             param.ReferencedAssemblies.Add("System.dll");
             param.ReferencedAssemblies.Add("System.Core.dll");
             param.ReferencedAssemblies.Add("mscorlib.dll");
+            param.ReferencedAssemblies.Add(typeof(PowerShell).Assembly.Location);
             param.ReferencedAssemblies.Add(typeof(FunctionCompiler).Assembly.Location);
 
             var cr = provider.CompileAssemblyFromSource(param, sourceString);
