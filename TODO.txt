@@ -6,3 +6,5 @@ kNN
 incorporate psmath functions and cmdlets
 array methods
 float/double type conversions of comparison operators like Eq()
+boolean arithmetics with numeric values (+-*/)
+bool ordered paratemer to Unique()

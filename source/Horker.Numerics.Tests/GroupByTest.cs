@@ -103,5 +103,29 @@ namespace Horker.Numerics.Tests
 
             Assert.Equal(new int[] { 2, 1, 0 }, result);
         }
+
+        [Fact]
+        public void TestSummarize()
+        {
+            var dm = DataMap.FromDictionary(new Hashtable()
+            {
+                { "cat", new int[] { 1, 2, 1, 1, 3 } },
+                { "value1", new string[] { "a", "b", "c", "d", "e" } },
+                { "value2", new double[] { 10, 20, 30, 40, 50 } },
+                { "value3", new double[] { 1, 2, 3, 4, 5 } },
+            });
+
+            var g = new GroupBy(dm, new string[] { "cat" }, new string[] { "cat", "value1", "value2", "value3" });
+
+            var s = g.Summarize(new[] { "value2", "value3" }, new Dictionary<string, string>() {
+                { "max", "Max" },
+                { "min", "c => c.Min()" }
+            });
+
+            Assert.Equal(new[] { "cat", "max/value2", "min/value2", "max/value3", "min/value3" }, s.ColumnNames.ToArray());
+            Assert.Equal(new int[] { 1, 2, 3 }, s["cat"].ToArray<int>());
+            Assert.Equal(new double[] { 40, 20, 50 }, s["max/value2"].ToArray<double>());
+            Assert.Equal(new double[] { 1, 2, 5 }, s["min/value3"].ToArray<double>());
+        }
     }
 } 

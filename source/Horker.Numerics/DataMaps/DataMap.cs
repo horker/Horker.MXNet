@@ -883,6 +883,40 @@ namespace Horker.Numerics.DataMaps
             return new GroupBy(this, groupingColumnNames, selectColumnNames);
         }
 
+        private T[] JoinArrays<T>(params T[][] arrays)
+        {
+            var total = arrays.Sum(x => x == null ? 0 : x.Length);
+            var result = new T[total];
+
+            var position = 0;
+            for (var i = 0; i < arrays.Length; ++i)
+            {
+                var a = arrays[i];
+                if (a == null)
+                    continue;
+                Array.Copy(a, 0, result, position, a.Length);
+                position += a.Length;
+            }
+
+            return result;
+        }
+
+        public DataMap Summarize(string[] groupingColumnNames, string[] aggregateColumnNames, IDictionary aggregators)
+        {
+            var columns = JoinArrays(groupingColumnNames, aggregateColumnNames);
+
+            return new GroupBy(this, groupingColumnNames, columns).
+                Summarize(aggregateColumnNames, aggregators);
+        }
+
+        public DataMap Summarize(string[] groupingColumnNames, string[] aggregateColumnNames, string[] aggregators)
+        {
+            var columns = JoinArrays(groupingColumnNames, aggregateColumnNames);
+
+            return new GroupBy(this, groupingColumnNames, columns).
+                Summarize(aggregateColumnNames, aggregators);
+        }
+
         public IEnumerable<KFold> KFold(int k, bool shuffle = false, int seed = -1)
         {
             var splitter = new KFoldSplitter(this, k, shuffle, seed);

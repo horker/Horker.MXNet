@@ -10,7 +10,7 @@ using Horker.Numerics.DataMaps;
 
 namespace Horker.Numerics
 {
-    public class FunctionCompiler
+    public static class FunctionCompiler
     {
         private static readonly Dictionary<string, MethodInfo> _codeCache = new Dictionary<string, MethodInfo>();
 
@@ -72,7 +72,7 @@ namespace {0} {{
             if(cr.Errors.Count > 0)
             {
                 var sb = new StringBuilder();
-                sb.AppendFormat("Error on compiling: {0}", sourceString);
+                sb.AppendFormat("Error when compiling: {0}", sourceString);
                 sb.AppendLine();
                 foreach (var ce in cr.Errors)
                 {
@@ -99,7 +99,7 @@ namespace {0} {{
                 else
                     sourceCode = ActionSourceCode;
 
-                var className = "Func" + classNameSuffix++;
+                var className = "Class" + classNameSuffix++;
                 var sourceString = string.Format(sourceCode, Namespace, className, typeString, typeString, funcString);
 
                 var assembly = CompileString(sourceString, "v3.5");
