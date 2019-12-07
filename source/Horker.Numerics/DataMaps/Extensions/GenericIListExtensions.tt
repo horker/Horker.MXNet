@@ -4,7 +4,7 @@
 <#@ import namespace="System.Threading" #>
 <#@ output extension=".cs" #>
 <#
-var numericTypes = new [] {
+var numericTypes = new[] {
 	"double",
 	"float",
 	"long",
@@ -15,11 +15,9 @@ var numericTypes = new [] {
 	"decimal"
 };
 
-var structTypes = new[] {
-	"bool",
+var dateTimeTypes = new[] {
 	"DateTime",
-	"DateTimeOffset",
-	"string",
+	"DateTimeOffset"
 };
 
 var unaryOperators = new[] {
@@ -59,6 +57,14 @@ var binaryOperators = new[] {
 	Tuple.Create("ElementModR", "(MetaNum)(other[i] % self[i])", "(MetaNum)(value % self[i])")
 };
 
+var dateTimeOperators = new[] {
+	Tuple.Create("Year", "int", "self[i].Year"),
+	Tuple.Create("Month", "int", "self[i].Month"),
+	Tuple.Create("Day", "int", "self[i].Day"),
+	Tuple.Create("Days", "int", "DateTimeUtils.GetDaysPassed(self[i])"),
+	Tuple.Create("DaysInRadian", "double", "DateTimeUtils.GetDaysInRadian(self[i])")
+};
+
 TextInfo textInfo = Thread.CurrentThread.CurrentCulture.TextInfo;
 string text;
 #>
@@ -67,6 +73,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Horker.Numerics.DataMaps.Utilities;
+using Horker.Numerics.Utilities;
 
 namespace Horker.Numerics.DataMaps.Extensions
 {
@@ -123,8 +130,24 @@ foreach (var t in numericTypes)
 <#
 	}
 }
+
+doc = GetDocument("DateTimeIListExtensions.cs");
+foreach (var t in dateTimeTypes)
+{
+    foreach (var op in dateTimeOperators)
+	{
+		var arguments = "(this IList<DateTime> self)";
+		text = doc.Replace("Year(this IList<DateTime> self)", op.Item1 + arguments);
+		text = text.Replace("int", op.Item2);
+		text = text.Replace("self[i].Year", op.Item3);
+        text = text.Replace("<DateTime>", $"<{t}>");
 #>
-    }
+<#= text #>
+<#
+	}
+}
+#>
+	}
 }
 <#+
 private string GetDocument(string baseFile)

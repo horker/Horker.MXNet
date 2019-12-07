@@ -284,6 +284,71 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
+        public SeriesBase Year()
+        {
+			try
+			{
+				var result = GenericIListExtensions.Year((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Year() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase Month()
+        {
+			try
+			{
+				var result = GenericIListExtensions.Month((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Month() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase Day()
+        {
+			try
+			{
+				var result = GenericIListExtensions.Day((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Day() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase Days()
+        {
+			try
+			{
+				var result = GenericIListExtensions.Days((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Days() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase DaysInRadian()
+        {
+			try
+			{
+				var result = GenericIListExtensions.DaysInRadian((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"DaysInRadian() does not support data type {DataType}");
+			}
+        }
+
         public SeriesBase ElementAdd(SeriesBase other)
         {
 			try
@@ -388,6 +453,32 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
+        public SeriesBase ElementMod(SeriesBase other)
+        {
+			try
+			{
+				var result = GenericIListExtensions.ElementMod((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementMod() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase ElementMod(object other)
+        {
+			try
+			{
+				var result = GenericIListExtensions.ElementMod((dynamic)UnderlyingList, (dynamic)other);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementMod() does not support data type {DataType}");
+			}
+        }
+
         public SeriesBase ElementAddR(SeriesBase other)
         {
 			try
@@ -489,6 +580,32 @@ namespace Horker.Numerics.DataMaps
 			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
 			{
 				throw new InvalidOperationException($"ElementDivideR() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase ElementModR(SeriesBase other)
+        {
+			try
+			{
+				var result = GenericIListExtensions.ElementModR((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementModR() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase ElementModR(object other)
+        {
+			try
+			{
+				var result = GenericIListExtensions.ElementModR((dynamic)UnderlyingList, (dynamic)other);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"ElementModR() does not support data type {DataType}");
 			}
         }
 

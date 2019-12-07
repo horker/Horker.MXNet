@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Horker.Numerics.DataMaps.Utilities;
+using Horker.Numerics.Utilities;
 
 namespace Horker.Numerics.DataMaps.Extensions
 {
@@ -11496,5 +11497,105 @@ namespace Horker.Numerics.DataMaps.Extensions
             for (var i = 0; i < self.Count; ++i)
                 self[i] = (decimal)(value % self[i]);
         }
-    }
+
+        public static List<int> Year(this IList<DateTime> self)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add(self[i].Year);
+
+            return result;
+        }
+
+        public static List<int> Month(this IList<DateTime> self)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add(self[i].Month);
+
+            return result;
+        }
+
+        public static List<int> Day(this IList<DateTime> self)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add(self[i].Day);
+
+            return result;
+        }
+
+        public static List<int> Days(this IList<DateTime> self)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add(DateTimeUtils.GetDaysPassed(self[i]));
+
+            return result;
+        }
+
+        public static List<double> DaysInRadian(this IList<DateTime> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add(DateTimeUtils.GetDaysInRadian(self[i]));
+
+            return result;
+        }
+
+        public static List<int> Year(this IList<DateTimeOffset> self)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add(self[i].Year);
+
+            return result;
+        }
+
+        public static List<int> Month(this IList<DateTimeOffset> self)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add(self[i].Month);
+
+            return result;
+        }
+
+        public static List<int> Day(this IList<DateTimeOffset> self)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add(self[i].Day);
+
+            return result;
+        }
+
+        public static List<int> Days(this IList<DateTimeOffset> self)
+        {
+            var result = new List<int>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add(DateTimeUtils.GetDaysPassed(self[i]));
+
+            return result;
+        }
+
+        public static List<double> DaysInRadian(this IList<DateTimeOffset> self)
+        {
+            var result = new List<double>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add(DateTimeUtils.GetDaysInRadian(self[i]));
+
+            return result;
+        }
+	}
 }

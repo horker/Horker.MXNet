@@ -281,16 +281,19 @@ namespace Horker.Numerics.DataMaps
         public static SeriesBase operator -(SeriesBase lhs, SeriesBase rhs) { return lhs.ElementSubtract(rhs);  }
         public static SeriesBase operator *(SeriesBase lhs, SeriesBase rhs) { return lhs.ElementMultiply(rhs);  }
         public static SeriesBase operator /(SeriesBase lhs, SeriesBase rhs) { return lhs.ElementDivide(rhs);  }
+        public static SeriesBase operator %(SeriesBase lhs, SeriesBase rhs) { return lhs.ElementMod(rhs);  }
 
         public static SeriesBase operator +(SeriesBase lhs, object rhs) { return lhs.ElementAdd(rhs);  }
         public static SeriesBase operator -(SeriesBase lhs, object rhs) { return lhs.ElementSubtract(rhs);  }
         public static SeriesBase operator *(SeriesBase lhs, object rhs) { return lhs.ElementMultiply(rhs);  }
         public static SeriesBase operator /(SeriesBase lhs, object rhs) { return lhs.ElementDivide(rhs);  }
+        public static SeriesBase operator %(SeriesBase lhs, object rhs) { return lhs.ElementMod(rhs);  }
 
         public static SeriesBase operator +(object lhs, SeriesBase rhs) { return rhs.ElementAddR(lhs);  }
         public static SeriesBase operator -(object lhs, SeriesBase rhs) { return rhs.ElementSubtractR(lhs);  }
         public static SeriesBase operator *(object lhs, SeriesBase rhs) { return rhs.ElementMultiplyR(lhs);  }
         public static SeriesBase operator /(object lhs, SeriesBase rhs) { return rhs.ElementDivideR(lhs);  }
+        public static SeriesBase operator %(object lhs, SeriesBase rhs) { return rhs.ElementModR(lhs);  }
 
         // Implicit conversion operators
 

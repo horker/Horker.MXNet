@@ -30,7 +30,14 @@ var methodNames = new[]
 	Tuple.Create("Tan", "", ""),
 	Tuple.Create("Tanh", "", ""),
 	Tuple.Create("Truncate", "", ""),
-	
+
+	// DateTime operations
+	Tuple.Create("Year", "", ""),
+	Tuple.Create("Month", "", ""),
+	Tuple.Create("Day", "", ""),
+	Tuple.Create("Days", "", ""),
+	Tuple.Create("DaysInRadian", "", ""),
+
 	// Elementwise binary operations
 
 	Tuple.Create("ElementAdd", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
@@ -41,6 +48,8 @@ var methodNames = new[]
 	Tuple.Create("ElementMultiply", "object other", ", (dynamic)other"),
 	Tuple.Create("ElementDivide", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
 	Tuple.Create("ElementDivide", "object other", ", (dynamic)other"),
+	Tuple.Create("ElementMod", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
+	Tuple.Create("ElementMod", "object other", ", (dynamic)other"),
 
 	Tuple.Create("ElementAddR", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
 	Tuple.Create("ElementAddR", "object other", ", (dynamic)other"),
@@ -50,6 +59,8 @@ var methodNames = new[]
 	Tuple.Create("ElementMultiplyR", "object other", ", (dynamic)other"),
 	Tuple.Create("ElementDivideR", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
 	Tuple.Create("ElementDivideR", "object other", ", (dynamic)other"),
+	Tuple.Create("ElementModR", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
+	Tuple.Create("ElementModR", "object other", ", (dynamic)other"),
 
 	// Other operations
 

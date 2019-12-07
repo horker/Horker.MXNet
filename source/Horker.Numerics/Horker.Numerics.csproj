@@ -87,6 +87,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataMaps\Extensions\DateTimeIListExtensions.cs" />
     <Compile Include="DataMaps\SlicedListView.cs" />
     <Compile Include="DataMaps\HistogramHelper.cs" />
     <Compile Include="DataMaps\GroupBy.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Estimators\LinearRegressionEstimator.cs" />
     <Compile Include="Estimators\LogisticRegressionEstimator.cs" />
     <Compile Include="Estimators\Metrics.cs" />
+    <Compile Include="Utilities\DateTimeUtils.cs" />
     <Compile Include="Utilities\TypeTrait.cs" />
     <Compile Include="DataMaps\NumericTrait.cs" />
     <Compile Include="DataMaps\Extensions\MetaNumIListExtensions.cs" />
