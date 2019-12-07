@@ -235,17 +235,12 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        private DataMap SummarizeInternal<T>(
-            string[] columnNames, string[] aggregationNames, object[] aggregators)
+        private static Regex _methodNameRegex = new Regex(@"^\w+(\([^)]*\))?$");
+
+        private Tuple<object[], bool> PreprocessAggregators(object[] aggregators)
         {
-            if (columnNames == null || columnNames.Length == 0)
-                columnNames = _dataMap.ColumnNames.Except(_groupingColumnNames).ToArray();
-
-            // Set up aggregators
-
-            var re = new Regex(@"^\w+(\([^)]*\))?$");
-            var funcs = new object[aggregationNames.Length];
-            var scriptBlockGiven = false;
+            var funcs = new object[aggregators.Length];
+            bool scriptBlockGiven = false;
             for (var i = 0; i < aggregators.Length; ++i)
             {
                 var agg = aggregators[i];
@@ -256,7 +251,7 @@ namespace Horker.Numerics.DataMaps
                 }
                 else if (agg is string st)
                 {
-                    var match = re.Match(st);
+                    var match = _methodNameRegex.Match(st);
                     if (match.Success)
                     {
                         if (!match.Groups[1].Success)
@@ -280,6 +275,19 @@ namespace Horker.Numerics.DataMaps
                     throw new ArgumentException("Aggregators should be a ScriptBlock or string");
                 }
             }
+
+            return Tuple.Create(funcs, scriptBlockGiven);
+        }
+
+        private DataMap SummarizeInternal<T>(
+            string[] columnNames, string[] aggregationNames, object[] aggregators)
+        {
+            if (columnNames == null || columnNames.Length == 0)
+                columnNames = _dataMap.ColumnNames.Except(_groupingColumnNames).ToArray();
+
+            var pre = PreprocessAggregators(aggregators);
+            var funcs = pre.Item1;
+            var scriptBlockGiven = pre.Item2;
 
             var result = new DataMap();
 
