@@ -767,10 +767,10 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         public static int CountUnique<T>(this IList<T> self)
         {
-            return self.Unique().Count;
+            return self.Unique(false).Count;
         }
 
-        public static ValueBin[] CountValues<T>(this IList<T> self)
+        public static ValueBin[] CountValues<T>(this IList<T> self, bool sort = true)
         {
             var counter = new Dictionary<T, int>();
 
@@ -782,19 +782,23 @@ namespace Horker.Numerics.DataMaps.Extensions
                     counter[value] = 1;
             }
 
-            var bins = new ValueBin[counter.Count];
-            var i = 0;
-            foreach (var entry in counter)
+            var values = counter.Keys.ToArray();
+            if (sort)
+                Array.Sort(values);
+
+            var bins = new ValueBin[values.Length];
+            for (var i = 0; i < values.Length; ++i)
             {
+                var count = counter[values[i]];
                 var bin = new ValueBin()
                 {
                     Index = i,
-                    Value = entry.Key,
-                    Count = entry.Value,
-                    Ratio = (double)entry.Value / self.Count
+                    Value = values[i],
+                    Count = count,
+                    Ratio = (double)count / self.Count
                 };
+
                 bins[i] = bin;
-                ++i;
             }
 
             return bins;
@@ -960,9 +964,12 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static List<T> Unique<T>(this IList<T> self)
+        public static List<T> Unique<T>(this IList<T> self, bool sort = true)
         {
-            return new HashSet<T>(self).ToList();
+            if (sort)
+                return new SortedSet<T>(self).ToList();
+            else
+                return new HashSet<T>(self).ToList();
         }
     }
 }

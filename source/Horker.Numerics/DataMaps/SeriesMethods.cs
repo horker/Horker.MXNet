@@ -765,11 +765,11 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
-        public SeriesBase Unique()
+        public SeriesBase Unique(bool sort = true)
         {
 			try
 			{
-				var result = GenericIListExtensions.Unique((dynamic)UnderlyingList);
+				var result = GenericIListExtensions.Unique((dynamic)UnderlyingList, sort);
 				return new Series((IList)result);
 			}
 			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
@@ -1342,11 +1342,11 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
-        public object CountValues()
+        public object CountValues(bool sort = true)
         {
 			try
 			{
-				return (object)GenericIListExtensions.CountValues((dynamic)UnderlyingList);
+				return (object)GenericIListExtensions.CountValues((dynamic)UnderlyingList, sort);
 			}
 			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
 			{

@@ -14,7 +14,7 @@ namespace Horker.Numerics.Tests
         public void TestApply()
         {
             var t1 = new Series(new double[] { 1, 2, 3, 4 });
-            var t2 = t1.Apply("(x, i) => (double)series[series.Count - 1 - i]");
+            var t2 = t1.Apply("(x, i) => (double)column[column.Count - 1 - i]");
 
             Assert.Equal(new double[] { 4, 3, 2, 1 }, t2.UnderlyingList);
         }

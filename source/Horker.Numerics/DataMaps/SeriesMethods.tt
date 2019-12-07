@@ -76,7 +76,7 @@ var methodNames = new[]
 	Tuple.Create("SortedCopy", "", ""),
 	Tuple.Create("FillNaN", "object fillValue", ", (dynamic)fillValue"),
 	Tuple.Create("RemoveNaN", "", ""),
-	Tuple.Create("Unique", "", ""),
+	Tuple.Create("Unique", "bool sort = true", ", sort")
 };
 
 var nonSeriesMethods = new[]
@@ -137,7 +137,7 @@ var nonSeriesMethods = new[]
 	Tuple.Create("CumulativeSumFill", "void", "", ""),
 	Tuple.Create("CountNaN", "int", "", ""),
 	Tuple.Create("CountUnique", "int", "", ""),
-	Tuple.Create("CountValues", "object", "", ""),
+	Tuple.Create("CountValues", "object", "bool sort = true", ", sort"),
 	Tuple.Create("Describe", "Summary", "", ""),
 	Tuple.Create("FillFill", "void", "object value", ", (dynamic)value"),
 	Tuple.Create("FillNaNFill", "void", "object fillValue", ", (dynamic)fillValue"),
