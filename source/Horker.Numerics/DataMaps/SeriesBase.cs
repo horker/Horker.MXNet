@@ -707,6 +707,18 @@ namespace Horker.Numerics.DataMaps
 
         // Other methods
 
+        public SeriesBase Filter(bool[] filter)
+        {
+            var filtered = FilteredListView.Create(UnderlyingList, filter);
+            return new Series(filtered);
+        }
+
+        public SeriesBase Filter(SeriesBase filter)
+        {
+            var filtered = FilteredListView.Create(UnderlyingList, filter.UnderlyingList.ToArray<bool>());
+            return new Series(filtered);
+        }
+
         public static SeriesBase MapTyped<T>(IList<T> list, IDictionary map)
         {
             if (!(map is IDictionary<T, T> typedMap))
