@@ -49,6 +49,10 @@ namespace Horker.Numerics.DataMaps
             set => _dataMap = value;
         }
 
+        public object First => this[0];
+
+        public object Last => this[Count - 1];
+
         // ISerializable implementation
 
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
