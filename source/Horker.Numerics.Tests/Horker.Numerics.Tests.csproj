@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EstimatorTest.cs" />
+    <Compile Include="JoinTest.cs" />
     <Compile Include="KFoldTest.cs" />
     <Compile Include="FunctionCompilerTest.cs" />
     <Compile Include="TypeTraitTest.cs" />

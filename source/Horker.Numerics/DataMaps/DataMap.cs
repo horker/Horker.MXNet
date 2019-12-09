@@ -581,6 +581,46 @@ namespace Horker.Numerics.DataMaps
             return Filter(filter.AsArray<bool>());
         }
 
+        public DataMap LeftJoin(DataMap other, JoinKeyMap joinKeyMap)
+        {
+            var result = ShallowCopy();
+            result.LeftJoinFill(other, joinKeyMap);
+            return result;
+        }
+
+        public DataMap LeftJoin(DataMap other, params string[] keyColumns)
+        {
+            return LeftJoin(other, new JoinKeyMap(this, keyColumns));
+        }
+
+        public void LeftJoinFill(DataMap other, JoinKeyMap joinKeyMap)
+        {
+            var rowCount = MaxRowCount;
+            var indexes = joinKeyMap.GetMatchingIndexes(other);
+
+            foreach (var column in other.Columns)
+            {
+                var l = column.Data.UnderlyingList;
+                var newColumn = Utils.CreateList(column.DataType, rowCount, 0);
+                for (var i = 0; i < l.Count; ++i)
+                {
+                    var j = indexes[i];
+                    if (j == -1)
+                        newColumn.Add(TypeTrait.GetNaN(column.DataType));
+                    else
+                        newColumn.Add(l[j]);
+                }
+
+                var name = GetUniqueColumnName(column.Name);
+                Add(name, newColumn);
+            }
+        }
+
+        public void LeftJoinFill(DataMap other, params string[] keyColumns)
+        {
+            LeftJoinFill(other, new JoinKeyMap(this, keyColumns));
+        }
+
         public DataMap Slice(int start, int count = -1)
         {
             var dataMap = new DataMap(ColumnNameComparer);
