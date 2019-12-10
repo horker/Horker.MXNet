@@ -66,6 +66,9 @@ namespace Horker.Numerics
             if (input is bool b)
                 return b ? 1.0 : 0.0;
 
+            if (input is null || DBNull.Value.Equals(input))
+                return double.NaN;
+
             try
             {
                 if (input is string s)
