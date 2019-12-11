@@ -581,22 +581,25 @@ namespace Horker.Numerics.DataMaps
             return Filter(filter.AsArray<bool>());
         }
 
-        public DataMap LeftJoin(DataMap other, JoinKeyMap joinKeyMap)
+        public DataMap LeftJoin(DataMap other, JoinKeyMap joinKeyMap, string[] rightKeyColumns = null)
         {
             var result = ShallowCopy();
-            result.LeftJoinFill(other, joinKeyMap);
+            result.LeftJoinFill(other, joinKeyMap, rightKeyColumns);
             return result;
         }
 
-        public DataMap LeftJoin(DataMap other, params string[] keyColumns)
+        public DataMap LeftJoin(DataMap other, string[] leftKeyColumns, string[] rightKeyColumns = null)
         {
-            return LeftJoin(other, new JoinKeyMap(this, keyColumns));
+            if (rightKeyColumns == null)
+                rightKeyColumns = leftKeyColumns;
+
+            return LeftJoin(other, new JoinKeyMap(this, leftKeyColumns), rightKeyColumns);
         }
 
-        public void LeftJoinFill(DataMap other, JoinKeyMap joinKeyMap)
+        public void LeftJoinFill(DataMap other, JoinKeyMap joinKeyMap, string[] rightKeyColumns = null)
         {
             var rowCount = MaxRowCount;
-            var indexes = joinKeyMap.GetMatchingIndexes(other);
+            var indexes = joinKeyMap.GetMatchingIndexes(other, rightKeyColumns);
 
             foreach (var column in other.Columns)
             {
@@ -616,9 +619,12 @@ namespace Horker.Numerics.DataMaps
             }
         }
 
-        public void LeftJoinFill(DataMap other, params string[] keyColumns)
+        public void LeftJoinFill(DataMap other, string[] leftKeyColumns, string[] rightKeyColumns = null)
         {
-            LeftJoinFill(other, new JoinKeyMap(this, keyColumns));
+            if (rightKeyColumns == null)
+                rightKeyColumns = leftKeyColumns;
+
+            LeftJoinFill(other, new JoinKeyMap(this, leftKeyColumns), rightKeyColumns);
         }
 
         public DataMap Slice(int start, int count = -1)

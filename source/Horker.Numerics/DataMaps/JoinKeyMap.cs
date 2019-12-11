@@ -155,19 +155,22 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        public int[] GetMatchingIndexes(DataMap left)
+        public int[] GetMatchingIndexes(DataMap right, string[] rightKeyColumns)
         {
-            return (int[])InvokeIndirect("GetMatchingIndexes", new object[] { left });
+            return (int[])InvokeIndirect("GetMatchingIndexes", new object[] { right, rightKeyColumns });
         }
 
-        private int[] GetMatchingIndexes1<T1>(DataMap left)
+        private int[] GetMatchingIndexes1<T1>(DataMap right, string[] rightKeyColumns)
         {
-            var result = new int[left.MaxRowCount];
+            if (rightKeyColumns == null)
+                rightKeyColumns = _keyColumns;
+
+            var result = new int[right.MaxRowCount];
             for (var i = 0; i < result.Length; ++i)
                 result[i] = -1;
 
             var indexMap = (Dictionary<T1, int>)_indexMap;
-            var column1 = (IList<T1>)left[_keyColumns[0]].UnderlyingList;
+            var column1 = (IList<T1>)right[rightKeyColumns[0]].UnderlyingList;
 
             for (var i = 0; i < result.Length; ++i)
             {
@@ -178,19 +181,22 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        private int[] GetMatchingIndexes2<T1, T2>(DataMap left)
+        private int[] GetMatchingIndexes2<T1, T2>(DataMap right, string[] rightKeyColumns)
         {
-            var result = new int[left.MaxRowCount];
+            if (rightKeyColumns == null)
+                rightKeyColumns = _keyColumns;
+
+            var result = new int[right.MaxRowCount];
             for (var i = 0; i < result.Length; ++i)
                 result[i] = -1;
 
             var indexMap = (Dictionary<Tuple<T1, T2>, int>)_indexMap;
-            var column1 = (IList<T1>)left[_keyColumns[0]].UnderlyingList;
-            var column2 = (IList<T2>)left[_keyColumns[1]].UnderlyingList;
+            var column1 = right[rightKeyColumns[0]].UnderlyingList;
+            var column2 = right[rightKeyColumns[1]].UnderlyingList;
 
             for (var i = 0; i < result.Length; ++i)
             {
-                var key = Tuple.Create(column1[i], column2[i]);
+                var key = Tuple.Create((T1)column1[i], (T2)column2[i]);
                 if (indexMap.TryGetValue(key, out var index))
                     result[index] = i;
             }
@@ -198,16 +204,19 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        private int[] GetMatchingIndexes3<T1, T2, T3>(DataMap left)
+        private int[] GetMatchingIndexes3<T1, T2, T3>(DataMap right, string[] rightKeyColumns)
         {
-            var result = new int[left.MaxRowCount];
+            if (rightKeyColumns == null)
+                rightKeyColumns = _keyColumns;
+
+            var result = new int[right.MaxRowCount];
             for (var i = 0; i < result.Length; ++i)
                 result[i] = -1;
 
             var indexMap = (Dictionary<Tuple<T1, T2, T3>, int>)_indexMap;
-            var column1 = (IList<T1>)left[_keyColumns[0]].UnderlyingList;
-            var column2 = (IList<T2>)left[_keyColumns[1]].UnderlyingList;
-            var column3 = (IList<T3>)left[_keyColumns[2]].UnderlyingList;
+            var column1 = (IList<T1>)right[rightKeyColumns[0]].UnderlyingList;
+            var column2 = (IList<T2>)right[rightKeyColumns[1]].UnderlyingList;
+            var column3 = (IList<T3>)right[rightKeyColumns[2]].UnderlyingList;
 
             for (var i = 0; i < result.Length; ++i)
             {
@@ -219,17 +228,20 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        private int[] GetMatchingIndexes4<T1, T2, T3, T4>(DataMap left)
+        private int[] GetMatchingIndexes4<T1, T2, T3, T4>(DataMap right, string[] rightKeyColumns)
         {
-            var result = new int[left.MaxRowCount];
+            if (rightKeyColumns == null)
+                rightKeyColumns = _keyColumns;
+
+            var result = new int[right.MaxRowCount];
             for (var i = 0; i < result.Length; ++i)
                 result[i] = -1;
 
             var indexMap = (Dictionary<Tuple<T1, T2, T3, T4>, int>)_indexMap;
-            var column1 = (IList<T1>)left[_keyColumns[0]].UnderlyingList;
-            var column2 = (IList<T2>)left[_keyColumns[1]].UnderlyingList;
-            var column3 = (IList<T3>)left[_keyColumns[2]].UnderlyingList;
-            var column4 = (IList<T4>)left[_keyColumns[3]].UnderlyingList;
+            var column1 = (IList<T1>)right[rightKeyColumns[0]].UnderlyingList;
+            var column2 = (IList<T2>)right[rightKeyColumns[1]].UnderlyingList;
+            var column3 = (IList<T3>)right[rightKeyColumns[2]].UnderlyingList;
+            var column4 = (IList<T4>)right[rightKeyColumns[3]].UnderlyingList;
 
             for (var i = 0; i < result.Length; ++i)
             {
