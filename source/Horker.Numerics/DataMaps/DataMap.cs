@@ -1062,6 +1062,16 @@ namespace Horker.Numerics.DataMaps
             return d;
         }
 
+        public DataMap CastDown()
+        {
+            var d = new DataMap(ColumnNameComparer);
+
+            foreach (var column in Columns)
+                d.Add(column.Name, column.Data.CastDown());
+
+            return d;
+        }
+
         public T[,] To2DArray<T>()
         {
             var columnCount = ColumnCount;

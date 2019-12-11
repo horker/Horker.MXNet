@@ -91,7 +91,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static IList CastDownToFirstElementType(this IList self)
+        public static IList CastDown(this IList self)
         {
             Type firstType = null;
             foreach (var value in self)
@@ -154,7 +154,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 
             // If any possible types are not adequate, try to cast down the type of the first non-null element.
 
-            return CastDownToFirstElementType(self);
+            return CastDown(self);
         }
 
         // Element-wise operations of string

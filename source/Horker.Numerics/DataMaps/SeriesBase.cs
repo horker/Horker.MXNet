@@ -241,6 +241,11 @@ namespace Horker.Numerics.DataMaps
             return new Series(ToList(type));
         }
 
+        public SeriesBase CastDown()
+        {
+            return new Series(GenericIListExtensions.CastDown(UnderlyingList));
+        }
+
         public IList TryConversion(Type[] possibleTypes = null, bool raiseError = false)
         {
             return GenericIListExtensions.TryConversion(UnderlyingList, possibleTypes, raiseError);

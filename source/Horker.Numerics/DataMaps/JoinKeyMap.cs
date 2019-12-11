@@ -191,12 +191,12 @@ namespace Horker.Numerics.DataMaps
                 result[i] = -1;
 
             var indexMap = (Dictionary<Tuple<T1, T2>, int>)_indexMap;
-            var column1 = right[rightKeyColumns[0]].UnderlyingList;
-            var column2 = right[rightKeyColumns[1]].UnderlyingList;
+            var column1 = (IList<T1>)right[rightKeyColumns[0]].UnderlyingList;
+            var column2 = (IList<T2>)right[rightKeyColumns[1]].UnderlyingList;
 
             for (var i = 0; i < result.Length; ++i)
             {
-                var key = Tuple.Create((T1)column1[i], (T2)column2[i]);
+                var key = Tuple.Create(column1[i], column2[i]);
                 if (indexMap.TryGetValue(key, out var index))
                     result[index] = i;
             }

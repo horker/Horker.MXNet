@@ -77,8 +77,10 @@ namespace Horker.Numerics.PowerShell
             foreach (var entry in _data)
                 d.AddLast(entry.Key, entry.Value);
 
-           if (Convert)
+            if (Convert)
                 d = d.TryConversion(DataTypes);
+            else
+                d = d.CastDown();
 
             if (_dataMap == null)
                 _dataMap = d;
