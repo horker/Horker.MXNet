@@ -24,6 +24,7 @@ namespace Horker.Numerics.PowerShell
 
         private Dictionary<string, List<object>> _data;
         private int _recordCount;
+        private DataMap _dataMap;
 
         protected override void BeginProcessing()
         {
@@ -33,31 +34,40 @@ namespace Horker.Numerics.PowerShell
 
         protected override void ProcessRecord()
         {
-            foreach (var prop in InputObject.Properties)
+            if (InputObject.BaseObject is IDictionary dict)
             {
-                List<object> column;
-                if (!_data.TryGetValue(prop.Name, out column))
-                {
-                    column = new List<object>();
-                    _data.Add(prop.Name, column);
-                    for (var i = 0; i < _recordCount; ++i)
-                        column.Add(null);
-                }
-
-                try
-                {
-                    var value = Utils.StripOffPSObject(prop.Value);
-                    column.Add(value);
-                }
-                catch (Exception)
-                {
-                    // An exception can occur when you try to get the property value. It will be ignored.
-                    // e.g. the ExitCode property of System.Diagnostics.Process
-                    column.Add(null);
-                }
+                if (_dataMap == null)
+                    _dataMap = DataMap.FromDictionary(dict);
+                else
+                    _dataMap.Pile(DataMap.FromDictionary(dict));
             }
+            else
+            {
+                foreach (var prop in InputObject.Properties)
+                {
+                    List<object> column;
+                    if (!_data.TryGetValue(prop.Name, out column))
+                    {
+                        column = new List<object>();
+                        _data.Add(prop.Name, column);
+                        for (var i = 0; i < _recordCount; ++i)
+                            column.Add(null);
+                    }
 
-            ++_recordCount;
+                    try
+                    {
+                        var value = Utils.StripOffPSObject(prop.Value);
+                        column.Add(value);
+                    }
+                    catch (Exception)
+                    {
+                        // An exception can occur when you try to get the property value. It will be ignored.
+                        // e.g. the ExitCode property of System.Diagnostics.Process
+                        column.Add(null);
+                    }
+                }
+                ++_recordCount;
+            }
         }
 
         protected override void EndProcessing()
@@ -70,7 +80,12 @@ namespace Horker.Numerics.PowerShell
            if (Convert)
                 d = d.TryConversion(DataTypes);
 
-            WriteObject(d);
+            if (_dataMap == null)
+                _dataMap = d;
+            else
+                _dataMap.Pile(d);
+
+            WriteObject(_dataMap);
         }
     }
 }
