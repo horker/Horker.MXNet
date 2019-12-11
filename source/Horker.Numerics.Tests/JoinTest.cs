@@ -38,6 +38,7 @@ namespace Horker.Numerics.Tests
             Assert.Equal(new string[] { "x", "y", "z" }, result["y"].Values);
             Assert.Equal(new double[] { 200, 300, double.NaN, 400 }, result["x_1"].Values);
         }
+
         [Fact]
         public void TestLeftJoinWithDifferentColumnNames()
         {
@@ -64,6 +65,34 @@ namespace Horker.Numerics.Tests
             Assert.Equal(new int[] { 10, 20, 30, 40 }, result["x"].Values);
             Assert.Equal(new string[] { "x", "y", "z" }, result["y"].Values);
             Assert.Equal(new double[] { 200, 300, double.NaN, 400 }, result["x_1"].Values);
+        }
+
+        [Fact]
+        public void TestLeftJoinWithShorterRightSide()
+        {
+            var d1 = DataMap.FromDictionary(new OrderedDictionary()
+            {
+                { "key1", new int[] { 1, 2 } },
+                { "key2", new string[] { "a", "b" } },
+                { "x", new int[] { 10, 20 } },
+                { "y", new string[] { "x", "y" } }
+            });
+
+            var d2 = DataMap.FromDictionary(new OrderedDictionary()
+            {
+                { "key1xx", new int[] { 99, 1, 2, 4 } },
+                { "key2xx", new string[] { "xxx", "a", "b", "d" } },
+                { "x", new double[] { 100, 200, 300, 400 } },
+            });
+
+            var result = d1.LeftJoin(d2, new[] { "key1", "key2" }, new[] { "key1xx", "key2xx" });
+
+            Assert.Equal(new[] { "key1", "key2", "x", "y", "key1xx", "key2xx", "x_1" }, result.ColumnNames);
+            Assert.Equal(new int[] { 1, 2 }, result["key1"].Values);
+            Assert.Equal(new string[] { "a", "b" }, result["key2"].Values);
+            Assert.Equal(new int[] { 10, 20 }, result["x"].Values);
+            Assert.Equal(new string[] { "x", "y" }, result["y"].Values);
+            Assert.Equal(new double[] { 200, 300 }, result["x_1"].Values);
         }
     }
 }

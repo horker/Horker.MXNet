@@ -605,7 +605,10 @@ namespace Horker.Numerics.DataMaps
             {
                 var l = column.Data.UnderlyingList;
                 var newColumn = Utils.CreateList(column.DataType, rowCount, 0);
-                for (var i = 0; i < l.Count; ++i)
+
+                var i = 0;
+                var count = Math.Min(rowCount, l.Count);
+                for (i = 0; i < count; ++i)
                 {
                     var j = indexes[i];
                     if (j == -1)
@@ -727,7 +730,7 @@ namespace Horker.Numerics.DataMaps
 
         public static DataMap ConcatenateAll(params DataMap[] maps)
         {
-            var result = new DataMap();
+            var result = new DataMap(maps[0].ColumnNameComparer);
             result.Concatenate(maps);
             return result;
         }
@@ -769,7 +772,7 @@ namespace Horker.Numerics.DataMaps
 
         public static DataMap PileAll(params DataMap[] maps)
         {
-            var result = new DataMap();
+            var result = new DataMap(maps[0].ColumnNameComparer);
             result.Pile(maps);
             return result;
         }
@@ -793,7 +796,7 @@ namespace Horker.Numerics.DataMaps
             if (selectColumnNames == null)
                 selectColumnNames = ColumnNames.ToArray();
 
-            var result = new DataMap();
+            var result = new DataMap(ColumnNameComparer);
 
             // Prepare groups that are grouped by key column values.
 
@@ -1002,7 +1005,7 @@ namespace Horker.Numerics.DataMaps
         {
             var order = GetOrder((dynamic)this[keyColumn].UnderlyingList);
 
-            var result = new DataMap();
+            var result = new DataMap(ColumnNameComparer);
             foreach (var column in Columns)
             {
                 var reordered = GetReorderedList((dynamic)column.Data.UnderlyingList, order);
