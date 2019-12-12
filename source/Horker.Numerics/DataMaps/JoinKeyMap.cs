@@ -80,7 +80,15 @@ namespace Horker.Numerics.DataMaps
                 T1 k1 = i >= column1.Count ? TypeTrait<T1>.GetNaN() : (T1)column1[i];
                 T2 k2 = i >= column2.Count ? TypeTrait<T2>.GetNaN() : (T2)column2[i];
 
-                result.Add(Tuple.Create(k1, k2), i);
+                var key = Tuple.Create(k1, k2);
+                try
+                {
+                    result.Add(key, i);
+                }
+                catch (ArgumentException ex)
+                {
+                    throw new ArgumentException($"Duplicate key values: {key}", ex);
+                }
             }
 
             return result;

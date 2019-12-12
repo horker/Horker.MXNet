@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using Horker.Numerics.DataMaps;
 using Horker.Numerics.DataMaps.Extensions;
@@ -13,7 +14,7 @@ namespace Horker.Numerics.Tests
         [Fact]
         public void TestGroupBy()
         {
-            var dm = DataMap.FromDictionary(new Hashtable()
+            var dm = DataMap.FromDictionary(new OrderedDictionary()
             {
                 { "cat", new int[] { 1, 2, 1, 1, 3 } },
                 { "value1", new string[] { "a", "b", "c", "d", "e" } },
@@ -62,6 +63,32 @@ namespace Horker.Numerics.Tests
             Assert.Equal(new double[] { 1, 4 }, s1["value1"].UnderlyingList);
         }
 
+        [Fact]
+        public void TestMultipleColumns2()
+        {
+            var dm = DataMap.FromDictionary(new OrderedDictionary()
+            {
+                { "cat1", new int[]    {   1,   2,   1,   1,   3 } },
+                { "cat2", new string[] { "a", "b", "c", "a", "a" } },
+                { "value1", new int[]  {   1,   2,   3,   4,   5 } }
+            });
+
+            var g = new GroupBy(dm, new string[] { "cat1", "cat2" });
+
+            var groups = g.Groups().ToArray();
+
+            Assert.Equal(4, groups.Length);
+
+            Assert.Equal(new[] { "cat1", "cat2", "value1" }, groups[0].ColumnNames);
+            Assert.Equal(new[] { 1, 1 }, groups[0]["cat1"].Values);
+            Assert.Equal(new[] { "a", "a" }, groups[0]["cat2"].Values);
+            Assert.Equal(new[] { 1, 4 }, groups[0]["value1"].Values);
+
+            Assert.Equal(new[] { "cat1", "cat2", "value1" }, groups[3].ColumnNames);
+            Assert.Equal(new[] { 3 }, groups[3]["cat1"].Values);
+            Assert.Equal(new[] { "a" }, groups[3]["cat2"].Values);
+            Assert.Equal(new[] { 5 }, groups[3]["value1"].Values);
+        }
 
         [Fact]
         public void TestUpdateSubset()

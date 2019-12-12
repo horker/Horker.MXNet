@@ -932,19 +932,26 @@ namespace Horker.Numerics.DataMaps
             return new GroupBy(this, groupingColumnNames, selectColumnNames);
         }
 
-        private T[] JoinArrays<T>(params T[][] arrays)
+        private List<T> JoinArrays<T>(params T[][] arrays)
         {
             var total = arrays.Sum(x => x == null ? 0 : x.Length);
-            var result = new T[total];
+            var result = new List<T>(total);
 
-            var position = 0;
+            var rememberSet = new HashSet<T>();
+
             for (var i = 0; i < arrays.Length; ++i)
             {
                 var a = arrays[i];
                 if (a == null)
                     continue;
-                Array.Copy(a, 0, result, position, a.Length);
-                position += a.Length;
+
+                foreach (var item in a)
+                {
+                    if (rememberSet.Contains(item))
+                        continue;
+                    result.Add(item);
+                    rememberSet.Add(item);
+                }
             }
 
             return result;
@@ -952,7 +959,7 @@ namespace Horker.Numerics.DataMaps
 
         public DataMap Summarize(string[] groupingColumnNames, IDictionary aggregators)
         {
-            return new GroupBy(this, groupingColumnNames).Summarize( aggregators);
+            return new GroupBy(this, groupingColumnNames).Summarize(aggregators);
         }
 
         public DataMap Summarize(string[] groupingColumnNames, object[] aggregators)
@@ -962,7 +969,11 @@ namespace Horker.Numerics.DataMaps
 
         public DataMap Summarize(string[] groupingColumnNames, string[] aggregateColumnNames, IDictionary aggregators)
         {
-            var columns = JoinArrays(groupingColumnNames, aggregateColumnNames);
+            string[] columns;
+            if (aggregateColumnNames == null)
+                columns = aggregateColumnNames = ColumnNames.ToArray();
+            else
+                columns = JoinArrays(groupingColumnNames, aggregateColumnNames).ToArray();
 
             return new GroupBy(this, groupingColumnNames, columns).
                 Summarize(aggregateColumnNames, aggregators);
@@ -970,7 +981,11 @@ namespace Horker.Numerics.DataMaps
 
         public DataMap Summarize(string[] groupingColumnNames, string[] aggregateColumnNames, object[] aggregators)
         {
-            var columns = JoinArrays(groupingColumnNames, aggregateColumnNames);
+            string[] columns;
+            if (aggregateColumnNames == null)
+                columns = aggregateColumnNames = ColumnNames.ToArray();
+            else
+                columns = JoinArrays(groupingColumnNames, aggregateColumnNames).ToArray();
 
             return new GroupBy(this, groupingColumnNames, columns).
                 Summarize(aggregateColumnNames, aggregators);

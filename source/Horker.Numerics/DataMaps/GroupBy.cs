@@ -100,13 +100,18 @@ namespace Horker.Numerics.DataMaps
                     var filter = new bool[_maxRowCount];
 
                     var data = dataMap[keyColumn.Name].UnderlyingList;
+                    bool exists = false;
                     for (var i = 0; i <  data.Count; ++i)
                     {
                         if (data[i].Equals(categoryValue))
+                        {
                             filter[i] = true;
+                            exists = true;
+                        }
                     }
 
-                    keyColumn.FilterSet.Add(categoryValue, filter);
+                    if (exists)
+                        keyColumn.FilterSet.Add(categoryValue, filter);
                 }
             }
         }
@@ -124,21 +129,28 @@ namespace Horker.Numerics.DataMaps
             for (var i = 0; i < categories.Length; ++i)
             {
                 var keyColumn = _groupingColumns[i];
+
                 if (!keyColumn.FilterSet.TryGetValue(categories[i], out var f))
-                    Array.Clear(filter, 0, filter.Length);
+                {
+                    _cache.Add(cacheKey, null);
+                    return null;
+                }
 
                 for (var j = 0; j < f.Length; ++j)
                     filter[j] &= f[j];
             }
 
-            var dataMap = new DataMap();
+            var result = new DataMap(_dataMap.ColumnNameComparer);
+            bool hasItem = false;
 
             if (_selectColumnNames != null)
             {
                 foreach (var c in _selectColumnNames)
                 {
                     var filtered = FilteredListView.Create(_dataMap[c].UnderlyingList, filter);
-                    dataMap.Add(c, filtered);
+                    if (filtered.Count > 0)
+                        hasItem = true;
+                    result.Add(c, filtered);
                 }
             }
             else
@@ -146,32 +158,42 @@ namespace Horker.Numerics.DataMaps
                 foreach (var column in _dataMap)
                 {
                     var filtered = FilteredListView.Create(column.Data.UnderlyingList, filter);
-                    dataMap.Add(column.Name, filtered);
+                    if (filtered.Count > 0)
+                        hasItem = true;
+                    result.Add(column.Name, filtered);
                 }
             }
 
-            _cache.Add(cacheKey, dataMap);
+            if (!hasItem)
+                result = null;
 
-            return dataMap;
+            _cache.Add(cacheKey, result);
+            return result;
         }
 
         public IEnumerable<DataMap> Groups()
         {
-            var counts = new int[_groupingColumns.Count];
+            var indexes = new int[_groupingColumns.Count];
             var categories = new object[_groupingColumns.Count];
 
-            while (counts[0] < _groupingColumns[0].CategoryValues.Count)
+            var stop = _groupingColumns[0].CategoryValues.Count;
+            while (indexes[0] < stop)
             {
                 for (var i = 0; i < categories.Length; ++i)
-                    categories[i] = _groupingColumns[i].CategoryValues[counts[i]];
+                    categories[i] = _groupingColumns[i].CategoryValues[indexes[i]];
 
-                yield return GetSubset(categories);
+                var g = GetSubset(categories);
+                if (g != null)
+                    yield return g;
 
                 for (var i = _groupingColumns.Count - 1; i >= 0; --i)
                 {
-                    ++counts[i];
-                    if (counts[i] < _groupingColumns[i].CategoryValues.Count)
+                    ++indexes[i];
+                    if (indexes[i] < _groupingColumns[i].CategoryValues.Count)
                         break;
+
+                    if (i > 0)
+                        indexes[i] = 0;
                 }
             }
         }
@@ -287,6 +309,9 @@ namespace Horker.Numerics.DataMaps
                     else if (funcs[i] is string st)
                     {
                         var m = group.GetType().GetMethod(st, BindingFlags.Public | BindingFlags.Instance);
+                        if (m == null)
+                            throw new ArgumentException($"Method '{st}' is not found");
+
                         value = m.Invoke(group, new object[0]);
                     }
 
@@ -322,7 +347,7 @@ namespace Horker.Numerics.DataMaps
             var funcs = pre.Item1;
             var scriptBlockGiven = pre.Item2;
 
-            var result = new DataMap();
+            var result = new DataMap(_dataMap.ColumnNameComparer);
 
             foreach (var c in _groupingColumnNames)
                 result.Add(c, new List<object>());
@@ -369,6 +394,9 @@ namespace Horker.Numerics.DataMaps
                         else if (funcs[i] is string st)
                         {
                             var m = column.GetType().GetMethod(st, BindingFlags.Public | BindingFlags.Instance);
+                            if (m == null)
+                                throw new ArgumentException($"Method '{st}' is not found");
+
                             value = m.Invoke(column, new object[0]);
                         }
 
