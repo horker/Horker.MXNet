@@ -96,10 +96,10 @@ task PublishLocal {
 
     Publish-Module -Path "$PSScriptRoot\..\module\Release\$ModuleName\" -Repository $LocalRepoName -NuGetApiKey any
 
-    if (-not (Get-Module $ModuleName)) {
+#    if (-not (Get-Module $ModuleName)) {
         Install-Module $ModuleName -Force -Repository $LocalRepoName -AllowClobber
-    }
-    else {
-        Update-Module $ModuleName -Force
-    }
+#    }
+#    else {
+#        Update-Module $ModuleName -Force
+#    }
 }
