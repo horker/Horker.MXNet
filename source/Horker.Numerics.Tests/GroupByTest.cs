@@ -150,6 +150,11 @@ namespace Horker.Numerics.Tests
             });
 
             Assert.Equal(new[] { "cat", "max_value2", "min_value3" }, s.ColumnNames.ToArray());
+
+            Assert.Equal(typeof(int), s["cat"].DataType);
+            Assert.Equal(typeof(double), s["max_value2"].DataType);
+            Assert.Equal(typeof(double), s["min_value3"].DataType);
+
             Assert.Equal(new int[] { 1, 2, 3 }, s["cat"].ToArray<int>());
             Assert.Equal(new double[] { 40, 20, 50 }, s["max_value2"].ToArray<double>());
             Assert.Equal(new double[] { 1, 2, 5 }, s["min_value3"].ToArray<double>());
@@ -174,6 +179,11 @@ namespace Horker.Numerics.Tests
             });
 
             Assert.Equal(new[] { "cat", "max/value2", "min/value2", "max/value3", "min/value3" }, s.ColumnNames.ToArray());
+
+            Assert.Equal(typeof(int), s["cat"].DataType);
+            Assert.Equal(typeof(double), s["max/value2"].DataType);
+            Assert.Equal(typeof(double), s["min/value3"].DataType);
+
             Assert.Equal(new int[] { 1, 2, 3 }, s["cat"].ToArray<int>());
             Assert.Equal(new double[] { 40, 20, 50 }, s["max/value2"].ToArray<double>());
             Assert.Equal(new double[] { 1, 2, 5 }, s["min/value3"].ToArray<double>());

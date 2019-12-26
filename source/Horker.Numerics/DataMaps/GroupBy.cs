@@ -279,10 +279,7 @@ namespace Horker.Numerics.DataMaps
             var result = new DataMap();
 
             foreach (var c in _groupingColumnNames)
-                result.Add(c, new List<T>());
-
-            foreach (var c in aggregationNames)
-                result.Add(c, new List<T>());
+                result.Add(c, Utils.CreateList(DataMap[c].DataType, 10, 0));
 
             var variables = new List<PSVariable>();
             variables.Add(new PSVariable("group", null));
@@ -316,7 +313,16 @@ namespace Horker.Numerics.DataMaps
                     }
 
                     var name = aggregationNames[i];
-                    result[name].Add(value);
+
+                    if (result.Contains(name))
+                        result[name].Add(value);
+                    else
+                    {
+                        var dataType = value == null ? typeof(object) : value.GetType();
+                        var list = Utils.CreateList(dataType, 10, 0);
+                        list.Add(value);
+                        result.Add(name, list);
+                    }
                 }
             }
 
@@ -350,15 +356,7 @@ namespace Horker.Numerics.DataMaps
             var result = new DataMap(_dataMap.ColumnNameComparer);
 
             foreach (var c in _groupingColumnNames)
-                result.Add(c, new List<object>());
-
-            foreach (var c in columnNames)
-            {
-                foreach (var a in aggregationNames)
-                {
-                    result.Add(a + "/" + c, new List<T>());
-                }
-            }
+                result.Add(c, Utils.CreateList(DataMap[c].DataType, 10, 0));
 
             List<PSVariable> variables = null;
             object[] arguments  = null;
@@ -401,7 +399,16 @@ namespace Horker.Numerics.DataMaps
                         }
 
                         var name =  aggregationNames[i] + "/" + c;
-                        result[name].Add(value);
+
+                        if (result.Contains(name))
+                            result[name].Add(value);
+                        else
+                        {
+                            var dataType = value == null ? typeof(object) : value.GetType();
+                            var list = Utils.CreateList(dataType, 10, 0);
+                            list.Add(value);
+                            result.Add(name, list);
+                        }
                     }
                 }
             }
