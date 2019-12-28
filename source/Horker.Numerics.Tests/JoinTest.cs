@@ -122,5 +122,30 @@ namespace Horker.Numerics.Tests
             Assert.Equal(new string[] { "x", "y" }, result["y"].Values);
             Assert.Equal(new double[] { 200, 300 }, result["x_1"].Values);
         }
+
+        [Fact]
+        public void TestDuplicateValues()
+        {
+            var d1 = DataMap.FromDictionary(new OrderedDictionary()
+            {
+                { "key1", new int[] { 1, 1 } },
+                { "x", new int[] { 10, 20 } },
+                { "y", new string[] { "x", "y" } }
+            });
+
+            var d2 = DataMap.FromDictionary(new OrderedDictionary()
+            {
+                { "key1", new int[] { 1 } },
+                { "x", new double[] { 200 } }
+            });
+
+            var result = d1.LeftJoin(d2, new[] { "key1" });
+
+            Assert.Equal(new[] { "key1", "x", "y", "key1_1", "x_1" }, result.ColumnNames);
+            Assert.Equal(new int[] { 1, 1 }, result["key1"].Values);
+            Assert.Equal(new int[] { 10, 20 }, result["x"].Values);
+            Assert.Equal(new string[] { "x", "y" }, result["y"].Values);
+            Assert.Equal(new double[] { 200, 200 }, result["x_1"].Values);
+        }
     }
 }

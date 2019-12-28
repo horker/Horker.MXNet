@@ -448,16 +448,14 @@ namespace Horker.Numerics.DataMaps
             return _nameMap.ContainsKey(name);
         }
 
-        public bool Remove(string name)
+        public void Remove(string name)
         {
             LinkedListNode<Column> column = null;
             if (_nameMap.TryGetValue(name, out column))
             {
                 _nameMap.Remove(name);
                 _columns.Remove(column);
-                return true;
             }
-            return false;
         }
 
         public void MoveToFirst(string name)
@@ -606,9 +604,7 @@ namespace Horker.Numerics.DataMaps
                 var l = column.Data.UnderlyingList;
                 var newColumn = Utils.CreateList(column.DataType, rowCount, 0);
 
-                var i = 0;
-                var count = Math.Min(rowCount, l.Count);
-                for (i = 0; i < count; ++i)
+                for (var i = 0; i < rowCount; ++i)
                 {
                     var j = indexes[i];
                     if (j == -1)
