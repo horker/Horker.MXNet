@@ -29,6 +29,20 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
+        public void TestComparer()
+        {
+            var t1 = new Series(new float[] { 0, 1, 2, 3, 4 });
+
+            var t2 = t1.Le(2);
+
+            Assert.Equal(new[] { true, true, true, false, false }, t2.Values);
+
+            var t3 = t1.Le(new float[] { 2, 2, 2, 2, 2 });
+
+            Assert.Equal(new[] { true, true, true, false, false }, t3.Values);
+        }
+
+        [Fact]
         public void TestContains()
         {
             var t1 = new Series(new double[] { 0, 1, 2, 3 });

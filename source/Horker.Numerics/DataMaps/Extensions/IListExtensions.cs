@@ -626,7 +626,7 @@ namespace Horker.Numerics.DataMaps.Extensions
 
         // Comparison operators
 
-        private static List<bool> CompareIList(this IList self, IList other, Func<int, bool> cond)
+        private static List<bool> CompareIList<T>(this IList<T> self, IList<T> other, Func<int, bool> cond)
         {
             var result = new List<bool>(self.Count);
             var comparer = Comparer.Default;
@@ -645,7 +645,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        private static List<bool> CompareScalar(this IList self, object value, Func<int, bool> cond)
+        private static List<bool> CompareScalar<T>(this IList<T> self, T value, Func<int, bool> cond)
         {
             var result = new List<bool>(self.Count);
             var comparer = Comparer.Default;
@@ -659,67 +659,67 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static List<bool> Eq(this IList self, IList other)
+        public static List<bool> Eq<T>(this IList<T> self, IList<T> other)
         {
             return CompareIList(self, other, x => x == 0);
         }
 
-        public static List<bool> Eq(this IList self, object value)
+        public static List<bool> Eq<T>(this IList<T> self, T value)
         {
             return CompareScalar(self, value, x => x == 0);
         }
 
-        public static List<bool> Ne(this IList self, IList other)
+        public static List<bool> Ne<T>(this IList<T> self, IList<T> other)
         {
             return CompareIList(self, other, x => x != 0);
         }
 
-        public static List<bool> Ne(this IList self, object value)
+        public static List<bool> Ne<T>(this IList<T> self, T value)
         {
             return CompareScalar(self, value, x => x != 0);
         }
 
-        public static List<bool> Lt(this IList self, IList other)
+        public static List<bool> Lt<T>(this IList<T> self, IList<T> other)
         {
             return CompareIList(self, other, x => x < 0);
         }
 
-        public static List<bool> Lt(this IList self, object value)
+        public static List<bool> Lt<T>(this IList<T> self, T value)
         {
             return CompareScalar(self, value, x => x < 0);
         }
 
-        public static List<bool> Le(this IList self, IList other)
+        public static List<bool> Le<T>(this IList<T> self, IList<T> other)
         {
             return CompareIList(self, other, x => x <= 0);
         }
 
-        public static List<bool> Le(this IList self, object value)
+        public static List<bool> Le<T>(this IList<T> self, T value)
         {
             return CompareScalar(self, value, x => x <= 0);
         }
 
-        public static List<bool> Gt(this IList self, IList other)
+        public static List<bool> Gt<T>(this IList<T> self, IList<T> other)
         {
             return CompareIList(self, other, x => x > 0);
         }
 
-        public static List<bool> Gt(this IList self, object value)
+        public static List<bool> Gt<T>(this IList<T> self, T value)
         {
             return CompareScalar(self, value, x => x > 0);
         }
 
-        public static List<bool> Ge(this IList self, IList other)
+        public static List<bool> Ge<T>(this IList<T> self, IList<T> other)
         {
             return CompareIList(self, other, x => x >= 0);
         }
 
-        public static List<bool> Ge(this IList self, object value)
+        public static List<bool> Ge<T>(this IList<T> self, T value)
         {
             return CompareScalar(self, value, x => x >= 0);
         }
 
-        public static List<bool> Between(this IList self, object left, object right, bool inclusive = true)
+        public static List<bool> Between<T>(this IList<T> self, T left, T right, bool inclusive = true)
         {
             var result = new List<bool>(self.Count);
             var comparer = Comparer.Default;
@@ -746,7 +746,7 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
-        public static List<bool> In(this IList self, params object[] values)
+        public static List<bool> In<T>(this IList<T> self, params T[] values)
         {
             var result = new List<bool>(self.Count);
             var comparer = Comparer.Default;

@@ -304,7 +304,7 @@ namespace Horker.Numerics.DataMaps
         public static SeriesBase operator /(object lhs, SeriesBase rhs) { return rhs.ElementDivideR(lhs);  }
         public static SeriesBase operator %(object lhs, SeriesBase rhs) { return rhs.ElementModR(lhs);  }
 
-        // Implicit conversion operators
+        // Implicit conversion operators to allow to assign arrays/lists to Series objects
 
         public static implicit operator SeriesBase(Array value) { return new Series(value); }
         public static implicit operator SeriesBase(List<double> value) { return new Series(value); }
@@ -320,6 +320,8 @@ namespace Horker.Numerics.DataMaps
         public static implicit operator SeriesBase(List<DateTime> value) { return new Series(value); }
         public static implicit operator SeriesBase(List<DateTimeOffset> value) { return new Series(value); }
         public static implicit operator SeriesBase(List<object> value) { return new Series(value); }
+
+        // Explicit conversion operators from Series objects to arrays
 
         public static explicit operator double[](SeriesBase value) { return value.UnderlyingList.AsArray<double>(); }
         public static explicit operator float[](SeriesBase value) { return value.UnderlyingList.AsArray<float>(); }
@@ -614,104 +616,58 @@ namespace Horker.Numerics.DataMaps
 
         // Comparison operators
 
-        public SeriesBase Eq(IList other)
+        public SeriesBase Eq(dynamic value)
         {
-            return new Series(UnderlyingList.Eq(other));
+            if (value is SeriesBase s)
+                return new Series(GenericIListExtensions.Eq((dynamic)UnderlyingList, (dynamic)s.UnderlyingList));
+            return new Series(GenericIListExtensions.Eq((dynamic)UnderlyingList, value));
         }
 
-        public SeriesBase Eq(SeriesBase other)
+        public SeriesBase Ne(dynamic value)
         {
-            return new Series(UnderlyingList.Eq(other.UnderlyingList));
+            if (value is SeriesBase s)
+                return new Series(GenericIListExtensions.Ne((dynamic)UnderlyingList, (dynamic)s.UnderlyingList));
+            return new Series(GenericIListExtensions.Ne((dynamic)UnderlyingList, value));
         }
 
-        public SeriesBase Eq(object value)
+        public SeriesBase Lt(dynamic value)
         {
-            return new Series(UnderlyingList.Eq(value));
+            if (value is SeriesBase s)
+                return new Series(GenericIListExtensions.Lt((dynamic)UnderlyingList, (dynamic)s.UnderlyingList));
+            return new Series(GenericIListExtensions.Lt((dynamic)UnderlyingList, value));
         }
 
-        public SeriesBase Ne(IList other)
+        public SeriesBase Le(dynamic value)
         {
-            return new Series(UnderlyingList.Ne(other));
+            if (value is SeriesBase s)
+                return new Series(GenericIListExtensions.Le((dynamic)UnderlyingList, (dynamic)s.UnderlyingList));
+            return new Series(GenericIListExtensions.Le((dynamic)UnderlyingList, value));
         }
 
-        public SeriesBase Ne(SeriesBase other)
+        public SeriesBase Gt(dynamic value)
         {
-            return new Series(UnderlyingList.Ne(other.UnderlyingList));
+            if (value is SeriesBase s)
+                return new Series(GenericIListExtensions.Gt((dynamic)UnderlyingList, (dynamic)s.UnderlyingList));
+            return new Series(GenericIListExtensions.Gt((dynamic)UnderlyingList, value));
         }
 
-        public SeriesBase Ne(object value)
+        public SeriesBase Ge(dynamic value)
         {
-            return new Series(UnderlyingList.Ne(value));
+            if (value is SeriesBase s)
+                return new Series(GenericIListExtensions.Ge((dynamic)UnderlyingList, (dynamic)s.UnderlyingList));
+            return new Series(GenericIListExtensions.Ge((dynamic)UnderlyingList, value));
         }
 
-        public SeriesBase Lt(IList other)
+        public SeriesBase Between(dynamic left, dynamic right, bool inclusive = true)
         {
-            return new Series(UnderlyingList.Lt(other));
+            return new Series(GenericIListExtensions.Between((dynamic)UnderlyingList, left, right, inclusive));
         }
 
-        public SeriesBase Lt(SeriesBase other)
+        public SeriesBase In(dynamic values)
         {
-            return new Series(UnderlyingList.Lt(other.UnderlyingList));
-        }
-
-        public SeriesBase Lt(object value)
-        {
-            return new Series(UnderlyingList.Lt(value));
-        }
-
-        public SeriesBase Le(IList other)
-        {
-            return new Series(UnderlyingList.Le(other));
-        }
-
-        public SeriesBase Le(SeriesBase other)
-        {
-            return new Series(UnderlyingList.Le(other.UnderlyingList));
-        }
-
-        public SeriesBase Le(object value)
-        {
-            return new Series(UnderlyingList.Le(value));
-        }
-
-        public SeriesBase Gt(IList other)
-        {
-            return new Series(UnderlyingList.Gt(other));
-        }
-
-        public SeriesBase Gt(SeriesBase other)
-        {
-            return new Series(UnderlyingList.Gt(other.UnderlyingList));
-        }
-
-        public SeriesBase Gt(object value)
-        {
-            return new Series(UnderlyingList.Gt(value));
-        }
-
-        public SeriesBase Ge(IList other)
-        {
-            return new Series(UnderlyingList.Ge(other));
-        }
-
-        public SeriesBase Ge(SeriesBase other)
-        {
-            return new Series(UnderlyingList.Ge(other.UnderlyingList));
-        }
-
-        public SeriesBase Ge(object value)
-        {
-            return new Series(UnderlyingList.Ge(value));
-        }
-
-        public SeriesBase Between(object left, object right, bool inclusive = true)
-        {
-            return new Series(UnderlyingList.Between(left, right, inclusive));
-        }
-
-        public SeriesBase In(object[] values)
-        {
-            return new Series(UnderlyingList.In(values));
+            if (values is SeriesBase s)
+                return new Series(GenericIListExtensions.In((dynamic)UnderlyingList, (dynamic)s.UnderlyingList));
+            return new Series(GenericIListExtensions.In((dynamic)UnderlyingList, values));
         }
 
         // Other methods

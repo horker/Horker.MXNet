@@ -157,5 +157,15 @@ namespace Horker.Numerics.Tests
 
             Assert.Equal(new int[] { 1, 2, 3 }, s1);
         }
+
+        [Fact]
+        public void TestComparer()
+        {
+            var s = new float[] { 1, 2, 3, 4, 5 };
+
+            var s1 = s.Le(3.0f);
+
+            Assert.Equal(new[] { true, true, true, false, false }, s1);
+        }
     }
 } 
