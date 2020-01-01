@@ -10,7 +10,7 @@ using LightGBMNet.Train;
 
 namespace Horker.Numerics.LightGBM
 {
-    public abstract class LightGBMRegressionEstimator : IEstimator, IDisposable
+    public class LightGBMRegressionEstimator : IEstimator, IDisposable
     {
         private Parameters _parameters;
         private RegressionTrainer _trainer;
