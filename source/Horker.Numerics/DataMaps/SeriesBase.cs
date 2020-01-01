@@ -798,9 +798,16 @@ namespace Horker.Numerics.DataMaps
 
         // Transformers
 
-        public DataMap OneHotEncoding(OneHotType oneHotType = OneHotType.OneHot, string columnNameFormat = "{0}")
+        public DataMap OneHotEncoding(OneHotType oneHotType = OneHotType.OneHot, IList mapping = null, string columnNameFormat = "{0}")
         {
             var trans = new OneHotTransformer<double>(oneHotType, columnNameFormat);
+
+            if (mapping != null)
+            {
+                trans.Fit(mapping);
+                return trans.TransformToDataMap(this);
+            }
+
             return trans.FitTransformToDataMap(this);
         }
 

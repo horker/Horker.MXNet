@@ -30,17 +30,22 @@ namespace Horker.Numerics.Transformers
             _columnNameFormat = columnNameFormat ?? "{0}";
         }
 
-        public override void Fit(SeriesBase data)
+        public void Fit(IList data)
         {
             _encoding = new OrderedDictionary();
 
             var count = 0;
-            foreach (var e in data.UnderlyingList)
+            foreach (var e in data)
             {
                 var s = e.ToString();
                 if (!_encoding.Contains(s))
                     _encoding.Add(s, count++);
             }
+        }
+
+        public override void Fit(SeriesBase data)
+        {
+            Fit(data.UnderlyingList);
         }
 
         public override DataMap TransformToDataMap(SeriesBase data)

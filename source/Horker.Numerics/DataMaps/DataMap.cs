@@ -1215,10 +1215,12 @@ namespace Horker.Numerics.DataMaps
 
         // Transformers
 
-        public void OneHotEncoding(string columnName, OneHotType oneHotType = OneHotType.OneHot, string columnNameFormat = "{1}_{0}")
+        public void OneHotEncoding(
+            string columnName, OneHotType oneHotType = OneHotType.OneHot,
+            IList mapping = null, string columnNameFormat = "{1}_{0}")
         {
             var format = string.Format(columnNameFormat, "{0}", columnName);
-            var oneHot = this[columnName].OneHotEncoding(oneHotType, format);
+            var oneHot = this[columnName].OneHotEncoding(oneHotType, mapping, format);
 
             foreach (var column in oneHot)
                 AddBefore(columnName, column.Name, column.Data);
