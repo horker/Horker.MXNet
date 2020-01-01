@@ -4,13 +4,13 @@ t-SNE
 kNN
 incorporate psmath functions and cmdlets
 array methods
-float/double type conversions of comparison operators like Eq()
-typed Eq()/Ne()/...
 boolean arithmetics with numeric values (+-*/)
 Series.IsNaN()
-params arguments for PowerShell object[] values
-one-hot encoding with specific mapping
 DataMap: join (inner outer anti)
 
+DONE params arguments for PowerShell object[] values
+DONE float/double type conversions of comparison operators like Eq()
+DONE typed Eq()/Ne()/...
+DONE one-hot encoding with specific mapping
 DONE DataMap: join (inner outer left anti)
 DONE bool ordered paratemer to Unique()

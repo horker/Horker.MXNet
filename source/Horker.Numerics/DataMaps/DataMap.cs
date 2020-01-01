@@ -478,6 +478,11 @@ namespace Horker.Numerics.DataMaps
                 MoveToFirst(name);
         }
 
+        public void SetOrder(params object[] columnNames)
+        {
+            SetOrder(columnNames.Cast<string>().ToArray());
+        }
+
         public DataMap SelectColumns(params string[] selected)
         {
             var result = new DataMap(ColumnNameComparer);
@@ -489,6 +494,11 @@ namespace Horker.Numerics.DataMaps
             }
 
             return result;
+        }
+
+        public DataMap SelectColumns(params object[] selected)
+        {
+            return SelectColumns(selected.Cast<string>().ToArray());
         }
 
         public DataMap UnselectColumns(params string[] unselected)
@@ -504,6 +514,11 @@ namespace Horker.Numerics.DataMaps
             }
 
             return result;
+        }
+
+        public DataMap UnselectColumns(params object[] unselected)
+        {
+            return UnselectColumns(unselected.Cast<string>().ToArray());
         }
 
         // Copy methods
@@ -679,6 +694,11 @@ namespace Horker.Numerics.DataMaps
             return Split(counts);
         }
 
+        public DataMap[] Split(params dynamic[] countsOrProps)
+        {
+            return Split(countsOrProps);
+        }
+
         public DataMap TopRows(int rowCount)
         {
             var dataMap = new DataMap(ColumnNameComparer);
@@ -724,11 +744,21 @@ namespace Horker.Numerics.DataMaps
             }
         }
 
+        public void Concatenate(params object[] maps)
+        {
+            Concatenate(maps.Cast<DataMap>().ToArray());
+        }
+
         public static DataMap ConcatenateAll(params DataMap[] maps)
         {
             var result = new DataMap(maps[0].ColumnNameComparer);
             result.Concatenate(maps);
             return result;
+        }
+
+        public static DataMap ConcatenateAll(params object[] maps)
+        {
+            return ConcatenateAll(maps.Cast<DataMap>().ToArray());
         }
 
         public void Pile(params DataMap[] maps)
@@ -766,11 +796,21 @@ namespace Horker.Numerics.DataMaps
             }
         }
 
+        public void Pile(params object[] maps)
+        {
+            Pile(maps.Cast<DataMap>().ToArray());
+        }
+
         public static DataMap PileAll(params DataMap[] maps)
         {
             var result = new DataMap(maps[0].ColumnNameComparer);
             result.Pile(maps);
             return result;
+        }
+
+        public static DataMap PileAll(params object[] maps)
+        {
+            return PileAll(maps.Cast<DataMap>().ToArray());
         }
 
         private string GetUniqueColumnName(string baseName)
