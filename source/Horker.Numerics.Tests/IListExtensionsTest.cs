@@ -167,5 +167,24 @@ namespace Horker.Numerics.Tests
 
             Assert.Equal(new[] { true, true, true, false, false }, s1);
         }
+
+        [Fact]
+        public void TestIsNaN()
+        {
+            var s1 = new float[] { 1, 2, float.NaN, 4, 5 };
+            var s2 = new double[] { double.NaN, 2, 3, 4, double.NaN };
+            var s3 = new int[] { -1, 0, 1, 2, 3 };
+            var s4 = new[] { "a", null, "b", "c", "d" };
+
+            var t1 = s1.IsNaN();
+            var t2 = s2.IsNaN();
+            var t3 = s3.IsNaN();
+            var t4 = s4.IsNaN();
+
+            Assert.Equal(new[] { false, false, true, false, false }, t1);
+            Assert.Equal(new[] { true, false, false, false, true }, t2);
+            Assert.Equal(new[] { false, false, false, false, false }, t3);
+            Assert.Equal(new[] { false, true, false, false, false }, t4);
+        }
     }
 } 

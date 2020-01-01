@@ -157,6 +157,16 @@ namespace Horker.Numerics.DataMaps.Extensions
             return CastDown(self);
         }
 
+        public static IList<bool> IsNaN<T>(this IList<T> self)
+        {
+            var result = new List<bool>(self.Count);
+
+            foreach (var item in self)
+                result.Add(TypeTrait<T>.IsNaN(item));
+
+            return result;
+        }
+
         // Element-wise operations of string
 
         public static IList<string> ElementAdd(this IList<string> self, IList<string> other)

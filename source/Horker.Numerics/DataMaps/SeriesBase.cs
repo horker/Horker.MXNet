@@ -670,6 +670,11 @@ namespace Horker.Numerics.DataMaps
             return new Series(GenericIListExtensions.In((dynamic)UnderlyingList, values));
         }
 
+        public SeriesBase IsNaN()
+        {
+            return new Series(GenericIListExtensions.IsNaN((dynamic)UnderlyingList));
+        }
+
         // Other methods
 
         public SeriesBase Filter(bool[] filter)
