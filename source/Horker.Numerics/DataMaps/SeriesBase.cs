@@ -595,6 +595,11 @@ namespace Horker.Numerics.DataMaps
             return (bool)GenericIListExtensions.AllScriptBlock((dynamic)UnderlyingList, scriptBlock);
         }
 
+        public bool All(dynamic value)
+        {
+            return ((dynamic)UnderlyingList).All(value);
+        }
+
         public bool Any<T>(Func<T, int, bool> func)
         {
             return ((IList<T>)UnderlyingList).Any(func);
@@ -612,6 +617,11 @@ namespace Horker.Numerics.DataMaps
         public bool Any(ScriptBlock scriptBlock)
         {
             return (bool)GenericIListExtensions.AnyScriptBlock((dynamic)UnderlyingList, scriptBlock);
+        }
+
+        public bool Any(dynamic value)
+        {
+            return ((dynamic)UnderlyingList).Any(value);
         }
 
         // Comparison operators

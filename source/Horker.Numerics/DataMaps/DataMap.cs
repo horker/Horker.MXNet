@@ -480,7 +480,7 @@ namespace Horker.Numerics.DataMaps
 
         public void SetOrder(params object[] columnNames)
         {
-            SetOrder(columnNames.Cast<string>().ToArray());
+            SetOrder(Utils.StripOffPSObjects<string>(columnNames).ToArray());
         }
 
         public DataMap SelectColumns(params string[] selected)
@@ -498,7 +498,7 @@ namespace Horker.Numerics.DataMaps
 
         public DataMap SelectColumns(params object[] selected)
         {
-            return SelectColumns(selected.Cast<string>().ToArray());
+            return SelectColumns(Utils.StripOffPSObjects<string>(selected).ToArray());
         }
 
         public DataMap UnselectColumns(params string[] unselected)
@@ -518,7 +518,7 @@ namespace Horker.Numerics.DataMaps
 
         public DataMap UnselectColumns(params object[] unselected)
         {
-            return UnselectColumns(unselected.Cast<string>().ToArray());
+            return UnselectColumns(Utils.StripOffPSObjects<string>(unselected).ToArray());
         }
 
         // Copy methods
@@ -746,7 +746,7 @@ namespace Horker.Numerics.DataMaps
 
         public void Concatenate(params object[] maps)
         {
-            Concatenate(maps.Cast<DataMap>().ToArray());
+            Concatenate(Utils.StripOffPSObjects<DataMap>(maps).ToArray());
         }
 
         public static DataMap ConcatenateAll(params DataMap[] maps)
@@ -758,7 +758,7 @@ namespace Horker.Numerics.DataMaps
 
         public static DataMap ConcatenateAll(params object[] maps)
         {
-            return ConcatenateAll(maps.Cast<DataMap>().ToArray());
+            return ConcatenateAll(Utils.StripOffPSObjects<DataMap>(maps).ToArray());
         }
 
         public void Pile(params DataMap[] maps)
@@ -798,7 +798,7 @@ namespace Horker.Numerics.DataMaps
 
         public void Pile(params object[] maps)
         {
-            Pile(maps.Cast<DataMap>().ToArray());
+            Pile(Utils.StripOffPSObjects<DataMap>(maps).ToArray());
         }
 
         public static DataMap PileAll(params DataMap[] maps)
@@ -810,7 +810,7 @@ namespace Horker.Numerics.DataMaps
 
         public static DataMap PileAll(params object[] maps)
         {
-            return PileAll(maps.Cast<DataMap>().ToArray());
+            return PileAll(Utils.StripOffPSObjects<DataMap>(maps).ToArray());
         }
 
         private string GetUniqueColumnName(string baseName)

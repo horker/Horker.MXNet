@@ -5,9 +5,10 @@ kNN
 incorporate psmath functions and cmdlets
 array methods
 boolean arithmetics with numeric values (+-*/)
-Series.IsNaN()
 DataMap: join (inner outer anti)
+Memory disposal after Fit() in LightGBM estimators
 
+DONE Series.IsNaN()
 DONE params arguments for PowerShell object[] values
 DONE float/double type conversions of comparison operators like Eq()
 DONE typed Eq()/Ne()/...

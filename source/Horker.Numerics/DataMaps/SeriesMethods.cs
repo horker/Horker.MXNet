@@ -609,6 +609,58 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
+        public SeriesBase And(SeriesBase other)
+        {
+			try
+			{
+				var result = GenericIListExtensions.And((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"And() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase Or(SeriesBase other)
+        {
+			try
+			{
+				var result = GenericIListExtensions.Or((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Or() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase Xor(SeriesBase other)
+        {
+			try
+			{
+				var result = GenericIListExtensions.Xor((dynamic)UnderlyingList, (dynamic)other.UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Xor() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase Not()
+        {
+			try
+			{
+				var result = GenericIListExtensions.Not((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Not() does not support data type {DataType}");
+			}
+        }
+
         public SeriesBase ArgSort()
         {
 			try

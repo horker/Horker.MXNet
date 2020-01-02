@@ -207,6 +207,72 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
+        // Element-wise operations of boolean
+
+        public static IList<bool> And(this IList<bool> self, IList<bool> other)
+        {
+            var result = new List<bool>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add(self[i] && other[i]);
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<bool> Or(this IList<bool> self, IList<bool> other)
+        {
+            var result = new List<bool>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add(self[i] || other[i]);
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<bool> Xor(this IList<bool> self, IList<bool> other)
+        {
+            var result = new List<bool>(Math.Max(self.Count, other.Count));
+
+            var i = 0;
+            for (; i < self.Count; ++i)
+            {
+                if (i > other.Count - 1)
+                    result.Add(self[i]);
+                else
+                    result.Add(self[i] ^ other[i]);
+            }
+            for (; i < other.Count; ++i)
+                result.Add(other[i]);
+
+            return result;
+        }
+
+        public static IList<bool> Not(this IList<bool> self)
+        {
+            var result = new List<bool>(self.Count);
+
+            for (var i = 0; i < self.Count; ++i)
+                result.Add(!self[i]);
+
+            return result;
+        }
+
         // Apply and friends
 
         public static List<U> Apply<T, U>(this IList<T> self, Func<T, int, U> func)
@@ -378,6 +444,17 @@ namespace Horker.Numerics.DataMaps.Extensions
             return true;
         }
 
+        public static bool All<T>(this IList<T> self, T value)
+        {
+            for (int i = 0; i < self.Count; ++i)
+            {
+                if (!self[i].Equals(value))
+                    return false;
+            }
+
+            return true;
+        }
+
         public static bool Any<T>(this IList<T> self, Func<T, int, bool> func)
         {
             for (int i = 0; i < self.Count; ++i)
@@ -385,6 +462,17 @@ namespace Horker.Numerics.DataMaps.Extensions
                 if (func.Invoke(self[i], i))
                     return true;
             }
+            return false;
+        }
+
+        public static bool Any<T>(this IList<T> self, T value)
+        {
+            for (int i = 0; i < self.Count; ++i)
+            {
+                if (self[i].Equals(value))
+                    return true;
+            }
+
             return false;
         }
 

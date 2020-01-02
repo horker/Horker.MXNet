@@ -20,6 +20,17 @@ namespace Horker.Numerics.Utilities
             return obj;
         }
 
+        public static IEnumerable<T> StripOffPSObjects<T>(object[] objs)
+        {
+            foreach (var obj in objs)
+            {
+                if (obj is PSObject pso && pso.BaseObject != null)
+                    yield return (T)pso.BaseObject;
+                else
+                    yield return (T)obj;
+            }
+        }
+
         public static bool IsNumeric(Type type)
         {
             return type == typeof(double) ||

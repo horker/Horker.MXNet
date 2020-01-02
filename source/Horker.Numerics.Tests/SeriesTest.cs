@@ -33,7 +33,7 @@ namespace Horker.Numerics.Tests
         {
             var t1 = new Series(new float[] { 0, 1, 2, 3, 4 });
 
-            var t2 = t1.Le(2);
+            var t2 = t1.Le(2.0f);
 
             Assert.Equal(new[] { true, true, true, false, false }, t2.Values);
 

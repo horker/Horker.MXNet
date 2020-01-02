@@ -62,6 +62,13 @@ var methodNames = new[]
 	Tuple.Create("ElementModR", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
 	Tuple.Create("ElementModR", "object other", ", (dynamic)other"),
 
+	// Logical operations
+
+	Tuple.Create("And", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
+	Tuple.Create("Or", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
+	Tuple.Create("Xor", "SeriesBase other", ", (dynamic)other.UnderlyingList"),
+	Tuple.Create("Not", "", ""),
+
 	// Other operations
 
 	Tuple.Create("ArgSort", "", ""),
