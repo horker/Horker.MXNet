@@ -288,7 +288,7 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        private int[] GetMatchingIndexes4<T1, T2, T3, T4, T5>(DataMap left, string[] leftKeyColumns)
+        private int[] GetMatchingIndexes5<T1, T2, T3, T4, T5>(DataMap left, string[] leftKeyColumns)
         {
             if (leftKeyColumns == null)
                 leftKeyColumns = _keyColumns;
