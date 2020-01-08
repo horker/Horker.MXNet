@@ -595,6 +595,25 @@ namespace Horker.Numerics.DataMaps.Extensions.Internal
             }
         }
 
+        public static List<MetaFloat> Softmax(this IList<MetaNum> self)
+        {
+            MetaNum max = Max(self);
+
+            var result = new List<MetaFloat>(self.Count);
+            var denom = (MetaFloat)0.0;
+            for (var i = 0; i < self.Count; ++i)
+            {
+                var e = Math.Exp((double)(self[i] - max));
+                result.Add((MetaFloat)e);
+                denom += (MetaFloat)e;
+            }
+
+            for (var i = 0; i < result.Count; ++i)
+                result[i] /= denom;
+
+            return result;
+        }
+
         public static MetaNum Sum(this IList<MetaNum> self, bool skipNaN = true, int minCount = 0)
         {
             MetaNum sum = (MetaNum)0.0;

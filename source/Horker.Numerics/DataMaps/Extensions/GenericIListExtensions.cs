@@ -594,6 +594,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+        public static List<double> Softmax(this IList<double> self)
+        {
+            double max = Max(self);
+
+            var result = new List<double>(self.Count);
+            var denom = (double)0.0;
+            for (var i = 0; i < self.Count; ++i)
+            {
+                var e = Math.Exp((double)(self[i] - max));
+                result.Add((double)e);
+                denom += (double)e;
+            }
+
+            for (var i = 0; i < result.Count; ++i)
+                result[i] /= denom;
+
+            return result;
+        }
+
         public static double Sum(this IList<double> self, bool skipNaN = true, int minCount = 0)
         {
             double sum = (double)0.0;
@@ -1282,6 +1301,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             {
                 return (float)g;
             }
+        }
+
+        public static List<float> Softmax(this IList<float> self)
+        {
+            float max = Max(self);
+
+            var result = new List<float>(self.Count);
+            var denom = (float)0.0;
+            for (var i = 0; i < self.Count; ++i)
+            {
+                var e = Math.Exp((double)(self[i] - max));
+                result.Add((float)e);
+                denom += (float)e;
+            }
+
+            for (var i = 0; i < result.Count; ++i)
+                result[i] /= denom;
+
+            return result;
         }
 
         public static float Sum(this IList<float> self, bool skipNaN = true, int minCount = 0)
@@ -1974,6 +2012,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+        public static List<double> Softmax(this IList<long> self)
+        {
+            long max = Max(self);
+
+            var result = new List<double>(self.Count);
+            var denom = (double)0.0;
+            for (var i = 0; i < self.Count; ++i)
+            {
+                var e = Math.Exp((double)(self[i] - max));
+                result.Add((double)e);
+                denom += (double)e;
+            }
+
+            for (var i = 0; i < result.Count; ++i)
+                result[i] /= denom;
+
+            return result;
+        }
+
         public static long Sum(this IList<long> self, bool skipNaN = true, int minCount = 0)
         {
             long sum = (long)0.0;
@@ -2662,6 +2719,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             {
                 return (double)g;
             }
+        }
+
+        public static List<double> Softmax(this IList<int> self)
+        {
+            int max = Max(self);
+
+            var result = new List<double>(self.Count);
+            var denom = (double)0.0;
+            for (var i = 0; i < self.Count; ++i)
+            {
+                var e = Math.Exp((double)(self[i] - max));
+                result.Add((double)e);
+                denom += (double)e;
+            }
+
+            for (var i = 0; i < result.Count; ++i)
+                result[i] /= denom;
+
+            return result;
         }
 
         public static int Sum(this IList<int> self, bool skipNaN = true, int minCount = 0)
@@ -3354,6 +3430,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+        public static List<double> Softmax(this IList<short> self)
+        {
+            short max = Max(self);
+
+            var result = new List<double>(self.Count);
+            var denom = (double)0.0;
+            for (var i = 0; i < self.Count; ++i)
+            {
+                var e = Math.Exp((double)(self[i] - max));
+                result.Add((double)e);
+                denom += (double)e;
+            }
+
+            for (var i = 0; i < result.Count; ++i)
+                result[i] /= denom;
+
+            return result;
+        }
+
         public static short Sum(this IList<short> self, bool skipNaN = true, int minCount = 0)
         {
             short sum = (short)0.0;
@@ -4042,6 +4137,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             {
                 return (double)g;
             }
+        }
+
+        public static List<double> Softmax(this IList<byte> self)
+        {
+            byte max = Max(self);
+
+            var result = new List<double>(self.Count);
+            var denom = (double)0.0;
+            for (var i = 0; i < self.Count; ++i)
+            {
+                var e = Math.Exp((double)(self[i] - max));
+                result.Add((double)e);
+                denom += (double)e;
+            }
+
+            for (var i = 0; i < result.Count; ++i)
+                result[i] /= denom;
+
+            return result;
         }
 
         public static byte Sum(this IList<byte> self, bool skipNaN = true, int minCount = 0)
@@ -4734,6 +4848,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             }
         }
 
+        public static List<double> Softmax(this IList<sbyte> self)
+        {
+            sbyte max = Max(self);
+
+            var result = new List<double>(self.Count);
+            var denom = (double)0.0;
+            for (var i = 0; i < self.Count; ++i)
+            {
+                var e = Math.Exp((double)(self[i] - max));
+                result.Add((double)e);
+                denom += (double)e;
+            }
+
+            for (var i = 0; i < result.Count; ++i)
+                result[i] /= denom;
+
+            return result;
+        }
+
         public static sbyte Sum(this IList<sbyte> self, bool skipNaN = true, int minCount = 0)
         {
             sbyte sum = (sbyte)0.0;
@@ -5422,6 +5555,25 @@ namespace Horker.Numerics.DataMaps.Extensions
             {
                 return (double)g;
             }
+        }
+
+        public static List<double> Softmax(this IList<decimal> self)
+        {
+            decimal max = Max(self);
+
+            var result = new List<double>(self.Count);
+            var denom = (double)0.0;
+            for (var i = 0; i < self.Count; ++i)
+            {
+                var e = Math.Exp((double)(self[i] - max));
+                result.Add((double)e);
+                denom += (double)e;
+            }
+
+            for (var i = 0; i < result.Count; ++i)
+                result[i] /= denom;
+
+            return result;
         }
 
         public static decimal Sum(this IList<decimal> self, bool skipNaN = true, int minCount = 0)

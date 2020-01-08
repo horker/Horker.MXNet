@@ -791,6 +791,19 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
+        public SeriesBase Softmax()
+        {
+			try
+			{
+				var result = GenericIListExtensions.Softmax((dynamic)UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Softmax() does not support data type {DataType}");
+			}
+        }
+
         public SeriesBase FillNaN(object fillValue)
         {
 			try

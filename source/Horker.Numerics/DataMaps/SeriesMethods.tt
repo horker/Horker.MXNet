@@ -81,6 +81,7 @@ var methodNames = new[]
 	Tuple.Create("Fill", "object value", ", (dynamic)value"),
 	Tuple.Create("Shuffle", "int seed = -1", ", seed"),
 	Tuple.Create("SortedCopy", "", ""),
+	Tuple.Create("Softmax", "", ""),
 	Tuple.Create("FillNaN", "object fillValue", ", (dynamic)fillValue"),
 	Tuple.Create("RemoveNaN", "", ""),
 	Tuple.Create("Unique", "bool sort = true", ", sort")
