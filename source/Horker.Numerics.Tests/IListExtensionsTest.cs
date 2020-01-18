@@ -186,5 +186,20 @@ namespace Horker.Numerics.Tests
             Assert.Equal(new[] { false, false, false, false, false }, t3);
             Assert.Equal(new[] { false, true, false, false, false }, t4);
         }
+
+        [Fact]
+        public void TestSortBy()
+        {
+            var s = new [] { 1, 2, 3, 4 };
+            var by = new [] { 4, 3, 1, 2 };
+
+            var t = GenericIListExtensions.SortBy(s, by);
+
+            Assert.Equal(new[] { 3, 4, 2, 1 }, t);
+
+            GenericIListExtensions.SortByFill(s, by);
+
+            Assert.Equal(new[] { 3, 4, 2, 1 }, s);
+        }
     }
 } 

@@ -791,6 +791,19 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
+        public SeriesBase SortBy(SeriesBase by)
+        {
+			try
+			{
+				var result = GenericIListExtensions.SortBy((dynamic)UnderlyingList, (dynamic)by.UnderlyingList);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"SortBy() does not support data type {DataType}");
+			}
+        }
+
         public SeriesBase Softmax()
         {
 			try
@@ -1656,6 +1669,18 @@ namespace Horker.Numerics.DataMaps
 			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
 			{
 				throw new InvalidOperationException($"SortFill() does not support data type {DataType}");
+			}
+        }
+
+        public void SortByFill(SeriesBase by)
+        {
+			try
+			{
+				GenericIListExtensions.SortByFill((dynamic)UnderlyingList, (dynamic)by.UnderlyingList);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"SortByFill() does not support data type {DataType}");
 			}
         }
 

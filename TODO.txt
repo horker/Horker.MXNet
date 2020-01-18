@@ -8,6 +8,7 @@ boolean arithmetics with numeric values (+-*/)
 DataMap: join (inner outer anti)
 Memory disposal after Fit() in LightGBM estimators
 Eq(<cond>, <return type>) and other logical operators
+Sort order in Sort() and SortBy()
 
 DONE Series.IsNaN()
 DONE params arguments for PowerShell object[] values

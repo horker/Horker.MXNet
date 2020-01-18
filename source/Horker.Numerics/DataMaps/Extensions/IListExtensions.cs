@@ -1050,6 +1050,15 @@ namespace Horker.Numerics.DataMaps.Extensions
             return result;
         }
 
+        public static T[] SortBy<T, S>(this IList<T> self, IList<S> by)
+        {
+            var result = self.ToArray();
+            var s = by.ToArray();
+            Array.Sort(s, result);
+
+            return result;
+        }
+
         public static void SortFill<T>(this IList<T> self)
         {
             if (self is Array a)
@@ -1066,6 +1075,14 @@ namespace Horker.Numerics.DataMaps.Extensions
             {
                 throw new InvalidOperationException("This object does not support inplace Sort() operation");
             }
+        }
+
+        public static void SortByFill<T, S>(this IList<T> self, IList<S> by)
+        {
+            var result = SortBy(self, by);
+
+            for (var i = 0; i < self.Count; ++i)
+                self[i] = result[i];
         }
 
         public static int[] ArgSort<T>(this IList<T> self)

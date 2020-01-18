@@ -81,6 +81,7 @@ var methodNames = new[]
 	Tuple.Create("Fill", "object value", ", (dynamic)value"),
 	Tuple.Create("Shuffle", "int seed = -1", ", seed"),
 	Tuple.Create("SortedCopy", "", ""),
+	Tuple.Create("SortBy", "SeriesBase by", ", (dynamic)by.UnderlyingList"),
 	Tuple.Create("Softmax", "", ""),
 	Tuple.Create("FillNaN", "object fillValue", ", (dynamic)fillValue"),
 	Tuple.Create("RemoveNaN", "", ""),
@@ -165,7 +166,8 @@ var nonSeriesMethods = new[]
     Tuple.Create("Std", "object", "bool unbiased = true, bool skipNaN = true", ", unbiased, skipNaN"),
     Tuple.Create("Variance", "object", "bool unbiased = true, bool skipNaN = true", ", unbiased, skipNaN"),
     Tuple.Create("Var", "object", "bool unbiased = true, bool skipNaN = true", ", unbiased, skipNaN"),
-	Tuple.Create("SortFill", "void", "", "")
+	Tuple.Create("SortFill", "void", "", ""),
+	Tuple.Create("SortByFill", "void", "SeriesBase by", ", (dynamic)by.UnderlyingList"),
 };
 #>
 using System;
