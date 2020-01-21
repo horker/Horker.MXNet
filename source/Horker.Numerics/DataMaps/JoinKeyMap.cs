@@ -1,4 +1,5 @@
-﻿using Horker.Numerics.DataMaps.Utilities;
+﻿using Horker.Numerics.DataMaps.Extensions;
+using Horker.Numerics.DataMaps.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -195,6 +196,17 @@ namespace Horker.Numerics.DataMaps
             return (int[])InvokeIndirect("GetMatchingIndexes", new object[] { left, leftKeyColumns });
         }
 
+        private IList<T> TryCast<T>(int index, IList list)
+        {
+            var result = list as IList<T>;
+            if (result == null)
+            {
+                var t = GenericIListExtensions.GetDataType(list);
+                throw new ArgumentException($"Column {index} type mismatch: expected type is {typeof(T).Name}, but actual type is {t.Name}");
+            }
+            return result;
+        }
+
         private int[] GetMatchingIndexes1<T1>(DataMap left, string[] leftKeyColumns)
         {
             if (leftKeyColumns == null)
@@ -205,7 +217,7 @@ namespace Horker.Numerics.DataMaps
                 result[i] = -1;
 
             var indexMap = (Dictionary<T1, int>)_indexMap;
-            var column1 = (IList<T1>)left[leftKeyColumns[0]].UnderlyingList;
+            var column1 = TryCast<T1>(1, left[leftKeyColumns[0]].UnderlyingList);
 
             for (var i = 0; i < result.Length; ++i)
             {
@@ -226,8 +238,9 @@ namespace Horker.Numerics.DataMaps
                 result[i] = -1;
 
             var indexMap = (Dictionary<Tuple<T1, T2>, int>)_indexMap;
-            var column1 = (IList<T1>)left[leftKeyColumns[0]].UnderlyingList;
-            var column2 = (IList<T2>)left[leftKeyColumns[1]].UnderlyingList;
+
+            var column1 = TryCast<T1>(1, left[leftKeyColumns[0]].UnderlyingList);
+            var column2 = TryCast<T2>(2, left[leftKeyColumns[1]].UnderlyingList);
 
             for (var i = 0; i < result.Length; ++i)
             {
@@ -249,9 +262,9 @@ namespace Horker.Numerics.DataMaps
                 result[i] = -1;
 
             var indexMap = (Dictionary<Tuple<T1, T2, T3>, int>)_indexMap;
-            var column1 = (IList<T1>)left[leftKeyColumns[0]].UnderlyingList;
-            var column2 = (IList<T2>)left[leftKeyColumns[1]].UnderlyingList;
-            var column3 = (IList<T3>)left[leftKeyColumns[2]].UnderlyingList;
+            var column1 = TryCast<T1>(1, left[leftKeyColumns[0]].UnderlyingList);
+            var column2 = TryCast<T2>(2, left[leftKeyColumns[1]].UnderlyingList);
+            var column3 = TryCast<T3>(3, left[leftKeyColumns[2]].UnderlyingList);
 
             for (var i = 0; i < result.Length; ++i)
             {
@@ -273,10 +286,10 @@ namespace Horker.Numerics.DataMaps
                 result[i] = -1;
 
             var indexMap = (Dictionary<Tuple<T1, T2, T3, T4>, int>)_indexMap;
-            var column1 = (IList<T1>)left[leftKeyColumns[0]].UnderlyingList;
-            var column2 = (IList<T2>)left[leftKeyColumns[1]].UnderlyingList;
-            var column3 = (IList<T3>)left[leftKeyColumns[2]].UnderlyingList;
-            var column4 = (IList<T4>)left[leftKeyColumns[3]].UnderlyingList;
+            var column1 = TryCast<T1>(1, left[leftKeyColumns[0]].UnderlyingList);
+            var column2 = TryCast<T2>(2, left[leftKeyColumns[1]].UnderlyingList);
+            var column3 = TryCast<T3>(3, left[leftKeyColumns[2]].UnderlyingList);
+            var column4 = TryCast<T4>(4, left[leftKeyColumns[3]].UnderlyingList);
 
             for (var i = 0; i < result.Length; ++i)
             {
@@ -298,11 +311,11 @@ namespace Horker.Numerics.DataMaps
                 result[i] = -1;
 
             var indexMap = (Dictionary<Tuple<T1, T2, T3, T4, T5>, int>)_indexMap;
-            var column1 = (IList<T1>)left[leftKeyColumns[0]].UnderlyingList;
-            var column2 = (IList<T2>)left[leftKeyColumns[1]].UnderlyingList;
-            var column3 = (IList<T3>)left[leftKeyColumns[2]].UnderlyingList;
-            var column4 = (IList<T4>)left[leftKeyColumns[3]].UnderlyingList;
-            var column5 = (IList<T5>)left[leftKeyColumns[4]].UnderlyingList;
+            var column1 = TryCast<T1>(1, left[leftKeyColumns[0]].UnderlyingList);
+            var column2 = TryCast<T2>(2, left[leftKeyColumns[1]].UnderlyingList);
+            var column3 = TryCast<T3>(3, left[leftKeyColumns[2]].UnderlyingList);
+            var column4 = TryCast<T4>(4, left[leftKeyColumns[3]].UnderlyingList);
+            var column5 = TryCast<T5>(5, left[leftKeyColumns[4]].UnderlyingList);
 
             for (var i = 0; i < result.Length; ++i)
             {
