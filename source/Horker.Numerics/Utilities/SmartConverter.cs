@@ -52,7 +52,7 @@ namespace Horker.Numerics
         {
             if (fallback.HasValue)
                 return fallback.Value;
-            throw new ArgumentException($"Failed convert into type {nameof(T)}: {input}", cause);
+            throw new ArgumentException($"Failed convert into type {typeof(T).Name}: {input}", cause);
         }
 
         public static double ToDouble(object input, double? fallback = null)
