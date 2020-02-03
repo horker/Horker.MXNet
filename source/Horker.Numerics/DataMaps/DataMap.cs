@@ -448,14 +448,22 @@ namespace Horker.Numerics.DataMaps
             return _nameMap.ContainsKey(name);
         }
 
-        public void Remove(string name)
+        public void Remove(params string[] names)
         {
-            LinkedListNode<Column> column = null;
-            if (_nameMap.TryGetValue(name, out column))
+            foreach (var name in names)
             {
-                _nameMap.Remove(name);
-                _columns.Remove(column);
+                LinkedListNode<Column> column = null;
+                if (_nameMap.TryGetValue(name, out column))
+                {
+                    _nameMap.Remove(name);
+                    _columns.Remove(column);
+                }
             }
+        }
+
+        public void Remove(params object[] names)
+        {
+            Remove(Utils.StripOffPSObjects<string>(names).ToArray());
         }
 
         public void MoveToFirst(string name)
