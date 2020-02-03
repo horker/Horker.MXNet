@@ -119,7 +119,12 @@ namespace Horker.Numerics.DataMaps
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            if (array.Length - arrayIndex < _count)
+                throw new ArgumentOutOfRangeException("Destination array too short");
+
+            var count = _count;
+            for (var i = 0; i < count; ++i)
+                array[arrayIndex + i] = _underlying[_start + i];
         }
 
         public IEnumerator<T> GetEnumerator()
