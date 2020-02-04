@@ -23,8 +23,8 @@ namespace Horker.Numerics.DataMaps
 
         public JoinKeyMap(DataMap dataMap, string[] keyColumns)
         {
-            if (keyColumns.Length > 5)
-                throw new ArgumentException("More than five key columns are not supported");
+            if (keyColumns.Length > 6)
+                throw new ArgumentException("More than six key columns are not supported");
 
             _dataMap = dataMap;
             _keyColumns = keyColumns;
@@ -188,6 +188,41 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
+        private Dictionary<Tuple<T1, T2, T3, T4, T5, T6>, int> CollectKeys6<T1, T2, T3, T4, T5, T6>()
+        {
+            Debug.Assert(_keyColumns.Length == 6);
+
+            var column1 = _dataMap[_keyColumns[0]].UnderlyingList;
+            var column2 = _dataMap[_keyColumns[1]].UnderlyingList;
+            var column3 = _dataMap[_keyColumns[2]].UnderlyingList;
+            var column4 = _dataMap[_keyColumns[3]].UnderlyingList;
+            var column5 = _dataMap[_keyColumns[4]].UnderlyingList;
+            var column6 = _dataMap[_keyColumns[5]].UnderlyingList;
+            var rowCount = _dataMap.MaxRowCount;
+            var result = new Dictionary<Tuple<T1, T2, T3, T4, T5, T6>, int>(rowCount);
+            for (var i = 0; i < rowCount; ++i)
+            {
+                T1 k1 = i >= column1.Count ? TypeTrait<T1>.GetNaN() : (T1)column1[i];
+                T2 k2 = i >= column2.Count ? TypeTrait<T2>.GetNaN() : (T2)column2[i];
+                T3 k3 = i >= column3.Count ? TypeTrait<T3>.GetNaN() : (T3)column3[i];
+                T4 k4 = i >= column4.Count ? TypeTrait<T4>.GetNaN() : (T4)column4[i];
+                T5 k5 = i >= column5.Count ? TypeTrait<T5>.GetNaN() : (T5)column5[i];
+                T6 k6 = i >= column6.Count ? TypeTrait<T6>.GetNaN() : (T6)column6[i];
+
+                var key = Tuple.Create(k1, k2, k3, k4, k5, k6);
+                try
+                {
+                    result.Add(key, i);
+                }
+                catch (ArgumentException ex)
+                {
+                    throw new ArgumentException($"Duplicate key values: {key}", ex);
+                }
+            }
+
+            return result;
+        }
+
         public int[] GetMatchingIndexes(DataMap left, string[] leftKeyColumns)
         {
             if (leftKeyColumns.Length != _keyColumns.Length)
@@ -320,6 +355,33 @@ namespace Horker.Numerics.DataMaps
             for (var i = 0; i < result.Length; ++i)
             {
                 var key = Tuple.Create(column1[i], column2[i], column3[i], column4[i], column5[i]);
+                if (indexMap.TryGetValue(key, out var index))
+                    result[i] = index;
+            }
+
+            return result;
+        }
+
+        private int[] GetMatchingIndexes6<T1, T2, T3, T4, T5, T6>(DataMap left, string[] leftKeyColumns)
+        {
+            if (leftKeyColumns == null)
+                leftKeyColumns = _keyColumns;
+
+            var result = new int[left.MaxRowCount];
+            for (var i = 0; i < result.Length; ++i)
+                result[i] = -1;
+
+            var indexMap = (Dictionary<Tuple<T1, T2, T3, T4, T5, T6>, int>)_indexMap;
+            var column1 = TryCast<T1>(1, left[leftKeyColumns[0]].UnderlyingList);
+            var column2 = TryCast<T2>(2, left[leftKeyColumns[1]].UnderlyingList);
+            var column3 = TryCast<T3>(3, left[leftKeyColumns[2]].UnderlyingList);
+            var column4 = TryCast<T4>(4, left[leftKeyColumns[3]].UnderlyingList);
+            var column5 = TryCast<T5>(5, left[leftKeyColumns[4]].UnderlyingList);
+            var column6 = TryCast<T6>(6, left[leftKeyColumns[5]].UnderlyingList);
+
+            for (var i = 0; i < result.Length; ++i)
+            {
+                var key = Tuple.Create(column1[i], column2[i], column3[i], column4[i], column5[i], column6[i]);
                 if (indexMap.TryGetValue(key, out var index))
                     result[i] = index;
             }
