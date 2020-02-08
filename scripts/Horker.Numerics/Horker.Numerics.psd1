@@ -60,6 +60,7 @@ RequiredAssemblies = @(
     "Accord.dll"
     "Accord.Math.dll"
     "Accord.Statistics.dll"
+    "Accord.MachineLearning.dll"
     "Horker.Numerics.dll"
 )
 
