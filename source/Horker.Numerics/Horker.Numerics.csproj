@@ -90,6 +90,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Estimators\SigmoidCalibrator.cs" />
     <Compile Include="DataMaps\JoinKeyMap.cs" />
     <Compile Include="DataMaps\Extensions\DateTimeIListExtensions.cs" />
     <Compile Include="DataMaps\SlicedListView.cs" />

@@ -118,5 +118,31 @@ namespace Horker.Numerics.Tests
             Assert.Equal(expected[5], predicted[5]);
             Assert.Equal(expected[9], predicted[9]);
         }
+
+        [Fact]
+        public void TestPlattCalibratorTest()
+        {
+            var inputs = DataMap.FromJagged(new double[][]
+            {
+                new double[] { 0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5 }
+            }, null, true);
+
+            var outputs = DataMap.FromJagged(new double[][]
+            {
+                new double[] { 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1 }
+            }, null, true);
+
+            var valid = DataMap.FromJagged(new double[][]
+            {
+                new double[] { 0, 1, 2, 3, 4, 5 }
+            }, null, true);
+
+            var est = new SigmoidCalibrator();
+            est.Fit(inputs, outputs);
+
+            var pred = est.Predict(valid);
+
+            Assert.Equal(0.0, pred.First[0]);
+        }
     }
 }
