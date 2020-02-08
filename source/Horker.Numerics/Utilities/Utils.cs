@@ -46,8 +46,9 @@ namespace Horker.Numerics.Utilities
         public static List<T> CreateListTyped<T>(int capacity, int count)
         {
             var result = new List<T>(capacity);
+            var nan = (T)TypeTrait<T>.GetNaN();
             for (var i = 0; i < count; ++i)
-                result.Add(TypeTrait<T>.GetNaN());
+                result.Add(nan);
 
             return result;
         }

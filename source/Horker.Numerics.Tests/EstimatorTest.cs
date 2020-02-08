@@ -140,9 +140,13 @@ namespace Horker.Numerics.Tests
             var est = new SigmoidCalibrator();
             est.Fit(inputs, outputs);
 
-            var pred = est.Predict(valid);
+            var pred = est.Predict(valid).First;
 
-            Assert.Equal(0.0, pred.First[0]);
+            Assert.True((double)pred[0] < (double)pred[1]);
+            Assert.True((double)pred[1] < (double)pred[2]);
+            Assert.True((double)pred[2] < (double)pred[3]);
+            Assert.True((double)pred[3] < (double)pred[4]);
+            Assert.True((double)pred[4] < (double)pred[5]);
         }
     }
 }

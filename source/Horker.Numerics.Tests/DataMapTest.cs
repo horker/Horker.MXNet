@@ -166,6 +166,36 @@ namespace Horker.Numerics.Tests
             Assert.Equal(new bool[] { true, false, false }, c4);
         }
 
+        [Fact]
+        public void TestPile()
+        {
+            var d1 = DataMap.FromDictionary(new Dictionary<string, IList>()
+            {
+                { "foo", new float[]{ 1 , 2 } },
+                { "bar", new string[]{ "a", "b", "c" } },
+            });
+
+            var d2 = DataMap.FromDictionary(new Dictionary<string, IList>()
+            {
+                { "bar", new string[]{ "x", "y" } },
+                { "foo", new float[]{ 4, 5 } },
+                { "baz", new bool[]{ true, false, false } }
+            });
+
+            d1.Pile(d2);
+
+            Assert.Equal(6, d1.MaxRowCount);
+            Assert.Equal(new string[] { "foo", "bar", "baz" }, d1.ColumnNames.ToArray());
+
+            var c1 = d1["foo"].AsArray<float>();
+            Assert.Equal(new float[] { 1, 2, float.NaN, 4, 5, float.NaN }, c1);
+
+            var c2 = d1["bar"].AsArray<string>();
+            Assert.Equal(new string[] { "a", "b", "c", "x", "y", "" }, c2);
+
+            var c3 = d1["baz"].AsArray<bool>();
+            Assert.Equal(new bool[] { false, false, false, true, false, false }, c3);
+        }
 
         [Fact]
         public void TestPileAll()

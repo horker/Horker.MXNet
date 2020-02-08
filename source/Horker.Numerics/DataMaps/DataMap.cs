@@ -789,36 +789,65 @@ namespace Horker.Numerics.DataMaps
 
         public void Pile(params DataMap[] maps)
         {
-            var rowCount = maps.Select(x => x.MaxRowCount).Sum();
+            var thisRowCount = MaxRowCount;
+            var totalRowCount = thisRowCount + maps.Select(x => x.MaxRowCount).Sum();
+
+            foreach (var c in _columns)
+            {
+                c.Data.EnsureSizeable();
+                for (var i = c.Data.Count; i < thisRowCount; ++i)
+                {
+                    var nan = TypeTrait.GetNaN(c.DataType);
+                    c.Data.Add(nan);
+                }
+            }
 
             foreach (var m in maps)
             {
                 foreach (var c in m.Columns)
                 {
                     if (!Contains(c.Name))
-                        Add(c.Name, Utils.CreateList(c.DataType, rowCount, rowCount));
+                        Add(c.Name, Utils.CreateList(c.DataType, totalRowCount, thisRowCount));
                 }
             }
 
-            var offset = 0;
+            var offset = thisRowCount;
             foreach (var m in maps)
             {
-                foreach (var c in m.Columns)
+                var maxRowCount = m.MaxRowCount;
+                foreach (var name in ColumnNames)
                 {
-                    var series = this[c.Name];
-                    if (series.DataType == c.DataType)
+                    var series = this[name];
+                    var t = series.DataType;
+
+                    object nan = null;
+                    if (!m.Contains(name))
                     {
-                        for (var i = 0; i < c.Data.Count; ++i)
-                            series[i + offset] = c.Data[i];
+                        nan = TypeTrait.GetNaN(t);
+                        for (var i = 0; i < maxRowCount; ++i)
+                            series.Add(nan);
+
+                        continue;
+                    }
+
+                    var c = m[name];
+                    if (c.DataType == t)
+                    {
+                        for (var i = 0; i < c.Count; ++i)
+                            series.Add(c[i]);
                     }
                     else
                     {
-                        var l = SmartConverter.ConvertTo(series.DataType, c.Data.UnderlyingList);
+                        var l = SmartConverter.ConvertTo(series.DataType, c.UnderlyingList);
                         for (var i = 0; i < l.Count; ++i)
-                            series[i + offset] = l[i];
+                            series.Add(l[i]);
                     }
+
+                    nan = TypeTrait.GetNaN(t);
+                    for (var i = c.Count; i < maxRowCount; ++i)
+                        series.Add(nan);
                 }
-                offset += m.MaxRowCount;
+                offset += maxRowCount;
             }
         }
 

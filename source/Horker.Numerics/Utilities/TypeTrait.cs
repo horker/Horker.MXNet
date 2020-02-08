@@ -15,17 +15,17 @@ namespace Horker.Numerics.DataMaps.Utilities
             if (typeof(T) == typeof(float))
                 return (T)(object)float.NaN;
             if (typeof(T) == typeof(long))
-                return (T)(object)0;
+                return (T)(object)0l;
             if (typeof(T) == typeof(int))
                 return (T)(object)0;
             if (typeof(T) == typeof(short))
-                return (T)(object)0;
+                return (T)(object)(short)0;
             if (typeof(T) == typeof(byte))
-                return (T)(object)0;
+                return (T)(object)(byte)0;
             if (typeof(T) == typeof(sbyte))
-                return (T)(object)0;
+                return (T)(object)(sbyte)0;
             if (typeof(T) == typeof(decimal))
-                return (T)(object)0;
+                return (T)(object)(decimal)0;
             if (typeof(T) == typeof(string))
                 return (T)(object)string.Empty;
             if (typeof(T) == typeof(bool))
