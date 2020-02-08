@@ -110,29 +110,47 @@ namespace Horker.Numerics.DataMaps
             return result;
         }
 
-        public static DataMap FromJagged<T>(T[][] source, string[] columnNames = null, IEqualityComparer<string> keyComparaer = null)
+        public static DataMap FromJagged<T>(T[][] source, string[] columnNames = null, bool transpose = false, IEqualityComparer<string> keyComparaer = null)
         {
-            if (columnNames == null)
-            {
-                var c = source[0].Length;
-                columnNames = new string[c];
-                for (var i = 0; i < c; ++i)
-                    columnNames[i] = "Column" + i;
-            }
-
             var result = new DataMap(keyComparaer);
 
-            for (var i = 0; i < columnNames.Length; ++i)
+            if (!transpose)
             {
-                var data = new List<T>(source.Length);
-                result.Add(columnNames[i], data);
-                for (var j = 0; j < source.Length; ++j)
+                if (columnNames == null)
                 {
-                    var row = source[j];
-                    if (i < row.Length)
-                        data.Add(row[i]);
-                    else
-                        data.Add(TypeTrait<T>.GetNaN());
+                    var c = source[0].Length;
+                    columnNames = new string[c];
+                    for (var i = 0; i < c; ++i)
+                        columnNames[i] = "Column" + i;
+                }
+
+                for (var i = 0; i < columnNames.Length; ++i)
+                {
+                    var data = new List<T>(source.Length);
+                    result.Add(columnNames[i], data);
+                    for (var j = 0; j < source.Length; ++j)
+                    {
+                        var row = source[j];
+                        if (i < row.Length)
+                            data.Add(row[i]);
+                        else
+                            data.Add(TypeTrait<T>.GetNaN());
+                    }
+                }
+            }
+            else
+            {
+                if (columnNames == null)
+                {
+                    var c = source.Length;
+                    columnNames = new string[c];
+                    for (var i = 0; i < c; ++i)
+                        columnNames[i] = "Column" + i;
+                }
+
+                for (var i = 0; i < columnNames.Length; ++i)
+                {
+                    result.Add(columnNames[i], source[i]);
                 }
             }
 
