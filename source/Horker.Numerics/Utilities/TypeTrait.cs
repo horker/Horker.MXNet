@@ -15,7 +15,7 @@ namespace Horker.Numerics.DataMaps.Utilities
             if (typeof(T) == typeof(float))
                 return (T)(object)float.NaN;
             if (typeof(T) == typeof(long))
-                return (T)(object)0l;
+                return (T)(object)0L;
             if (typeof(T) == typeof(int))
                 return (T)(object)0;
             if (typeof(T) == typeof(short))
