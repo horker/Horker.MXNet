@@ -57,12 +57,28 @@ namespace Horker.Numerics.LightGBM
             _predicator = predictor;
         }
 
+        public Tuple<float[][], float[], float[][], float[]> GetDataAsArray(DataMap x, DataMap y, DataMap validX, DataMap validY)
+        {
+            var xArray = x.ToJagged<float>();
+            var yArray = y.First.AsArray<float>();
+            var validXArray = validX.ToJagged<float>();
+            var validYArray = validY.First.AsArray<float>();
+
+            return Tuple.Create(xArray, yArray, validXArray, validYArray);
+        }
+
         public void Fit(DataMap x, DataMap y, DataMap validX, DataMap validY)
+        {
+            var (xArray, yArray, validXArray, validYArray) = GetDataAsArray(x, y, validX, validY);
+            Fit(xArray, yArray, validXArray, validYArray, x.ColumnNames.ToArray(), validX.ColumnNames.ToArray());
+        }
+
+        public void Fit(float[][] x, float[] y, float[][] validX = null, float[] validY = null, string[] columnNames = null, string[] validColumnNames = null)
         {
             var trainDense = new DataDense()
             {
-                Features = x.ToJagged<float>(),
-                Labels = y.First.AsArray<float>()
+                Features = x,
+                Labels = y
             };
 
             DataDense validDense = null;
@@ -70,16 +86,18 @@ namespace Horker.Numerics.LightGBM
             {
                 validDense = new DataDense()
                 {
-                    Features = validX.ToJagged<float>(),
-                    Labels = validY.First.AsArray<float>()
+                    Features = validX,
+                    Labels = validY
                 };
             }
 
             using (var datasets = new Datasets(_parameters.Common, _parameters.Dataset, trainDense, validDense))
             {
-                datasets.Training.SetFeatureNames(x.ColumnNames.ToArray());
-                if (validX != null)
-                    datasets.Validation.SetFeatureNames(validX.ColumnNames.ToArray());
+                if (columnNames != null)
+                    datasets.Training.SetFeatureNames(columnNames);
+
+                if (validX != null && validColumnNames != null)
+                    datasets.Validation.SetFeatureNames(validColumnNames);
 
                 var predicators = _trainer.Train(datasets);
                 _predicator = (NativePredictorBase<T>)predicators.Native;
