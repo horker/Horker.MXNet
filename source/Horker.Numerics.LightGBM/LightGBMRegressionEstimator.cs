@@ -59,7 +59,8 @@ namespace Horker.Numerics.LightGBM
             var trainDense = new DataDense()
             {
                 Features = x.ToJagged<float>(),
-                Labels = y.First.AsArray<float>()
+                Labels = y.First.AsArray<float>(),
+                Weights = Weights
             };
 
             DataDense validDense = null;

@@ -19,6 +19,8 @@ namespace Horker.Numerics.LightGBM
         protected NativePredictorBase<T> _predicator;
         public NativePredictorBase<T> Predictor => _predicator;
 
+        public float[] Weights { get; set; }
+
         public void Save(string path)
         {
             var text = _predicator.Booster.GetModelString();
