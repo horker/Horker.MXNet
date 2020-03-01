@@ -81,10 +81,6 @@
       <Project>{5DE0998E-7315-4A67-A390-16DE6D8435F1}</Project>
       <Name>Horker.MXNet</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Horker.Numerics\Horker.Numerics.csproj">
-      <Project>{526b980c-7693-4609-aa5e-28d7a11d08c0}</Project>
-      <Name>Horker.Numerics</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,31 +1,21 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Platforms>AnyCPU;x64</Platforms>
-    <Authors>horker</Authors>
-    <Company>horker</Company>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutputPath></OutputPath>
+    <OutputPath>bin\Debug</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutputPath></OutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath></OutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath></OutputPath>
+    <OutputPath>bin\Release</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LightGBMNet.Train.Alt" Version="1.0.8" />
-    <PackageReference Include="LightGBMNet.Tree.Alt" Version="1.0.8" />
+    <PackageReference Include="LightGBMNet.Train" Version="1.0.8" />
+    <PackageReference Include="LightGBMNet.Tree" Version="1.0.8" />
   </ItemGroup>
 
   <ItemGroup>

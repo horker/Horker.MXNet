@@ -22,8 +22,8 @@ $BuildFiles = @(
 ############################################################
 
 task Compile {
-    msbuild.exe $SolutionFile /p:Configuration=Debug /p:Platform=x64 /nologo /v:minimal
-    msbuild.exe $SolutionFile /p:Configuration=Release /p:Platform=x64 /nologo /v:minimal
+    dotnet build $SolutionFile -c Debug -v minimal
+    dotnet build $SolutionFile -c Release -v minimal
 }
 
 task Build {

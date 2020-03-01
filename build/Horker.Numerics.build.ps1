@@ -14,7 +14,7 @@ $ModulePath = "$PSScriptRoot\..\module\{0}\$ModuleName"
 
 $ScriptFiles = "$PSScriptRoot\..\scripts\$ModuleName\*"
 
-$ObjectPath = "$PSScriptRoot\..\source\bin\x64\{0}"
+$ObjectPath = "$PSScriptRoot\..\source\Horker.Numerics.LightGBM.Tests\bin\Release\netcoreapp3.1"
 
 $ObjectFiles = @(
     "$ObjectPath\Accord.dll"
