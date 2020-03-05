@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.CSharp;
 using System.CodeDom.Compiler;
 using System.Reflection;
-using Horker.Numerics.DataMaps;
 using System.Management.Automation;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Horker.Numerics.DataMaps;
+using System.IO;
 
 namespace Horker.Numerics
 {
@@ -25,6 +27,9 @@ using System.Linq;
 using Horker.Numerics;
 using Horker.Numerics.DataMaps;
 using Horker.Numerics.DataMaps.Extensions;
+using Accord.Math;
+using Accord.Statistics;
+using Accord.MachineLearning;
 namespace {0} {{
     public static class {1}
     {{
@@ -42,6 +47,9 @@ using System.Linq;
 using Horker.Numerics;
 using Horker.Numerics.DataMaps;
 using Horker.Numerics.DataMaps.Extensions;
+using Accord.Math;
+using Accord.Statistics;
+using Accord.MachineLearning;
 namespace {0} {{
     public static class {1}
     {{
@@ -53,40 +61,77 @@ namespace {0} {{
 }}
 ";
 
+        private static string _assemblyBasePath = Path.GetDirectoryName(typeof(object).Assembly.Location);
+
+        private static IEnumerable<MetadataReference> _references = new string[]
+        {
+            // This assembly is System.Private.CoreLib.dll in .NET Core 3.1.2.
+            typeof(object).Assembly.Location,
+
+            // Core classes
+            // We are not sure what classes the above assembly contains, but we know it isn't
+            // sufficient to make ordinary core classes available anyway.
+            // So we will load core assemblies explicitly.
+            Path.Combine(_assemblyBasePath, "mscorlib.dll"),
+            Path.Combine(_assemblyBasePath, "System.dll"),
+            Path.Combine(_assemblyBasePath, "System.Runtime.dll"),
+            Path.Combine(_assemblyBasePath, "System.Collections.dll"),
+            Path.Combine(_assemblyBasePath, "System.Linq.dll"),
+
+            // System.Management.Automation
+            typeof(PowerShell).Assembly.Location,
+
+            // Horker.Numerics
+            typeof(FunctionCompiler).Assembly.Location,
+
+            // Accord.Math
+            typeof(Accord.Math.Beta).Assembly.Location,
+
+            // Accord.Statistics
+            typeof(Accord.Statistics.Distributions.Univariate.NormalDistribution).Assembly.Location,
+
+            // Accord.MachineLearning
+            typeof(Accord.MachineLearning.KMeans).Assembly.Location
+        }.Select(r => MetadataReference.CreateFromFile(r));
+
         private static Assembly CompileString(string sourceString, string compilerVersion)
         {
-            var provider = new CSharpCodeProvider( new Dictionary<string, string> { { "CompilerVersion", compilerVersion } });
+            var syntaxTree = CSharpSyntaxTree.ParseText(sourceString);
 
-            var param = new CompilerParameters()
+            var assemblyName = Path.GetRandomFileName();
+
+            var compilation = CSharpCompilation.Create(
+                assemblyName,
+                new[] { syntaxTree },
+                _references,
+                new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+            using (var ms = new MemoryStream())
             {
-                GenerateExecutable = false,
-                CompilerOptions = "/optimize"
-            };
+                var result = compilation.Emit(ms);
 
-            param.ReferencedAssemblies.Add("System.dll");
-            param.ReferencedAssemblies.Add("System.Core.dll");
-            param.ReferencedAssemblies.Add("mscorlib.dll");
-            param.ReferencedAssemblies.Add(typeof(PowerShell).Assembly.Location);
-            param.ReferencedAssemblies.Add(typeof(FunctionCompiler).Assembly.Location);
-
-            var cr = provider.CompileAssemblyFromSource(param, sourceString);
-            
-            if(cr.Errors.Count > 0)
-            {
-                var sb = new StringBuilder();
-                sb.AppendFormat("Error when compiling: {0}", sourceString);
-                sb.AppendLine();
-                foreach (var ce in cr.Errors)
+                if (!result.Success)
                 {
-                    sb.Append("  ");
-                    sb.Append(ce.ToString());
-                    sb.AppendLine();
+                    var failures = result.Diagnostics.Where(diagnostic =>
+                        diagnostic.IsWarningAsError ||
+                        diagnostic.Severity == DiagnosticSeverity.Error);
+
+                    var e = new StringBuilder();
+                    e.AppendFormat("Error when compiling: {0}", sourceString);
+                    e.AppendLine();
+                    foreach (Diagnostic diagnostic in failures)
+                    {
+                        e.Append("  ");
+                        e.AppendFormat("{0}: {1}", diagnostic.Id, diagnostic.GetMessage());
+                        e.AppendLine();
+                    }
+
+                    throw new ArgumentException(e.ToString());
                 }
 
-                throw new ArgumentException(sb.ToString());
+                ms.Seek(0, SeekOrigin.Begin);
+                return Assembly.Load(ms.ToArray());
             }
-
-            return cr.CompiledAssembly;
         }
 
         public static Delegate Compile(string funcString, Type[] parameterTypes, bool func, DataMap dataMap = null, SeriesBase column = null, string compilerVersion = "v4.0")
