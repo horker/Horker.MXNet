@@ -22,6 +22,9 @@ namespace Horker.Numerics.Utilities
 
         public static IEnumerable<T> StripOffPSObjects<T>(object[] objs)
         {
+            if (objs == null)
+                yield break;
+
             foreach (var obj in objs)
             {
                 if (obj is PSObject pso && pso.BaseObject != null)

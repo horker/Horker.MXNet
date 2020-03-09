@@ -635,6 +635,14 @@ namespace Horker.Numerics.DataMaps
             return LeftJoin(other, leftKeyColumns, new JoinKeyMap(other, rightKeyColumns));
         }
 
+        public DataMap LeftJoin(DataMap other, object[] leftKeyColumns, object[] rightKeyColumns = null)
+        {
+            return LeftJoin(other,
+                Utils.StripOffPSObjects<string>(leftKeyColumns).ToArray(),
+                Utils.StripOffPSObjects<string>(rightKeyColumns).ToArray());
+
+        }
+
         public void LeftJoinFill(DataMap other, string[] leftKeyColumns, JoinKeyMap joinKeyMap)
         {
             var rowCount = MaxRowCount;
