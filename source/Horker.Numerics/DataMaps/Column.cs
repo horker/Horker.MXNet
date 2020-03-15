@@ -12,6 +12,8 @@ namespace Horker.Numerics.DataMaps
 
         public string Name => _name;
 
+        internal void SetName(string newName) => _name = newName;
+
         public SeriesBase Data
         {
             get => _data;

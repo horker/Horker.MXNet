@@ -484,6 +484,14 @@ namespace Horker.Numerics.DataMaps
             Remove(Utils.StripOffPSObjects<string>(names).ToArray());
         }
 
+        public void Rename(string oldName, string newName)
+        {
+            var column = _nameMap[oldName];
+            _nameMap.Remove(oldName);
+            _nameMap.Add(newName, column);
+            column.Value.SetName(newName);
+        }
+
         public void MoveToFirst(string name)
         {
             var column = _nameMap[name];
