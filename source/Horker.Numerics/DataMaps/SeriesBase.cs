@@ -687,16 +687,22 @@ namespace Horker.Numerics.DataMaps
 
         // Other methods
 
-        public SeriesBase Filter(bool[] filter)
+        public SeriesBase Filter(bool[] filter, bool copy = false)
         {
             var filtered = FilteredListView.Create(UnderlyingList, filter);
+            if (copy)
+                return new Series(filtered).Copy();
             return new Series(filtered);
         }
 
-        public SeriesBase Filter(SeriesBase filter)
+        public SeriesBase Filter(object[] filter, bool copy = false)
         {
-            var filtered = FilteredListView.Create(UnderlyingList, filter.UnderlyingList.ToArray<bool>());
-            return new Series(filtered);
+            return Filter(Utils.StripOffPSObjects<bool>(filter).ToArray(), copy);
+        }
+
+        public SeriesBase Filter(SeriesBase filter, bool copy = false)
+        {
+            return Filter(filter.UnderlyingList.ToArray<bool>(), copy);
         }
 
         public static SeriesBase MapTyped<T>(IList<T> list, IDictionary map)

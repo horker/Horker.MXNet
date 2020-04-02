@@ -611,21 +611,26 @@ namespace Horker.Numerics.DataMaps
             return -1;
         }
 
-        public DataMap Filter(bool[] filter)
+        public DataMap Filter(bool[] filter, bool copy = false)
         {
             var dataMap = new DataMap(ColumnNameComparer);
             foreach (var c in Columns)
             {
-                var filtered = FilteredListView.Create(c.Data.UnderlyingList, filter);
+                var filtered = c.Data.Filter(filter, copy);
                 dataMap.Add(c.Name, filtered);
             }
 
             return dataMap;
         }
 
-        public DataMap Filter(SeriesBase filter)
+        public DataMap Filter(object[] filter, bool copy = false)
         {
-            return Filter(filter.AsArray<bool>());
+            return Filter(Utils.StripOffPSObjects<bool>(filter).ToArray(), copy);
+        }
+
+        public DataMap Filter(SeriesBase filter, bool copy = false)
+        {
+            return Filter(filter.AsArray<bool>(), copy);
         }
 
         public DataMap LeftJoin(DataMap other, string[] leftKeyColumns, JoinKeyMap joinKeyMap)
