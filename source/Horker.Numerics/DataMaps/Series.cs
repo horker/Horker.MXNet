@@ -65,6 +65,20 @@ namespace Horker.Numerics.DataMaps
             return list;
         }
 
+        public static Series CreateRandom<T>(int size, int seed = -1)
+        {
+            var list = new List<T>(size);
+            var random = seed == -1 ? new Random() : new Random(seed);
+
+            for (var i = 0; i < size; ++i)
+            {
+                var value = random.NextDouble();
+                list.Add(SmartConverter.ConvertTo<T>(value));
+            }
+
+            return new Series(list);
+        }
+
         // ISerializable implementation
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)

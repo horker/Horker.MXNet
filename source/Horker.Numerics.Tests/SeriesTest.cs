@@ -11,6 +11,14 @@ namespace Horker.Numerics.Tests
     public class SeriesTest
     {
         [Fact]
+        public void TestCreateRandom()
+        {
+            var t = Series.CreateRandom<float>(5, 1234);
+
+            Assert.Equal(new float[] { 0.399081f, 0.8958995f, 0.31920293f, 0.9467375f, 0.33943602f }, t.UnderlyingList);
+        }
+
+        [Fact]
         public void TestApply()
         {
             var t1 = new Series(new double[] { 1, 2, 3, 4 });
