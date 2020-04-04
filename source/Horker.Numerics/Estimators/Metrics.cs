@@ -54,7 +54,15 @@ namespace Horker.Numerics.Estimators
 
         public static double MeanSquareError(double[] expected, double[] predicted)
         {
-            return new SquareLoss(expected).Loss(predicted);
+            // We need to write its own version because Accord.Math.Optimization.Losses.SquareLosss()
+            // don't return a correct value when it is called with root = true.
+            double error = 0.0;
+            for (var i = 0; i < expected.Length; ++i)
+            {
+                var d = expected[i] - predicted[i];
+                error += d * d;
+            }
+            return error / expected.Length;
         }
 
         public static double Auc(double[] expected, double[] predicted)
@@ -66,9 +74,7 @@ namespace Horker.Numerics.Estimators
 
         public static double RootMeanSquareError(double[] expected, double[] predicted)
         {
-            var loss = new SquareLoss(expected);
-            loss.Root = true;
-            return loss.Loss(predicted);
+            return Math.Sqrt(MeanSquareError(expected, predicted));
         }
 
         public static double RSquared(double[] expected, double[] predicted)
