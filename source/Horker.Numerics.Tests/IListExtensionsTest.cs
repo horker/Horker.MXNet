@@ -115,6 +115,70 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
+        public void TestSample()
+        {
+            var s = new int[] { 0, 1, 2, 3 };
+            var sMin = s.Min();
+            var sMax = s.Max();
+            var counters = new int[s.Length + 3];
+            var repeat = 10000;
+
+            for (var i = 0; i < repeat; ++i)
+            {
+                var t = s.Sample(true, counters.Length);
+                Assert.Equal(counters.Length, t.Count);
+                for (var j = 0; j < t.Count; ++j)
+                {
+                    Assert.True(sMin <= t[j] && t[j] <= sMax);
+                    counters[j] += t[j];
+                }
+            }
+
+            for (var i = 0; i < counters.Length; ++i)
+                Assert.True(Math.Abs(repeat * s.Average() - counters[i]) < repeat * .05);
+        }
+
+        [Fact]
+        public void TestShuffle()
+        {
+            var s = new int[] { 0, 1, 2, 3 };
+            var counters = new int[s.Length];
+            var repeat = 10000;
+
+            for (var i = 0; i < repeat; ++i)
+            {
+                var t = s.Shuffle();
+                Assert.Equal(s.Length, t.Count);
+                Assert.Equal(s, t.SortedCopy());
+                for (var j = 0; j < t.Count; ++j)
+                    counters[j] += t[j];
+            }
+
+            for (var i = 0; i < counters.Length; ++i)
+                Assert.True(Math.Abs(repeat * s.Average() - counters[i]) < repeat * .05);
+        }
+
+        [Fact]
+        public void TestShuffleFill()
+        {
+            var s = new int[] { 0, 1, 2, 3 };
+            var t = new int[] { 0, 1, 2, 3 };
+            var counters = new int[s.Length];
+            var repeat = 10000;
+
+            for (var i = 0; i < repeat; ++i)
+            {
+                t.ShuffleFill();
+                Assert.Equal(s, t.SortedCopy());
+                for (var j = 0; j < t.Length; ++j)
+                    counters[j] += t[j];
+            }
+
+            for (var i = 0; i < counters.Length; ++i)
+                Assert.True(Math.Abs(repeat * s.Average() - counters[i]) < repeat * .05);
+        }
+
+        [Fact]
         public void TestSkipNaN()
         {
             var s = new double[] { double.NaN, 1, 2, double.NaN, 3, 4, 5, double.NaN };

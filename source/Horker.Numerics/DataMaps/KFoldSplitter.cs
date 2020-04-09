@@ -1,4 +1,6 @@
 ﻿using Horker.Numerics.DataMaps.Extensions;
+using Horker.Numerics.Random;
+using System;
 using System.Collections.Generic;
 
 namespace Horker.Numerics.DataMaps
@@ -23,7 +25,7 @@ namespace Horker.Numerics.DataMaps
         private DataMap _dataMap;
         private int[] _folds;
 
-        public KFoldSplitter(DataMap dataMap, int k, bool shuffle = false, int seed = -1)
+        public KFoldSplitter(DataMap dataMap, int k, bool shuffle = false, IRandom random = null)
         {
             _k = k;
             _dataMap = dataMap;
@@ -33,7 +35,7 @@ namespace Horker.Numerics.DataMaps
                 _folds[i] = (int)(i / k);
 
             if (shuffle)
-                _folds.ShuffleFill(seed);
+                _folds.ShuffleFill(random);
         }
 
         public IEnumerable<KFold> EnumerateFolds()

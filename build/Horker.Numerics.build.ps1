@@ -23,6 +23,7 @@ $ObjectFiles = @(
     "$ObjectPath\Accord.Math.Core.dll"
     "$ObjectPath\Accord.Statistics.dll"
     "$ObjectPath\Accord.MachineLearning.dll"
+    "$ObjectPath\XoshiroPRNG.Net.dll"
     "$ObjectPath\Horker.Numerics.dll"
     "$ObjectPath\Horker.Numerics.pdb"
     "$ObjectPath2\Horker.Numerics.PowerShell.dll"

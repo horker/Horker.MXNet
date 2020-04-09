@@ -11,6 +11,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using Horker.Numerics.DataMaps.Utilities;
+using Horker.Numerics.Random;
 using Horker.Numerics.Transformers;
 using Horker.Numerics.Utilities;
 
@@ -1103,9 +1104,9 @@ namespace Horker.Numerics.DataMaps
                 Summarize(aggregateColumnNames, aggregators);
         }
 
-        public IEnumerable<KFold> KFold(int k, bool shuffle = false, int seed = -1)
+        public IEnumerable<KFold> KFold(int k, bool shuffle = false, IRandom random = null)
         {
-            var splitter = new KFoldSplitter(this, k, shuffle, seed);
+            var splitter = new KFoldSplitter(this, k, shuffle, random);
             return splitter.EnumerateFolds();
         }
 

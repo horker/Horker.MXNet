@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Horker.Numerics.DataMaps.Extensions;
+using Horker.Numerics.Random;
 
 namespace Horker.Numerics.DataMaps
 {
@@ -193,11 +194,24 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
-        public SeriesBase Shuffle(int seed = -1)
+        public SeriesBase Sample(bool replacement = false, int count = -1, IRandom random = null)
         {
 			try
 			{
-				var result = GenericIListExtensions.Shuffle((dynamic)UnderlyingList, seed);
+				var result = GenericIListExtensions.Sample((dynamic)UnderlyingList, replacement, count, random);
+				return new Series((IList)result);
+			}
+			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+			{
+				throw new InvalidOperationException($"Sample() does not support data type {DataType}");
+			}
+        }
+
+        public SeriesBase Shuffle(IRandom random = null)
+        {
+			try
+			{
+				var result = GenericIListExtensions.Shuffle((dynamic)UnderlyingList, random);
 				return new Series((IList)result);
 			}
 			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
@@ -1576,11 +1590,11 @@ namespace Horker.Numerics.DataMaps
 			}
         }
 
-        public void ShuffleFill(int seed = -1)
+        public void ShuffleFill(IRandom random = null)
         {
 			try
 			{
-				GenericIListExtensions.ShuffleFill((dynamic)UnderlyingList, seed);
+				GenericIListExtensions.ShuffleFill((dynamic)UnderlyingList, random);
 			}
 			catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
 			{

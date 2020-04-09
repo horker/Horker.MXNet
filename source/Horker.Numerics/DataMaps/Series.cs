@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Horker.Numerics.Random;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -65,10 +66,10 @@ namespace Horker.Numerics.DataMaps
             return list;
         }
 
-        public static Series CreateRandom<T>(int size, int seed = -1)
+        public static Series CreateRandom<T>(int size, IRandom random = null)
         {
             var list = new List<T>(size);
-            var random = seed == -1 ? new Random() : new Random(seed);
+            random ??= RandomInstance.Get();
 
             for (var i = 0; i < size; ++i)
             {

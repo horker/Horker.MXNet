@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Horker.Numerics.DataMaps;
+using Horker.Numerics.Random;
 using Xunit;
 
 namespace Horker.Numerics.Tests
@@ -13,7 +14,7 @@ namespace Horker.Numerics.Tests
         [Fact]
         public void TestCreateRandom()
         {
-            var t = Series.CreateRandom<float>(5, 1234);
+            var t = Series.CreateRandom<float>(5, new BuiltinRandom(1234));
 
             Assert.Equal(new float[] { 0.399081f, 0.8958995f, 0.31920293f, 0.9467375f, 0.33943602f }, t.UnderlyingList);
         }

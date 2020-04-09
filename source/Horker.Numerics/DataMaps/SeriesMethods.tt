@@ -23,7 +23,8 @@ var methodNames = new[]
 	Tuple.Create("Negate", "", ""),
 	Tuple.Create("Pow", "double exp", ", exp"),
 	Tuple.Create("Round", "int digits = 0, MidpointRounding mode = MidpointRounding.ToEven", ", digits, mode"),
-	Tuple.Create("Shuffle", "int seed = -1", ", seed"),
+	Tuple.Create("Sample", "bool replacement = false, int count = -1, IRandom random = null", ", replacement, count, random"),
+	Tuple.Create("Shuffle", "IRandom random = null", ", random"),
 	Tuple.Create("Sign", "", ""),
 	Tuple.Create("Sin", "", ""),
 	Tuple.Create("Sinh", "", ""),
@@ -159,7 +160,7 @@ var nonSeriesMethods = new[]
     Tuple.Create("Mode", "object", "bool skipNaN = true", ", skipNaN"),
     Tuple.Create("Product", "object", "bool skipNaN = true, int minCount = 0", ", skipNaN, minCount"),
     Tuple.Create("Quantile", "object", "double p, bool skipNaN = true, bool isSorted = false", ", p, skipNaN, isSorted"),
-	Tuple.Create("ShuffleFill", "void", "int seed = -1", ", seed"),
+	Tuple.Create("ShuffleFill", "void", "IRandom random = null", ", random"),
     Tuple.Create("Sum", "object", "bool skipNaN = true, int minCount = 0", ", skipNaN, minCount"),
 	Tuple.Create("Skewness", "object","bool unbiased = true", ", unbiased"),
     Tuple.Create("StandardDeviation", "object", "bool unbiased = true, bool skipNaN = true", ", unbiased, skipNaN"),
@@ -178,6 +179,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Horker.Numerics.DataMaps.Extensions;
+using Horker.Numerics.Random;
 
 namespace Horker.Numerics.DataMaps
 {

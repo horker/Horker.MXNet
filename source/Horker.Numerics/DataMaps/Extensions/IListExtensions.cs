@@ -1,4 +1,5 @@
 ﻿using Horker.Numerics.DataMaps.Utilities;
+using Horker.Numerics.Random;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -953,26 +954,6 @@ namespace Horker.Numerics.DataMaps.Extensions
             return summary;
         }
 
-        public static List<T> Shuffle<T>(this IList<T> self, int seed = -1)
-        {
-            var list = self.ToList();
-            ShuffleFill(list, seed);
-            return list;
-        }
-
-        public static void ShuffleFill<T>(this IList<T> self, int seed = -1)
-        {
-            var random = seed == -1 ? new Random() : new Random(seed);
-
-            for (var i = 0; i < self.Count; ++i)
-            {
-                var j = random.Next(i + 1);
-                var temp = self[i];
-                self[i] = self[j];
-                self[j] = temp;
-            }
-        }
-
         public static List<T> FillNaN<T>(this IList<T> self, T fillValue)
         {
             var result = new List<T>(self.Count);
@@ -1041,6 +1022,68 @@ namespace Horker.Numerics.DataMaps.Extensions
                     result.Add(value);
 
             return result;
+        }
+
+        public static List<T> Sample<T>(this IList<T> self, bool replacement = false, int sampleSize = -1, IRandom random = null)
+        {
+            if (sampleSize == -1)
+                sampleSize = self.Count;
+
+            if (replacement)
+            {
+                random ??= RandomInstance.Get();
+                var result = new List<T>(sampleSize);
+                for (var i = 0; i < sampleSize; ++i)
+                {
+                    var j = random.Next(self.Count);
+                    result.Add(self[j]);
+                }
+
+                return result;
+            }
+            else
+            {
+                if (sampleSize > self.Count)
+                    throw new ArgumentOutOfRangeException("sampleSize", "Sample size must not be larger than the size of the population without replacement.");
+
+                var result = Shuffle(self, random);
+                if (sampleSize == self.Count)
+                    return result;
+                return result.Take(sampleSize).ToList();
+            }
+        }
+
+        public static List<T> Shuffle<T>(this IList<T> self, IRandom random = null)
+        {
+            // ref: https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle 
+
+            var result = new List<T>(self.Count);
+            random ??= RandomInstance.Get();
+            for (var i = 0; i < self.Count; ++i)
+            {
+                var j = random.Next(i + 1);
+                if (j == i)
+                    result.Add(self[i]);
+                else
+                {
+                    result.Add(result[j]);
+                    result[j] = self[i];
+                }
+            }
+
+            return result;
+        }
+
+        public static void ShuffleFill<T>(this IList<T> self, IRandom random = null)
+        {
+            random ??= RandomInstance.Get();
+            for (var i = 0; i < self.Count; ++i)
+            {
+                var j = random.Next(i + 1);
+                var temp = self[i];
+                self[i] = self[j];
+                self[j] = temp;
+            }
         }
 
         public static List<T> SortedCopy<T>(this IList<T> self)
