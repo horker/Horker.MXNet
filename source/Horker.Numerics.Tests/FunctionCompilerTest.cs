@@ -22,6 +22,15 @@ namespace Horker.Numerics.Tests
         }
 
         [Fact]
+        public void TestRegex()
+        {
+            var t1 = new Series(new[] { "abc1", "abc2", "def" });
+
+            var t2 = t1.Apply(@"(x, i) => Regex.Match(x, @""abc\d"").Success", typeof(bool));
+            Assert.Equal(new[] { true, true, false }, t2.UnderlyingList);
+        }
+
+        [Fact]
         public void TestApplyFill()
         {
             var t1 = new Series(new double[] { 1, 2, 3, 4 });

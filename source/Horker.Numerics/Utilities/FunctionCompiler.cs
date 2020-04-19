@@ -24,12 +24,16 @@ namespace Horker.Numerics
         private static readonly string FuncSourceCode = @"
 using System;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using Horker.Numerics;
 using Horker.Numerics.DataMaps;
 using Horker.Numerics.DataMaps.Extensions;
 using Accord.Math;
 using Accord.Statistics;
 using Accord.MachineLearning;
+using static System.Math;
+
 namespace {0} {{
     public static class {1}
     {{
@@ -43,13 +47,18 @@ namespace {0} {{
 
         private static readonly string ActionSourceCode = @"
 using System;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using Horker.Numerics;
 using Horker.Numerics.DataMaps;
 using Horker.Numerics.DataMaps.Extensions;
 using Accord.Math;
 using Accord.Statistics;
 using Accord.MachineLearning;
+using static System.Math;
+
 namespace {0} {{
     public static class {1}
     {{
@@ -77,6 +86,7 @@ namespace {0} {{
             Path.Combine(_assemblyBasePath, "System.Runtime.dll"),
             Path.Combine(_assemblyBasePath, "System.Collections.dll"),
             Path.Combine(_assemblyBasePath, "System.Linq.dll"),
+            Path.Combine(_assemblyBasePath, "System.Text.RegularExpressions.dll"),
 
             // System.Management.Automation
             typeof(PowerShell).Assembly.Location,
