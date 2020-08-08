@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Horker.Numerics.DataMaps;
+using Horker.Numerics.Random;
 
 namespace Horker.Numerics.PowerShell
 {
@@ -29,6 +30,9 @@ namespace Horker.Numerics.PowerShell
         [Parameter(Position = 4, Mandatory = false, ParameterSetName = "New")]
         public int Seed = -1;
 
+        [Parameter(Position = 5, Mandatory = false, ParameterSetName = "New")]
+        public IRandom RandomGenerator = null;
+
         [Parameter(Position = 0, Mandatory = true, ParameterSetName = "FromArray")]
         public IList Data;
 
@@ -39,9 +43,12 @@ namespace Horker.Numerics.PowerShell
             {
                 if (Random)
                 {
+                    if (RandomGenerator == null && Seed != -1)
+                        RandomGenerator = new XoshiroRandom(Seed);
+
                     var m = typeof(Series).GetMethod("CreateRandom");
                     var gm = m.MakeGenericMethod(DataType);
-                    result = gm.Invoke(null, new object [] { Count, Seed }) as SeriesBase;
+                    result = gm.Invoke(null, new object [] { Count, RandomGenerator }) as SeriesBase;
                 }
                 else
                     result = new Series(DataType, Count, Value);
