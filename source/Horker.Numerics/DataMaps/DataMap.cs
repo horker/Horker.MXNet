@@ -643,7 +643,7 @@ namespace Horker.Numerics.DataMaps
 
         public DataMap LeftJoin(DataMap other, string[] leftKeyColumns, string[] rightKeyColumns = null)
         {
-            if (rightKeyColumns == null)
+            if (rightKeyColumns == null || rightKeyColumns.Length == 0)
                 rightKeyColumns = leftKeyColumns;
 
             return LeftJoin(other, leftKeyColumns, new JoinKeyMap(other, rightKeyColumns));
@@ -683,7 +683,7 @@ namespace Horker.Numerics.DataMaps
 
         public void LeftJoinFill(DataMap other, string[] leftKeyColumns, string[] rightKeyColumns = null)
         {
-            if (rightKeyColumns == null)
+            if (rightKeyColumns == null || rightKeyColumns.Length == 0)
                 rightKeyColumns = leftKeyColumns;
 
             LeftJoinFill(other, leftKeyColumns, new JoinKeyMap(other, rightKeyColumns));
