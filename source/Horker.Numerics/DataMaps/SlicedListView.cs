@@ -2,12 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Horker.Numerics.DataMaps.Extensions;
 
 namespace Horker.Numerics.DataMaps
 {
+    // TODO: make serializable.
     public class SlicedListView<T> : IList<T>, IList
     {
         private IList<T> _underlying;
