@@ -3,9 +3,9 @@
 <Configuration>
     <ViewDefinitions>
         <View>
-            <Name>MxNet.NDArray</Name>
+            <Name>Horker.MXNet.Core.NDArray</Name>
             <ViewSelectedBy>
-                <TypeName>MxNet.NDArray</TypeName>
+                <TypeName>Horker.MXNet.Core.NDArray</TypeName>
             </ViewSelectedBy>
             <CustomControl>
                 <CustomEntries>
@@ -13,7 +13,7 @@
                         <CustomItem>
                             <ExpressionBinding>
                                 <ScriptBlock>
-                                    [Horker.MxNet.PowerShell.NDArrayExtensions]::ToStringInLongFormat($_)
+                                    [Horker.MXNet.Core.NDArrayExtensions]::ToStringInLongFormat($_)
                                 </ScriptBlock>
                             </ExpressionBinding>
                         </CustomItem>

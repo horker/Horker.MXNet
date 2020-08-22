@@ -1,8 +1,12 @@
-﻿using MxNet;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Management.Automation;
+using System.Text;
+using System.Threading.Tasks;
+using Horker.MXNet.Core;
 
-namespace Horker.MxNet.PowerShell
+namespace Horker.MXNet.PowerShell
 {
     [Cmdlet("New", "MxNDArray")]
     [Alias("mx.ndarray")]
@@ -22,27 +26,29 @@ namespace Horker.MxNet.PowerShell
         public int[] Shape = null;
 
         [Parameter(Position = 2, Mandatory = false)]
-        public Context Context = null;
+        public Type Type = null;
 
         protected override void BeginProcessing()
         {
             var setName = ParameterSetName;
             NDArray result = null;
 
+            if (Type != null)
+            {
+                // TODO
+            }
+
             if (setName == "double")
-                result = new NDArray(Double, Context);
+                result = NDArray.FromArray(Double, Shape);
             else if (setName == "float")
-                result = new NDArray(Float, Context);
+                result = NDArray.FromArray(Float, Shape);
             else if (setName == "int")
-                result = new NDArray(Int, Context);
+                result = NDArray.FromArray(Int, Shape);
             else
             {
                 WriteError(new ErrorRecord(new ArgumentException("Unsupported type"), "", ErrorCategory.InvalidType, null));
                 return;
             }
-
-            if (Shape != null)
-                result = result.Reshape(Shape);
 
             WriteObject(result);
         }

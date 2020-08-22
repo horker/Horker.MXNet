@@ -1,11 +1,11 @@
-using namespace Horker.MXNet.Core
+using namespace MXNet
 
 Set-StrictMode -Version Latest
 
 Describe "NDArray operation tests" {
 
     It "can compute sin()" {
-        [Context]::DefaultContext = [Context]::Cpu()
+        [Context]::CurrentContext = [Context]::Cpu()
 
         $a = New-MxNDArray -Double 1, 2, 3
         $b = $a.Sin()

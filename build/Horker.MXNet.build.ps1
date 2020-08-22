@@ -8,27 +8,28 @@ task . Build, ImportDebug, Test
 # Settings
 ############################################################
 
-$ModuleName = "Horker.MXNet"
+$ModuleName = "Horker.MxNet"
 
 $ModulePath = "$PSScriptRoot\..\module\{0}\$ModuleName"
 
 $ScriptFiles = "$PSScriptRoot\..\scripts\$ModuleName\*"
 
-$ObjectPath = "$PSScriptRoot\..\source\bin\x64\{0}"
+$ObjectPath = "$PSScriptRoot\..\source\Horker.MxNet.PowerShell.Tests\bin\x64\{0}\netcoreapp3.1"
 
 $ObjectFiles = @(
-    "$ObjectPath\Accord.dll"
-    "$ObjectPath\Accord.Math.dll"
-    "$ObjectPath\Accord.Math.Core.dll"
-    "$ObjectPath\Accord.Statistics.dll"
-    "$ObjectPath\Horker.MXNet.dll"
-    "$ObjectPath\Horker.MXNet.pdb"
-    "$ObjectPath\Horker.MXNet.PowerShell.dll"
-    "$ObjectPath\Horker.MXNet.PowerShell.pdb"
-    "$ObjectPath\Horker.Numerics.dll"
-    "$ObjectPath\Horker.Numerics.pdb"
-    "$ObjectPath\Horker.Numerics.PowerShell.dll"
-    "$ObjectPath\Horker.Numerics.PowerShell.pdb"
+    "$ObjectPath\CsvHelper.dll"
+    "$ObjectPath\MxNet.dll"
+    "$ObjectPath\NumpyDotNet.dll"
+    "$ObjectPath\NumpyLib.dll"
+    "$ObjectPath\OpenCvSharp.Blob.dll"
+    "$ObjectPath\OpenCvSharp.dll"
+    "$ObjectPath\OpenCvSharp.Extensions.dll"
+    "$ObjectPath\Horker.MxNet.PowerShell.dll"
+    "$ObjectPath\Horker.MxNet.PowerShell.pdb"
 )
+
+$RuntimePath = "$PSScriptRoot\..\source\Horker.MxNet.PowerShell.Tests\bin\x64\Debug\netcoreapp3.1\runtimes\win-x64\native"
+
+$RuntimeFiles = "$RuntimePath\*.dll"
 
 $TestPath = "$PSScriptRoot\..\tests\$ModuleName"

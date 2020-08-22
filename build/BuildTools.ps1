@@ -70,8 +70,13 @@ function Copy-ObjectFiles {
 task Build {
     "Debug", "Release" | foreach {
         $build = $_
-        Copy-ObjectFiles $ScriptFiles ($ModulePath -f $build)
-        Copy-ObjectFiles ($ObjectFiles | foreach { $_-f $build }) ($ModulePath -f $build)
+        $m = $ModulePath -f $build
+        Copy-ObjectFiles $ScriptFiles $m
+        Copy-ObjectFiles ($ObjectFiles | foreach { $_ -f $build }) $m
+
+        if ((Test-Path Variable:RuntimeFiles) -and $null -ne $RuntimeFiles) {
+            Copy-ObjectFiles ($RuntimeFiles | foreach { $_ -f $build }) (Join-Path $m "runtime\")
+        }
     }
 }
 
@@ -90,7 +95,7 @@ task Clean {
 }
 
 task PublishLocal {
-    # Delete the existing .nupkg file beforehand
+    # The existing .nupkg file should be deleted beforehand
     # because Publish-Module denies re-publishing the module with the same version number.
     Remove-Item "$LocalRepoPath\$ModuleName.*.nupkg"
 
