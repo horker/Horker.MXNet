@@ -4,6 +4,8 @@ Set-StrictMode -Version 6
 # Load native DLLs
 ############################################################
 
+# Note: MxNet.mx.SetMxNetPath() does a similar thing, but it doesn't load MKL and OpenCV files.
+
 $RuntimeDlls = @(
     # MKL
     "libiomp5md.dll"
