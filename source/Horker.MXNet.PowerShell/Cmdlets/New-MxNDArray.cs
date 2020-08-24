@@ -5,7 +5,7 @@ using System.Management.Automation;
 namespace Horker.MxNet.PowerShell
 {
     [Cmdlet("New", "MxNDArray")]
-    [Alias("mx.ndarray")]
+    [Alias("mx.NDArray")]
     [OutputType(typeof(NDArray))]
     public class NewMxNDArray : PSCmdlet
     {

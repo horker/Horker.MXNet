@@ -13,10 +13,10 @@ namespace Horker.MxNet.PowerShell
     {
         public static readonly Type TargetType = typeof(NDArrayIter);
 
-        // By one of PowerShell's bugs, calling methods that matches some specific conditions
+        // By PowerShell's bug, calling methods that matches some specific conditions
         // causes a runtime exception. See https://github.com/PowerShell/PowerShell/issues/7686 for details.
         // A workaround is to call such methods indirectly via PowerShell methods.
-        // NDArrayIter.End() is one of such methods, so we define a wrapper method.
+        // NDArrayIter.End() is one of such methods, so we have defined a wrapper method.
         public static PSObject End(PSObject self)
         {
             var iter = (NDArrayIter)self.BaseObject;

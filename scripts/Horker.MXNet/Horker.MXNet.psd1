@@ -59,8 +59,10 @@ ProcessorArchitecture = 'Amd64'
 
 # Assemblies that must be loaded prior to importing this module
 RequiredAssemblies = @(
+    "CocoTools.NET.dll"
     "CsvHelper.dll"
     "MxNet.dll"
+    "MxNet.GluonCV.dll"
     "NumpyDotNet.dll"
     "NumpyLib.dll"
     "OpenCvSharp.Blob.dll"

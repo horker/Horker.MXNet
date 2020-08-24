@@ -17,8 +17,10 @@ $ScriptFiles = "$PSScriptRoot\..\scripts\$ModuleName\*"
 $ObjectPath = "$PSScriptRoot\..\source\Horker.MxNet.PowerShell.Tests\bin\x64\{0}\netcoreapp3.1"
 
 $ObjectFiles = @(
+    "$ObjectPath\CocoTools.NET.dll"
     "$ObjectPath\CsvHelper.dll"
     "$ObjectPath\MxNet.dll"
+    "$ObjectPath\MxNet.GluonCV.dll"
     "$ObjectPath\NumpyDotNet.dll"
     "$ObjectPath\NumpyLib.dll"
     "$ObjectPath\OpenCvSharp.Blob.dll"

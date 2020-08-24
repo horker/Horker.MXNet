@@ -12,7 +12,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MxNet.Sharp" Version="1.5.1.8" />
+    <PackageReference Include="CocoTools.NET" Version="1.0.0" />
+    <PackageReference Include="MxNet.Sharp" Version="1.5.1.9-fork" />
+    <PackageReference Include="OpenCvSharp4.Windows" Version="4.3.0.20200405" />
     <PackageReference Include="PowerShellStandard.Library" Version="5.1.0" />
   </ItemGroup>
 
