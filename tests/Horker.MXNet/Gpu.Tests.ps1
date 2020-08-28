@@ -8,8 +8,8 @@ Describe "NDArray with GPUs" {
         [Context]::CurrentContext = [Context]::Gpu(0)
 #        [Context]::CurrentContext = [Context]::Cpu()
 
-        $a = New-MxNDArray -Double 1, 2, 3
-        $b = New-MxNDArray -Double 4, 5, 6
+        $a = New-MxNDArray 1, 2, 3
+        $b = New-MxNDArray 4, 5, 6
 
         $c = $a + $b
 
