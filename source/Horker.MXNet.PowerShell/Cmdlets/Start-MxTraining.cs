@@ -50,7 +50,7 @@ namespace Horker.MxNet.PowerShell
         [Parameter(Position = 4, Mandatory = true)]
         public Block LossFunction { get; set; }
 
-        [Parameter(Position = 5, Mandatory = true)]
+        [Parameter(Position = 5, Mandatory = false)]
         public EvalMetric MetricFunction { get; set; }
 
         [Parameter(Position = 6, Mandatory = true)]
@@ -102,9 +102,12 @@ namespace Horker.MxNet.PowerShell
                     totalLoss /= dataSize;
 
                     ValidationData.Reset();
-                    MetricFunction.Reset();
                     var totalValidLoss = 0.0f;
                     var validDataSize = 0;
+
+                    if (MetricFunction != null)
+                        MetricFunction.Reset();
+
                     while (!ValidationData.End())
                     {
                         var batch = ValidationData.Next();
@@ -116,16 +119,22 @@ namespace Horker.MxNet.PowerShell
                         totalValidLoss += validLoss.Sum();
                         validDataSize += data.Shape[0];
 
-                        MetricFunction.Update(label, output);
+                        if (MetricFunction != null)
+                            MetricFunction.Update(label, output);
                     }
                     totalValidLoss /= validDataSize;
 
-                    var (name, met) = MetricFunction.Get();
+                    string metricName = null;
+                    float metric = float.NaN;
+
+                    if (MetricFunction != null)
+                        (metricName, metric) = MetricFunction.Get();
+
                     var status = new TrainingStatus(epoch,
                         (float)Math.Round(totalLoss, DisplayDigits),
                         (float)Math.Round(totalValidLoss, DisplayDigits),
-                        name,
-                        (float)Math.Round(met, DisplayDigits),
+                        metricName,
+                        (float)Math.Round(metric, DisplayDigits),
                         stopWatch.Elapsed);
 
                     WriteObject(status);
